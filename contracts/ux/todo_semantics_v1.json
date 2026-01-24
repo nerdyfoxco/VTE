@@ -1,0 +1,14 @@
+{
+    "contract_name": "todo_semantics_v1",
+    "version": "1.0.0",
+    "dedupe_keys": [
+        "intent_id",
+        "task_type"
+    ],
+    "close_conditions": [
+        "ACTION_TAKEN",
+        "INTENT_CANCELLED",
+        "TIMEOUT"
+    ],
+    "sla_seconds": 3600
+}

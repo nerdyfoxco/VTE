@@ -1,0 +1,13 @@
+{
+    "schema": "vte_proof_context_propagation_v1",
+    "description": "Ensures proof context is maintained across service boundaries.",
+    "context_fields": [
+        "trace_id",
+        "parent_span_id",
+        "user_id",
+        "tenant_id",
+        "decision_id"
+    ],
+    "propagation_mechanism": "http_headers",
+    "header_prefix": "x-vte-"
+}

@@ -1,0 +1,22 @@
+{
+    "contract_name": "contract_lifecycle_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Standardizes the lifecycle states of all system contracts to prevent usage of deprecated or draft logic.",
+    "valid_states": [
+        "DRAFT",
+        "ACTIVE",
+        "DEPRECATED",
+        "RETIRED"
+    ],
+    "transitions": {
+        "DRAFT_TO_ACTIVE": "REQUIRES_REVIEW_AND_TESTS",
+        "ACTIVE_TO_DEPRECATED": "REQUIRES_MIGRATION_PLAN",
+        "DEPRECATED_TO_RETIRED": "REQUIRES_ZERO_USAGE"
+    },
+    "enforcement": {
+        "DRAFT": "NON_PROD_ONLY",
+        "DEPRECATED": "WARN_ON_USE",
+        "RETIRED": "BLOCK_ON_USE"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "contract_name": "hitl_backlog_controller_v1",
+    "version": "1.0.0",
+    "control_loop_interval_sec": 60,
+    "metrics": [
+        "backlog_size",
+        "agent_utilization"
+    ],
+    "actions": [
+        "SCALE_UP",
+        "SCALE_DOWN",
+        "PAUSE_INGEST"
+    ]
+}

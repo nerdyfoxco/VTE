@@ -1,0 +1,14 @@
+{
+    "contract_name": "user_interrupt_budget",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "budget_tokens": {
+        "daily_max": 20,
+        "burst_limit": 3
+    },
+    "costs": {
+        "blocking_modal": 5,
+        "inline_suggestion": 1,
+        "toast_notification": 0
+    }
+}

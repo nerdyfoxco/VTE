@@ -1,0 +1,26 @@
+{
+    "contract_name": "viewer_redaction_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "default_rule": "REDACT_PII",
+    "role_overrides": [
+        {
+            "role": "AUDITOR_L3",
+            "can_view_unredacted": [
+                "SSN",
+                "ADDRESS"
+            ]
+        },
+        {
+            "role": "AGENT_L1",
+            "can_view_unredacted": [
+                "NAME",
+                "EMAIL"
+            ]
+        }
+    ],
+    "pii_patterns": {
+        "SSN": "\\d{3}-\\d{2}-\\d{4}",
+        "CREDIT_CARD": "\\d{4}-\\d{4}-\\d{4}-\\d{4}"
+    }
+}

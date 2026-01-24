@@ -1,0 +1,16 @@
+{
+    "contract_name": "backpressure_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines how the system sheds load when overwhelmed.",
+    "mechanisms": {
+        "load_shedding": {
+            "trigger": "QUEUE_DEPTH > 1000",
+            "action": "DROP_OLDEST_LOW_PRIORITY"
+        },
+        "client_pushback": {
+            "trigger": "API_LATENCY_P99 > 2s",
+            "response": "429_TOO_MANY_REQUESTS"
+        }
+    }
+}

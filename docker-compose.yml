@@ -1,0 +1,21 @@
+services:
+  spine-db:
+    image: postgres:16
+    container_name: vte-spine-db
+    environment:
+      POSTGRES_USER: spine_app
+      POSTGRES_PASSWORD: dev_only_password_123
+      POSTGRES_DB: vte_spine
+    ports:
+      - "5432:5432"
+    volumes:
+      - spine_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U spine_app -d vte_spine"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  spine_pgdata:

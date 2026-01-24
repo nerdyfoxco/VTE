@@ -1,0 +1,18 @@
+{
+    "contract_name": "legal_defense_bundle",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Aggregates all normative definitions required to reconstruct the decision logic for legal defense.",
+    "bundled_artifacts": {
+        "ontology": "contracts/ontology/vte_ontology_v1.json",
+        "golden_journey": "contracts/journeys/vte_delinquency_golden_journey_v1.json",
+        "evidence_ladder": "contracts/evidence/evidence_ladder_v1.json",
+        "feature_truth": "contracts/features/vte_delinquency_v1/feature_truth_packet_v1.json",
+        "authority_chain": "contracts/authority_chain.json"
+    },
+    "export_requirements": {
+        "format": "ZIP_ARCHIVE",
+        "manifest": "REQUIRED",
+        "signature": "REQUIRED"
+    }
+}

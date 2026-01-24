@@ -1,0 +1,13 @@
+{
+    "contract_name": "incident_response_playbook_v1",
+    "version": "1.0.0",
+    "triggers": [
+        "DATA_EXFIL",
+        "UNAUTHORIZED_ACCESS"
+    ],
+    "actions": [
+        "LOCK_ACCOUNT",
+        "NOTIFY_CISO",
+        "ISOLATE_POD"
+    ]
+}

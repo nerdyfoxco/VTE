@@ -1,0 +1,31 @@
+{
+    "schema": "vte_proof_context_schema_v1",
+    "description": "Structured context object passed through the service mesh (Spine -> Connectors).",
+    "fields": {
+        "trace_id": {
+            "type": "String",
+            "format": "W3C_Trace_Context_v1"
+        },
+        "tenant_id": {
+            "type": "UUID"
+        },
+        "actor_assurance_level": {
+            "type": "Enum",
+            "values": [
+                "AAL1",
+                "AAL2",
+                "AAL3"
+            ]
+        },
+        "decision_intent_id": {
+            "type": "UUID"
+        },
+        "captured_at": {
+            "type": "String",
+            "format": "ISO8601_UTC"
+        }
+    },
+    "invariants": {
+        "trace_integrity": "trace_id MUST match X-Trace-Id header."
+    }
+}

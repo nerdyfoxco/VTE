@@ -1,0 +1,25 @@
+{
+    "schema": "vte_field_truth_table_v1",
+    "description": "Defines the authoritative source system for every critical data element.",
+    "fields": {
+        "user_email": {
+            "source_system": "IDP (Cognito)",
+            "VTE_role": "read_only_copy"
+        },
+        "transaction_amount": {
+            "source_system": "Evidence Bundle (Plaid/Bank)",
+            "VTE_role": "record_of_fact"
+        },
+        "decision_outcome": {
+            "source_system": "Spine (VTE Ledger)",
+            "VTE_role": "authoritative_master"
+        },
+        "policy_definition": {
+            "source_system": "Git (Codebase)",
+            "VTE_role": "authoritative_master"
+        }
+    },
+    "invariants": {
+        "no_two_masters": "A field cannot have Authoritative Master status in two systems."
+    }
+}

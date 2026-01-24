@@ -1,0 +1,22 @@
+{
+    "schema": "vte_db_isolation_policy_v1",
+    "target_db": "PostgreSQL",
+    "rules": [
+        {
+            "name": "RLS_MANDATORY",
+            "description": "Row Level Security must be enabled on all tables containing user data.",
+            "severity": "CRITICAL"
+        },
+        {
+            "name": "TENANT_ID_IMMUTABLE",
+            "description": "The tenant_id column of a row cannot be changed after creation.",
+            "severity": "CRITICAL"
+        },
+        {
+            "name": "CONNECTION_SCOPING",
+            "description": "Every DB connection checkout must immediately set 'app.current_tenant_id'.",
+            "severity": "CRITICAL"
+        }
+    ],
+    "enforcement_script": "tools/ci/check_rls_compliance.py"
+}

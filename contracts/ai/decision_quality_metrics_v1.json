@@ -1,0 +1,16 @@
+{
+    "contract_name": "decision_quality_metrics",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "metrics": [
+        "PRECISION",
+        "RECALL",
+        "F1_SCORE",
+        "ABSTENTION_RATE",
+        "HITL_AGREEMENT_RATE"
+    ],
+    "targets": {
+        "precision_min": 0.95,
+        "abstention_max": 0.20
+    }
+}

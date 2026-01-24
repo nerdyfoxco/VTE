@@ -1,0 +1,47 @@
+{
+    "contract_name": "vte_ontology",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the canonical data model and vocabulary for the VTE system, ensuring shared understanding across all components.",
+    "types": {
+        "Delinquency": {
+            "description": "A state of past-due payment obligation.",
+            "fields": {
+                "account_id": "UUID",
+                "amount_due": "Currency",
+                "days_past_due": "Integer",
+                "status": "DelinquencyStatus"
+            }
+        },
+        "WorkItem": {
+            "description": "A unit of work assigned to an agent or automation.",
+            "fields": {
+                "id": "UUID",
+                "priority": "PriorityLevel",
+                "assigned_to": "Principal",
+                "context": "Map<String, Any>"
+            }
+        },
+        "Evidence": {
+            "description": "Proof of a fact or event.",
+            "fields": {
+                "hash": "SHA256",
+                "timestamp": "ISO8601",
+                "source": "SystemIdentifier",
+                "payload": "Blob"
+            }
+        }
+    },
+    "relationships": {
+        "Delinquency_triggers_WorkItem": {
+            "source": "Delinquency",
+            "target": "WorkItem",
+            "cardinality": "ONE_TO_MANY"
+        },
+        "WorkItem_produces_Evidence": {
+            "source": "WorkItem",
+            "target": "Evidence",
+            "cardinality": "ONE_TO_MANY"
+        }
+    }
+}

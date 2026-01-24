@@ -1,0 +1,17 @@
+{
+    "schema": "vte_llm_io_contract_v1",
+    "description": "Governs the probabilistic nature of AI agents within the deterministic VTE system.",
+    "input_constraints": {
+        "context_window_limit": "32k_tokens",
+        "pii_sanitization": "required_before_inference"
+    },
+    "output_constraints": {
+        "format": "JSON_Strict",
+        "hallucination_check": "cross_reference_against_evidence"
+    },
+    "abstention_policy": {
+        "condition": "confidence_score < 0.95",
+        "action": "ABSTAIN",
+        "fallback": "Escalate to Human Reviewer"
+    }
+}

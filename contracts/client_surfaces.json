@@ -1,0 +1,32 @@
+{
+    "schema": "vte_client_surfaces_v1",
+    "description": "Defines the authorized interaction surface for VTE Clients.",
+    "surfaces": {
+        "web_dashboard": {
+            "audience": [
+                "user",
+                "admin"
+            ],
+            "allowed_actions": [
+                "view_decision_history",
+                "submit_decision_draft",
+                "view_evidence_bundle"
+            ],
+            "auth_requirement": "oidc_bearer"
+        },
+        "mobile_approver": {
+            "audience": [
+                "admin"
+            ],
+            "allowed_actions": [
+                "sign_decision",
+                "view_decision_details"
+            ],
+            "auth_requirement": "oidc_bearer + device_binding"
+        }
+    },
+    "constraints": {
+        "no_direct_db": true,
+        "no_admin_creation_from_public": true
+    }
+}

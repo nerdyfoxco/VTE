@@ -1,0 +1,31 @@
+{
+    "contract_name": "break_glass_workflow",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "To provide a controlled, audited, and time-bound mechanism for emergency access to production systems.",
+    "workflow": {
+        "initiation": {
+            "required_context": [
+                "INCIDENT_TICKET_ID"
+            ],
+            "justification_length_min": 50
+        },
+        "approval": {
+            "mode": "DUAL_APPROVAL_REQUIRED",
+            "timeout_minutes": 15,
+            "approver_roles": [
+                "INCIDENT_COMMANDER",
+                "SECURITY_ONCALL"
+            ]
+        },
+        "session": {
+            "max_duration_minutes": 60,
+            "privileges": "ELEVATED_ADMIN",
+            "audit_level": "FULL_SESSION_RECORDING"
+        },
+        "termination": {
+            "trigger": "DURATION_EXCEEDED_OR_MANUAL_STOP",
+            "post_action": "REVOKE_TEMP_CREDENTIALS"
+        }
+    }
+}

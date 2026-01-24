@@ -1,0 +1,22 @@
+{
+    "schema": "vte_client_capability_matrix_v1",
+    "description": "Defines feature availability per client version.",
+    "matrix": {
+        "web_dashboard_v1": {
+            "view_decisions": true,
+            "submit_draft": true,
+            "biometric_approval": false,
+            "push_notifications": false
+        },
+        "mobile_app_v1": {
+            "view_decisions": true,
+            "submit_draft": false,
+            "biometric_approval": true,
+            "push_notifications": true
+        }
+    },
+    "min_supported_version": {
+        "web": "1.0.0",
+        "mobile": "1.0.0"
+    }
+}

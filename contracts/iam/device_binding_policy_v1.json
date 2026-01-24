@@ -1,0 +1,10 @@
+{
+    "contract_name": "device_binding_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Restricts high-privilege access to trusted, managed devices.",
+    "binding_strength": {
+        "ADMIN_CONSOLE": "MANAGED_DEVICE_CERT_REQUIRED",
+        "CUSTOMER_PORTAL": "BROWSER_FINGERPRINT"
+    }
+}

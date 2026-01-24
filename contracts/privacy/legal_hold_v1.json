@@ -1,0 +1,27 @@
+{
+    "contract_name": "legal_hold_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "To ensure data relevant to active litigation or investigation is preserved indefinitely, overriding standard retention policies.",
+    "workflow": {
+        "initiation": {
+            "required_role": "LEGAL_COUNSEL",
+            "required_metadata": [
+                "CASE_ID",
+                "JURISDICTION"
+            ]
+        },
+        "scope_definition": {
+            "selectors": [
+                "TENANT_ID",
+                "USER_ID",
+                "TIME_RANGE"
+            ],
+            "action": "PREVENT_DELETION"
+        },
+        "audit": {
+            "log_level": "CRITICAL",
+            "provenance": "CHAIN_OF_CUSTODY_REQUIRED"
+        }
+    }
+}

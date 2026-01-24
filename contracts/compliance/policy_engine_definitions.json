@@ -1,0 +1,32 @@
+{
+    "contract_name": "policy_engine_definitions",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "policies": [
+        {
+            "id": "DNC_GLOBAL",
+            "type": "DO_NOT_CONTACT",
+            "scope": "GLOBAL",
+            "action": "BLOCK_OUTBOUND_COMMUNICATION"
+        },
+        {
+            "id": "QUIET_HOURS_USA",
+            "type": "TIME_RESTRICTION",
+            "region": "USA",
+            "window_utc": {
+                "start": "01:00",
+                "end": "13:00"
+            },
+            "action": "QUEUE_FOR_NEXT_WINDOW"
+        },
+        {
+            "id": "JURISDICTION_NY",
+            "type": "REGULATORY_RESTRICTION",
+            "region": "NY",
+            "rules": [
+                "MAX_ATTEMPTS_PER_WEEK=3"
+            ],
+            "action": "BLOCK_IF_LIMIT_EXCEEDED"
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "contract_name": "backfill_protocol",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "To govern the safe execution of historical data backfills, ensuring no external side-effects (e.g., duplicated emails) occur.",
+    "protocol": {
+        "modes": [
+            "LIVE_PROCESSING",
+            "HISTORICAL_BACKFILL",
+            "DRY_RUN"
+        ],
+        "constraints": {
+            "HISTORICAL_BACKFILL": {
+                "external_side_effects": "BLOCKED",
+                "notifications": "SUPPRESSED",
+                "ledger_recording": "REQUIRED_WITH_BACKFILL_FLAG",
+                "timestamp_semantics": "PRESERVE_ORIGINAL_EVENT_TIME"
+            }
+        },
+        "idempotency": {
+            "requirement": "UNIQUE_CONSTRAINT_ON_SOURCE_EVENT_ID",
+            "conflict_resolution": "SKIP_IF_EXISTS"
+        }
+    },
+    "safety_gates": {
+        "requires_snapshot_backup": true,
+        "max_throughput_tps": 500
+    }
+}

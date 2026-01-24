@@ -1,0 +1,17 @@
+{
+    "schema": "vte_browser_evidence_protocol_v1",
+    "description": "Strict protocol for Browser Extension <-> Spine communication.",
+    "transport_security": {
+        "tls_version": "1.3",
+        "certificate_pinning": "recommended"
+    },
+    "payload_binding": {
+        "nonce_required": true,
+        "user_agent_binding": "sha256(UA_String)",
+        "dom_hash_algo": "sha256"
+    },
+    "error_handling": {
+        "on_tamper_detection": "SILENT_REJECT_AND_FLAG",
+        "on_timeout": "RETRY_WITH_EXPONENTIAL_BACKOFF"
+    }
+}

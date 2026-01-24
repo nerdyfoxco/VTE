@@ -1,0 +1,45 @@
+{
+    "schema": "vte_rbac_policy_v1",
+    "description": "Role-Based Access Control matrix for VTE surfaces.",
+    "roles": {
+        "super_admin": {
+            "description": "God-mode access, requires dual-control for destructive actions.",
+            "permissions": [
+                "*"
+            ]
+        },
+        "admin": {
+            "description": "System administrator with ability to manage configuration but not destroy audit logs.",
+            "permissions": [
+                "view:all",
+                "create:user",
+                "disable:user",
+                "configure:system"
+            ]
+        },
+        "user": {
+            "description": "Standard end-user.",
+            "permissions": [
+                "view:own_data",
+                "initiate:transaction"
+            ]
+        },
+        "auditor": {
+            "description": "Read-only access to all decision logs and evidence.",
+            "permissions": [
+                "view:all_decisions",
+                "view:audit_log",
+                "export:audit_report"
+            ]
+        },
+        "system_bot": {
+            "description": "Automated agent for routine maintenance.",
+            "permissions": [
+                "run:maintenance",
+                "flag:anomaly"
+            ]
+        }
+    },
+    "enforcement_mode": "STRICT",
+    "version": "1.0"
+}

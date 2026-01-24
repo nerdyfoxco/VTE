@@ -1,0 +1,29 @@
+{
+    "schema": "vte_store_compliance_map_v1",
+    "description": "Mapping of VTE Security Controls to external compliance frameworks.",
+    "frameworks": {
+        "OWASP_MASVS_L2": {
+            "MSTG-STORAGE-1": {
+                "requirement": "System credential storage facilities used.",
+                "implementation": "contracts/iam/evidence_signing_keys_policy.json",
+                "verifier": "tests/prove_mobile_keystore_usage.py"
+            },
+            "MSTG-AUTH-1": {
+                "requirement": "Remote endpoint authentication.",
+                "implementation": "contracts/evidence/evidence_ladder_v1.json (SSL Pinning)",
+                "verifier": "tests/prove_ssl_pinning_enforced.py"
+            }
+        },
+        "Google_CASA": {
+            "GEN-1": {
+                "requirement": "Architecture Diagram",
+                "implementation": "contracts/system_map.json"
+            },
+            "AUTH-1": {
+                "requirement": "OAuth 2.0 Usage",
+                "implementation": "contracts/oauth_scopes.json"
+            }
+        }
+    },
+    "completeness_check": "ALL_MUST_HAVE_ARTIFACT"
+}

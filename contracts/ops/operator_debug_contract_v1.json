@@ -1,0 +1,35 @@
+{
+    "schema": "vte_operator_debug_contract_v1",
+    "description": "Defines the observability surface for Operator Debugging.",
+    "exposed_fields": {
+        "decision_trace": {
+            "level": "INFO",
+            "fields": [
+                "trace_id",
+                "decision_id",
+                "step_latencies_ms",
+                "rule_hit_list"
+            ]
+        },
+        "error_context": {
+            "level": "ERROR",
+            "fields": [
+                "error_code",
+                "stack_trace_hash",
+                "failing_component"
+            ]
+        },
+        "pii_redaction": {
+            "rules": [
+                "email",
+                "phone",
+                "ssn"
+            ],
+            "replacement": "***REDACTED***"
+        }
+    },
+    "access_policy": {
+        "role": "support_engineer",
+        "mechanism": "just_in_time_grant"
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "schema": "vte_idempotency_spec_v1",
+    "description": "Defines how VTE handles duplicate requests to ensure Exactly-Once Execution side-effects.",
+    "key_construction": {
+        "standard_format": "vte:{intent_action}:{hash_of_params_and_target}",
+        "examples": [
+            "vte:submit_claim:sha256(claim_555+amount=500)"
+        ]
+    },
+    "behavior": {
+        "on_duplicate_pending": "WAIT",
+        "on_duplicate_success": "RETURN_EXISTING_RESULT",
+        "on_duplicate_failure": "RETRY_IF_RETRYABLE_ELSE_FAIL",
+        "max_lock_duration": "30s"
+    },
+    "enforcement": "strict_db_lock"
+}

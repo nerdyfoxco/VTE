@@ -1,0 +1,23 @@
+{
+    "contract_name": "intent_tags",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "tags": [
+        {
+            "tag": "FINANCIAL_IMPACT",
+            "description": "Intent involving money movement"
+        },
+        {
+            "tag": "PII_ACCESS",
+            "description": "Intent accessing personal data"
+        },
+        {
+            "tag": "REVERSIBLE",
+            "description": "Action can be undone"
+        },
+        {
+            "tag": "IRREVERSIBLE",
+            "description": "Action cannot be undone without admin intervention"
+        }
+    ]
+}

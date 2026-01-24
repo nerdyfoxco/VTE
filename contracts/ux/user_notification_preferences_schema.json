@@ -1,0 +1,22 @@
+{
+    "contract_name": "user_notification_preferences_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "fields": {
+        "user_id": "UUID",
+        "channels": {
+            "email": "Boolean",
+            "push": "Boolean",
+            "slack": "Boolean"
+        },
+        "quiet_hours": {
+            "enabled": "Boolean",
+            "start_utc": "HH:MM",
+            "end_utc": "HH:MM",
+            "timezone": "String"
+        },
+        "categories": {
+            "promotions": "Boolean"
+        }
+    }
+}

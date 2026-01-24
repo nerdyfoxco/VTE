@@ -1,0 +1,20 @@
+{
+    "contract_name": "provider_sync_semantics",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Governs how the system behaves when synchronizing state with external providers (e.g. Email Providers, HRIS).",
+    "sync_modes": {
+        "INCREMENTAL": {
+            "tolerance": "EVENTUAL_CONSISTENCY",
+            "retry_strategy": "BACKOFF"
+        },
+        "FULL_RECONCILIATION": {
+            "tolerance": "STRICT_CONSISTENCY_CHECK",
+            "retry_strategy": "MANUAL_INTERVENTION_ON_FAIL"
+        }
+    },
+    "failure_handling": {
+        "rate_limit_exceeded": "PAUSE_AND_RESUME",
+        "auth_failure": "ALERT_AND_DISABLE_CONNECTOR"
+    }
+}

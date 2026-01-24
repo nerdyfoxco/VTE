@@ -1,0 +1,17 @@
+{
+    "contract_name": "side_effect_registry_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "description": "Registry of all declared side effects in the system, used for auditing and firewall permissions.",
+    "fields": {
+        "handler_id": "String",
+        "method_signature": "String",
+        "side_effects": [
+            {
+                "type": "ENUM(EXTERNAL_CALL, DB_WRITE, EMAIL_SEND)",
+                "target_resource": "String",
+                "idempotency_key_strategy": "ENUM(HEADER_REQUEST_ID, PAYLOAD_HASH, NONE)"
+            }
+        ]
+    }
+}

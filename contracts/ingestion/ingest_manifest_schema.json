@@ -1,0 +1,23 @@
+{
+    "contract_name": "ingest_manifest_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "required_fields": {
+        "manifest_id": "UUID",
+        "source_system": "String",
+        "file_count": "Integer",
+        "files": [
+            {
+                "filename": "String",
+                "sha256": "String",
+                "row_count": "Integer"
+            }
+        ],
+        "uploaded_by_user": "String (Email)"
+    },
+    "validation_rules": [
+        "ALL_FILES_MUST_EXIST",
+        "HASHES_MUST_MATCH",
+        "ROW_COUNTS_MUST_MATCH_ACTUAL"
+    ]
+}

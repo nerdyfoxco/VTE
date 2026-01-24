@@ -1,0 +1,32 @@
+{
+    "contract_name": "security_package_index",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the standard documentation package required for Enterprise Procurement/Security Reviews, ensuring consistent, automated delivery of compliance artifacts.",
+    "package_contents": {
+        "architecture": {
+            "system_map": "contracts/system_map.json",
+            "data_flow_diagram": "docs/architecture/dfd_v1.pdf"
+        },
+        "governance": {
+            "separation_of_duties": "contracts/security/separation_of_duties_v1.json",
+            "break_glass_policy": "contracts/security/break_glass_workflow.json"
+        },
+        "risk_management": {
+            "risk_register": "contracts/risk_acceptance_register.md",
+            "threat_model": "contracts/threat_model.md"
+        },
+        "compliance": {
+            "retention_policy": "contracts/privacy/retention_policy_v1.json",
+            "data_classification": "contracts/privacy/data_classification_policy_v1.json"
+        },
+        "reports": {
+            "latest_penetration_test": "reports/security/pentest_latest.pdf",
+            "soc2_type2": "reports/compliance/soc2_type2_redacted.pdf"
+        }
+    },
+    "metadata": {
+        "classification": "CONFIDENTIAL",
+        "distribution": "NDA_REQUIRED"
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "schema": "vte_network_egress_policy_v1",
+    "default_rule": "DENY_ALL",
+    "description": "Network firewall rules for the Spine container. Only allowlisted destinations are permitted.",
+    "allowlist": [
+        {
+            "destination": "postgres",
+            "port": 5432,
+            "protocol": "tcp",
+            "justification": "Primary Database Access"
+        },
+        {
+            "destination": "s3.us-east-1.amazonaws.com",
+            "port": 443,
+            "protocol": "https",
+            "justification": "Evidence Blob Storage (WORM)"
+        },
+        {
+            "destination": "cognito-idp.us-east-1.amazonaws.com",
+            "port": 443,
+            "protocol": "https",
+            "justification": "OIDC Identity Provider"
+        },
+        {
+            "destination": "email-smtp.us-east-1.amazonaws.com",
+            "port": 587,
+            "protocol": "smtps",
+            "justification": "Notification Gateway"
+        }
+    ],
+    "monitoring": "vpc_flow_logs_enabled"
+}

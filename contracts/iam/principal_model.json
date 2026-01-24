@@ -1,0 +1,17 @@
+{
+    "contract_name": "principal_model",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the identity object for all actors in the system.",
+    "types": [
+        "USER",
+        "SERVICE_ACCOUNT",
+        "SYSTEM_ACTOR"
+    ],
+    "attributes": {
+        "sub": "Unique Subject ID",
+        "org_id": "Organization Context",
+        "scopes": "List of granted OAuth scopes",
+        "mfa_verified": "Boolean"
+    }
+}

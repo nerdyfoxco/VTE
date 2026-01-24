@@ -1,0 +1,13 @@
+{
+    "contract_name": "queue_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Ordering and assignment logic for the Unified Queue.",
+    "ordering": "PRIORITY_DESC, DUE_DATE_ASC",
+    "assignment_mode": "PULL_OR_PUSH",
+    "filters_allowed": [
+        "STATUS",
+        "PRIORITY",
+        "WORK_TYPE"
+    ]
+}

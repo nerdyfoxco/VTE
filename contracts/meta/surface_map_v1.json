@@ -1,0 +1,42 @@
+{
+    "schema": "vte_surface_map_v1",
+    "description": "Registry of all allowed external surfaces (I/O) capable of side-effects.",
+    "surfaces": [
+        {
+            "key": "surface.db.primary",
+            "type": "database",
+            "driver": "spine.drivers.postgres",
+            "criticality": "HIGH",
+            "auditable": true
+        },
+        {
+            "key": "surface.net.email",
+            "type": "gateway",
+            "driver": "spine.drivers.email.smtp",
+            "criticality": "MEDIUM",
+            "auditable": true
+        },
+        {
+            "key": "surface.blob.evidence",
+            "type": "storage",
+            "driver": "spine.drivers.blob.s3",
+            "criticality": "HIGH",
+            "auditable": true
+        },
+        {
+            "key": "surface.api.internal",
+            "type": "http",
+            "driver": "spine.drivers.api.internal",
+            "criticality": "HIGH",
+            "auditable": true
+        },
+        {
+            "key": "surface.api.public",
+            "type": "http",
+            "driver": "spine.drivers.api.public",
+            "criticality": "HIGH",
+            "auditable": true
+        }
+    ],
+    "required_assurance": "ALL_SURFACES_MUST_EMIT_AUDIT_EVENTS"
+}

@@ -1,0 +1,9 @@
+{
+    "contract_name": "contract_registry_bundle_v1",
+    "version": "1.0.0",
+    "registry_mode": "BUNDLED_ONLY",
+    "allowed_bundles": [
+        "core_bundle_v1",
+        "extension_bundle_v1"
+    ]
+}

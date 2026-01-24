@@ -1,0 +1,8 @@
+{
+    "contract_name": "backlog_stabilization_contract_v1",
+    "version": "1.0.0",
+    "scaling_rules": [
+        "IF pending_tasks > 1000 THEN spawn_agent",
+        "IF pending_tasks > 5000 THEN reject_new_ingest"
+    ]
+}

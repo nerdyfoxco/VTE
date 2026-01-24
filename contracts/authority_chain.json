@@ -1,0 +1,32 @@
+{
+    "contract_name": "authority_chain",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the hierarchy of decision-making authority to resolve conflicts between systems or policies.",
+    "hierarchy": [
+        {
+            "level": 0,
+            "role": "LEGAL_HOLD_POLICY",
+            "override_reason": "COMPLIANCE_HARD_STOP"
+        },
+        {
+            "level": 1,
+            "role": "SECURITY_ADMISSION_CONTROLLER",
+            "override_reason": "THREAT_PREVENTION"
+        },
+        {
+            "level": 5,
+            "role": "CUSTOMER_PREFERENCE",
+            "override_reason": "USER_CONSENT"
+        },
+        {
+            "level": 10,
+            "role": "DEFAULT_BUSINESS_LOGIC",
+            "override_reason": "STANDARD_OP"
+        }
+    ],
+    "dispute_resolution": {
+        "rule": "LOWER_LEVEL_WINS",
+        "tie_breaker": "REJECT_CHANGE"
+    }
+}

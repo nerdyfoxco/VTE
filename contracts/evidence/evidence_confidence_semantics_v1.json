@@ -1,0 +1,14 @@
+{
+    "contract_name": "evidence_confidence_semantics_v1",
+    "version": "1.0.0",
+    "confidence_levels": {
+        "HIGH": "> 0.90",
+        "MEDIUM": "> 0.70",
+        "LOW": "< 0.70"
+    },
+    "action_thresholds": {
+        "AUTO_APPROVE": "HIGH",
+        "FLAG_FOR_REVIEW": "MEDIUM",
+        "REJECT": "LOW"
+    }
+}

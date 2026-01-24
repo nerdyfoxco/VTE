@@ -1,0 +1,10 @@
+{
+    "contract_name": "effective_authority_binding_v1",
+    "version": "1.0.0",
+    "requirements": [
+        "ALL database_writes MUST include 'effective_principal_id'",
+        "ALL database_writes MUST include 'session_grant_source'",
+        "session_grant_source MUST comprise [IDP_TOKEN_ID, IAM_ROLE_ARN]"
+    ],
+    "enforcement": "DB_MIDDLEWARE_INTERCEPTOR"
+}

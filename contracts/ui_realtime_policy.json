@@ -1,0 +1,13 @@
+{
+    "contract_name": "ui_realtime_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "SLA for real-time updates to the UI via WebSockets/SSE.",
+    "sla": {
+        "latency": "500ms",
+        "delivery_guarantee": "AT_MOST_ONCE"
+    },
+    "fallback": {
+        "on_disconnect": "POLLING_EVERY_30S"
+    }
+}

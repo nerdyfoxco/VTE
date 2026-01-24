@@ -1,0 +1,11 @@
+{
+    "contract_name": "abstention_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "logic": "CONFIDENCE_THRESHOLD",
+    "thresholds": {
+        "auto_approve_min_confidence": 0.95,
+        "abstain_max_confidence": 0.85
+    },
+    "action_on_abstain": "ROUTE_TO_HITL"
+}

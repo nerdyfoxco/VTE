@@ -1,0 +1,23 @@
+{
+    "contract_name": "silo_boundary_map",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines strict data silos to ensure customer data isolation and regulatory compliance.",
+    "silos": {
+        "US_FED": {
+            "allowed_regions": [
+                "us-gov-east-1"
+            ],
+            "data_classification": "IL4"
+        },
+        "EU_COMMERCIAL": {
+            "allowed_regions": [
+                "eu-central-1"
+            ],
+            "residency_requirement": "STRICT_EU"
+        }
+    },
+    "constraints": {
+        "cross_silo_data_movement": "BLOCKED"
+    }
+}

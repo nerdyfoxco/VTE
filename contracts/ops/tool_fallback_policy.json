@@ -1,0 +1,22 @@
+{
+    "schema": "vte_tool_fallback_policy_v1",
+    "default_behavior": "FAIL_CLOSED",
+    "description": "Governs the behavior when specialized VTE tools (e.g., Verify, Decide) fail or are unavailable.",
+    "rules": {
+        "no_raw_sql": {
+            "condition": "db_tool_failure",
+            "fallback": "BLOCK",
+            "exception": "emergency_break_glass_admin_only"
+        },
+        "no_raw_http": {
+            "condition": "api_client_failure",
+            "fallback": "BLOCK",
+            "exception": "whitelisted_domains_only"
+        },
+        "agent_behavior": {
+            "on_tool_error": "REPORT_AND_HALT",
+            "retry_limit": 3,
+            "backoff": "exponential"
+        }
+    }
+}

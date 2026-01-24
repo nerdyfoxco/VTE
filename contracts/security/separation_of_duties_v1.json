@@ -1,0 +1,34 @@
+{
+    "contract_name": "separation_of_duties",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "To prevent any single individual from having unilateral control over critical system functions or sensitive data exports.",
+    "conflicting_roles": [
+        {
+            "role_a": "DEVELOPER",
+            "role_b": "PROD_DEPLOYER",
+            "rationale": "Code authors cannot unilaterally deploy to production."
+        },
+        {
+            "role_a": "SYS_ADMIN",
+            "role_b": "DATA_AUDITOR",
+            "rationale": "Admins cannot audit their own actions."
+        }
+    ],
+    "dual_control_requirements": {
+        "SENSITIVE_DATA_EXPORT": {
+            "min_approvers": 2,
+            "required_roles": [
+                "DATA_CUSTODIAN",
+                "LEGAL_COMPLIANCE"
+            ]
+        },
+        "CONFIG_CHANGE_PROD": {
+            "min_approvers": 2,
+            "required_roles": [
+                "ENGINEERING_LEAD",
+                "OPS_LEAD"
+            ]
+        }
+    }
+}

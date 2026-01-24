@@ -1,0 +1,12 @@
+{
+    "contract_name": "sealed_paths_manifest",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Lists critical paths that are 'sealed' and require elevated approval to modify.",
+    "sealed_paths": [
+        "contracts/meta/**",
+        "contracts/iam/principal_model.json",
+        "contracts/deploy/provenance_enforcement_policy.json"
+    ],
+    "approval_requirement": "SECURITY_REVIEW_REQUIRED"
+}

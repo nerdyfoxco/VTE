@@ -1,0 +1,25 @@
+{
+    "contract_name": "provenance_enforcement_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Ensures that only software with verifiable chain-of-custody (provenance) can be deployed to the runtime environment, mitigating supply chain attacks.",
+    "admission_rules": {
+        "image_signature": {
+            "required": true,
+            "trusted_roots": [
+                "KEYS_VTE_PROD_SIGNER"
+            ]
+        },
+        "sbom_presence": {
+            "required": true,
+            "format": "SPDX_JSON"
+        },
+        "slsa_level": {
+            "minimum": 3,
+            "verification_mode": "STRICT"
+        }
+    },
+    "exceptions": {
+        "emergency_break_glass": "ALLOWED_WITH_AUDIT"
+    }
+}

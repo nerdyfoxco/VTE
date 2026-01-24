@@ -1,0 +1,27 @@
+{
+    "contract_name": "account_lifecycle",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Governs the states of user accounts from provisioning to deprovisioning.",
+    "lifecycle_states": [
+        "PROVISIONING",
+        "ACTIVE",
+        "SUSPENDED",
+        "DISABLED",
+        "DELETED"
+    ],
+    "transitions": {
+        "ACTIVE_TO_DISABLED": {
+            "trigger": "ADMIN_ACTION_OR_OFFBOARDING",
+            "side_effects": [
+                "REVOKE_ALL_TOKENS",
+                "DISCONNECT_ACTIVE_SESSIONS",
+                "REMOVE_FROM_GROUPS"
+            ]
+        }
+    },
+    "provisioning": {
+        "approval_required": true,
+        "default_mfa": "REQUIRED"
+    }
+}

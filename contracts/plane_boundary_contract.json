@@ -1,0 +1,19 @@
+{
+    "schema": "vte_plane_boundary_contract_v1",
+    "description": "Defines the strict isolation between User Interactions (Inbox) and Authority Execution (Spine).",
+    "boundary_rules": {
+        "no_shared_state": "Inbox and Spine must NOT share a database.",
+        "communication_channel": "Spine API (REST) only.",
+        "directionality": {
+            "inbox_to_spine": [
+                "Submit Draft",
+                "Query Status"
+            ],
+            "spine_to_inbox": [
+                "Webhook (Decision Finalized)",
+                "Email Notification"
+            ]
+        }
+    },
+    "enforcement": "network_segmentation"
+}

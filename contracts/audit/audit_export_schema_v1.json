@@ -1,0 +1,25 @@
+{
+    "schema": "vte_audit_export_v1",
+    "description": "Portable, verifiable export format for VTE decision history.",
+    "structure": {
+        "export_metadata": {
+            "exported_at": "datetime",
+            "export_id": "uuid",
+            "range_start": "datetime",
+            "range_end": "datetime"
+        },
+        "chain_segment": [
+            {
+                "decision_object": "vte_decision_object_v1",
+                "evidence_bundle": "vte_evidence_bundle_v1",
+                "permit_token": "vte_permit_token_v1",
+                "verification_proof": {
+                    "calculated_hash": "sha256",
+                    "previous_hash_match": "bool"
+                }
+            }
+        ],
+        "merkle_root": "sha256",
+        "signature": "spine_authority_signature"
+    }
+}

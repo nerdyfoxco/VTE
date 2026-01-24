@@ -1,0 +1,31 @@
+{
+    "contract_name": "kill_switch_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "layers": [
+        {
+            "layer": "FIREWALL",
+            "action": "BLOCK_ALL_OUTBOUND",
+            "trigger": "GLOBAL_KILL_SIGNAL"
+        },
+        {
+            "layer": "RUNNER",
+            "action": "ABORT_ACTIVE_JOBS",
+            "trigger": "GLOBAL_KILL_SIGNAL"
+        },
+        {
+            "layer": "QUEUE",
+            "action": "PAUSE_CONSUMPTION",
+            "trigger": "GLOBAL_KILL_SIGNAL"
+        },
+        {
+            "layer": "CONNECTORS",
+            "action": "DISCONNECT_AND_DRAIN",
+            "trigger": "GLOBAL_KILL_SIGNAL"
+        }
+    ],
+    "escalation": {
+        "timeout_sec": 5,
+        "fallback_action": "SIGKILL_PROCESS"
+    }
+}

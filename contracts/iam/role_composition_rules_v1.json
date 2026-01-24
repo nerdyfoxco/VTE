@@ -1,0 +1,12 @@
+{
+    "contract_name": "role_composition_rules",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines how multiple roles assigned to a single principal combine to form an effective permission set.",
+    "composition_strategy": "UNION",
+    "conflict_resolution": {
+        "explicit_deny": "WINS_OVER_ALLOW",
+        "scope_limit": "INTERSECTION_WITH_OAUTH_SCOPES"
+    },
+    "max_roles_per_user": 10
+}

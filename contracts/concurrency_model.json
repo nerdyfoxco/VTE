@@ -1,0 +1,22 @@
+{
+    "contract_name": "concurrency_model",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Define how the system handles concurrent access to shared resources to prevent race conditions and ensure data integrity.",
+    "mechanisms": {
+        "database": {
+            "isolation_level": "SERIALIZABLE",
+            "optimistic_locking": "REQUIRED_FOR_ALL_UPDATES",
+            "version_column": "version_idx"
+        },
+        "distributed_locks": {
+            "provider": "REDIS_REDLOCK",
+            "ttl_semantics": "AUTO_RENEW_OR_FAIL",
+            "usage": "REQUIRED_FOR_NON_TRANSACTIONAL_RESOURCES"
+        }
+    },
+    "invariants": {
+        "no_lost_updates": true,
+        "deadlock_retries": "EXPONENTIAL_BACKOFF"
+    }
+}

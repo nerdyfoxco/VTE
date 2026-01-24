@@ -1,0 +1,29 @@
+{
+    "contract_name": "persona_queue_bindings_v1",
+    "version": "1.0.0",
+    "bindings": [
+        {
+            "persona": "L1_AGENT",
+            "queues": [
+                "triage",
+                "general_support"
+            ],
+            "permission": "READ_WRITE"
+        },
+        {
+            "persona": "L2_AGENT",
+            "queues": [
+                "escalations",
+                "vip_support"
+            ],
+            "permission": "READ_WRITE"
+        },
+        {
+            "persona": "MANAGER",
+            "queues": [
+                "*"
+            ],
+            "permission": "READ_ONLY"
+        }
+    ]
+}

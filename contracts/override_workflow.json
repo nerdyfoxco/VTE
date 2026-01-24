@@ -1,0 +1,24 @@
+{
+    "contract_name": "override_workflow",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Standardizes how a human or system operator can force a state transition against default logic, requiring audit and privilege.",
+    "workflow": {
+        "initiation": {
+            "required_input": [
+                "TARGET_ENTITY",
+                "DESIRED_STATE",
+                "REASON_CODE"
+            ],
+            "privilege": "OPERATOR_LEVEL_2"
+        },
+        "validation": {
+            "check": "AUTHORITY_CHAIN_PERMITS_OVERRIDE",
+            "blocked_if": "LEGAL_HOLD_ACTIVE"
+        },
+        "audit": {
+            "log_event": "MANUAL_OVERRIDE_EXECUTED",
+            "alert_security": true
+        }
+    }
+}

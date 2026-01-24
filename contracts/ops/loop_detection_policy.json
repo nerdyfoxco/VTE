@@ -1,0 +1,29 @@
+{
+    "contract_name": "loop_detection_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "To detect and halt infinite execution loops or runaway amplification in the work graph before they cause systemic outage.",
+    "detection_rules": {
+        "item_amplification": {
+            "threshold": 50,
+            "window_seconds": 60,
+            "metric": "child_items_created_from_single_parent",
+            "action": "FREEZE_PARENT"
+        },
+        "recursion_depth": {
+            "threshold": 10,
+            "metric": "work_item_chain_depth",
+            "action": "FREEZE_CHAIN"
+        },
+        "rapid_state_oscillation": {
+            "threshold": 5,
+            "window_seconds": 10,
+            "metric": "state_transitions_per_item",
+            "action": "FREEZE_ITEM"
+        }
+    },
+    "global_safety": {
+        "max_system_tps": 2500,
+        "action_on_global_breach": "GLOBAL_FREEZE"
+    }
+}

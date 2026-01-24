@@ -1,0 +1,10 @@
+{
+    "schema": "vte_agent_change_budget_v1",
+    "description": "Limits the scope of AI Agent modifications to prevent sprawl.",
+    "limits": {
+        "files_per_pr": 10,
+        "lines_per_pr": 500,
+        "critical_path_modifications": 0
+    },
+    "enforcement": "ci_pr_gate"
+}

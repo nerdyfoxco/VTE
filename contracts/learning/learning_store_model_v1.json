@@ -1,0 +1,13 @@
+{
+    "contract_name": "learning_store_model_v1",
+    "version": "1.0.0",
+    "fields": [
+        "tenant_id",
+        "observation_vector",
+        "decision_outcome"
+    ],
+    "constraints": [
+        "tenant_id IS NOT NULL",
+        "data_at_rest_encrypted: TRUE"
+    ]
+}

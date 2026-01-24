@@ -1,0 +1,26 @@
+{
+    "contract_name": "retention_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "To enforce strict limits on how long personal and sensitive data resides in the system, defaulting to minimum necessary retention.",
+    "schedules": {
+        "raw_evidence_artifacts": {
+            "retention_days": 90,
+            "post_action": "HARD_DELETE",
+            "rationale": "Transient proof needed for immediate dispute window."
+        },
+        "customer_pii": {
+            "retention_days": 365,
+            "post_action": "ANONYMIZE",
+            "rationale": "Yearly audit requirement."
+        },
+        "audit_logs": {
+            "retention_days": 2555,
+            "post_action": "ARCHIVE_COLD_STORAGE",
+            "rationale": "7 Year Legal Requirement."
+        }
+    },
+    "constraints": {
+        "override_precedence": "LEGAL_HOLD_OVERRIDES_RETENTION"
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "schema": "vte_deployment_integrity_policy_v1",
+    "description": "Enforces cryptographic chain of custody for all deployed artifacts.",
+    "requirements": {
+        "sbom": {
+            "required": true,
+            "format": "SPDX-JSON",
+            "generation_phase": "build"
+        },
+        "image_pinning": {
+            "required": true,
+            "method": "sha256_digest",
+            "prohibited": [
+                "latest",
+                "stable",
+                "v1"
+            ]
+        },
+        "attestation": {
+            "required": true,
+            "method": "cosign_signature",
+            "signer": "vte-build-authority"
+        }
+    },
+    "enforcement_gate": "deployment_pipeline_admission_controller"
+}

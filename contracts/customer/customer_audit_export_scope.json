@@ -1,0 +1,59 @@
+{
+    "contract_name": "customer_audit_export_scope",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the scope and redaction rules for customer-requested audit exports.",
+    "export_scope": {
+        "customer_export_bundle": {
+            "included_entities": [
+                "action_log",
+                "communication_history",
+                "decision_summary"
+            ],
+            "format": "JSON_AND_PDF",
+            "verification": "CRYPTOGRAPHIC_PROOF_CHAIN"
+        }
+    },
+    "field_policies": {
+        "action_log": {
+            "fields": [
+                "timestamp",
+                "action_type",
+                "status",
+                "public_proof_key"
+            ],
+            "redactions": [
+                "internal_retry_count",
+                "provider_latency_ms"
+            ]
+        },
+        "communication_history": {
+            "fields": [
+                "timestamp",
+                "channel",
+                "direction",
+                "content_hash",
+                "redacted_content_preview"
+            ],
+            "redactions": [
+                "full_pii_content_unless_dsar"
+            ]
+        },
+        "decision_summary": {
+            "fields": [
+                "decision_id",
+                "timestamp",
+                "outcome",
+                "policy_version_ref"
+            ],
+            "redactions": [
+                "operator_notes",
+                "internal_discussion_threads"
+            ]
+        }
+    },
+    "compliance": {
+        "dsar_compatibility": "MUST_MATCH_DSAR_EXPORT_IF_REQUESTED_BY_SUBJECT",
+        "retention_policy_ref": "contracts/privacy/retention_policy_v1.json"
+    }
+}

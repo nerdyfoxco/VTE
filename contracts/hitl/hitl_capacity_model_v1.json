@@ -1,0 +1,11 @@
+{
+    "contract_name": "hitl_capacity_model",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "units": "items_per_hour",
+    "assumptions": {
+        "average_handling_time_sec": 300,
+        "utilization_target": 0.8
+    },
+    "max_queue_depth": 1000
+}

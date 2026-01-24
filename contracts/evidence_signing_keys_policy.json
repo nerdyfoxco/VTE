@@ -1,0 +1,22 @@
+{
+    "schema": "vte_evidence_signing_keys_policy_v1",
+    "description": "Registry of trusted keys for verifying evidence bundles.",
+    "environments": {
+        "PRODUCTION": {
+            "key_type": "AWS_KMS_ECC_NIST_P256",
+            "rotation_period": "90_days",
+            "enforcement": "HARD_FAIL_IF_UNTRUSTED"
+        },
+        "STAGING": {
+            "key_type": "RSA_2048",
+            "enforcement": "LOG_WARNING"
+        },
+        "LOCAL": {
+            "key_type": "DEV_INSECURE_KEY",
+            "enforcement": "ALLOW_ALL"
+        }
+    },
+    "revocation_list": [
+        "key_id_compromised_2024_01"
+    ]
+}

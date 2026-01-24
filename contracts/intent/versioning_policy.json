@@ -1,0 +1,14 @@
+{
+    "contract_name": "versioning_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "strategies": {
+        "intent_schema": "SEMVER",
+        "ledger_format": "AMEND_ONLY",
+        "handler_logic": "ROLLING_WINDOW_SUPPORT"
+    },
+    "compatibility": {
+        "min_supported_client_version": "1.0.0",
+        "breaking_change_window_days": 30
+    }
+}

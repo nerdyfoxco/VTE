@@ -1,0 +1,21 @@
+{
+    "schema": "vte_abstention_policy_v1",
+    "triggers": [
+        {
+            "type": "ambiguity",
+            "threshold": "high",
+            "example": "User asks for 'reimbursement' but evidence is indistinguishable between lunch and dinner."
+        },
+        {
+            "type": "risk",
+            "category": "irreversible_action",
+            "example": "Request to delete production database."
+        },
+        {
+            "type": "compliance",
+            "category": "gdpr_violation_risk",
+            "example": "Instruction to export data without proper authorization context."
+        }
+    ],
+    "response": "I cannot fulfill this request due to VTE Safety Policy [ID]."
+}

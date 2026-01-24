@@ -1,0 +1,14 @@
+{
+    "contract_name": "learning_loop",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "stages": [
+        "DATA_COLLECTION",
+        "LABEL_AGGREGATION",
+        "MODEL_TRAINING",
+        "EVALUATION",
+        "DEPLOYMENT"
+    ],
+    "feedback_source": "HITL_DECISIONS",
+    "minimum_labels_per_item": 3
+}

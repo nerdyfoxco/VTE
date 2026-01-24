@@ -1,0 +1,9 @@
+{
+    "contract_name": "work_item_invariant_v1",
+    "version": "1.0.0",
+    "invariants": [
+        "work_item_id MUST be UUIDv4",
+        "created_at MUST be UTC ISO8601",
+        "state MUST start as 'NEW'"
+    ]
+}

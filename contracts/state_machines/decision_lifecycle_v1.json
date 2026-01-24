@@ -1,0 +1,45 @@
+{
+    "schema": "vte_state_machine_v1",
+    "id": "lifecycle:decision_object",
+    "description": "Lifecycle of a Decision Object.",
+    "initial_state": "PENDING",
+    "final_states": [
+        "APPROVED",
+        "DENIED",
+        "NEEDS_MORE_EVIDENCE"
+    ],
+    "states": {
+        "PENDING": {
+            "description": "Decision is being evaluated. Not persisted in ledger as 'final' yet."
+        },
+        "APPROVED": {
+            "description": "Intent is authorized. Permit Token issued."
+        },
+        "DENIED": {
+            "description": "Intent is rejected."
+        },
+        "NEEDS_MORE_EVIDENCE": {
+            "description": "Cannot reach verdict without further data."
+        }
+    },
+    "transitions": [
+        {
+            "from": "PENDING",
+            "to": "APPROVED",
+            "guard": "policy_eval_success"
+        },
+        {
+            "from": "PENDING",
+            "to": "DENIED",
+            "guard": "policy_eval_rejection"
+        },
+        {
+            "from": "PENDING",
+            "to": "NEEDS_MORE_EVIDENCE",
+            "guard": "policy_eval_incomplete"
+        }
+    ],
+    "invariants": {
+        "immutability": "Once a final state is reached and persisted (decision_hash calculated), it CANNOT change."
+    }
+}

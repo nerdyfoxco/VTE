@@ -1,0 +1,20 @@
+{
+    "schema": "vte_tenant_isolation_policy_v1",
+    "description": "Enforces strict logical separation of tenant data within shared infrastructure.",
+    "requirements": {
+        "db_isolation": {
+            "method": "ROW_LEVEL_SECURITY",
+            "column": "tenant_id",
+            "enforcement": "MANDATORY_ON_ALL_TABLES"
+        },
+        "blob_isolation": {
+            "method": "PREFIX_SEPARATION",
+            "pattern": "s3://bucket/{tenant_id}/*"
+        },
+        "runtime_isolation": {
+            "method": "REQUEST_CONTEXT_BINDING",
+            "requirement": "tenant_id_must_be_present_in_auth_token"
+        }
+    },
+    "verification": "canary_cross_tenant_read_attempt"
+}

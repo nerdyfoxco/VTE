@@ -1,0 +1,26 @@
+{
+    "contract_name": "degrade_modes",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "modes": [
+        {
+            "mode": "NORMAL",
+            "description": "All systems operational"
+        },
+        {
+            "mode": "DEGRADED_PERFORMANCE",
+            "trigger": "LATENCY_P99 > 2s",
+            "action": "DISABLE_BACKGROUND_JOBS"
+        },
+        {
+            "mode": "READ_ONLY",
+            "trigger": "DB_STORAGE > 95%",
+            "action": "BLOCK_WRITES"
+        },
+        {
+            "mode": "COST_SAVING",
+            "trigger": "BUDGET_USAGE > 95%",
+            "action": "DISABLE_LLM_ENRICHMENT"
+        }
+    ]
+}

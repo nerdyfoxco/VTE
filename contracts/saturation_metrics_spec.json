@@ -1,0 +1,23 @@
+{
+    "contract_name": "saturation_metrics_spec",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Standard metrics to measure system capacity and saturation (USE Method).",
+    "metrics": [
+        {
+            "resource": "CPU",
+            "signal": "utilization_percent",
+            "saturation_threshold": 80
+        },
+        {
+            "resource": "MEMORY",
+            "signal": "rss_usage_mb",
+            "saturation_threshold": 85_PERCENT_OF_LIMIT
+        },
+        {
+            "resource": "DB_CONNECTION_POOL",
+            "signal": "active_connections",
+            "saturation_threshold": 90_PERCENT_OF_MAX
+        }
+    ]
+}

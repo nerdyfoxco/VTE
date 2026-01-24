@@ -1,0 +1,48 @@
+{
+    "schema": "vte_side_effect_ledger_schema_v1",
+    "description": "Ledger recording all external side-effects to ensure Exactly-Once Semantics.",
+    "columns": [
+        {
+            "name": "id",
+            "type": "UUID",
+            "primary_key": true
+        },
+        {
+            "name": "idempotency_key",
+            "type": "VARCHAR(255)",
+            "unique": true,
+            "description": "Crucial constraint preventing double-execution."
+        },
+        {
+            "name": "decision_id",
+            "type": "UUID",
+            "foreign_key": "decision_objects.id"
+        },
+        {
+            "name": "target_system",
+            "type": "VARCHAR(50)",
+            "enum": [
+                "STRIPE",
+                "EMAIL",
+                "PLAID"
+            ]
+        },
+        {
+            "name": "payload_hash",
+            "type": "CHAR(64)",
+            "description": "SHA256 of the side-effect payload."
+        },
+        {
+            "name": "status",
+            "type": "VARCHAR(20)",
+            "enum": [
+                "PENDING",
+                "COMPLETED",
+                "FAILED"
+            ]
+        }
+    ],
+    "invariants": {
+        "unique_idempotency_key": "Must be enforced at DB level."
+    }
+}

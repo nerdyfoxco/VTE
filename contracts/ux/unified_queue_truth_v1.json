@@ -1,0 +1,16 @@
+{
+    "contract_name": "unified_queue_truth_v1",
+    "version": "1.0.0",
+    "definitions": {
+        "queue_item": {
+            "id": "uuid",
+            "priority": "int",
+            "sla_deadline": "timestamp",
+            "assigned_to": "principal_id?"
+        }
+    },
+    "invariants": [
+        "Every work item MUST belong to exactly one queue at a time.",
+        "Items exceeding SLA MUST be auto-escalated."
+    ]
+}

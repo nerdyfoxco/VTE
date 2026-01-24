@@ -1,0 +1,47 @@
+{
+    "schema": "vte_runtime_ledger_schema_v1",
+    "description": "Schema for the append-only ledger of executed side-effects.",
+    "type": "object",
+    "properties": {
+        "ledger_id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "permit_token_id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "execution_timestamp": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "surface": {
+            "type": "string",
+            "description": "Key from surface_map_v1"
+        },
+        "status": {
+            "type": "string",
+            "enum": [
+                "SUCCESS",
+                "FAILURE",
+                "PARTIAL"
+            ]
+        },
+        "side_effect_hash": {
+            "type": "string",
+            "description": "Hash of the actual payload sent to the surface."
+        },
+        "metadata": {
+            "type": "object"
+        }
+    },
+    "required": [
+        "ledger_id",
+        "permit_token_id",
+        "execution_timestamp",
+        "surface",
+        "status",
+        "side_effect_hash"
+    ],
+    "additionalProperties": false
+}

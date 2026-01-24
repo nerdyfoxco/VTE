@@ -1,0 +1,15 @@
+{
+    "contract_name": "support_access_timebox",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Limits support access to specific time windows and purposes.",
+    "grant_rules": {
+        "max_duration_hours": 4,
+        "extension_allowed": false,
+        "scope_limit": "READ_ONLY_UNLESS_ELEVATED"
+    },
+    "revocation": {
+        "trigger": "TIME_EXPIRY_OR_TICKET_CLOSURE",
+        "action": "IMMEDIATE_SESSION_KILL"
+    }
+}

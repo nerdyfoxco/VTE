@@ -1,0 +1,14 @@
+{
+    "contract_name": "notification_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "channels": [
+        "IN_APP",
+        "EMAIL",
+        "PUSH"
+    ],
+    "rules": {
+        "default_opt_in": true,
+        "grouping": "SMART_DIGEST_IF_HIGH_VOLUME"
+    }
+}

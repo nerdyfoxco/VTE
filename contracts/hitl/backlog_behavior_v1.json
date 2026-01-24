@@ -1,0 +1,18 @@
+{
+    "contract_name": "backlog_behavior",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "shedding_policy": "REJECT_EXCESS_AT_INGEST",
+    "triggers": [
+        {
+            "metric": "QUEUE_DEPTH",
+            "threshold": 1000,
+            "action": "ENABLE_INGEST_CIRCUIT_BREAKER"
+        },
+        {
+            "metric": "OLDEST_ITEM_AGE_HOURS",
+            "threshold": 24,
+            "action": "ALERT_CRITICAL"
+        }
+    ]
+}

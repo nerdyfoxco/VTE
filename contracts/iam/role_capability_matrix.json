@@ -1,0 +1,26 @@
+{
+    "contract_name": "role_capability_matrix",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Maps high-level Roles to granular Capabilities.",
+    "roles": {
+        "ORG_ADMIN": [
+            "org:read",
+            "org:write",
+            "user:invite",
+            "billing:manage"
+        ],
+        "AGENT": [
+            "work_item:read",
+            "work_item:action",
+            "queue:view"
+        ],
+        "AUDITOR": [
+            "audit_log:read",
+            "report:generate"
+        ]
+    },
+    "capabilities": {
+        "work_item:action": "Take action on assignments"
+    }
+}

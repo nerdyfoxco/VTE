@@ -1,0 +1,36 @@
+{
+    "schema": "vte_dashboard_contract_v1",
+    "dashboard_id": "delinquency_overview_v1",
+    "title": "Delinquency Outreach Overview",
+    "widgets": [
+        {
+            "id": "pending_count",
+            "type": "stat_card",
+            "data_source": "SELECT count(*) FROM decision_objects WHERE state='PENDING_REVIEW' AND tenant_id = :tenant_id",
+            "refresh_rate": "30s"
+        },
+        {
+            "id": "recent_actions_list",
+            "type": "table",
+            "data_source": "SELECT * FROM audit_log WHERE tenant_id = :tenant_id ORDER BY timestamp DESC LIMIT 10",
+            "columns": [
+                "timestamp",
+                "actor",
+                "action",
+                "status"
+            ]
+        }
+    ],
+    "rbac.visibility": {
+        "pending_count": [
+            "admin",
+            "hitl_operator"
+        ],
+        "recent_actions_list": [
+            "admin"
+        ]
+    },
+    "invariants": {
+        "no_phantom_state": "Widget value MUST equal DB Count(State)."
+    }
+}

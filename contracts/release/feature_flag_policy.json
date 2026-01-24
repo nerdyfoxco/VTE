@@ -1,0 +1,23 @@
+{
+    "contract_name": "feature_flag_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Standardizes feature flag definitions, enforcement, and lifecycle management.",
+    "flag_schema": {
+        "required_fields": [
+            "flag_key",
+            "owner",
+            "description",
+            "default_state",
+            "expiration_date"
+        ]
+    },
+    "constraints": {
+        "no_database_schema_flags": "Schema changes MUST NOT be gated by feature flags.",
+        "runtime_config_reload": "Flags MUST be resolvable without service restart."
+    },
+    "audit": {
+        "log_toggles": true,
+        "attribution_required": true
+    }
+}

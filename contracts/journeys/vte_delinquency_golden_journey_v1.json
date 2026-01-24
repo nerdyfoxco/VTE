@@ -1,0 +1,54 @@
+{
+    "contract_name": "vte_delinquency_golden_journey",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the canonical 'Happy Path' for a delinquency resolution workflow, serving as the ultimate integration test and truth source.",
+    "journey_steps": [
+        {
+            "step_id": 1,
+            "name": "INGEST_DELINQUENCY",
+            "expected_outcome": "WORK_ITEM_CREATED",
+            "required_evidence": [
+                "PROVIDER_SYNC_PROOF",
+                "DEDUPE_CHECK"
+            ]
+        },
+        {
+            "step_id": 2,
+            "name": "FILTER_DNC",
+            "expected_outcome": "PROCEED_OR_CLOSE",
+            "required_evidence": [
+                "DNC_CHECK_RESULT"
+            ]
+        },
+        {
+            "step_id": 3,
+            "name": "SELECT_STRATEGY",
+            "expected_outcome": "STRATEGY_ASSIGNED",
+            "required_evidence": [
+                "POLICY_ENGINE_DECISION"
+            ]
+        },
+        {
+            "step_id": 4,
+            "name": "EXECUTE_OUTREACH",
+            "expected_outcome": "SIDE_EFFECT_RECORDED",
+            "required_evidence": [
+                "BROWSER_PROOF",
+                "SIDE_EFFECT_LEDGER_ENTRY"
+            ]
+        },
+        {
+            "step_id": 5,
+            "name": "VERIFY_OUTCOME",
+            "expected_outcome": "WORK_ITEM_CLOSED",
+            "required_evidence": [
+                "AUDIT_LOG_FINALIZATION"
+            ]
+        }
+    ],
+    "invariants": {
+        "total_duration_max_ms": 5000,
+        "completeness": "ALL_STEPS_MUST_SUCCEED"
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "contract_name": "evidence_store_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "storage_backend": "S3_OBJECT_LOCK",
+    "retention_policy": {
+        "mode": "COMPLIANCE",
+        "retention_period_days": 2555
+    },
+    "encryption": "AES_256_GCM_STRICT",
+    "access_control": "READ_ONLY_AUDITOR"
+}

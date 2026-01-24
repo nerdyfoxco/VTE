@@ -1,0 +1,20 @@
+{
+    "schema": "vte_idempotency_keys_v1",
+    "description": "Defines the structure and scope of idempotency keys for critical operations.",
+    "keys": {
+        "decision_submission": {
+            "format": "idempotency-key: {client_generated_uuid}",
+            "scope": "actor_session_id",
+            "ttl": "24_hours"
+        },
+        "payment_processing": {
+            "format": "stripe-idempotency-key: {decision_id}",
+            "scope": "global",
+            "ttl": "7_days"
+        }
+    },
+    "storage": {
+        "backend": "redis_or_postgres",
+        "collision_behavior": "return_previous_result"
+    }
+}

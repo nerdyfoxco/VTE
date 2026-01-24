@@ -1,0 +1,19 @@
+{
+    "schema": "vte_google_data_safety_v1",
+    "data_shared": {
+        "third_parties": [
+            "Stripe (Payments)",
+            "Plaid (Evidence)"
+        ],
+        "purpose": "Fraud Prevention, App Functionality"
+    },
+    "security_practices": {
+        "data_encrypted_in_transit": true,
+        "user_can_request_deletion": true
+    },
+    "data_types": [
+        "Financial Info",
+        "Personal Info (Email)",
+        "Device or other IDs"
+    ]
+}

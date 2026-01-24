@@ -1,0 +1,24 @@
+{
+    "schema": "vte_ui_signature_v1",
+    "description": "Ensures that the UI presentation matches the cryptographic intent of the Decision.",
+    "requirements": {
+        "intent_binding": {
+            "required": true,
+            "method": "hash_match",
+            "fields": [
+                "intent_action",
+                "target_resource",
+                "amount",
+                "currency"
+            ]
+        },
+        "drift_protection": {
+            "mechanism": "ui_version_hash",
+            "enforcement": "reject_decision_if_ui_version_mismatch"
+        },
+        "user_acknowledgment": {
+            "explicit_action": "click_sign_button",
+            "reauth_threshold": "critical_actions_only"
+        }
+    }
+}

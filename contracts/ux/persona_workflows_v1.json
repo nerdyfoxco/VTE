@@ -1,0 +1,39 @@
+{
+    "contract_name": "persona_workflows_v1",
+    "version": "1.0.0",
+    "description": "Defines allowed workflows and transitions per user persona.",
+    "personas": {
+        "ADMIN": {
+            "allowed_actions": [
+                "VIEW_ALL",
+                "EDIT_ALL",
+                "DELETE_USER",
+                "EXPORT_AUDIT"
+            ],
+            "denied_actions": []
+        },
+        "AGENT": {
+            "allowed_actions": [
+                "VIEW_ASSIGNED",
+                "EDIT_ASSIGNED",
+                "SUBMIT_APPROVAL"
+            ],
+            "denied_actions": [
+                "DELETE_USER",
+                "EXPORT_AUDIT"
+            ]
+        },
+        "AUDITOR": {
+            "allowed_actions": [
+                "VIEW_ALL",
+                "EXPORT_AUDIT"
+            ],
+            "denied_actions": [
+                "EDIT_ALL",
+                "EDIT_ASSIGNED",
+                "DELETE_USER"
+            ]
+        }
+    },
+    "enforcement": "STRICT"
+}

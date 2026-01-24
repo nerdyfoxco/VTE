@@ -1,0 +1,21 @@
+{
+    "contract_name": "tenant_quota_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Ensures no single tenant can monopolize system resources (Noisy Neighbor protection).",
+    "quotas": {
+        "api_requests": {
+            "window": "1_MINUTE",
+            "limit": 1000,
+            "action": "THROTTLE_429"
+        },
+        "storage_gb": {
+            "limit": 500,
+            "action": "BLOCK_WRITES"
+        },
+        "concurrent_workflows": {
+            "limit": 50,
+            "action": "QUEUE_WITH_BACKPRESSURE"
+        }
+    }
+}

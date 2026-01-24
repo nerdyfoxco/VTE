@@ -1,0 +1,24 @@
+{
+    "contract_name": "feature_truth_packet",
+    "feature_id": "vte_delinquency_v1",
+    "version": "1.0.0",
+    "status": "SEALED",
+    "purpose": "Aggregates all normative definitions for the delinquency feature into a single immutable packet for release verification.",
+    "components": {
+        "scope": "contracts/features/vte_delinquency_v1/scope_contract.json",
+        "journey": "contracts/journeys/vte_delinquency_golden_journey_v1.json",
+        "evidence_ladder": "contracts/evidence/evidence_ladder_v1.json",
+        "side_effects": "contracts/side_effect_surface.json",
+        "failure_rules": "contracts/partial_failure_semantics.json"
+    },
+    "constraints": {
+        "no_bloat": "Must not import workflows outside of declared scope.",
+        "completeness": "All component paths must resolve to existing, active contracts."
+    },
+    "signatures": {
+        "required": [
+            "PRODUCT_OWNER",
+            "SECURITY_ARCHITECT"
+        ]
+    }
+}

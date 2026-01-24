@@ -1,0 +1,43 @@
+{
+    "graph_id": "vte_core_readiness_graph_v1",
+    "generated_at": "2023-10-27T12:00:00Z",
+    "nodes": [
+        {
+            "id": "contract_scope",
+            "type": "CONTRACT",
+            "metadata": {
+                "contract_name": "scope_contract",
+                "version": "1.0",
+                "status": "ACTIVE",
+                "path": "contracts/features/vte_delinquency_v1/scope_contract.json"
+            }
+        },
+        {
+            "id": "contract_journey",
+            "type": "CONTRACT",
+            "metadata": {
+                "contract_name": "vte_delinquency_golden_journey",
+                "version": "1.0",
+                "status": "ACTIVE",
+                "path": "contracts/journeys/vte_delinquency_golden_journey_v1.json"
+            }
+        },
+        {
+            "id": "contract_security_sod",
+            "type": "CONTRACT",
+            "metadata": {
+                "contract_name": "separation_of_duties",
+                "version": "1.0",
+                "status": "ACTIVE",
+                "path": "contracts/security/separation_of_duties_v1.json"
+            }
+        }
+    ],
+    "edges": [
+        {
+            "source": "contract_journey",
+            "target": "contract_scope",
+            "type": "DEPENDS_ON"
+        }
+    ]
+}

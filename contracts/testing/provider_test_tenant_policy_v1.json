@@ -1,0 +1,9 @@
+{
+    "contract_name": "provider_test_tenant_policy_v1",
+    "version": "1.0.0",
+    "policy": [
+        "Test tenants MUST be clearly marked with 'is_test_tenant: true'.",
+        "Test tenants MUST NOT interact with Production payment gateways.",
+        "Test tenants MUST have an automated TTL (Time To Live)."
+    ]
+}

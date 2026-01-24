@@ -1,0 +1,9 @@
+{
+    "contract_name": "contract_deprecation_and_archival_policy_v1",
+    "version": "1.0.0",
+    "archival_rules": [
+        "Archived contracts are read-only.",
+        "Archived contracts CANNOT be included in new bundles.",
+        "Archived contracts MUST be retained for 7 years (legal hold)."
+    ]
+}

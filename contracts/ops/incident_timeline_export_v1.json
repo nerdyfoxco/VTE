@@ -1,0 +1,27 @@
+{
+    "contract_name": "incident_timeline_export",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Standardizes the export format for incident post-mortems, ensuring all relevant events, chats, and metrics are captured in a single chronological stream.",
+    "schema": {
+        "required_fields": [
+            "incident_id",
+            "severity",
+            "start_time_utc",
+            "end_time_utc",
+            "events"
+        ],
+        "event_types": [
+            "ALERT_FIRED",
+            "PAGE_ACKNOWLEDGED",
+            "STATUS_CHANGE",
+            "DEPLOYMENT_EVENT",
+            "CHAT_MESSAGE",
+            "MITIGATION_ACTION"
+        ]
+    },
+    "privacy_rules": {
+        "scrub_pii": true,
+        "redact_secrets": true
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "contract_name": "platform_capability_matrix_v1",
+    "version": "1.0.0",
+    "capabilities": {
+        "blob_storage": [
+            "s3",
+            "gcs",
+            "azure_blob"
+        ],
+        "queue": [
+            "sqs",
+            "pubsub",
+            "azure_queue"
+        ],
+        "compute": [
+            "k8s",
+            "lambda",
+            "cloud_run"
+        ]
+    },
+    "invariants": [
+        "All platform adapters MUST implement the common interface.",
+        "No vendor-specific logic allowed in core business logic."
+    ]
+}

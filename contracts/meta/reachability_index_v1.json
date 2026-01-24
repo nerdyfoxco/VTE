@@ -1,0 +1,24 @@
+{
+    "contract_name": "reachability_index",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Maps all public entry points (Ports) to their backing implementation handlers, ensuring no dangling ports or unreachable handlers.",
+    "ports": [
+        {
+            "port_id": "api_submit_delinquency",
+            "type": "REST_API_POST",
+            "path": "/v1/delinquency",
+            "handler_ref": "vte.delinquency.handler.submit"
+        },
+        {
+            "port_id": "queue_delinquency_events",
+            "type": "MESSAGE_QUEUE",
+            "topic": "delinquency.events",
+            "handler_ref": "vte.delinquency.consumer.process"
+        }
+    ],
+    "wiring_rules": {
+        "all_ports_must_bind": true,
+        "no_orphan_handlers": true
+    }
+}

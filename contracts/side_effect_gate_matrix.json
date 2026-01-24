@@ -1,0 +1,38 @@
+{
+    "schema": "vte_side_effect_gate_matrix_v1",
+    "description": "Defines authorized side-effects for each system component.",
+    "matrix": {
+        "spine_api": {
+            "db_write": [
+                "decision_objects",
+                "evidence_bundles",
+                "permit_tokens"
+            ],
+            "external_api": [
+                "stripe.com",
+                "plaid.com",
+                "cognito-idp"
+            ],
+            "email_send": [
+                "smtp_gateway"
+            ]
+        },
+        "web_dashboard": {
+            "db_write": [],
+            "external_api": [
+                "spine_api",
+                "auth0"
+            ],
+            "email_send": []
+        },
+        "batch_worker": {
+            "db_write": [
+                "audit_logs",
+                "usage_metrics"
+            ],
+            "external_api": [],
+            "email_send": []
+        }
+    },
+    "enforcement": "network_policy_and_iam"
+}

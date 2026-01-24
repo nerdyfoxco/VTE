@@ -1,0 +1,22 @@
+{
+    "contract_name": "compensation_protocol",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the standard for SAGA-pattern compensation transactions to undo side effects of failed workflows.",
+    "requirements": {
+        "idempotency": {
+            "description": "Compensation actions must be safe to run multiple times with the same outcome.",
+            "enforced_by": "TRANSACTION_ID_DEDUPLICATION"
+        },
+        "ordering": {
+            "description": "Compensations must run in reverse order of the original successful steps (LIFO).",
+            "enforced_by": "WORKFLOW_ENGINE"
+        }
+    },
+    "standard_actions": [
+        "REFUND_PAYMENT",
+        "RELEASE_RESERVATION",
+        "DELETE_PROVISIONAL_RECORD",
+        "SEND_APOLOGY_EMAIL"
+    ]
+}

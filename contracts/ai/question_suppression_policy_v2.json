@@ -1,0 +1,22 @@
+{
+    "schema": "vte_question_suppression_policy_v2",
+    "description": "Defines rate limits and budget caps for Agent-generated questions to Human Operators.",
+    "budgets": {
+        "daily_question_cap_per_agent": 50,
+        "max_retries_on_ambiguity": 1
+    },
+    "suppression_rules": [
+        {
+            "trigger": "low_confidence_repeated",
+            "threshold": 3,
+            "action": "HALT_WORKFLOW_AND_FLAG_FOR_REVIEW"
+        },
+        {
+            "trigger": "budget_exceeded",
+            "action": "AUTO_ABSTAIN"
+        }
+    ],
+    "invariants": {
+        "human_time_is_expensive": "Agents must not treat humans as free API endpoints."
+    }
+}

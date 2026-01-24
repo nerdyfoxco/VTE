@@ -1,0 +1,15 @@
+{
+    "contract_name": "financial_budget_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "limits": {
+        "daily_spend_usd": 100.00,
+        "monthly_spend_usd": 2000.00
+    },
+    "alert_thresholds": [
+        0.5,
+        0.8,
+        0.95
+    ],
+    "enforcement_action": "HARD_STOP_NON_CRITICAL"
+}

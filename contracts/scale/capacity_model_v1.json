@@ -1,0 +1,20 @@
+{
+    "schema": "vte_capacity_model_v1",
+    "description": "Defines the scale limits and Performance SLOs for the VTE Spine.",
+    "limits": {
+        "max_concurrent_active_users": 1000,
+        "max_transactions_per_second": 2500,
+        "max_db_connections_per_pool": 50,
+        "executor_pool_size": 100
+    },
+    "slos": {
+        "api_latency_p95": "200ms",
+        "api_latency_p99": "800ms",
+        "async_job_pickup_time_p99": "5s"
+    },
+    "throttling_strategy": {
+        "algorithm": "TOKEN_BUCKET",
+        "bucket_size": 100,
+        "refill_rate": 10
+    }
+}

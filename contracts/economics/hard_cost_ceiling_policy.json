@@ -1,0 +1,30 @@
+{
+    "contract_name": "hard_cost_ceiling_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "To prevent runaway costs by enforcing absolute ceilings on expensive operations (OCR, Provider API usage) per unit time/tenant.",
+    "ceilings": {
+        "provider_api_calls": {
+            "metric": "calls_per_minute",
+            "limit": 600,
+            "scope": "TENANT",
+            "action_on_breach": "THROTTLE_AND_ERROR"
+        },
+        "ocr_pages_processed": {
+            "metric": "pages_per_hour",
+            "limit": 100,
+            "scope": "TENANT",
+            "action_on_breach": "DEGRADE_TO_MANUAL"
+        },
+        "sms_messages_sent": {
+            "metric": "messages_per_day",
+            "limit": 5000,
+            "scope": "TENANT_CAMPAIGN",
+            "action_on_breach": "HARD_STOP"
+        }
+    },
+    "safety_valves": {
+        "global_kill_switch_cost_threshold_usd": 1000.0,
+        "kill_switch_window_hours": 1
+    }
+}

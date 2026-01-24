@@ -1,0 +1,53 @@
+{
+    "schema": "vte_evidence_ladder_v1",
+    "description": "Defines the hierarchy of evidence reliability and the required artifacts for each level.",
+    "ladder": [
+        {
+            "rank": 1,
+            "type": "DIRECT_API",
+            "description": "Evidence obtained directly from a Provider API (e.g. Stripe, Gmail).",
+            "required_artifacts": [
+                "raw_json_response",
+                "trace_id",
+                "timestamp_utc"
+            ],
+            "confidence_score": 1.0
+        },
+        {
+            "rank": 2,
+            "type": "BROWSER_DOM_SNAPSHOT",
+            "description": "Evidence extracted from a verified DOM snapshot via Playwright.",
+            "required_artifacts": [
+                "dom_snapshot_html",
+                "screenshot_png",
+                "url_verification"
+            ],
+            "confidence_score": 0.95
+        },
+        {
+            "rank": 3,
+            "type": "OCR_SCREENSHOT",
+            "description": "Text extracted from a visual screenshot via OCR.",
+            "required_artifacts": [
+                "screenshot_png",
+                "ocr_text_content",
+                "bounding_box"
+            ],
+            "confidence_score": 0.8
+        },
+        {
+            "rank": 4,
+            "type": "USER_ASSERTION",
+            "description": "Information provided manually by a human user.",
+            "required_artifacts": [
+                "user_id",
+                "timestamp_utc",
+                "assertion_text"
+            ],
+            "confidence_score": 0.5
+        }
+    ],
+    "invariants": {
+        "no_irreversible_action_on_assertion": "Actions labeled 'irreversible' require Rank <= 2."
+    }
+}

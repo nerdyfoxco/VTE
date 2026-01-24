@@ -1,0 +1,9 @@
+{
+    "contract_name": "bundle_only_runtime_policy_v1",
+    "version": "1.0.0",
+    "rules": [
+        "The runtime MUST ONLY execute contracts loaded from a signed bundle.",
+        "Loading contracts from the local filesystem (loose files) is FORBIDDEN in Production.",
+        "Bundles MUST be verified against the Transparency Log."
+    ]
+}

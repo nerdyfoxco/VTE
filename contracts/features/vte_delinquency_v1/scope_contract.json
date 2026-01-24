@@ -1,0 +1,54 @@
+{
+    "schema": "vte_feature_scope_v1",
+    "feature_id": "vte_delinquency_v1",
+    "description": "Manages user delinquency status (e.g. past due payments) and automated enforcement actions.",
+    "states": [
+        "GOOD_STANDING",
+        "WARNING_SENT",
+        "SUSPENDED",
+        "TERMINATED"
+    ],
+    "transitions": [
+        {
+            "from": "GOOD_STANDING",
+            "to": "WARNING_SENT",
+            "trigger": "payment_missed"
+        },
+        {
+            "from": "WARNING_SENT",
+            "to": "SUSPENDED",
+            "trigger": "grace_period_expired"
+        },
+        {
+            "from": "WARNING_SENT",
+            "to": "GOOD_STANDING",
+            "trigger": "payment_received"
+        },
+        {
+            "from": "SUSPENDED",
+            "to": "GOOD_STANDING",
+            "trigger": "payment_received"
+        },
+        {
+            "from": "SUSPENDED",
+            "to": "TERMINATED",
+            "trigger": "manual_review_decision"
+        }
+    ],
+    "side_effects": {
+        "WARNING_SENT": [
+            "email_notification_v1"
+        ],
+        "SUSPENDED": [
+            "revoke_access_token",
+            "email_notification_v2"
+        ],
+        "TERMINATED": [
+            "archive_user_data",
+            "final_bill_generation"
+        ]
+    },
+    "invariants": {
+        "no_termination_without_human_review": "True"
+    }
+}

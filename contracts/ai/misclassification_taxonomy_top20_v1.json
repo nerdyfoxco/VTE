@@ -1,0 +1,12 @@
+{
+    "contract_name": "misclassification_taxonomy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "categories": [
+        "FALSE_POSITIVE_FRAUD",
+        "FALSE_NEGATIVE_FRAUD",
+        "WRONG_ENTITY_TYPE",
+        "MISSING_ATTRIBUTE_EXTRACTION",
+        "HALLUCINATION"
+    ]
+}

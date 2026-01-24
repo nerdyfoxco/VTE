@@ -1,0 +1,51 @@
+{
+    "contract_name": "playwright_dsl_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "allowed_actions": [
+        {
+            "action": "NAVIGATE",
+            "args": [
+                "url"
+            ]
+        },
+        {
+            "action": "CLICK",
+            "args": [
+                "selector"
+            ]
+        },
+        {
+            "action": "TYPE",
+            "args": [
+                "selector",
+                "text"
+            ]
+        },
+        {
+            "action": "READ_TEXT",
+            "args": [
+                "selector"
+            ]
+        },
+        {
+            "action": "WAIT_FOR",
+            "args": [
+                "selector",
+                "timeout_ms"
+            ]
+        },
+        {
+            "action": "SCREENSHOT",
+            "args": [
+                "filename"
+            ]
+        }
+    ],
+    "forbidden_patterns": [
+        "eval",
+        "exec",
+        "javascript:",
+        "function("
+    ]
+}

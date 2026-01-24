@@ -1,0 +1,14 @@
+{
+    "contract_name": "evidence_metadata_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "fields": {
+        "evidence_id": "UUID",
+        "timestamp_utc": "ISO8601",
+        "content_hash": "SHA256",
+        "previous_evidence_hash": "SHA256",
+        "actor_id": "String",
+        "context_tags": "List<String>"
+    },
+    "integrity_guarantee": "CHAINED_HASH"
+}

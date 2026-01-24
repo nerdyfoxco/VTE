@@ -1,0 +1,38 @@
+{
+    "contract_name": "firewall_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "default_action": "BLOCK",
+    "rules": [
+        {
+            "mode": "LIVE",
+            "allow": [
+                "*"
+            ],
+            "condition": "REGISTERED_IN_REGISTRY"
+        },
+        {
+            "mode": "SHADOW",
+            "allow": [
+                "DB_READ",
+                "LOGGING"
+            ],
+            "block": [
+                "EXTERNAL_CALL",
+                "EMAIL_SEND",
+                "DB_WRITE"
+            ]
+        },
+        {
+            "mode": "REPLAY",
+            "allow": [
+                "DB_READ",
+                "LOGGING"
+            ],
+            "block": [
+                "*"
+            ]
+        }
+    ],
+    "enforcement_action": "EXCEPTION_AND_ALERT"
+}

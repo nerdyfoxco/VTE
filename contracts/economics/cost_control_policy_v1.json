@@ -1,0 +1,24 @@
+{
+    "schema": "vte_cost_control_policy_v1",
+    "enforcement": "circuit_breaker",
+    "quotas": {
+        "daily_decision_volume": {
+            "limit": 10000,
+            "action": "alert_at_80_percent"
+        },
+        "s3_storage_growth": {
+            "limit": "10GB_per_day",
+            "action": "alert"
+        },
+        "llm_token_spend": {
+            "limit": "$50_per_day",
+            "action": "hard_stop"
+        }
+    },
+    "circuit_breakers": {
+        "cost_spike_protection": {
+            "trigger": "spend_rate > $10/hour",
+            "reset": "manual_intervention"
+        }
+    }
+}

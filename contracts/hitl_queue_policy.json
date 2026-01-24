@@ -1,0 +1,28 @@
+{
+    "schema": "vte_hitl_queue_policy_v1",
+    "description": "Governs the Human-in-the-Loop review process, managing capacity and ensuring timely decisions.",
+    "queues": {
+        "fraud_review": {
+            "priority": "P0",
+            "sla": "15_minutes",
+            "escalation": "on_call_fraud_manager"
+        },
+        "policy_ambiguity": {
+            "priority": "P1",
+            "sla": "4_hours",
+            "escalation": "senior_policy_analyst"
+        },
+        "ai_uncertainty": {
+            "priority": "P2",
+            "sla": "24_hours",
+            "escalation": "batch_review_team"
+        }
+    },
+    "capacity_model": {
+        "max_active_items_per_reviewer": 20,
+        "backlog_kill_switch": {
+            "threshold": "500_items_pending",
+            "action": "halt_new_decision_ingest"
+        }
+    }
+}

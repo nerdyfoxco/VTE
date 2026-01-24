@@ -1,0 +1,28 @@
+{
+    "contract_name": "work_queue_views",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the standard filters and columns for different persona views of the Unified Queue.",
+    "views": {
+        "my_work": {
+            "filters": [
+                "assigned_to == ME",
+                "status != RESOLVED"
+            ],
+            "sort": "priority DESC"
+        },
+        "team_backlog": {
+            "filters": [
+                "assigned_to == NULL",
+                "group == MY_GROUP"
+            ],
+            "sort": "due_date ASC"
+        },
+        "manager_oversight": {
+            "filters": [
+                "group == MY_DB_REPORTS"
+            ],
+            "sort": "sla_breach_time ASC"
+        }
+    }
+}

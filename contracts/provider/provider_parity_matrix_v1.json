@@ -1,0 +1,41 @@
+{
+    "contract_name": "provider_parity_matrix",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Tracks feature parity across different external providers to ensure uniform system behavior.",
+    "matrix": {
+        "gmail": {
+            "features": [
+                "READ",
+                "SEND",
+                "THREADS",
+                "LABELS"
+            ],
+            "limitations": []
+        },
+        "outlook": {
+            "features": [
+                "READ",
+                "SEND",
+                "THREADS",
+                "FOLDERS"
+            ],
+            "limitations": [
+                "PAGE_SIZE_LIMIT_50"
+            ]
+        },
+        "imap_generic": {
+            "features": [
+                "READ",
+                "SEND"
+            ],
+            "limitations": [
+                "NO_THREADS",
+                "POLLING_ONLY"
+            ]
+        }
+    },
+    "invariants": {
+        "core_workflow_must_work": "TRUE"
+    }
+}

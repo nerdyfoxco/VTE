@@ -1,0 +1,103 @@
+{
+  "schema": "vte_system_map_v1",
+  "description": "The sealed topology of the VTE system. Defines all authorized components and permitted connections (Wiring Matrix).",
+  "components": [
+    {
+      "id": "comp:spine",
+      "type": "service",
+      "criticality": "critical",
+      "description": "The Proof Authority. Python/FastAPI."
+    },
+    {
+      "id": "comp:db",
+      "type": "database",
+      "criticality": "critical",
+      "description": "PostgreSQL 16. Append-Only Ledger."
+    },
+    {
+      "id": "comp:web",
+      "type": "frontend",
+      "criticality": "high",
+      "description": "Next.js Consumer Interface."
+    },
+    {
+      "id": "comp:mobile",
+      "type": "frontend",
+      "criticality": "high",
+      "description": "Flutter Mobile App."
+    },
+    {
+      "id": "comp:blob_storage",
+      "type": "infrastructure",
+      "criticality": "high",
+      "description": "S3 (WORM) for Evidence Artifacts."
+    },
+    {
+      "id": "comp:email_gateway",
+      "type": "connector",
+      "criticality": "medium",
+      "description": "SMTP Gateway for Notifications."
+    },
+    {
+      "id": "comp:auth_provider",
+      "type": "external_service",
+      "criticality": "critical",
+      "description": "OIDC Identity Provider (e.g., Auth0/Cognito)."
+    }
+  ],
+  "wiring_matrix": [
+    {
+      "source": "comp:spine",
+      "target": "comp:db",
+      "protocol": "tcp/5432",
+      "auth_mode": "mtls_or_credentials",
+      "description": "Spine reads/writes to Ledger."
+    },
+    {
+      "source": "comp:web",
+      "target": "comp:spine",
+      "protocol": "https/443",
+      "auth_mode": "oidc_bearer",
+      "description": "Web App invokes Decision API."
+    },
+    {
+      "source": "comp:mobile",
+      "target": "comp:spine",
+      "protocol": "https/443",
+      "auth_mode": "oidc_bearer",
+      "description": "Mobile App invokes Decision API."
+    },
+    {
+      "source": "comp:spine",
+      "target": "comp:blob_storage",
+      "protocol": "https/443",
+      "auth_mode": "aws_sigv4",
+      "description": "Spine writes Evidence Artifacts."
+    },
+    {
+      "source": "comp:spine",
+      "target": "comp:email_gateway",
+      "protocol": "smtps/587",
+      "auth_mode": "api_key",
+      "description": "Spine sends notifications."
+    },
+    {
+      "source": "comp:web",
+      "target": "comp:auth_provider",
+      "protocol": "https/443",
+      "auth_mode": "public_client",
+      "description": "Web login flow."
+    },
+    {
+      "source": "comp:mobile",
+      "target": "comp:auth_provider",
+      "protocol": "https/443",
+      "auth_mode": "public_client",
+      "description": "Mobile login flow."
+    }
+  ],
+  "constraints": {
+    "no_direct_db_access_from_frontend": true,
+    "no_internet_egress_from_spine_except_allowlist": true
+  }
+}

@@ -1,0 +1,22 @@
+{
+    "contract_name": "ui_action_binding_map_v1",
+    "version": "1.0.0",
+    "description": "Maps every UI button/action to a required Evidence Contract ID.",
+    "bindings": [
+        {
+            "ui_element_id": "btn_approve_invoice",
+            "required_contract": "PROVE_INVOICE_APPROVAL",
+            "enforcement_level": "BLOCKING"
+        },
+        {
+            "ui_element_id": "btn_delete_user",
+            "required_contract": "PROVE_USER_DELETION",
+            "enforcement_level": "BLOCKING"
+        },
+        {
+            "ui_element_id": "btn_export_audit",
+            "required_contract": "PROVE_AUDIT_EXPORT",
+            "enforcement_level": "AUDIT_ONLY"
+        }
+    ]
+}

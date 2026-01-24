@@ -1,0 +1,15 @@
+{
+    "contract_name": "mobile_approval_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "payload_structure": {
+        "approval_id": "UUID",
+        "intent_hash": "SHA256",
+        "decision": "ENUM(APPROVE, REJECT)",
+        "timestamp_utc": "ISO8601",
+        "device_id": "String",
+        "biometric_proof": "String (Optional)"
+    },
+    "signing_algorithm": "ECDSA_P256",
+    "signature_format": "DER_ENCODED"
+}

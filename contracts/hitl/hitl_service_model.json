@@ -1,0 +1,15 @@
+{
+    "contract_name": "hitl_service_model",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the service boundary for HITL operations.",
+    "capabilities": {
+        "batch_review": "SUPPORTED",
+        "qa_sampling": "RANDOM_%_5",
+        "sla_monitoring": "REQUIRED"
+    },
+    "interface": {
+        "get_next_batch": "/api/hitl/next",
+        "submit_decision": "/api/hitl/submit"
+    }
+}

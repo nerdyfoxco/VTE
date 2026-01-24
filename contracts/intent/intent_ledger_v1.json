@@ -1,0 +1,19 @@
+{
+    "contract_name": "intent_ledger",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "description": "A simplified ledger to track user intent and system actions immutably.",
+    "schema": {
+        "intent_id": "UUID",
+        "user_id": "UUID",
+        "original_intent_text": "String",
+        "timestamp_utc": "ISO8601",
+        "status": "ENUM(PENDING, FULFILLED, BLOCKED)",
+        "events": "List<IntentEvent>",
+        "integrity_checksum": "SHA256"
+    },
+    "invariants": [
+        "NO_UPDATE_OF_PAST_EVENTS",
+        "APPEND_ONLY"
+    ]
+}

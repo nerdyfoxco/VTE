@@ -1,0 +1,10 @@
+{
+    "contract_name": "invite_flow",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "requirements": {
+        "expiry": "7_DAYS",
+        "domain_restriction": "OPTIONAL_ENFORCED",
+        "max_pending": 100
+    }
+}

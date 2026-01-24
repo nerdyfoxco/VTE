@@ -1,0 +1,35 @@
+{
+    "schema": "vte_release_dossier_schema_v1",
+    "description": "Validation constraint for the Release Dossier artifact. Ensures no release proceeds without proof of verification.",
+    "required_sections": [
+        "safety_checks",
+        "testing_evidence",
+        "deployment_artifacts",
+        "operational_readiness",
+        "sign_off"
+    ],
+    "section_requirements": {
+        "safety_checks": {
+            "required_fields": [
+                "invariant_check_hash",
+                "migration_integrity_check"
+            ]
+        },
+        "testing_evidence": {
+            "required_fields": [
+                "unit_test_coverage_percent",
+                "deep_scale_simulation_result"
+            ]
+        },
+        "deployment_artifacts": {
+            "required_fields": [
+                "sbom_uri",
+                "image_digest_sha256"
+            ]
+        },
+        "sign_off": {
+            "required_role": "release_manager",
+            "method": "digital_signature"
+        }
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "schema": "vte_contract_enforcement_index_v1",
+    "description": "Meta-registry ensuring that every defined contract has a concrete enforcement mechanism.",
+    "contracts": [
+        {
+            "contract": "contracts/ledger/invariants.md",
+            "enforcement": "tests/prove_direct_state_update_rejected.py",
+            "type": "CANARY"
+        },
+        {
+            "contract": "contracts/side_effect_ledger_schema.json",
+            "enforcement": "tests/prove_concurrent_duplicate_side_effect_insert_rejected.py",
+            "type": "CANARY"
+        },
+        {
+            "contract": "contracts/tenancy_model.json",
+            "enforcement": "tests/prove_cross_tenant_read_write_denied.py",
+            "type": "CANARY"
+        },
+        {
+            "contract": "contracts/evidence_authenticity_v1.json",
+            "enforcement": "tests/prove_unsigned_evidence_rejected.py",
+            "type": "CANARY"
+        },
+        {
+            "contract": "contracts/security/irreversible_actions.json",
+            "enforcement": "spine/app/core/verifier.py",
+            "type": "RUNTIME"
+        },
+        {
+            "contract": "contracts/store/apple_privacy_manifest.json",
+            "enforcement": "tools/compliance_pack/emit_pack.py",
+            "type": "BUILD_TOOL"
+        }
+    ],
+    "coverage_goal": "100_percent"
+}

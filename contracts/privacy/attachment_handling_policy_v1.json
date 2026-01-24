@@ -1,0 +1,15 @@
+{
+    "contract_name": "attachment_handling",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "allowed_types": [
+        "application/pdf",
+        "image/png",
+        "image/jpeg",
+        "text/plain"
+    ],
+    "security_scan": {
+        "required": true,
+        "action_on_fail": "QUARANTINE_AND_ALERT"
+    }
+}

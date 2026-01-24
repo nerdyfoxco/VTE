@@ -1,0 +1,13 @@
+{
+    "contract_name": "promotion_pipeline",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "thresholds": {
+        "agreement_score": 0.9,
+        "min_reviewers": 3
+    },
+    "actions": {
+        "promote": "ADD_TO_GOLDEN_SET",
+        "demote": "FLAG_FOR_AUDIT"
+    }
+}

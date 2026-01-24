@@ -1,0 +1,24 @@
+{
+    "schema": "vte_run_modes_v1",
+    "modes": {
+        "STANDARD": {
+            "description": "Normal operation.",
+            "restrictions": []
+        },
+        "MAINTENANCE": {
+            "description": "Scheduled upgrades.",
+            "restrictions": [
+                "block_decision_ingest",
+                "allow_read_only"
+            ]
+        },
+        "EMERGENCY": {
+            "description": "Active attack or corruption detected.",
+            "restrictions": [
+                "block_all_traffic",
+                "enable_admin_console_only"
+            ]
+        }
+    },
+    "enforcement": "middleware_flag_check"
+}

@@ -1,0 +1,41 @@
+{
+    "contract_name": "email_message_v1",
+    "version": "1.0.0",
+    "fields": [
+        {
+            "name": "message_id",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "thread_id",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "from",
+            "type": "email_address",
+            "required": true
+        },
+        {
+            "name": "to",
+            "type": "list<email_address>",
+            "required": true
+        },
+        {
+            "name": "subject",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "body_text",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "received_at",
+            "type": "timestamp",
+            "required": true
+        }
+    ]
+}

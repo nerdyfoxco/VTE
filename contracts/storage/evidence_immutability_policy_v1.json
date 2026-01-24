@@ -1,0 +1,18 @@
+{
+    "schema": "vte_evidence_immutability_policy_v1",
+    "description": "Requirement for WORM storage of all Evidence Artifacts.",
+    "storage_backend": {
+        "type": "s3_compatible",
+        "bucket_config": {
+            "object_lock_enabled": true,
+            "default_retention_mode": "COMPLIANCE",
+            "default_retention_days": 2555,
+            "versioning": "enabled",
+            "encryption": "AES-256"
+        }
+    },
+    "verification_job": {
+        "frequency": "daily",
+        "action": "verify_hashes_match_db_ledger"
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "schema": "vte_mobile_approval_signing_v1",
+    "description": "Defines the payload and signature format for mobile approvals, requiring device-bound keys.",
+    "payload_structure": {
+        "decision_id": "UUID",
+        "approver_id": "UUID",
+        "timestamp": "ISO8601",
+        "intent_hash": "SHA256",
+        "device_assurance": "AssertionString"
+    },
+    "signature_scheme": {
+        "algorithm": "ES256",
+        "key_storage": "SecureEnclave_or_KeyStore",
+        "attestation": "required_on_key_generation"
+    }
+}

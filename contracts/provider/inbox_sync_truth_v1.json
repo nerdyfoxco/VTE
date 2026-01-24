@@ -1,0 +1,43 @@
+{
+    "schema": "vte_inbox_sync_truth_v1",
+    "description": "Defines the authoritative source and synchronization guarantees for Inbox Data (Email/Work Items).",
+    "truth_authority": {
+        "message_content": {
+            "source": "PROVIDER_API",
+            "example": "Gmail, Outlook",
+            "vte_role": "READ_ONLY_MIRROR"
+        },
+        "message_metadata": {
+            "source": "PROVIDER_API",
+            "fields": [
+                "received_at",
+                "sender",
+                "recipients",
+                "thread_id"
+            ],
+            "vte_role": "READ_ONLY_MIRROR"
+        },
+        "processing_state": {
+            "source": "VTE_SPINE",
+            "states": [
+                "UNPROCESSED",
+                "INGESTED",
+                "CLASSIFIED",
+                "ACTIONED"
+            ],
+            "vte_role": "AUTHORITATIVE_MASTER"
+        }
+    },
+    "synchronization_guarantees": {
+        "at_least_once_delivery": true,
+        "deduplication_key": [
+            "provider_message_id",
+            "provider_thread_id"
+        ],
+        "ordering": "eventually_consistent_within_thread"
+    },
+    "invariants": {
+        "no_deletion_propagation": "Deletes in Provider do NOT delete in VTE (Legal Hold).",
+        "immutable_external_id": "provider_message_id must never change once ingested."
+    }
+}

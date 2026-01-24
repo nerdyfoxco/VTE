@@ -1,0 +1,21 @@
+{
+    "schema": "vte_evidence_authenticity_v1",
+    "description": "Defines how evidence authenticity is established and verified.",
+    "authenticity_types": {
+        "signed_payload": {
+            "description": "Payload signed by a trusted key (e.g. Bank API).",
+            "verification": "verify_signature"
+        },
+        "hash_match": {
+            "description": "Payload matches a known hash (e.g. File upload).",
+            "verification": "calculate_hash_and_compare"
+        },
+        "origin_assertion": {
+            "description": "Payload originated from a trusted source (e.g. Internal Service).",
+            "verification": "mtls_identity_check"
+        }
+    },
+    "invariants": {
+        "all_evidence_must_be_authentic": "True"
+    }
+}

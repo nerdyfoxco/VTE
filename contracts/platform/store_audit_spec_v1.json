@@ -1,0 +1,9 @@
+{
+    "contract_name": "store_audit_spec_v1",
+    "version": "1.0.0",
+    "audit_requirements": [
+        "Every write to the store MUST generate an audit log.",
+        "Audit logs MUST contain: timestamp, actor, action, resource_id.",
+        "Audit logs MUST be immutable."
+    ]
+}

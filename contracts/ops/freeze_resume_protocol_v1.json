@@ -1,0 +1,24 @@
+{
+    "contract_name": "freeze_resume_protocol",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "To define the rigorous procedure for freezing the system (or parts of it) and safely resuming operations, requiring cryptographic evidence of the freeze state.",
+    "freeze_levels": [
+        "ITEM_FREEZE",
+        "TENANT_FREEZE",
+        "GLOBAL_FREEZE"
+    ],
+    "freeze_packet_schema": {
+        "required_fields": [
+            "freeze_id",
+            "timestamp_utc",
+            "triggering_rule",
+            "scope_id",
+            "affected_items_snapshot_hash"
+        ]
+    },
+    "resume_requirements": {
+        "approval": "HUMAN_OPERATOR_REQUIRED",
+        "audit_log": "MANDATORY"
+    }
+}

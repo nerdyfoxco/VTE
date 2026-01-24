@@ -1,0 +1,11 @@
+{
+    "schema": "vte_time_semantics_v1",
+    "description": "Defines the authoritative handling of time to prevent replay attacks and causality confusion.",
+    "standard": "ISO8601 UTC (Z-suffix mandatory)",
+    "resolution": "Microseconds (6 decimal places)",
+    "rules": {
+        "no_local_time": "All timestamps MUST be UTC.",
+        "clock_skew_tolerance": "30000ms",
+        "monotonicity": "Decision timestamps must strictly increase per Actor Session."
+    }
+}

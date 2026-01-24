@@ -1,0 +1,9 @@
+{
+    "contract_name": "contract_deprecation_and_gc_policy_v1",
+    "version": "1.0.0",
+    "rules": [
+        "Contracts older than N-2 major versions MUST be deprecated.",
+        "Deprecated contracts MUST be garbage collected after 90 days.",
+        "Evidence linked to deprecated contracts MUST be archived, not deleted."
+    ]
+}

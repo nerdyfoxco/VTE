@@ -1,0 +1,56 @@
+{
+    "schema": "vte_evidence_bundle_v1",
+    "description": "Container for all data points used to justify a decision, strictly typed and hashable.",
+    "type": "object",
+    "properties": {
+        "bundle_id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "collected_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "items": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "source": {
+                        "type": "string",
+                        "description": "Origin of data (e.g., 'plaid', 'user_upload', 'internal_db')"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Type of evidence (e.g., 'bank_statement', 'id_image', 'credit_score')"
+                    },
+                    "data": {
+                        "type": "object",
+                        "description": "The actual evidence payload or reference."
+                    },
+                    "sha256": {
+                        "type": "string",
+                        "description": "Hash of the specific data item for integrity."
+                    }
+                },
+                "required": [
+                    "source",
+                    "type",
+                    "data",
+                    "sha256"
+                ]
+            }
+        },
+        "normalization_schema": {
+            "type": "string",
+            "description": "Reference to the schema used to normalize this data for policy consumption."
+        }
+    },
+    "required": [
+        "bundle_id",
+        "collected_at",
+        "items",
+        "normalization_schema"
+    ],
+    "additionalProperties": false
+}

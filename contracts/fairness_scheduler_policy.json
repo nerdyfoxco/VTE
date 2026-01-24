@@ -1,0 +1,28 @@
+{
+    "contract_name": "fairness_scheduler_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Governs the scheduling of background jobs to ensure fair share across tenants.",
+    "algorithm": "WEIGHTED_ROUND_ROBIN",
+    "queues": [
+        {
+            "name": "high_priority",
+            "weight": 10,
+            "sla_latency": "1m"
+        },
+        {
+            "name": "standard",
+            "weight": 5,
+            "sla_latency": "10m"
+        },
+        {
+            "name": "bulk",
+            "weight": 1,
+            "sla_latency": "4h"
+        }
+    ],
+    "tenant_isolation": {
+        "strategy": "SHUFFLE_SHARDING",
+        "shard_count": 16
+    }
+}

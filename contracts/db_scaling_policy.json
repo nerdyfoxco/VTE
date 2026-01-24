@@ -1,0 +1,23 @@
+{
+    "contract_name": "db_scaling_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Strategies for sharding and indexing to maintain DB performance at scale.",
+    "strategies": {
+        "partitioning": {
+            "table": "events",
+            "key": "created_at_month",
+            "type": "RANGE"
+        },
+        "read_replicas": {
+            "routing": "WORKFLOW_READS_TO_CONSISTENT_REPLICA",
+            "max_lag_ms": 1000
+        }
+    },
+    "indexes": {
+        "required": [
+            "delinquency.account_id",
+            "work_item.assigned_to"
+        ]
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "contract_name": "notification_contract",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the structure and guarantees of a system notification.",
+    "types": [
+        "WORK_ASSIGNED",
+        "SLA_BREACH",
+        "MENTION",
+        "SYSTEM_ALERT"
+    ],
+    "schema": {
+        "notification_id": "UUID",
+        "recipient_id": "PrincipalID",
+        "type": "NotificationType",
+        "payload": "JSON",
+        "created_at": "ISO8601",
+        "deduplication_key": "String (Optional)"
+    },
+    "guarantees": {
+        "ordered_delivery": false,
+        "at_least_once": true
+    }
+}

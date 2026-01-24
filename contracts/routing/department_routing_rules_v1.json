@@ -1,0 +1,18 @@
+{
+    "contract_name": "department_routing_rules_v1",
+    "version": "1.0.0",
+    "rules": [
+        {
+            "keyword": "invoice",
+            "target": "FINANCE"
+        },
+        {
+            "keyword": "lawsuit",
+            "target": "LEGAL"
+        },
+        {
+            "keyword": "bug",
+            "target": "ENGINEERING"
+        }
+    ]
+}

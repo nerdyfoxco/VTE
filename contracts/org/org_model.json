@@ -1,0 +1,12 @@
+{
+    "contract_name": "org_model",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the tenant boundary.",
+    "fields": {
+        "org_id": "UUID",
+        "name": "String",
+        "settings": "JSON",
+        "subscription_tier": "Enum"
+    }
+}

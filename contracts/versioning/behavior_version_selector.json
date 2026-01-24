@@ -1,0 +1,31 @@
+{
+    "contract_name": "behavior_version_selector",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "To deterministically route tenants to specific versions of behavioral logic (policies, workflows, rules) without code branching or feature flags.",
+    "routing_table": {
+        "default_version": "v1",
+        "version_overrides": {
+            "tenant_beta": "v2_rc1",
+            "tenant_legacy": "v0_9_deprecated"
+        }
+    },
+    "versions": {
+        "v1": {
+            "description": "Stable Production",
+            "modules": {
+                "delinquency": "contracts/features/vte_delinquency_v1/scope_contract.json"
+            }
+        },
+        "v2_rc1": {
+            "description": "Release Candidate - New Outcome Logic",
+            "modules": {
+                "delinquency": "contracts/features/vte_delinquency_v2_draft/scope_contract.json"
+            }
+        }
+    },
+    "invariants": {
+        "no_cross_tenant_leakage": "A tenant MUST be pinned to exactly one version at any given timestamp.",
+        "immutable_execution": "Once a workflow starts usage of a version, it MUST complete with that version."
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "contract_name": "work_item_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Universal schema for items appearing in the Unified Queue.",
+    "fields": {
+        "item_id": "UUID",
+        "type": "WORK_TYPE",
+        "priority": "Integer (1-100)",
+        "status": "WorkStatus (NEW, ASSIGNED, IN_PROGRESS, RESOLVED, BLOCKED)",
+        "assigned_to": "PrincipalID?",
+        "payload": "Reference to underlying entity",
+        "created_at": "ISO8601",
+        "due_at": "ISO8601"
+    }
+}

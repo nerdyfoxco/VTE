@@ -1,0 +1,24 @@
+{
+    "contract_name": "provisioning_workflows",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Workflows for granting access.",
+    "workflows": {
+        "new_hire_agent": {
+            "steps": [
+                "CREATE_IDENTITY",
+                "ASSIGN_ROLE_AGENT",
+                "ADD_TO_GROUP_TIER1",
+                "SEND_WELCOME_EMAIL"
+            ]
+        },
+        "jit_super_admin": {
+            "steps": [
+                "REQUEST_JUSTIFICATION",
+                "DUAL_APPROVAL",
+                "GRANT_TEMP_ACCESS_1H",
+                "LOG_AUDIT"
+            ]
+        }
+    }
+}

@@ -1,0 +1,39 @@
+{
+    "schema": "vte_run_mode_truth_table_v1",
+    "description": "Defines allowed behaviors and strictness levels per environment.",
+    "modes": {
+        "DEV": {
+            "allow_mock_evidence": true,
+            "allow_unsigned_bundles": false,
+            "require_canonical_json": true,
+            "enforce_silos": true,
+            "audit_level": "DEBUG",
+            "data_persistence": "EPHEMERAL"
+        },
+        "TEST": {
+            "allow_mock_evidence": true,
+            "allow_unsigned_bundles": true,
+            "require_canonical_json": true,
+            "enforce_silos": true,
+            "audit_level": "FULL",
+            "data_persistence": "RESET_ON_BOOT"
+        },
+        "STAGING": {
+            "allow_mock_evidence": false,
+            "allow_unsigned_bundles": false,
+            "require_canonical_json": true,
+            "enforce_silos": true,
+            "audit_level": "FULL",
+            "data_persistence": "PERSISTENT"
+        },
+        "PROD": {
+            "allow_mock_evidence": false,
+            "allow_unsigned_bundles": false,
+            "require_canonical_json": true,
+            "enforce_silos": true,
+            "audit_level": "FULL",
+            "data_persistence": "PERSISTENT_WORM"
+        }
+    },
+    "active_mode_env_var": "VTE_RUN_MODE"
+}

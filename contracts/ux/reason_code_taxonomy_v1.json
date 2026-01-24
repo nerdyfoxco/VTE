@@ -1,0 +1,22 @@
+{
+    "contract_name": "reason_code_taxonomy_v1",
+    "version": "1.0.0",
+    "codes": [
+        {
+            "code": "RC_100",
+            "description": "Resolved via KB"
+        },
+        {
+            "code": "RC_200",
+            "description": "Escalated to Engineering"
+        },
+        {
+            "code": "RC_300",
+            "description": "Customer Unresponsive"
+        },
+        {
+            "code": "RC_900",
+            "description": "Spam/Abuse"
+        }
+    ]
+}

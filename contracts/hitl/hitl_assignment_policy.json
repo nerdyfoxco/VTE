@@ -1,0 +1,14 @@
+{
+    "contract_name": "hitl_assignment_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "strategy": "MOST_QUALIFIED_THEN_LEAST_BUSY",
+    "constraints": {
+        "max_concurrent_items_per_agent": 5,
+        "required_skills_match": "STRICT"
+    },
+    "tie_breakers": [
+        "LOWEST_ACTIVE_COUNT",
+        "LONGEST_IDLE_TIME"
+    ]
+}

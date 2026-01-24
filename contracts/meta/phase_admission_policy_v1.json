@@ -1,0 +1,9 @@
+{
+    "contract_name": "phase_admission_policy_v1",
+    "version": "1.0.0",
+    "requirements": [
+        "New phases MUST define at least one architectural contract.",
+        "New phases MUST implement at least one living canary.",
+        "New phases MUST have a CRG (Consumer Reliability Group) binding."
+    ]
+}

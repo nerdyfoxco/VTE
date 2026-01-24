@@ -1,0 +1,35 @@
+{
+    "contract_name": "canary_execution_matrix",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Maps operational contexts (CI, Deploy, Hourly) to required canary sets to ensure continuous verification coverage.",
+    "contexts": {
+        "PR_BUILD": {
+            "required_canaries": [
+                "contracts/meta/readiness_graph_v1.json",
+                "tests/prove_readiness_graph_blocks_missing_dependency.py",
+                "tests/prove_port_binding_completeness.py"
+            ],
+            "blocking": true
+        },
+        "PRE_DEPLOY": {
+            "required_canaries": [
+                "contracts/features/vte_delinquency_v1/feature_truth_packet_v1.json",
+                "tests/prove_ship_gate_binding_generated_and_blocks_ship.py",
+                "tests/canary_harness/prove_golden_journey_e2e.py"
+            ],
+            "blocking": true
+        },
+        "HOURLY_PROBE": {
+            "required_canaries": [
+                "tests/prove_loop_detection_freezes_work_graph.py",
+                "tests/prove_cost_attribution_present_in_proof_run.py"
+            ],
+            "blocking": false,
+            "alert_on_failure": "P2_WARN"
+        }
+    },
+    "constraints": {
+        "coverage_minimum": "GOLDEN_JOURNEY_MUST_RUN_IN_PRE_DEPLOY"
+    }
+}

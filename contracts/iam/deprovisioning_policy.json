@@ -1,0 +1,13 @@
+{
+    "contract_name": "deprovisioning_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Ensures secure offboarding.",
+    "sla": "IMMEDIATE_SESSION_REVOCATION",
+    "steps": [
+        "REVOKE_TOKENS",
+        "DISABLE_ACCOUNT",
+        "REASSIGN_OPEN_WORK_ITEMS",
+        "ARCHIVE_USER_DATA"
+    ]
+}

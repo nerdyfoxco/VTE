@@ -1,0 +1,10 @@
+{
+    "contract_name": "session_grant_source_enum_v1",
+    "version": "1.0.0",
+    "enums": [
+        "IDP_OIDC",
+        "API_KEY_EXCHANGE",
+        "IMPERSONATION_GRANT",
+        "BREAK_GLASS_TOKEN"
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "bundle_id": "893c8340-a384-47a3-ba09-2276532439a1",
+    "collected_at": "2025-10-26T14:30:00Z",
+    "normalization_schema": "plaid_txn_v1",
+    "items": [
+        {
+            "source": "plaid_prod",
+            "type": "transaction",
+            "data": {
+                "txn_id": "plaid_txn_12345",
+                "amount": 1200.50,
+                "currency": "USD",
+                "merchant_name": "DELTA AIR LINES",
+                "date": "2025-10-25"
+            },
+            "sha256": "a3b... (content hash)"
+        }
+    ],
+    "bundle_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

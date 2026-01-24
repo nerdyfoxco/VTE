@@ -1,0 +1,15 @@
+{
+    "contract_name": "identity_lifecycle_truth_packet_v1",
+    "version": "1.0.0",
+    "lifecycle_events": [
+        "INVITE_SENT",
+        "INVITE_ACCEPTED",
+        "ROLE_ASSIGNED",
+        "SESSION_GRANTED",
+        "ACCESS_REVOKED"
+    ],
+    "invariants": [
+        "A principal MUST NOT have a session if ACCESS_REVOKED is the latest state.",
+        "Role upgrades MUST be explicitly approved."
+    ]
+}

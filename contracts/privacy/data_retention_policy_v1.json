@@ -1,0 +1,22 @@
+{
+    "schema": "vte_data_retention_policy_v1",
+    "description": "Defines the lifecycle of data artifacts. Enforces compliance with financial and privacy regulations.",
+    "schedules": {
+        "decision_ledger": {
+            "retention_period": "7_years",
+            "justification": "Financial Audit Requirement (SOX/Tax)",
+            "action_at_expiry": "ARCHIVE_TO_COLD_STORAGE"
+        },
+        "evidence_blob": {
+            "retention_period": "7_years",
+            "justification": "Must match ledger retention",
+            "action_at_expiry": "DELETE_IF_NOT_LEGAL_HOLD"
+        },
+        "pii_logs": {
+            "retention_period": "30_days",
+            "justification": "Operational Debugging only",
+            "action_at_expiry": "HARD_DELETE"
+        }
+    },
+    "legal_hold_override": true
+}

@@ -1,0 +1,26 @@
+{
+    "schema": "vte_oauth_scopes_v1",
+    "description": "Defines the OAuth2 scopes allowing access to VTE resources.",
+    "scopes": {
+        "spine:decision:read": "Read-only access to decision history.",
+        "spine:decision:draft": "Ability to propose new decisions.",
+        "spine:decision:approve": "Ability to sign/approve pending decisions (Requires Admin).",
+        "spine:evidence:write": "Ability to upload evidence bundles.",
+        "spine:admin:config": "Access to system configuration (Super Admin)."
+    },
+    "role_mapping": {
+        "user": [
+            "spine:decision:read",
+            "spine:decision:draft",
+            "spine:evidence:write"
+        ],
+        "admin": [
+            "spine:decision:read",
+            "spine:decision:approve",
+            "spine:evidence:write"
+        ],
+        "auditor": [
+            "spine:decision:read"
+        ]
+    }
+}

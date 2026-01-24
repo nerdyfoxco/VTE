@@ -1,0 +1,21 @@
+{
+    "contract_name": "promotion_workflow",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "steps": [
+        {
+            "step": "AUTO_LABEL",
+            "next_if_confident": "GOLDEN_CANDIDATE",
+            "next_if_uncertain": "HITL_TRIAGE"
+        },
+        {
+            "step": "HITL_TRIAGE",
+            "next": "EXPERT_REVIEW"
+        },
+        {
+            "step": "EXPERT_REVIEW",
+            "next_if_agreed": "GOLDEN_SET",
+            "next_if_rejected": "TRAINING_NEGATIVE"
+        }
+    ]
+}

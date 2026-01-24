@@ -1,0 +1,23 @@
+{
+    "contract_name": "ship_gate_binding",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Binds the Compiled Readiness Graph (CRG) to specific Feature Truth Packets to determine Go/No-Go for shipping.",
+    "binding_logic": {
+        "input": [
+            "READINESS_GRAPH",
+            "FEATURE_TRUTH_PACKET"
+        ],
+        "rule": "ALL_NODES_IN_PACKET_MUST_BE_GREEN_IN_GRAPH",
+        "gates": [
+            "NO_OPEN_RISKS_ABOVE_LOW",
+            "ALL_CANARIES_PASSING",
+            "PERFORMANCE_SLO_MET",
+            "LEGAL_HOLD_COMPLIANCE_VERIFIED"
+        ]
+    },
+    "enforcement": {
+        "ci_block": "TRUE",
+        "cd_block": "TRUE"
+    }
+}

@@ -1,0 +1,41 @@
+{
+    "contract_name": "vte_sheet_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "description": "Strict schema for VTE data sheets to ensure data integrity.",
+    "columns": {
+        "account_id": {
+            "type": "STRING",
+            "pattern": "^ACC-[0-9]{8}$",
+            "required": true
+        },
+        "customer_name": {
+            "type": "STRING",
+            "min_length": 2,
+            "required": true
+        },
+        "balance_due": {
+            "type": "DECIMAL",
+            "min_value": 0.00,
+            "required": true
+        },
+        "state_code": {
+            "type": "ENUM",
+            "values": [
+                "NY",
+                "CA",
+                "TX",
+                "FL"
+            ],
+            "required": true
+        },
+        "last_contact_date": {
+            "type": "DATE",
+            "format": "YYYY-MM-DD",
+            "required": false
+        }
+    },
+    "unique_constraints": [
+        "account_id"
+    ]
+}

@@ -1,0 +1,57 @@
+{
+    "schema": "vte_permit_token_v1",
+    "description": "Cryptographically signed token granting permission to execute a side-effect.",
+    "type": "object",
+    "properties": {
+        "token_id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "decision_ref": {
+            "type": "string",
+            "description": "Reference to the DecisionObject that authorized this permit."
+        },
+        "issued_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "expires_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "scope": {
+            "type": "object",
+            "properties": {
+                "allowed_side_effects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "max_value": {
+                    "type": "number",
+                    "description": "Optional monetary or quantitative limit."
+                },
+                "target_resource_pattern": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "allowed_side_effects"
+            ]
+        },
+        "signature": {
+            "type": "string",
+            "description": "Digital signature from the 'Spine Authority' key."
+        }
+    },
+    "required": [
+        "token_id",
+        "decision_ref",
+        "issued_at",
+        "expires_at",
+        "scope",
+        "signature"
+    ],
+    "additionalProperties": false
+}

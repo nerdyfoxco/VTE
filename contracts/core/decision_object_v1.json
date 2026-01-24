@@ -1,0 +1,85 @@
+{
+    "schema": "vte_decision_object_v1",
+    "description": "Immutable record of a VTE decision, linking intent, evidence, and outcome.",
+    "type": "object",
+    "properties": {
+        "decision_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier for this decision event."
+        },
+        "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of when the decision was finalized."
+        },
+        "actor": {
+            "type": "object",
+            "properties": {
+                "user_id": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "session_id": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "user_id",
+                "role"
+            ]
+        },
+        "intent": {
+            "type": "object",
+            "description": "The proposed action or state change.",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "target_resource": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "object"
+                }
+            },
+            "required": [
+                "action",
+                "target_resource"
+            ]
+        },
+        "evidence_hash": {
+            "type": "string",
+            "description": "SHA-256 hash of the normalized EvidenceBundle used to reach this decision."
+        },
+        "outcome": {
+            "type": "string",
+            "enum": [
+                "APPROVED",
+                "DENIED",
+                "NEEDS_MORE_EVIDENCE"
+            ],
+            "description": "The final verdict of the VTE."
+        },
+        "policy_version": {
+            "type": "string",
+            "description": "Version of the policy logic that was applied."
+        },
+        "permit_token_id": {
+            "type": "string",
+            "description": "ID of the PermitToken issued if outcome is APPROVED. Null otherwise."
+        }
+    },
+    "required": [
+        "decision_id",
+        "timestamp",
+        "actor",
+        "intent",
+        "evidence_hash",
+        "outcome",
+        "policy_version"
+    ],
+    "additionalProperties": false
+}

@@ -1,0 +1,18 @@
+{
+    "contract_name": "performance_slo_gates",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Hard gates for performance acceptance in CI/CD.",
+    "gates": {
+        "api_latency": {
+            "p95_limit_ms": 200,
+            "p99_limit_ms": 500
+        },
+        "db_query_time": {
+            "p95_limit_ms": 50
+        },
+        "throughput": {
+            "min_rps_capacity": 500
+        }
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "contract_name": "promotion_evidence_bundle_v1",
+    "version": "1.0.0",
+    "required_artifacts": [
+        "model_binary_signature",
+        "training_data_manifest",
+        "evaluation_metrics_report",
+        "legal_approval_token"
+    ]
+}

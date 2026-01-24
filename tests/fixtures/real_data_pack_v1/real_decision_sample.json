@@ -1,0 +1,22 @@
+{
+    "decision_id": "d0e1b2c3-d4e5-4f6a-8b9c-0d1e2f3a4b5c",
+    "actor": {
+        "user_id": "analyst_jane_doe",
+        "role": "admin",
+        "session_id": "sess_high_security_99"
+    },
+    "intent": {
+        "action": "approve_high_value_expense",
+        "target_resource": "expense_report_777",
+        "parameters": {
+            "amount": 1200.50,
+            "category": "Travel"
+        }
+    },
+    "evidence_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "outcome": "APPROVED",
+    "policy_version": "expense_policy_v2.1",
+    "permit_token_id": "p1234...",
+    "decision_hash": "f4a7...",
+    "previous_hash": "last_decision_hash..."
+}

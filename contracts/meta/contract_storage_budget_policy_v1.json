@@ -1,0 +1,10 @@
+{
+    "contract_name": "contract_storage_budget_policy_v1",
+    "version": "1.0.0",
+    "budgets": {
+        "default_tenant": "50GB",
+        "contract_history": "100GB",
+        "evidence_archive": "500GB"
+    },
+    "alert_threshold": 0.8
+}

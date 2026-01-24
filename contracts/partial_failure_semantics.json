@@ -1,0 +1,25 @@
+{
+    "contract_name": "partial_failure_semantics",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines how the system handles failures in part of a distributed transaction or workflow, ensuring predictable recovery or fallback.",
+    "failure_modes": {
+        "TRANSIENT_RPC_ERROR": {
+            "retry_policy": "EXPONENTIAL_BACKOFF",
+            "max_retries": 3,
+            "fallback": "CIRCUIT_BREAKER_OPEN"
+        },
+        "DATA_CORRUPTION": {
+            "retry_policy": "NONE",
+            "fallback": "QUARANTINE_AND_ALERT"
+        },
+        "TIMEOUT": {
+            "retry_policy": "IMMEDIATE_RETRY_ONCE",
+            "fallback": "RETURN_PARTIAL_RESULT_OR_ERROR"
+        }
+    },
+    "invariants": {
+        "no_silent_failures": "All partial failures must emit a structured error event.",
+        "consistency": "EVENTUAL_CONSISTENCY_ALLOWED_IF_COMPENSATED"
+    }
+}

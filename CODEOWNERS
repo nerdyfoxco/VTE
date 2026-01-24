@@ -1,0 +1,24 @@
+# VTE Governance - CODEOWNERS
+# These rules enforce review requirements for critical system components.
+
+# Global fallback
+* @nerdyfoxco/vte-core
+
+# Contracts & Governance (The "Sealed" Layer)
+# Changes here require maximum scrutiny
+/contracts/ @nerdyfoxco/vte-governance @nerdyfoxco/security
+/contracts/core/ @nerdyfoxco/vte-governance
+/contracts/meta/ @nerdyfoxco/vte-governance
+
+# Backend (Spine)
+/spine/ @nerdyfoxco/spine-team
+
+# Frontend (Web)
+/web/ @nerdyfoxco/web-team
+
+# Mobile
+/mobile/ @nerdyfoxco/mobile-team
+
+# CI/CD & Tooling
+/tools/ @nerdyfoxco/devops
+/.github/ @nerdyfoxco/devops

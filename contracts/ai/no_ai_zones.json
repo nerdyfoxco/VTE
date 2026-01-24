@@ -1,0 +1,32 @@
+{
+    "schema": "vte_no_ai_zones_v1",
+    "description": "Areas where AI Agent interference is strictly prohibited to ensure human accountability.",
+    "codebase_zones": [
+        {
+            "path": "contracts/ledger/invariants.md",
+            "reason": "The Constitution cannot be rewritten by the machine."
+        },
+        {
+            "path": "contracts/security/irreversible_actions.json",
+            "reason": "Safety definitions must be human-defined."
+        },
+        {
+            "path": "spine/migrations/",
+            "reason": "DB structure defines truth; AI drift here corrupts the ledger."
+        },
+        {
+            "path": "spine/vte/core/verifier.py",
+            "reason": "The Core Verifier logic is the trust anchor."
+        }
+    ],
+    "runtime_zones": [
+        {
+            "intent_action": "delete_*",
+            "reason": "Destruction is a human prerogative."
+        },
+        {
+            "intent_action": "grant_permission",
+            "reason": "Elevation of privilege requires human judgment."
+        }
+    ]
+}

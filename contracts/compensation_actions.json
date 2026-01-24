@@ -1,0 +1,18 @@
+{
+    "schema": "vte_compensation_actions_v1",
+    "description": "Defines how to reverse partial failures for supported intent targets.",
+    "actions": {
+        "stripe_charge": {
+            "compensation": "stripe_refund",
+            "trigger": "charge_succeeded_but_db_failed"
+        },
+        "email_send": {
+            "compensation": "none_possible",
+            "trigger": "best_effort_only"
+        },
+        "db_ledger_write": {
+            "compensation": "cannot_compensate_ledger_is_immutable",
+            "trigger": "append_correction_entry"
+        }
+    }
+}

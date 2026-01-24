@@ -1,0 +1,17 @@
+{
+    "schema": "vte_tenancy_model_v1",
+    "description": "Defines the isolation strategy for multi-tenancy within the Spine.",
+    "strategy": {
+        "type": "SHARED_SCHEMA_LOGICAL_ISOLATION",
+        "discriminator_column": "tenant_id",
+        "enforcement_layer": "DATABASE_ROW_LEVEL_SECURITY"
+    },
+    "constraints": {
+        "every_table_must_have_tenant_id": true,
+        "admin_cross_tenant_access": "EXPLICIT_BREAK_GLASS_ONLY"
+    },
+    "provisioning": {
+        "method": "API_CALL",
+        "post_provisioning_check": "verify_isolation_policy_active"
+    }
+}

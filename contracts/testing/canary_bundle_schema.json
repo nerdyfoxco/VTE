@@ -1,0 +1,12 @@
+{
+    "contract_name": "canary_bundle_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "bundle_structure": {
+        "bundle_id": "UUID",
+        "canary_script_path": "String (Relative)",
+        "inputs": "JSON",
+        "expected_output_hash": "SHA256",
+        "required_mode": "ENUM(OFFLINE, REPLAY, LIVE, SHADOW)"
+    }
+}

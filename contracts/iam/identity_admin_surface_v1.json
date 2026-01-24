@@ -1,0 +1,14 @@
+{
+    "contract_name": "identity_admin_surface_v1",
+    "version": "1.0.0",
+    "surface_actions": [
+        "PROVISION_TENANT",
+        "REVOKE_TENANT",
+        "RESET_MFA",
+        "IMPERSONATE_USER"
+    ],
+    "constraints": [
+        "IMPERSONATE_USER requires Dual Approval.",
+        "RESET_MFA triggers security alert."
+    ]
+}

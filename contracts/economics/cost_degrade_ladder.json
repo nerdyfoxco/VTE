@@ -1,0 +1,46 @@
+{
+    "contract_name": "cost_degrade_ladder",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the sequence of graceful degradation steps when costs exceed thresholds or services become unavailable/too expensive.",
+    "ladders": {
+        "document_extraction": {
+            "steps": [
+                {
+                    "level": 0,
+                    "method": "PREMIUM_OCR_API",
+                    "condition": "cost < budget AND api_available"
+                },
+                {
+                    "level": 1,
+                    "method": "STANDARD_OCR_API",
+                    "condition": "cost >= budget OR premium_unavailable"
+                },
+                {
+                    "level": 2,
+                    "method": "MANUAL_REVIEW_QUEUE",
+                    "condition": "all_apis_unavailable OR cost_critical"
+                }
+            ]
+        },
+        "enrichment": {
+            "steps": [
+                {
+                    "level": 0,
+                    "method": "REALTIME_ENRICHMENT",
+                    "condition": "latency < 200ms"
+                },
+                {
+                    "level": 1,
+                    "method": "BATCH_ENRICHMENT_NIGHTLY",
+                    "condition": "latency >= 200ms"
+                },
+                {
+                    "level": 2,
+                    "method": "SKIP_ENRICHMENT",
+                    "condition": "batch_overflow"
+                }
+            ]
+        }
+    }
+}

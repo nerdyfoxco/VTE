@@ -1,0 +1,25 @@
+{
+    "contract_name": "budget_surface_matrix",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "surfaces": [
+        {
+            "service": "OPENAI",
+            "metric": "TOKENS",
+            "cost_per_unit_usd": 0.00003,
+            "criticality": "HIGH"
+        },
+        {
+            "service": "TWILIO",
+            "metric": "SMS_COUNT",
+            "cost_per_unit_usd": 0.0079,
+            "criticality": "MEDIUM"
+        },
+        {
+            "service": "AWS_LAMBDA",
+            "metric": "INVOCATION_GB_SEC",
+            "cost_per_unit_usd": 0.0000166667,
+            "criticality": "LOW"
+        }
+    ]
+}

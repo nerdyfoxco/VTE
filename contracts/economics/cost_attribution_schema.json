@@ -1,0 +1,30 @@
+{
+    "contract_name": "cost_attribution_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "To ensure every unit of work (CPU, API Call, Storage) is attributed to a specific tenant, user, or system procoess.",
+    "schema": {
+        "required_tags": [
+            "tenant_id",
+            "cost_center",
+            "feature_id"
+        ],
+        "optional_tags": [
+            "campaign_id",
+            "user_id",
+            "batch_id"
+        ],
+        "cost_centers": [
+            "INGESTION",
+            "PROCESSING",
+            "VERIFICATION",
+            "STORAGE",
+            "OUTREACH"
+        ]
+    },
+    "attribution_rules": {
+        "idle_storage": "TENANT_PRORATED",
+        "shared_compute": "REQUEST_COUNT_RATIO",
+        "dedicated_resources": "DIRECT_ASSIGNMENT"
+    }
+}

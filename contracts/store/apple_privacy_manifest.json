@@ -1,0 +1,19 @@
+{
+    "schema": "vte_apple_privacy_manifest_v1",
+    "app_store_labels": {
+        "data_linked_to_user": [
+            "Contact Info (Email)",
+            "Financial Info (Transaction Amount)",
+            "Identifiers (User ID, Device ID)"
+        ],
+        "data_not_linked_to_user": [
+            "Diagnostics (Crash Data)",
+            "Usage Data (Performance Metrics)"
+        ],
+        "tracking": false
+    },
+    "justification": {
+        "financial_info": "Core App Functionality (Decision Execution)",
+        "device_id": "App Functionality (Security/mTLS Binding)"
+    }
+}

@@ -1,0 +1,32 @@
+{
+    "schema": "vte_irreversible_actions_policy_v1",
+    "description": "Registry of actions that cannot be undone. These require heightened auth and verification.",
+    "actions": [
+        {
+            "intent_action": "delete_customer_data",
+            "risk_level": "CRITICAL",
+            "requirements": {
+                "auth": "step_up_mfa",
+                "approval": "dual_control_admin",
+                "legal_hold_check": true
+            }
+        },
+        {
+            "intent_action": "initiate_payout",
+            "risk_level": "CRITICAL",
+            "requirements": {
+                "auth": "step_up_mfa",
+                "rate_limiter": "financial_velocity_check"
+            }
+        },
+        {
+            "intent_action": "archive_project",
+            "risk_level": "HIGH",
+            "requirements": {
+                "auth": "standard_mfa",
+                "warning_dialog": "explicit_confirmation"
+            }
+        }
+    ],
+    "enforcement": "spine_middleware_pre_permit"
+}

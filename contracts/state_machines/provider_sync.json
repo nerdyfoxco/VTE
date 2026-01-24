@@ -1,0 +1,76 @@
+{
+    "schema": "vte_provider_sync_state_machine_v1",
+    "description": "State machine governing the lifecycle of a Provider Synchronization Job.",
+    "states": [
+        "IDLE",
+        "SCHEDULED",
+        "CONNECTING",
+        "FETCHING_DELTA",
+        "INGESTING_PAGE",
+        "HANDLE_RATE_LIMIT",
+        "FAILED",
+        "COMPLETED"
+    ],
+    "transitions": [
+        {
+            "from": "IDLE",
+            "to": "SCHEDULED",
+            "trigger": "timer_tick"
+        },
+        {
+            "from": "SCHEDULED",
+            "to": "CONNECTING",
+            "trigger": "worker_pickup"
+        },
+        {
+            "from": "CONNECTING",
+            "to": "FETCHING_DELTA",
+            "trigger": "auth_success"
+        },
+        {
+            "from": "FETCHING_DELTA",
+            "to": "INGESTING_PAGE",
+            "trigger": "page_received"
+        },
+        {
+            "from": "INGESTING_PAGE",
+            "to": "FETCHING_DELTA",
+            "trigger": "next_page_available"
+        },
+        {
+            "from": "INGESTING_PAGE",
+            "to": "COMPLETED",
+            "trigger": "no_more_pages"
+        },
+        {
+            "from": "FETCHING_DELTA",
+            "to": "HANDLE_RATE_LIMIT",
+            "trigger": "429_response"
+        },
+        {
+            "from": "HANDLE_RATE_LIMIT",
+            "to": "SCHEDULED",
+            "trigger": "backoff_complete"
+        },
+        {
+            "from": "CONNECTING",
+            "to": "FAILED",
+            "trigger": "auth_failure"
+        }
+    ],
+    "side_effects": {
+        "INGESTING_PAGE": [
+            "emit_message_ingested_events",
+            "update_high_watermark"
+        ],
+        "HANDLE_RATE_LIMIT": [
+            "log_warning",
+            "calculate_backoff"
+        ],
+        "FAILED": [
+            "log_error",
+            "alert_ops_if_repeated"
+        ]
+    },
+    "max_retries": 5
+}

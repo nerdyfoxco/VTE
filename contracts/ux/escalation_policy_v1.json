@@ -1,0 +1,23 @@
+{
+    "contract_name": "escalation_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Rules for escalating work items that are ignored or at risk of breaching SLA.",
+    "levels": [
+        {
+            "level": 1,
+            "trigger": "SLA_WARNING (Time > 80% SLA)",
+            "action": "NOTIFY_ASSIGNEE_URGENT"
+        },
+        {
+            "level": 2,
+            "trigger": "SLA_BREACHED",
+            "action": "REASSIGN_TO_MANAGER_POOL"
+        },
+        {
+            "level": 3,
+            "trigger": "SLA_BREACHED + 1h",
+            "action": "NOTIFY_DIRECTOR"
+        }
+    ]
+}

@@ -1,0 +1,51 @@
+{
+    "contract_name": "readiness_graph_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the node types and relationship rules for the System Readiness Graph, ensuring a traceable dependency tree for all system components.",
+    "node_types": {
+        "CONTRACT": {
+            "required_metadata": [
+                "contract_name",
+                "version",
+                "status",
+                "path"
+            ]
+        },
+        "IMPLEMENTATION": {
+            "required_metadata": [
+                "component",
+                "version",
+                "repo_path"
+            ]
+        },
+        "TEST_SUITE": {
+            "required_metadata": [
+                "suite_name",
+                "target_contract",
+                "passing"
+            ]
+        }
+    },
+    "edge_types": {
+        "IMPLEMENTS": {
+            "source": "IMPLEMENTATION",
+            "target": "CONTRACT"
+        },
+        "VERIFIES": {
+            "source": "TEST_SUITE",
+            "target": "CONTRACT"
+        },
+        "DEPENDS_ON": {
+            "source": [
+                "CONTRACT",
+                "IMPLEMENTATION"
+            ],
+            "target": "CONTRACT"
+        }
+    },
+    "constraints": {
+        "no_cycles": true,
+        "provenance_required": "ALL_NODES"
+    }
+}

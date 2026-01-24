@@ -1,0 +1,711 @@
+{
+  "artifact_type": "vte_execution_backlog",
+  "version": "1.0",
+  "principles": [
+    "Fail-Closed: no irreversible side-effect without a valid permit and proof context",
+    "Proof Spine is ultimate authority: verifier decisions supersede UI/agent intent",
+    "Bundle-only runtime: contracts are consumed via signed bundles; no ad-hoc runtime file reads",
+    "Append-only truth: auditability and replay require immutable event chains",
+    "No fake greens: PR gates must include at least one negative canary proving failure is detected"
+  ],
+  "global_definition_of_done": {
+    "ship_blockers": [
+      "Feature Truth Packet exists and is referenced by CRG",
+      "Ship Gate Binding generated from CRG and Feature Packet",
+      "Golden Journey E2E canary passes using real data fixtures",
+      "Negative canary passes (deterministic failure is detected, not masked)",
+      "Bundle-only runtime canary passes",
+      "Unified Queue Truth canary passes",
+      "Identity Admin Surface canary passes",
+      "Concurrency Envelope load proof passes",
+      "Sealed Risk Acceptance Register signed for any exceptions"
+    ]
+  },
+  "crg": {
+    "node_key_convention": "CRG::<domain>::<name>::v<major>",
+    "feature_root_node": "CRG::feature::vte_delinquency::v1"
+  },
+  "entities": {
+    "personas": [
+      "super_admin",
+      "admin",
+      "user",
+      "team_member",
+      "hitl",
+      "support",
+      "devsupport"
+    ],
+    "surfaces": [
+      "spine_api",
+      "truth_store_db",
+      "web_ui",
+      "mobile_witness",
+      "execution_playwright",
+      "ocr",
+      "provider_gmail",
+      "provider_graph",
+      "object_store_worm"
+    ]
+  },
+  "tasks": [
+    {
+      "id": "T-0001",
+      "title": "Seal Feature Truth Packet for VTE Delinquency v1",
+      "type": "contract",
+      "crg_node": "CRG::feature::vte_delinquency::v1",
+      "paths": [
+        "contracts/features/vte_delinquency_v1/feature_truth_packet_v1.json"
+      ],
+      "depends_on": [
+        "T-0002",
+        "T-0003"
+      ],
+      "outputs": [
+        "feature truth packet binding side-effects, evidence ladder, failure rules, idempotency keys"
+      ],
+      "acceptance_criteria": [
+        "Packet enumerates every allowed irreversible action and its required permit type",
+        "Packet specifies evidence ladder minimum per step (API > Browser > OCR) and justification requirement for Browser/OCR",
+        "Packet binds state machine(s) and terminal states for the feature journey",
+        "Packet declares idempotency keys per side-effect and DB uniqueness expectations"
+      ],
+      "ci_gates": [],
+      "canaries": []
+    },
+    {
+      "id": "T-0002",
+      "title": "Define Feature Scope Contract for Delinquency v1",
+      "type": "contract",
+      "crg_node": "CRG::scope::vte_delinquency::v1",
+      "paths": [
+        "contracts/features/vte_delinquency_v1/scope_contract.json"
+      ],
+      "depends_on": [],
+      "outputs": [
+        "explicit in-scope and out-of-scope user journeys and side-effects"
+      ],
+      "acceptance_criteria": [
+        "Scope includes start/end states and explicitly excludes non-delinq business suite automation unless separately feature-scoped",
+        "Out-of-scope actions are enforced by Side-Effect Firewall and verifier invariants"
+      ],
+      "ci_gates": [],
+      "canaries": []
+    },
+    {
+      "id": "T-0003",
+      "title": "Bind Ship Gate to CRG and Feature Packet",
+      "type": "governance",
+      "crg_node": "CRG::release::ship_gate_binding::v1",
+      "paths": [
+        "contracts/release/ship_gate_binding_v1.json",
+        "tools/release/emit_ship_gate_binding.py"
+      ],
+      "depends_on": [
+        "T-0010",
+        "T-0001"
+      ],
+      "outputs": [
+        "generated ship gate binding mapping CRG nodes to required proofs/canaries"
+      ],
+      "acceptance_criteria": [
+        "Ship gate file is generated (not handwritten) from CRG + feature packet",
+        "Ship gate enumerates required canaries per PR/Nightly/Release tier",
+        "Ship gate blocks release if any dependency node lacks passing proof"
+      ],
+      "ci_gates": [
+        "tools/ci/check_crg_has_feature_node_edges.py"
+      ],
+      "canaries": [
+        "tests/canary_harness/prove_ship_gate_binding_generated_and_blocks_ship.py"
+      ]
+    },
+    {
+      "id": "T-0010",
+      "title": "Validate CRG completeness and dependency closure",
+      "type": "governance",
+      "crg_node": "CRG::meta::readiness_graph::v1",
+      "paths": [
+        "contracts/meta/readiness_graph_v1.json",
+        "tools/meta/validate_readiness_graph.py"
+      ],
+      "depends_on": [],
+      "outputs": [
+        "validated readiness graph with enforceable dependency edges"
+      ],
+      "acceptance_criteria": [
+        "Validator fails if any node references missing contracts/enforcement/tests",
+        "Graph prevents 'ship' if any required node is missing or deprecated incorrectly"
+      ],
+      "ci_gates": [
+        "tools/ci/check_readiness_graph_complete.py"
+      ],
+      "canaries": [
+        "tests/canary_harness/prove_readiness_graph_blocks_missing_dependency.py"
+      ]
+    },
+    {
+      "id": "T-0100",
+      "title": "Golden Journey Contract + E2E Canary (Real Data)",
+      "type": "e2e",
+      "crg_node": "CRG::journey::golden::v1",
+      "paths": [
+        "contracts/journeys/vte_delinquency_golden_journey_v1.json",
+        "tests/canary_harness/prove_golden_journey_e2e.py"
+      ],
+      "depends_on": [
+        "T-0200",
+        "T-0300",
+        "T-0400"
+      ],
+      "outputs": [
+        "canonical end-to-end proof run demonstrating real data correctness and auditable evidence chain"
+      ],
+      "acceptance_criteria": [
+        "Canary produces proof_run, decision_objects, evidence_bundle, permits, audit log entries",
+        "Canary verifies UI->API->DB->worker->external side-effect chain where applicable",
+        "Canary is replayable offline with deterministic outputs and stable hashes"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_golden_journey_e2e.py"
+      ]
+    },
+    {
+      "id": "T-0101",
+      "title": "Negative Canary (Deterministic Failure Detection)",
+      "type": "e2e",
+      "crg_node": "CRG::journey::negative::v1",
+      "paths": [
+        "tests/canary_harness/prove_golden_journey_negative.py"
+      ],
+      "depends_on": [
+        "T-0100"
+      ],
+      "outputs": [
+        "proof that failures are detected and persisted (no masking, no fake greens)"
+      ],
+      "acceptance_criteria": [
+        "Negative canary fails for a known reason code and records failure persistence state",
+        "Failure is observable in audit export and incident timeline reconstruction",
+        "System remains fail-closed: no side-effects occur"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_golden_journey_negative.py"
+      ]
+    },
+    {
+      "id": "T-0200",
+      "title": "Canonical Email/Work OS Data Model (Business Invariants)",
+      "type": "data_model",
+      "crg_node": "CRG::data::email_work_os::v1",
+      "paths": [
+        "contracts/email/email_message_v1.json",
+        "contracts/email/email_thread_v1.json",
+        "contracts/work/work_item_invariant_v1.json",
+        "contracts/routing/department_routing_rules_v1.json",
+        "spine/migrations/00xx_email_work_os.sql"
+      ],
+      "depends_on": [
+        "T-0002"
+      ],
+      "outputs": [
+        "append-only tables and schemas for message_ingested, classification_result, work_item, draft_response"
+      ],
+      "acceptance_criteria": [
+        "Message->Thread->WorkItem chain is reproducible with deterministic dedupe keys",
+        "No duplicate side-effects for same provider message id (unique constraints enforced)",
+        "Every work_item state transition references reason codes and proof context"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_email_chain_reproducibility.py"
+      ]
+    },
+    {
+      "id": "T-0300",
+      "title": "Real-Data Fixture Handling + Provider Test Tenant Isolation",
+      "type": "testing_infra",
+      "crg_node": "CRG::testing::fixtures::v1",
+      "paths": [
+        "contracts/testing/real_fixture_handling_policy_v1.json",
+        "contracts/testing/provider_test_tenant_policy_v1.json",
+        "tools/testing/fixture_sanitizer.py",
+        "tests/canary_harness/prove_fixture_sanitization_is_lossless_except_pii.py",
+        "tests/canary_harness/prove_provider_test_tenant_is_isolated_from_production.py"
+      ],
+      "depends_on": [],
+      "outputs": [
+        "sanitized real data packs and enforced isolation between test tenants and production"
+      ],
+      "acceptance_criteria": [
+        "Fixture sanitizer outputs a diff report of redactions and retains structural integrity",
+        "Provider test tenant cannot access or impact production provider accounts",
+        "Secrets handling is compatible with provenance and CI gating"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_fixture_sanitization_is_lossless_except_pii.py",
+        "tests/canary_harness/prove_provider_test_tenant_is_isolated_from_production.py"
+      ]
+    },
+    {
+      "id": "T-0400",
+      "title": "UI Proof Binding (UI Action Map + CI Gate + Canary)",
+      "type": "ui_binding",
+      "crg_node": "CRG::ux::ui_proof_binding::v1",
+      "paths": [
+        "contracts/ux/ui_action_binding_map_v1.json",
+        "tools/ci/check_ui_action_binding_complete.py",
+        "tests/canary_harness/prove_each_ui_action_emits_expected_proof_fields.py"
+      ],
+      "depends_on": [
+        "T-0200"
+      ],
+      "outputs": [
+        "enforced mapping from each UI action to permit, evidence, and state transition"
+      ],
+      "acceptance_criteria": [
+        "CI fails if a new UI action exists without binding",
+        "Canary validates emitted proof fields for every bound action",
+        "UI cannot trigger irreversible actions without step-up + permit binding"
+      ],
+      "ci_gates": [
+        "tools/ci/check_ui_action_binding_complete.py"
+      ],
+      "canaries": [
+        "tests/canary_harness/prove_each_ui_action_emits_expected_proof_fields.py",
+        "tests/canary_harness/prove_step_up_required_for_irreversible_actions.py"
+      ]
+    },
+    {
+      "id": "T-0500",
+      "title": "Unified Queue Truth + Persona Bindings (UI Reality Hard Stop)",
+      "type": "ux_truth",
+      "crg_node": "CRG::ux::unified_queue_truth::v1",
+      "paths": [
+        "contracts/ux/unified_queue_truth_v1.json",
+        "contracts/ux/persona_queue_bindings_v1.json",
+        "contracts/ux/reason_code_taxonomy_v1.json",
+        "tools/ci/check_persona_queue_bindings_complete.py",
+        "tests/canary_harness/prove_queue_truth_under_multi_role_and_escalations.py"
+      ],
+      "depends_on": [
+        "T-0400",
+        "T-0600",
+        "T-0700"
+      ],
+      "outputs": [
+        "canonical to-do list semantics, persona dashboards, SLA/escalation correctness under multi-role composition"
+      ],
+      "acceptance_criteria": [
+        "Queue counts match DB truth under retries and partial failures",
+        "Admin+User same principal sees consistent views without phantom states",
+        "Every blocked/escalated item shows reason_code and required next action",
+        "Notifications are deduped and tied to work_item ids deterministically"
+      ],
+      "ci_gates": [
+        "tools/ci/check_persona_queue_bindings_complete.py"
+      ],
+      "canaries": [
+        "tests/canary_harness/prove_queue_truth_under_multi_role_and_escalations.py",
+        "tests/canary_harness/prove_multi_role_queue_truth.py",
+        "tests/canary_harness/prove_notification_dedupe_and_delivery.py",
+        "tests/canary_harness/prove_escalation_triggers_when_sla_breached.py"
+      ]
+    },
+    {
+      "id": "T-0600",
+      "title": "Effective Authority Binding (persisted on every decision + permit)",
+      "type": "security",
+      "crg_node": "CRG::iam::effective_authority_binding::v1",
+      "paths": [
+        "contracts/iam/effective_authority_binding_v1.json",
+        "spine/migrations/00xx_effective_authority.sql",
+        "tests/canary_harness/prove_effective_authority_persisted_on_every_decision.py",
+        "tests/canary_harness/prove_permit_binds_effective_authority.py"
+      ],
+      "depends_on": [],
+      "outputs": [
+        "DB schema and invariants ensuring effective principal + grant source stored everywhere"
+      ],
+      "acceptance_criteria": [
+        "All decision_objects and permits persist effective principal and grant source",
+        "Revocation/disable invalidates all sessions and blocks new permits",
+        "Audit export reconstructs who/why/when for every action"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_effective_authority_persisted_on_every_decision.py",
+        "tests/canary_harness/prove_permit_binds_effective_authority.py"
+      ]
+    },
+    {
+      "id": "T-0700",
+      "title": "Identity Lifecycle Truth Packet (Multi-Role + Support Access)",
+      "type": "iam",
+      "crg_node": "CRG::iam::identity_lifecycle::v1",
+      "paths": [
+        "contracts/iam/identity_lifecycle_truth_packet_v1.json",
+        "contracts/iam/session_grant_source_enum_v1.json",
+        "tests/canary_harness/prove_invite_accept_role_compose_and_revoke.py",
+        "tests/canary_harness/prove_support_session_timebox_and_revocation.py",
+        "tests/canary_harness/prove_account_disable_revokes_all_sessions.py"
+      ],
+      "depends_on": [
+        "T-0600"
+      ],
+      "outputs": [
+        "auditable invite/verify/disable lifecycle and timeboxed support access"
+      ],
+      "acceptance_criteria": [
+        "Super admin/admin can invite users; acceptance results in auditable activation event",
+        "Support access is timeboxed, scoped, logged, and revocable",
+        "Multi-role composition rules enforced deterministically"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_invite_accept_role_compose_and_revoke.py",
+        "tests/canary_harness/prove_support_session_timebox_and_revocation.py",
+        "tests/canary_harness/prove_account_disable_revokes_all_sessions.py"
+      ]
+    },
+    {
+      "id": "T-0750",
+      "title": "Identity Admin Surface (Super Admin Reality: create/edit/disable support/HITL/devsupport)",
+      "type": "iam",
+      "crg_node": "CRG::iam::identity_admin_surface::v1",
+      "paths": [
+        "contracts/iam/identity_admin_surface_v1.json",
+        "tests/canary_harness/prove_super_admin_provisioning_and_revocation_e2e.py"
+      ],
+      "depends_on": [
+        "T-0700"
+      ],
+      "outputs": [
+        "explicit administrative operations with irreversibility and evidence requirements"
+      ],
+      "acceptance_criteria": [
+        "Super admin can provision HITL/support/devsupport with correct scoped roles",
+        "Edit/disable/delete (archive) operations produce audit events and are replay-verifiable",
+        "No admin operation bypasses step-up or proof requirements"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_super_admin_provisioning_and_revocation_e2e.py"
+      ]
+    },
+    {
+      "id": "T-0800",
+      "title": "HITL Dispatch Determinism + Backlog Controller",
+      "type": "ops",
+      "crg_node": "CRG::hitl::dispatch_and_backlog::v1",
+      "paths": [
+        "contracts/hitl/hitl_presence_policy.json",
+        "contracts/hitl/hitl_assignment_policy.json",
+        "contracts/ops/hitl_backlog_controller_v1.json",
+        "spine/app/ops/backlog_controller.py",
+        "tests/canary_harness/prove_hitl_failover_when_only_one_online.py",
+        "tests/canary_harness/prove_backlog_controller_emits_actions_and_proofs.py",
+        "tests/canary_harness/prove_hitl_backlog_growth_trips_killswitch.py"
+      ],
+      "depends_on": [
+        "T-0500"
+      ],
+      "outputs": [
+        "deterministic dispatch under partial availability and enforced degrade/killswitch behavior"
+      ],
+      "acceptance_criteria": [
+        "If 3 HITLs exist and only 1 is online, work routes deterministically without oscillation",
+        "Backlog controller triggers degrade ladder and/or killswitch with recorded proof",
+        "No pressure to rubber-stamp approvals: system slows/degrades instead"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_hitl_failover_when_only_one_online.py",
+        "tests/canary_harness/prove_backlog_controller_emits_actions_and_proofs.py",
+        "tests/canary_harness/prove_hitl_backlog_growth_trips_killswitch.py"
+      ]
+    },
+    {
+      "id": "T-0900",
+      "title": "Question Suppression + Anti-Spam User Interaction Truth",
+      "type": "ai_governance",
+      "crg_node": "CRG::ai::question_suppression::v2",
+      "paths": [
+        "contracts/ai/question_suppression_policy_v2.json",
+        "contracts/ai/abstention_policy_v1.json",
+        "tests/canary_harness/prove_ai_cannot_ask_more_than_budget.py",
+        "tests/canary_harness/prove_abstention_and_escalation.py"
+      ],
+      "depends_on": [
+        "T-0800",
+        "T-0500"
+      ],
+      "outputs": [
+        "runtime enforcement preventing AI from spamming user/HITL; deterministic escalation/abstention"
+      ],
+      "acceptance_criteria": [
+        "Per-tenant and per-work-item question limits are enforced",
+        "Low confidence escalates to queue/HITL rather than repeated user prompts",
+        "All AI questions are logged with justification, budget counters, and outcomes"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_ai_cannot_ask_more_than_budget.py",
+        "tests/canary_harness/prove_abstention_and_escalation.py"
+      ]
+    },
+    {
+      "id": "T-1000",
+      "title": "Contract Bundle Runtime Closure (hash stability + runtime enforcement)",
+      "type": "meta_sealing",
+      "crg_node": "CRG::meta::contract_bundle_runtime::v1",
+      "paths": [
+        "contracts/meta/contract_bundle_policy_v1.json",
+        "tools/meta/emit_contract_bundle.py",
+        "tests/canary_harness/prove_bundle_hash_stable_and_matches_sources.py"
+      ],
+      "depends_on": [
+        "T-0010"
+      ],
+      "outputs": [
+        "signed contract bundle manifest with stable hash and runtime load mechanism"
+      ],
+      "acceptance_criteria": [
+        "Bundle hash is stable across builds with identical sources",
+        "Runtime can assert bundle hash at startup and record it in proof_context",
+        "Bundles reference lifecycle state; deprecated contracts excluded unless explicitly allowed"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_bundle_hash_stable_and_matches_sources.py"
+      ]
+    },
+    {
+      "id": "T-1010",
+      "title": "Contract Storage Budgets + Catalog + Non-Destructive GC Planner",
+      "type": "meta_sealing",
+      "crg_node": "CRG::meta::contract_storage_and_catalog::v1",
+      "paths": [
+        "contracts/meta/contract_storage_budget_policy_v1.json",
+        "contracts/meta/contract_deprecation_and_gc_policy_v1.json",
+        "tools/meta/emit_contract_catalog.py",
+        "tools/meta/contract_gc_planner.py",
+        "tests/canary_harness/prove_catalog_matches_bundle_and_lifecycle.py"
+      ],
+      "depends_on": [
+        "T-1000"
+      ],
+      "outputs": [
+        "catalog of contracts (size, lifecycle, references) and a non-destructive GC plan"
+      ],
+      "acceptance_criteria": [
+        "Catalog lists every contract included in runtime bundle and its lifecycle state",
+        "Budget policy can fail CI when namespace caps exceeded without risk acceptance",
+        "GC planner produces archival plan; does not delete; preserves replay guarantees"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_catalog_matches_bundle_and_lifecycle.py"
+      ]
+    },
+    {
+      "id": "T-1020",
+      "title": "Bundle-Only Runtime + Archival-Only History",
+      "type": "meta_sealing",
+      "crg_node": "CRG::meta::bundle_only_runtime::v1",
+      "paths": [
+        "contracts/meta/bundle_only_runtime_policy_v1.json",
+        "contracts/meta/contract_deprecation_and_archival_policy_v1.json",
+        "tests/canary_harness/prove_runtime_rejects_unbundled_contracts.py"
+      ],
+      "depends_on": [
+        "T-1010"
+      ],
+      "outputs": [
+        "runtime rejects unbundled contracts; history preserved by archival rules"
+      ],
+      "acceptance_criteria": [
+        "Runtime refuses to start (fail-closed) if bundle missing/invalid",
+        "Archived contracts remain retrievable for offline replay and legal defense bundles",
+        "No 'erase everything' path exists without explicit override workflow + signed risk acceptance"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_runtime_rejects_unbundled_contracts.py"
+      ]
+    },
+    {
+      "id": "T-1100",
+      "title": "Concurrency Envelope Enforcement (1,000 Active Users)",
+      "type": "scale",
+      "crg_node": "CRG::scale::concurrency_envelope::v1",
+      "paths": [
+        "contracts/scale/concurrency_envelope_v1.json",
+        "contracts/provider/provider_quota_budget_v1.json",
+        "contracts/db/db_connection_pool_policy_v1.json",
+        "tests/load/prove_concurrency_envelope_enforced.py"
+      ],
+      "depends_on": [
+        "T-0800",
+        "T-0200"
+      ],
+      "outputs": [
+        "enforced ceilings per surface with deterministic degrade/backpressure behavior"
+      ],
+      "acceptance_criteria": [
+        "Under load, requests are queued/shed/degraded according to envelope policy",
+        "Noisy neighbor tenant is throttled without affecting other tenants beyond defined limits",
+        "DB contention remains under threshold or triggers defined backpressure mechanisms",
+        "Provider quota budgets prevent runaway retries and tool usage"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/load/prove_concurrency_envelope_enforced.py",
+        "tests/load/prove_noisy_neighbor_throttled.py",
+        "tests/load/prove_db_lock_contention_under_threshold.py",
+        "tests/load/prove_executor_pool_backpressure_engages.py"
+      ]
+    },
+    {
+      "id": "T-1200",
+      "title": "Supply Chain End-to-End Enforcement (attestation + admission policy)",
+      "type": "deploy_security",
+      "crg_node": "CRG::deploy::provenance_end_to_end::v1",
+      "paths": [
+        "contracts/deploy/provenance_enforcement_policy.json",
+        "contracts/deploy/supply_chain_end_to_end_v1.md",
+        "k8s/admission/policy.yaml",
+        "tools/deploy/verify_attestation.py",
+        "tests/canary_harness/prove_unattested_image_blocked_by_admission_controller.py"
+      ],
+      "depends_on": [],
+      "outputs": [
+        "runtime blocks unattested code/images; deploy pipeline verifies provenance"
+      ],
+      "acceptance_criteria": [
+        "Admission policy blocks unattested image",
+        "Verifier and runtime record build/provenance metadata into proofs",
+        "Provenance exception path requires explicit signed policy and is auditable"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_unattested_image_blocked_by_admission_controller.py"
+      ]
+    },
+    {
+      "id": "T-1300",
+      "title": "Incident Timeline Export + Offline Replay Verification",
+      "type": "ops_audit",
+      "crg_node": "CRG::ops::incident_timeline_export::v1",
+      "paths": [
+        "contracts/ops/incident_timeline_export_v1.json",
+        "tools/ops/emit_incident_timeline.py",
+        "tests/canary_harness/prove_incident_timeline_reconstructs_from_append_only_logs.py",
+        "tests/canary_harness/prove_canary_bundle_replays_offline.py"
+      ],
+      "depends_on": [
+        "T-0100",
+        "T-1020"
+      ],
+      "outputs": [
+        "deterministic timeline export and offline verifier replay bundle"
+      ],
+      "acceptance_criteria": [
+        "Timeline reconstructs full causal chain of inputs->decisions->evidence->actions",
+        "Offline replay validates hash chain and matches stored proofs",
+        "Export is tenant-scoped and redaction policy-compliant"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_incident_timeline_reconstructs_from_append_only_logs.py",
+        "tests/canary_harness/prove_canary_bundle_replays_offline.py"
+      ]
+    },
+    {
+      "id": "T-1400",
+      "title": "Phase Admission Policy (Anti-Sprawl Enforcement)",
+      "type": "governance",
+      "crg_node": "CRG::meta::phase_admission_policy::v1",
+      "paths": [
+        "contracts/meta/phase_admission_policy_v1.json",
+        "tools/ci/check_new_phase_has_feature_and_crg_binding.py"
+      ],
+      "depends_on": [
+        "T-0010"
+      ],
+      "outputs": [
+        "rule preventing new phases without feature binding + CRG edges + proofs"
+      ],
+      "acceptance_criteria": [
+        "CI fails if a new phase is added without naming feature(s) and required proofs",
+        "Every phase addition includes at least one CI gate or canary",
+        "Phase sprawl cannot occur without explicit governance action"
+      ],
+      "ci_gates": [
+        "tools/ci/check_new_phase_has_feature_and_crg_binding.py"
+      ],
+      "canaries": []
+    },
+    {
+      "id": "T-1500",
+      "title": "Sealed Risk Acceptance Register (sign-off + reevaluation schedule)",
+      "type": "governance",
+      "crg_node": "CRG::release::sealed_risk_register::v1",
+      "paths": [
+        "contracts/release/sealed_risk_acceptance_register.md"
+      ],
+      "depends_on": [
+        "T-0003",
+        "T-1200",
+        "T-1100"
+      ],
+      "outputs": [
+        "explicit accepted risks with owners, evidence, and reevaluation dates"
+      ],
+      "acceptance_criteria": [
+        "Any exception (provenance, budgets, controls) has a signed entry",
+        "Each risk maps to mitigations and canaries where applicable",
+        "Ship is blocked if required risk entries are missing"
+      ],
+      "ci_gates": [],
+      "canaries": [
+        "tests/canary_harness/prove_ship_gate_blocks_without_signed_risk_register.py"
+      ]
+    }
+  ],
+  "execution_order_recommendation": [
+    "T-0010",
+    "T-0002",
+    "T-0200",
+    "T-0300",
+    "T-0400",
+    "T-0600",
+    "T-0700",
+    "T-0750",
+    "T-1000",
+    "T-1010",
+    "T-1020",
+    "T-0500",
+    "T-0800",
+    "T-0900",
+    "T-1100",
+    "T-1200",
+    "T-0100",
+    "T-0101",
+    "T-1300",
+    "T-0001",
+    "T-0003",
+    "T-1500",
+    "T-1400"
+  ],
+  "notes": {
+    "non_execution_clause": "This artifact is a plan only. It does not authorize code changes. Implementation requires a separate execution instruction and must follow sealed paths/change budget policies.",
+    "agent_usage": [
+      "Agents must treat CRG as the single source of truth for 'done'",
+      "Agents must attach evidence references (logs/screenshots/queries) for each acceptance criterion",
+      "No mocks in E2E canaries unless explicitly allowed by test_environment_spec and recorded in risk register"
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+    "contract_name": "progressive_delivery_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Governs the safe rollout of new features via gradual traffic shifting and automatic rollback triggers.",
+    "rollout_stages": [
+        {
+            "stage": "CANARY",
+            "percentage": 1,
+            "soak_time_minutes": 30,
+            "required_approvals": [
+                "AUTOMATED_HEALTH_CHECK"
+            ]
+        },
+        {
+            "stage": "BETA",
+            "percentage": 10,
+            "soak_time_minutes": 120,
+            "required_approvals": [
+                "QA_SIGN_OFF"
+            ]
+        },
+        {
+            "stage": "GENERAL_AVAILABILITY",
+            "percentage": 100,
+            "soak_time_minutes": 0,
+            "required_approvals": [
+                "PRODUCT_OWNER"
+            ]
+        }
+    ],
+    "safety_valves": {
+        "auto_rollback_triggers": [
+            {
+                "metric": "error_rate",
+                "threshold": 0.01,
+                "action": "ROLLBACK_TO_PREVIOUS"
+            },
+            {
+                "metric": "p95_latency",
+                "threshold_ms": 500,
+                "action": "HALT_ROLLOUT"
+            }
+        ]
+    }
+}

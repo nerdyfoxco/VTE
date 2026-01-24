@@ -1,0 +1,23 @@
+{
+    "contract_name": "product_boundary_map",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Maps source code paths to logical product areas to prevent spaghetti code drift.",
+    "boundaries": {
+        "core_platform": [
+            "contracts/platform/**",
+            "spine/platform/**"
+        ],
+        "delinquency_feature": [
+            "contracts/features/vte_delinquency_v1/**",
+            "spine/features/delinquency/**"
+        ],
+        "iam_system": [
+            "contracts/iam/**",
+            "spine/iam/**"
+        ]
+    },
+    "rules": {
+        "cross_boundary_import": "EXPLICIT_CONTRACT_ONLY"
+    }
+}

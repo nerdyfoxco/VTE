@@ -1,0 +1,23 @@
+{
+    "contract_name": "data_classification_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "tiers": {
+        "PUBLIC": {
+            "description": "Information intended for public release.",
+            "controls": "NONE"
+        },
+        "INTERNAL": {
+            "description": "Internal business data, non-sensitive.",
+            "controls": "ACCESS_LOGGING"
+        },
+        "CONFIDENTIAL": {
+            "description": "PII, Financials, Customer Data.",
+            "controls": "ENCRYPTION_AT_REST, REDACTION_ON_EXPORT, NEED_TO_KNOW"
+        },
+        "RESTRICTED": {
+            "description": "Credentials, Keys, SPI.",
+            "controls": "HSM_PROTECTION, NO_HUMAN_READ_ACCESS"
+        }
+    }
+}

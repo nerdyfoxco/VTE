@@ -1,0 +1,29 @@
+{
+    "contract_name": "redaction_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "rules": {
+        "email_address": {
+            "pattern": "EMAIL_REGEX",
+            "replacement": "PARTIAL_MASK",
+            "scope": [
+                "LOGS",
+                "SUPPORT_DASHBOARD"
+            ]
+        },
+        "credit_card": {
+            "pattern": "LUNH_CHECK",
+            "replacement": "FULL_MASK",
+            "scope": [
+                "ALL"
+            ]
+        },
+        "ssn": {
+            "pattern": "USA_SSN",
+            "replacement": "FULL_MASK",
+            "scope": [
+                "ALL"
+            ]
+        }
+    }
+}

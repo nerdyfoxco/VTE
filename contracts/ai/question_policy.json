@@ -1,0 +1,11 @@
+{
+    "contract_name": "question_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "budget_strategy": "DYNAMIC_BASED_ON_VALUE",
+    "max_questions_per_session": 5,
+    "suppression_thresholds": {
+        "high_confidence_gap": 0.1,
+        "user_fatigue_score_max": 80
+    }
+}

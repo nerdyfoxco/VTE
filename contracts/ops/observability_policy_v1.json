@@ -1,0 +1,32 @@
+{
+    "schema": "vte_observability_policy_v1",
+    "metrics": {
+        "decision_latency_p95": {
+            "target": "200ms",
+            "critical": "500ms"
+        },
+        "error_rate_5xx": {
+            "target": "0.01%",
+            "critical": "0.1%"
+        },
+        "chain_integrity_check": {
+            "target": "100%",
+            "critical": "ANY_FAILURE"
+        }
+    },
+    "logging": {
+        "format": "JSON",
+        "required_fields": [
+            "trace_id",
+            "span_id",
+            "severity",
+            "component",
+            "msg"
+        ],
+        "pii_redaction": "STRICT"
+    },
+    "tracing": {
+        "sampling_rate": "1.0",
+        "provider": "OpenTelemetry"
+    }
+}

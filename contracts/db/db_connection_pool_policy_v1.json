@@ -1,0 +1,9 @@
+{
+    "contract_name": "db_connection_pool_policy_v1",
+    "version": "1.0.0",
+    "pool_settings": {
+        "min_idle": 5,
+        "max_open": 20,
+        "max_lifetime": "30m"
+    }
+}

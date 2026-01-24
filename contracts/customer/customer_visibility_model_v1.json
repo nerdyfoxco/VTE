@@ -1,0 +1,56 @@
+{
+    "contract_name": "customer_visibility_model",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Maps internal VTE states and data to customer-visible statuses and fields, ensuring no internal-only context leaks.",
+    "sensitivity_level": "PUBLIC_FACING",
+    "definitions": {
+        "status_mapping": {
+            "internal_states": {
+                "PENDING_PROVIDER_SYNC": "PROCESSING",
+                "SYNC_COMPLETE": "PROCESSING",
+                "DECISION_NEEDED": "ACTION_REQUIRED",
+                "DECISION_QUEUED": "PROCESSING",
+                "EXECUTING_SIDE_EFFECT": "PROCESSING",
+                "SIDE_EFFECT_COMPLETE": "COMPLETED",
+                "SIDE_EFFECT_FAILED": "ERROR",
+                "COMPENSATION_REQUIRED": "ERROR",
+                "MANUAL_REVIEW": "PROCESSING",
+                "BLOCKED_BY_POLICY": "CANCELLED"
+            },
+            "customer_statuses": [
+                "PROCESSING",
+                "ACTION_REQUIRED",
+                "COMPLETED",
+                "ERROR",
+                "CANCELLED"
+            ],
+            "invariant": "Every internal state MUST map to exactly one customer status."
+        },
+        "visible_fields": {
+            "delinquency_record": [
+                "reference_id",
+                "tenant_id",
+                "current_balance",
+                "days_past_due",
+                "last_action_date",
+                "last_action_type",
+                "customer_status"
+            ],
+            "action_history": [
+                "action_id",
+                "timestamp_utc",
+                "action_type",
+                "status",
+                "outcome_summary"
+            ]
+        },
+        "redaction_rules": {
+            "internal_trace_id": "REDACT",
+            "provider_raw_response": "REDACT",
+            "operator_id": "REDACT",
+            "rule_hit_list": "REDACT",
+            "ai_confidence_score": "REDACT"
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "contract_name": "provenance_exception_policy_v1",
+    "version": "1.0.0",
+    "exceptions": [
+        "Emergency Hotfix (Requires CTO Approval)",
+        "Vendor Appliance (Must be air-gapped)"
+    ],
+    "max_duration": "24h"
+}

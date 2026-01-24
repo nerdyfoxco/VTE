@@ -1,0 +1,37 @@
+{
+    "schema": "vte_browser_evidence_spec_v1",
+    "description": "Defines the required metadata for evidence collected via Browser Extension or Headless Browser.",
+    "required_fields": {
+        "url": {
+            "type": "string",
+            "validation": "valid_url_scheme"
+        },
+        "title": {
+            "type": "string"
+        },
+        "timestamp": {
+            "type": "iso8601_utc"
+        },
+        "user_agent": {
+            "type": "string"
+        },
+        "viewport": {
+            "type": "dimensions_string"
+        }
+    },
+    "optional_fields": {
+        "dom_snapshot": {
+            "type": "html_string",
+            "max_size_kb": 5000
+        },
+        "screenshot_blob": {
+            "type": "image_data_uri"
+        },
+        "console_logs": {
+            "type": "array_of_strings"
+        }
+    },
+    "invariants": {
+        "no_script_injection_in_snapshot": "Must sanitize <script> tags from DOM snapshot."
+    }
+}

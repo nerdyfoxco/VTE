@@ -1,0 +1,19 @@
+{
+    "contract_name": "hitl_presence_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "states": [
+        "AVAILABLE",
+        "BUSY",
+        "AWAY",
+        "OFFLINE"
+    ],
+    "timeouts": {
+        "heartbeat_missing_sec": 30,
+        "auto_away_idle_sec": 300
+    },
+    "transitions": {
+        "missed_heartbeat": "OFFLINE",
+        "idle_timeout": "AWAY"
+    }
+}

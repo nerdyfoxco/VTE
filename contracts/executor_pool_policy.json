@@ -1,0 +1,18 @@
+{
+    "contract_name": "executor_pool_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Sizing and isolation of worker pools for different task types.",
+    "pools": {
+        "latency_sensitive": {
+            "min_workers": 10,
+            "max_workers": 100,
+            "timeout": "5s"
+        },
+        "batch_processing": {
+            "min_workers": 2,
+            "max_workers": 20,
+            "timeout": "1h"
+        }
+    }
+}

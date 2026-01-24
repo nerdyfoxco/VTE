@@ -1,0 +1,10 @@
+{
+    "contract_name": "real_fixture_handling_policy_v1",
+    "version": "1.0.0",
+    "policy": [
+        "Real customer data MUST NEVER be checked into source control.",
+        "Fixtures derived from real data MUST be sanitized first.",
+        "PII fields (email, phone, name) MUST be replaced with synthetic values.",
+        "Relationships (topology) MAY be preserved for high-fidelity testing."
+    ]
+}

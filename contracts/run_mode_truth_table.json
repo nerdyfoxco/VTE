@@ -1,0 +1,26 @@
+{
+    "contract_name": "run_mode_truth_table",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Strictly defines allowed side-effects for each system Run Mode.",
+    "modes": {
+        "LIVE": {
+            "db_writes": "ALLOWED",
+            "external_egress": "ALLOWED",
+            "notifications": "ALLOWED",
+            "payment_processing": "ALLOWED"
+        },
+        "SHADOW": {
+            "db_writes": "ALLOWED_SHADOW_TABLES_ONLY",
+            "external_egress": "BLOCKED",
+            "notifications": "BLOCKED_OR_DIVERTED_TO_TEST",
+            "payment_processing": "MOCKED"
+        },
+        "REPLAY": {
+            "db_writes": "BLOCKED",
+            "external_egress": "BLOCKED",
+            "notifications": "BLOCKED",
+            "payment_processing": "MOCKED"
+        }
+    }
+}

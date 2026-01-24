@@ -1,0 +1,10 @@
+{
+    "contract_name": "provider_quota_budget_v1",
+    "version": "1.0.0",
+    "quotas": {
+        "twilio_sms": 5000,
+        "sendgrid_email": 10000,
+        "gcp_ai": 500
+    },
+    "period": "daily"
+}

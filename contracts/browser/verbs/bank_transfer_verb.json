@@ -1,0 +1,39 @@
+{
+    "schema": "vte_browser_verb_spec_v1",
+    "verb_id": "bank_transfer_v1",
+    "description": "Executes a bank transfer via the web interface and captures proof of success.",
+    "target_url_pattern": "https://banking.example.com/transfer/*",
+    "steps": [
+        {
+            "name": "navigate_to_form",
+            "action": "goto",
+            "selector": "#transfer-form"
+        },
+        {
+            "name": "input_amount",
+            "action": "fill",
+            "selector": "input[name='amount']",
+            "value_source": "decision.amount"
+        },
+        {
+            "name": "submit_form",
+            "action": "click",
+            "selector": "button#submit-transfer"
+        },
+        {
+            "name": "verify_success",
+            "action": "wait_for_selector",
+            "selector": ".transfer-success-message",
+            "timeout": 30000
+        }
+    ],
+    "evidence_capture": {
+        "elements_to_snapshot": [
+            "#transfer-details",
+            ".transfer-success-message"
+        ],
+        "redaction_rules": [
+            "input[name='account_number']"
+        ]
+    }
+}

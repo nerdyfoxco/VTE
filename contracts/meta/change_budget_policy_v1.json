@@ -1,0 +1,18 @@
+{
+    "contract_name": "change_budget_policy",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "purpose": "Defines the 'budget' for risky changes (like DB migrations or contract breaking changes) per period.",
+    "budgets": {
+        "breaking_schema_changes": {
+            "limit": 5,
+            "period": "MONTHLY",
+            "current_usage": 0
+        },
+        "sealed_path_modifications": {
+            "limit": 2,
+            "period": "WEEKLY",
+            "current_usage": 0
+        }
+    }
+}

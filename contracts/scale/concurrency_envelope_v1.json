@@ -1,0 +1,9 @@
+{
+    "contract_name": "concurrency_envelope_v1",
+    "version": "1.0.0",
+    "limits": {
+        "max_concurrent_requests_per_tenant": 100,
+        "max_concurrent_requests_global": 1000,
+        "burst_allowance": "10%"
+    }
+}

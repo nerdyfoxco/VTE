@@ -1,0 +1,26 @@
+{
+    "schema": "vte_db_write_policy_v1",
+    "description": "Defines strict rules for database modifications to ensure ledger integrity.",
+    "ledger_tables": [
+        "decision_objects",
+        "evidence_bundles",
+        "permit_tokens"
+    ],
+    "rules": {
+        "append_only": {
+            "result": "MUST_HAVE_TRIGGER_PREVENTING_DELETE_UPDATE",
+            "enforcement": "ci_migration_check"
+        },
+        "no_direct_client_access": {
+            "result": "REVOKE_ALL_PUBLIC_SCHEMA_PERMISSIONS",
+            "exception": "spine_app_user"
+        },
+        "migration_safety": {
+            "forbidden_statements": [
+                "DROP TABLE",
+                "TRUNCATE"
+            ],
+            "requires_review": "dual_control_admin"
+        }
+    }
+}

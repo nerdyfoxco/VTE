@@ -1,0 +1,28 @@
+{
+    "contract_name": "clarification_schema",
+    "version": "1.0",
+    "status": "ACTIVE",
+    "interaction_types": [
+        {
+            "type": "BINARY_CONFIRMATION",
+            "ui_widget": "YES_NO_BUTTONS",
+            "payload": {
+                "question_text": "String"
+            }
+        },
+        {
+            "type": "SLOT_FILLING",
+            "ui_widget": "DROPDOWN",
+            "payload": {
+                "options": "List<String>"
+            }
+        },
+        {
+            "type": "AMBIGUITY_RESOLUTION",
+            "ui_widget": "MULTI_SELECT",
+            "payload": {
+                "candidates": "List<Object>"
+            }
+        }
+    ]
+}
