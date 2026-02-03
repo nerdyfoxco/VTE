@@ -7,11 +7,9 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
-# Security: API Permissions
 permissions:
   contents: read
 
-# Concurrency: Cancel duplicate runs
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -66,5 +64,4 @@ jobs:
         working-directory: ./apps/frontend
         run: npm run build
         env:
-          # Prevent OOM in CI
           NODE_OPTIONS: "--max-old-space-size=4096"
