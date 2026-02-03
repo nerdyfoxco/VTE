@@ -15,6 +15,12 @@ The repository allows for a Monorepo structure:
 *   **`contracts/`**: JSON/Markdown definitions that serve as the "Source of Truth" for the system.
 *   **`infrastructure/`**: Terraform and Cloud definitions (GitHub Native).
 
+## 📚 Documentation
+- **[Project Roadmap](docs/wiki/Roadmap.md)**: The journey from V1 to Enterprise Scale.
+- **[Current Status](docs/wiki/Current-Status.md)**: Real-time operational dashboard.
+- **[Software Architecture](docs/wiki/Software-Architecture.md)**: Deep dive into Spine & Web.
+- **[Full Wiki](docs/wiki/Home.md)**: Improving software, better, together.
+
 ## 🚀 Getting Started
 
 ### Prerequisites
