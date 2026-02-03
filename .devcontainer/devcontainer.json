@@ -1,0 +1,26 @@
+{
+    "name": "VTE Monorepo",
+    "image": "mcr.microsoft.com/devcontainers/universal:2",
+    "features": {
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "3.12"
+        },
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "20"
+        },
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "hashicorp.terraform",
+                "github.vscode-github-actions"
+            ]
+        }
+    },
+    "postCreateCommand": "npm install -g poetry && cd apps/backend-core && poetry install && cd ../frontend && npm install"
+}
