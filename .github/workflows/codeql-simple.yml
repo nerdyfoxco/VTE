@@ -1,0 +1,22 @@
+name: CodeQL-Simple
+on:
+    push:
+        branches: ["main"]
+    workflow_dispatch:
+
+jobs:
+    analyze:
+        runs-on: ubuntu-latest
+        permissions:
+            security-events: write
+            actions: read
+        steps:
+            - uses: actions/checkout@v4
+            - name: Init
+              uses: github/codeql-action/init@v3
+              with:
+                  languages: python
+            - name: Build
+              uses: github/codeql-action/autobuild@v3
+            - name: Analyze
+              uses: github/codeql-action/analyze@v3
