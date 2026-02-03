@@ -7,14 +7,12 @@
 # Contracts & Governance (The "Sealed" Layer)
 # Changes here require maximum scrutiny
 /contracts/ @nerdyfoxco/vte-governance @nerdyfoxco/security
-/contracts/core/ @nerdyfoxco/vte-governance
-/contracts/meta/ @nerdyfoxco/vte-governance
 
 # Backend (Spine)
-/spine/ @nerdyfoxco/spine-team
+/apps/backend-core/ @nerdyfoxco/spine-team
 
 # Frontend (Web)
-/web/ @nerdyfoxco/web-team
+/apps/frontend/ @nerdyfoxco/web-team
 
 # Mobile
 /mobile/ @nerdyfoxco/mobile-team
