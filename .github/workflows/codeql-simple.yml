@@ -11,7 +11,7 @@ jobs:
             security-events: write
             actions: read
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
             - name: Init
               uses: github/codeql-action/init@v3
               with:
