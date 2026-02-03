@@ -1,0 +1,67 @@
+name: VTE CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-verification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install Dependencies
+        working-directory: ./apps/backend-core
+        run: poetry install
+
+      - name: Run Tests (Pytest)
+        working-directory: ./apps/backend-core
+        run: poetry run pytest
+
+  frontend-verification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: apps/frontend/package-lock.json
+
+      - name: Install Dependencies
+        working-directory: ./apps/frontend
+        run: npm ci
+
+      - name: Lint
+        working-directory: ./apps/frontend
+        run: npm run lint
+
+      - name: Build
+        working-directory: ./apps/frontend
+        run: npm run build
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
