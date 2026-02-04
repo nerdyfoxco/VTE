@@ -67,3 +67,8 @@ export const createDecision = async (draft: DecisionDraft): Promise<DecisionRead
     const response = await api.post<DecisionRead>("/decisions", draft);
     return response.data;
 };
+
+export const exchangeGoogleToken = async (idToken: string): Promise<string> => {
+    const response = await api.post<{ access_token: string; token_type: string }>("/auth/google-exchange", { id_token: idToken });
+    return response.data.access_token;
+};
