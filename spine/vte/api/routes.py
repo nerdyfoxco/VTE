@@ -197,3 +197,12 @@ def get_decisions(status: Optional[OutcomeEnum] = None, limit: int = 50, db: Ses
         
     query = query.order_by(desc(DecisionObject.timestamp))
     return query.limit(limit).all()
+
+@router.post("/agents/ingest", status_code=status.HTTP_202_ACCEPTED)
+def trigger_ingest_agent():
+    """
+    Manually trigger the Ingestion Agent (Async).
+    """
+    from vte.tasks import run_ingest_agent
+    task = run_ingest_agent.delay()
+    return {"status": "triggered", "task_id": str(task.id)}

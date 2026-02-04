@@ -38,24 +38,29 @@ class IngestionAgent(Agent):
                 item = self.create_evidence("google-gmail", "email_summary", e, sha)
                 email_items.append(item)
         except Exception as e:
-            self.logger.warning(f"Failed to fetch Gmail (Running in Mock/Partial Mode?): {e}")
-            # Optional: Add a dummy mock item if we want to force evidence flow verification
-            # For now, we prefer to log warning and proceed with 0 emails.
-            pass
+            self.logger.error(f"Gmail Fetch Failed: {e}", exc_info=True)
+            # Do NOT swallow error silently. But do not crash the agent loop entirely?
+            # For Phase 18, we want to see errors.
+            # Continue to AppFolio fetch attempt?
             
         # 2. Fetch AppFolio (Mock/Stub)
-        # For demo, let's just fetch one unit
-        ledger = self.appfolio.fetch_ledger("101")
         ledger_items = []
-        if ledger:
-             data_str = json.dumps(ledger, sort_keys=True)
-             sha = hashlib.sha256(data_str.encode()).hexdigest()
-             item = self.create_evidence("appfolio", "general_ledger", ledger, sha)
-             ledger_items.append(item)
+        try:
+            # For demo, let's just fetch one unit
+            ledger = self.appfolio.fetch_ledger("101")
+            
+            if ledger:
+                 data_str = json.dumps(ledger, sort_keys=True)
+                 sha = hashlib.sha256(data_str.encode()).hexdigest()
+                 item = self.create_evidence("appfolio", "general_ledger", ledger, sha)
+                 ledger_items.append(item)
+        except Exception as e:
+            self.logger.error(f"AppFolio Fetch Failed: {e}", exc_info=True)
         
         all_items = email_items + ledger_items
         
         if not all_items:
+            self.logger.info("No items found.")
             return {"status": "empty", "count": 0}
 
         # 3. Create Bundle
@@ -65,16 +70,25 @@ class IngestionAgent(Agent):
         )
         
         # 4. Post to API
-        # We need to call the API to persist. 
-        # If API is running in a different container, we need that URL.
-        # If we are running tests locally, localhost:8000.
-        # In Docker-Compose, we need a service for the API.
+        try:
+            return self._post_bundle(bundle)
+        except Exception as e:
+            self.logger.error(f"Failed to post bundle to API: {e}", exc_info=True)
+            raise e
+
+    def _post_bundle(self, bundle: EvidenceBundleDraft) -> Dict[str, Any]:
+        """
+        Persist bundle to Spine API.
+        """
+        url = f"{self.api_url}/evidence"
+        self.logger.info(f"Posting Bundle to {url}")
         
-        # CRITICAL: I noticed earlier that docker-compose only has 'spine-db', 'spine-redis', 'spine-worker'.
-        # WHERE IS THE API SERVER?
-        # The 'spine' service seems missing from the snippets I edited?
-        # Or did I override it?
-        # I must check docker-compose again.
+        # Use bundle.model_dump() for Pydantic V2
+        payload = bundle.model_dump(mode='json') 
         
-        return {"status": "success", "ingested": len(all_items)}
+        resp = requests.post(url, json=payload, timeout=10)
+        resp.raise_for_status()
+        
+        self.logger.info(f"Bundle Persisted: {resp.json().get('bundle_id')}")
+        return {"status": "success", "ingested": len(bundle.items), "response": resp.json()}
 
