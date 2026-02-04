@@ -2,12 +2,15 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import text, desc
 from vte.db import get_db
-from vte.api.schema import DecisionDraft, DecisionRead, EvidenceBundleDraft, EvidenceBundleRead
+from typing import List, Optional
+from vte.api.schema import DecisionDraft, DecisionRead, EvidenceBundleDraft, EvidenceBundleRead, OutcomeEnum
 from vte.orm import DecisionObject, EvidenceBundle
 from vte.core.verifier import ProofVerifier
 from vte.core.canonicalize import canonical_json_dumps
 import hashlib
+import hashlib
 import json
+import datetime
 
 router = APIRouter()
 verifier = ProofVerifier()
@@ -32,8 +35,8 @@ def create_evidence(draft: EvidenceBundleDraft, db: Session = Depends(get_db)):
     # 'Collected At' is part of the fact "I saw this at time T".
     # So we should include it.
     
-    from datetime import datetime
-    now_iso = datetime.utcnow().isoformat() + "Z"
+    # from datetime import datetime
+    now_iso = datetime.datetime.utcnow().isoformat() + "Z"
     
     # Payload for hashing
     hash_payload = payload.copy()
@@ -45,9 +48,11 @@ def create_evidence(draft: EvidenceBundleDraft, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Canonicalization failed: {str(e)}")
 
-    # 2. Persist
+    # Create Bundle
+    # For SQLite compatibility, pass datetime object, not ISO string.
+    # SA will handle conversion.
     db_obj = EvidenceBundle(
-        collected_at=now_iso,
+        collected_at=datetime.datetime.now(datetime.timezone.utc),
         normalization_schema=draft.normalization_schema,
         items_json=json.loads(json.dumps(draft.model_dump()["items"], default=str)), # Ensure valid JSON
         bundle_hash=bundle_hash
@@ -65,12 +70,30 @@ def create_evidence(draft: EvidenceBundleDraft, db: Session = Depends(get_db)):
 
     return db_obj
 
+from vte.api.deps import get_current_user_claims
+from vte.core.policy import PolicyEngine
+
+policy_engine = PolicyEngine()
+
 @router.post("/decisions", response_model=DecisionRead, status_code=status.HTTP_201_CREATED)
-def create_decision(draft: DecisionDraft, db: Session = Depends(get_db)):
+def create_decision(draft: DecisionDraft, claims: dict = Depends(get_current_user_claims), db: Session = Depends(get_db)):
     """
-    Ingests a Decision Draft, canonicalizes it, links it to the chain, and persists it.
+    Ingests a Decision Draft. Requires JWT Auth.
+    Ensures 'actor' in draft matches the authenticated user token.
+    Enforces Policy Rules via PolicyEngine.
     """
-    # 1. Get Previous Hash (Locking recommended in hi-concurrency, skipping generic lock for Phase 1 simple)
+    # 0. Security Enforcement: Overwrite Actor with Trusted Token Claims
+    draft.actor.user_id = claims["user_id"]
+    
+    # 0.5 Policy Enforcement
+    policy_result = policy_engine.evaluate(draft, claims)
+    if not policy_result.allowed:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=policy_result.reason
+        )
+    
+    # 1. Get Previous Hash...
     # In a real app we'd use select ... for update or advisory lock here.
     # We rely on the DB trigger to optimistic check, but we need the value to calc hash.
     
@@ -102,8 +125,7 @@ def create_decision(draft: DecisionDraft, db: Session = Depends(get_db)):
     }
     
     # Add timestamp
-    from datetime import datetime
-    now_iso = datetime.utcnow().isoformat() + "Z" 
+    now_iso = datetime.datetime.utcnow().isoformat() + "Z" 
     payload["timestamp"] = now_iso
     
     # 3. Canonicalize & Hash
@@ -146,3 +168,17 @@ def get_decision(decision_id: str, db: Session = Depends(get_db)):
     if not obj:
         raise HTTPException(status_code=404, detail="Decision not found")
     return obj
+
+@router.get("/decisions", response_model=List[DecisionRead])
+def get_decisions(status: Optional[OutcomeEnum] = None, limit: int = 50, db: Session = Depends(get_db)):
+    """
+    Get list of decisions, optionally filtered by status (e.g., PROPOSED).
+    Returns most recent first.
+    """
+    query = db.query(DecisionObject)
+    
+    if status:
+        query = query.filter(DecisionObject.outcome == status)
+        
+    query = query.order_by(desc(DecisionObject.timestamp))
+    return query.limit(limit).all()

@@ -11,6 +11,7 @@ DB_PORT = os.getenv("POSTGRES_PORT", "5432")
 DB_NAME = os.getenv("POSTGRES_DB", "vte_spine")
 
 DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+# DATABASE_URL = "sqlite:///./vte_spine.db"
 
 # Create Engine
 # pool_pre_ping=True handles DB connection drops gracefully

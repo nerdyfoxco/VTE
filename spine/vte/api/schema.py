@@ -4,6 +4,10 @@ from datetime import datetime
 from enum import Enum
 
 # Enums
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
 class RoleEnum(str, Enum):
     super_admin = "super_admin"
     admin = "admin"
@@ -12,6 +16,7 @@ class RoleEnum(str, Enum):
     system_bot = "system_bot"
 
 class OutcomeEnum(str, Enum):
+    PROPOSED = "PROPOSED"
     APPROVED = "APPROVED"
     DENIED = "DENIED"
     NEEDS_MORE_EVIDENCE = "NEEDS_MORE_EVIDENCE"
