@@ -119,6 +119,65 @@ class AppFolioClient:
             self.p.stop()
         logger.info("Browser Shutdown")
 
+    def navigate_to_tenant(self, tenant_id: str) -> bool:
+        """
+        Navigates to a specific tenant page.
+        URL pattern: https://anchorrealty.appfolio.com/users/12345/tenants/{tenant_id}
+        """
+        if not self.page:
+            logger.error("Browser not started.")
+            return False
+            
+        try:
+            # We assume a standard URL structure. 
+            # In reality, this might need dynamic discovery or use the 'Global Search' box.
+            # Using specific URL for now as placeholder.
+            target_url = f"https://anchorrealty.appfolio.com/tenants/{tenant_id}"
+            logger.info(f"Navigating to Tenant: {tenant_id} ({target_url})")
+            
+            self.page.goto(target_url)
+            self.page.wait_for_load_state("networkidle")
+            
+            # Verify we are on the right page
+            if "Page Not Found" in self.page.title():
+                 logger.error("Tenant Page Not Found")
+                 return False
+                 
+            return True
+        except Exception as e:
+            logger.error(f"Navigation Failed: {e}")
+            return False
+
+    def write_note(self, content: str, dry_run: bool = False) -> bool:
+        """
+        Writes a note to the current Tenant page.
+        """
+        if not self.page:
+             return False
+
+        logger.info(f"Writing Note: '{content}' (DryRun={dry_run})")
+        
+        try:
+            # 1. Click 'Notes' tab or finding the Note input
+            # Selectors based on AppFolio UI experience (Hypothetical)
+            self.page.click("text=Notes", timeout=2000) 
+            
+            # 2. Type Content
+            self.page.fill('textarea[placeholder="Add a note..."]', content)
+            
+            # 3. Save
+            if not dry_run:
+                self.page.click('button:has-text("Save")')
+                self.page.wait_for_load_state("networkidle")
+                logger.info("Note Saved.")
+            else:
+                logger.info("[DRY RUN] Would have clicked Save.")
+                
+            return True
+        except Exception as e:
+            logger.error(f"Write Note Failed: {e}")
+            return False
+
 if __name__ == "__main__":
     # Canary
     try:

@@ -18,6 +18,16 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 pytest = "^8.0.0"
 httpx = "^0.27.0"
 python-multipart = "^0.0.20"
+celery = {extras = ["redis"], version = "^5.3.6"}
+redis = "^5.0.1"
+google-api-python-client = "^2.118.0"
+google-auth-httplib2 = "^0.2.0"
+google-auth-oauthlib = "^1.2.0"
+beautifulsoup4 = "^4.12.3"
+requests = "^2.31.0"
+google-generativeai = "^0.4.0"
+openai = "^1.12.0"
+playwright = "^1.58.0"
 
 [build-system]
 requires = ["poetry-core"]

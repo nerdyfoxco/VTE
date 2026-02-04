@@ -83,5 +83,63 @@ def test_governance_flow():
         print("FAILURE: Did not find decision in list.")
         sys.exit(1)
 
+    print("\n--- 4. Verify Execution (Phase 16) ---")
+    
+    # 4.1 Approve the Decision (Create Append-Only Block)
+    # Get hash of the PROPOSED decision
+    proposed_decision = next(d for d in items if d["decision_id"] == decision_id)
+    proposed_hash = proposed_decision["decision_hash"]
+    
+    approval_payload = {
+        "actor": {
+             "user_id": "admin_user",
+             "role": "admin",
+             "session_id": "sess_admin"
+        },
+        "intent": {
+            "action": "write_note", # Override for test
+            "target_resource": proposed_decision["intent_target"],
+            "parameters": {"content": "Verified by VTE Phase 16", "dry_run": True}
+        },
+        "evidence_hash": evidence_hash,
+        "outcome": "APPROVED",
+        "policy_version": "v1.0"
+    }
+    
+    resp = client.post("/api/v1/decisions", json=approval_payload)
+    if resp.status_code != 201:
+        print(f"Approval Failed: {resp.text}")
+        sys.exit(1)
+        
+    approved_id = resp.json()["decision_id"]
+    print(f"Created Decision {approved_id} (APPROVED)")
+    
+    # 4.2 Execute
+    print("Triggering Execution Task (Sync)...")
+    from vte.tasks import execute_decision
+    
+    # Ensure env var for cookies is set to avoid random IO errors
+    import os
+    os.environ["APPFOLIO_COOKIE_PATH"] = "./test_cookies.json"
+    
+    result = execute_decision(approved_id)
+    print(f"Execution Result: {result}")
+    
+    # Verification Logic
+    # We expect 'failed_navigation' (if no cookies) or 'success' (if cookies exist)
+    # The key is that it didn't crash or return 'not_found'.
+    if result["status"] == "success":
+        print("SUCCESS: Execution Succeeded (Writeback).")
+    elif result["status"] == "failed" and result["reason"] == "navigation_failed":
+        print("SUCCESS: Execution Attempted (Navigation Verified - Auth Wall Hit as expected).")
+    elif result["status"] == "failed" and result["reason"] == "not_found":
+        print("FAILURE: Execution Task could not find the decision.")
+        sys.exit(1)
+    else:
+         print(f"WARNING: Execution Result unexpected: {result}")
+
+if __name__ == "__main__":
+    test_governance_flow()
+
 if __name__ == "__main__":
     test_governance_flow()

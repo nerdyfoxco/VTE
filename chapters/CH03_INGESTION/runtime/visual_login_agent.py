@@ -16,18 +16,58 @@ class VisualLoginAgent:
         self.page: Page = None
         self.brain = BrainClient()
         self.cookie_path = config.appfolio_cookie_path
+        self.profile_path = os.path.join(os.path.dirname(self.cookie_path), "..", "auth_profiles", "appfolio.json")
+        self.learned_path = [] # For recording Tier 3 actions
 
+    def validate_session(self) -> bool:
+        """Tier 1: Checks if existing cookies provide access to Dashboard."""
+        if not os.path.exists(self.cookie_path):
+            logger.info("[Tier 1] No cookies found.")
+            return False
+            
+        logger.info("[Tier 1] Validating Session Cookies...")
+        self.start_browser()
+        
+        # Load Cookies
+        with open(self.cookie_path, 'r') as f:
+            cookies = json.load(f)
+            self.browser_context.add_cookies(cookies)
+            
+        try:
+            self.page.goto("https://anchorrealty.appfolio.com/dashboard", timeout=15000)
+            self.page.wait_for_load_state("networkidle")
+            
+            # Check for specific dashboard elements or URL
+            if "dashboard" in self.page.url and "Sign In" not in self.page.title():
+                logger.info("[Tier 1] Success: Session is Valid.")
+                return True
+            else:
+                logger.warning("[Tier 1] Failed: Redirected to Login.")
+                return False
+        except Exception as e:
+            logger.error(f"[Tier 1] Validation Error: {e}")
+            return False
     def start_browser(self):
-        self.playwright = sync_playwright().start()
-        # Launch options for maximum visibility/stability
-        launch_args = ["--start-maximized", "--disable-blink-features=AutomationControlled"]
-        self.browser = self.playwright.chromium.launch(
-            headless=self.headless,
-            slow_mo=1000, # Slow down to avoid "m" typing errors and let user see
-            args=launch_args
-        )
-        self.browser_context = self.browser.new_context(no_viewport=True)
-        self.page = self.browser_context.new_page()
+        if self.page and not self.page.is_closed():
+            logger.info("[Browser] Reusing existing session.")
+            return
+
+        logger.info("[Browser] Launching Playwright...")
+        try:
+            self.playwright = sync_playwright().start()
+            # Launch options for maximum visibility/stability
+            launch_args = ["--start-maximized", "--disable-blink-features=AutomationControlled"]
+            self.browser = self.playwright.chromium.launch(
+                headless=self.headless,
+                slow_mo=1000, # Slow down to avoid "m" typing errors and let user see
+                args=launch_args
+            )
+            self.browser_context = self.browser.new_context(no_viewport=True)
+            self.page = self.browser_context.new_page()
+            logger.info("[Browser] Launched.")
+        except Exception as e:
+            logger.error(f"[Browser] Launch Failed: {e}")
+            raise
 
     def _get_screenshot_base64(self) -> str:
         """Captures screenshot and returns base64 string for LLM."""
@@ -37,6 +77,55 @@ class VisualLoginAgent:
         except Exception as e:
             logger.error(f"[Vsion] Screenshot Failed: {e}")
             return ""
+
+    def login_using_profile(self) -> bool:
+        """Tier 2: Replays a learned selector path."""
+        if not os.path.exists(self.profile_path):
+            return False
+            
+        logger.info("[Tier 2] Profiler Found. Attempting Replay...")
+        try:
+            with open(self.profile_path, 'r') as f:
+                path_steps = json.load(f)
+                
+            self.start_browser()
+            self.page.goto("https://anchorrealty.appfolio.com/users/sign_in")
+            
+            for step in path_steps:
+                action = step.get("action")
+                selector = step.get("selector")
+                desc = step.get("desc", selector)
+                
+                logger.info(f"[Tier 2] Replaying: {action} on {desc}")
+                
+                if action == "FILL":
+                    value_key = step.get("value")
+                    val = os.getenv(value_key) if value_key in ["EMAIL_USER", "EMAIL_PASS"] else value_key
+                    self.page.fill(selector, val)
+                elif action == "CLICK":
+                    self.page.click(selector, timeout=5000)
+                elif action == "PRESS":
+                    self.page.press(selector, step.get("key"))
+                    
+                self.page.wait_for_timeout(1000) # Human-like pace
+                
+            self.page.wait_for_load_state("networkidle")
+            
+            # Validation
+            if "dashboard" in self.page.url:
+                logger.info("[Tier 2] Success: Replay Login Complete.")
+                # Save Cookies
+                cookies = self.browser_context.cookies()
+                with open(self.cookie_path, 'w') as f:
+                    json.dump(cookies, f)
+                return True
+            else:
+                logger.warning("[Tier 2] Replay Failed (URL mismatch). Falling back to Vision.")
+                return False
+                
+        except Exception as e:
+            logger.error(f"[Tier 2] Replay Failed: {e}")
+            return False
 
     def analyze_state_and_act(self, email, password, last_action=None):
         """
@@ -110,13 +199,17 @@ class VisualLoginAgent:
              logger.info(f"[Act] Clicking Element with text: '{target_text}'")
              try:
                  # Try to click by text
+                 # Try to click by text
                  try:
                      self.page.click(f"text={target_text}", timeout=2000)
+                     # Record for Tier 2
+                     self.learned_path.append({"action": "CLICK", "selector": f"text={target_text}", "desc": target_text})
                  except:
                      # Fallback for "Send Verification Code"
                      if "Send" in target_text:
                          logger.info("Trying fallback selectors for Send button...")
                          self.page.click('input[type="submit"]', timeout=2000)
+                         self.learned_path.append({"action": "CLICK", "selector": 'input[type="submit"]', "desc": "Send Button"})
                      else:
                          raise
 
@@ -138,6 +231,12 @@ class VisualLoginAgent:
             
             logger.info("[Act] Submitting...")
             self.page.press('input[name="user[password]"]', 'Enter')
+            
+            # Record for Tier 2
+            self.learned_path.append({"action": "FILL", "selector": 'input[name="user[email]"]', "value": "EMAIL_USER"})
+            self.learned_path.append({"action": "FILL", "selector": 'input[name="user[password]"]', "value": "EMAIL_PASS"})
+            self.learned_path.append({"action": "PRESS", "selector": 'input[name="user[password]"]', "key": "Enter"})
+            
             self.page.wait_for_load_state("networkidle")
             return self.analyze_state_and_act(email, password, last_action="Typed Credentials") # Recurse/Check next state
 
@@ -156,9 +255,14 @@ class VisualLoginAgent:
                      self.page.type('input[type="text"]', otp_code)
                 
                 self.page.press('body', 'Enter')
-                logger.info("OTP Submitted. Waiting for transition...")
-                self.page.wait_for_timeout(5000) # Wait for redirect
-                self.page.wait_for_load_state("networkidle")
+                logger.info("OTP Submitted (Enter Key). Waiting for transition...")
+                
+                # Wait longer for redirect (sometimes slow)
+                try:
+                    self.page.wait_for_load_state("networkidle", timeout=15000)
+                except:
+                    logger.warning("NetworkIdle timeout (15s), proceeding to check state anyway...")
+
                 return self.analyze_state_and_act(email, password, last_action="Entered OTP")
             except Exception as e:
                 logger.error(f"Failed to enter OTP: {e}")
@@ -166,6 +270,15 @@ class VisualLoginAgent:
 
         elif action == "FINISH":
             logger.info("[Act] Login Complete. Dashboard Detected.")
+            # Save Learned Path (Tier 2 Enablement)
+            if self.learned_path:
+                try:
+                    os.makedirs(os.path.dirname(self.profile_path), exist_ok=True)
+                    with open(self.profile_path, 'w') as f:
+                        json.dump(self.learned_path, f, indent=2)
+                    logger.info(f"[Tier 3] Learned Path Saved ({len(self.learned_path)} steps).")
+                except Exception as e:
+                    logger.error(f"Failed to save auth profile: {e}")
             return True
 
         elif action == "ABORT":
@@ -181,10 +294,28 @@ class VisualLoginAgent:
         return False
 
     def login(self, email, password):
+        # Tier 1: Session Resume
+        if self.validate_session():
+            logger.info("Login Success via Tier 1 (Cookies).")
+            return
+
+        # Tier 2: Learned Path Replay
+        if self.login_using_profile():
+            logger.info("Login Success via Tier 2 (Replay).")
+            self.browser.close()
+            return
+
+        # Tier 3: Visual Intelligence (Fallback)
+        logger.info("[Tier 3] Fallback to Visual Intelligence...")
+        
+        # Ensure browser is running (idempotent)
         self.start_browser()
-        url = "https://anchorrealty.appfolio.com/users/sign_in"
-        logger.info(f"Navigating to AppFolio: {url}")
-        self.page.goto(url)
+        
+        # Only navigate if we aren't already there (e.g. from Tier 2 failure)
+        if self.page.url == "about:blank":
+            url = "https://anchorrealty.appfolio.com/users/sign_in"
+            logger.info(f"Navigating to AppFolio: {url}")
+            self.page.goto(url)
         
         success = self.analyze_state_and_act(email, password)
         
