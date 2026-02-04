@@ -160,6 +160,21 @@ def create_decision(draft: DecisionDraft, claims: dict = Depends(get_current_use
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Persistence failed: {str(e)}")
 
+    # 5. Trigger Execution (Side Effect)
+    # If the decision is APPROVED, we must execute the intent.
+    # We do this asynchronously via Celery.
+    if db_obj.outcome == OutcomeEnum.APPROVED:
+        try:
+            from vte.tasks import execute_decision
+            # We use delay() to send to Redis queue
+            execute_decision.delay(decision_id=str(db_obj.decision_id))
+        except Exception as e:
+            # We do NOT rollback the decision - it is committed.
+            # But we log the failure to enqueue.
+            # In a real system, we might need a reliable outbox pattern here.
+            # For VTE Phase 17, logging is sufficient.
+            print(f"CRITICAL: Failed to enqueue execution task: {e}")
+
     return db_obj
 
 @router.get("/decisions/{decision_id}", response_model=DecisionRead)
