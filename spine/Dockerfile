@@ -14,11 +14,17 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="/root/.local/bin:$PATH"
 ENV POETRY_VIRTUALENVS_CREATE=false
 
+# Upgrade pip
+RUN pip install --upgrade pip
+
 # Copy project files
 COPY pyproject.toml poetry.lock ./
 
 # Install dependencies
 RUN poetry install --no-root --no-dev
+
+# Install Playwright Browsers (Chromium only to save space)
+RUN poetry run playwright install --with-deps chromium
 
 # Copy app code
 COPY . .
