@@ -17,5 +17,51 @@ services:
       retries: 5
     restart: unless-stopped
 
+  spine-redis:
+    image: redis:7-alpine
+    container_name: vte-spine-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  spine-api:
+    build:
+      context: ./spine
+    container_name: vte-spine-api
+    command: poetry run uvicorn vte.main:app --host 0.0.0.0 --port 8000
+    environment:
+      DATABASE_URL: postgresql://spine_app:dev_only_password_123@spine-db:5432/vte_spine
+      CELERY_BROKER_URL: redis://spine-redis:6379/0
+      CELERY_RESULT_BACKEND: redis://spine-redis:6379/0
+    ports:
+      - "8000:8000"
+    depends_on:
+      - spine-db
+      - spine-redis
+    volumes:
+      - ./spine:/app
+    restart: unless-stopped
+
+  spine-worker:
+    build:
+      context: ./spine
+    container_name: vte-spine-worker
+    command: poetry run celery -A vte.worker worker --loglevel=info
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://spine_app:dev_only_password_123@spine-db:5432/vte_spine
+      CELERY_BROKER_URL: redis://spine-redis:6379/0
+      CELERY_RESULT_BACKEND: redis://spine-redis:6379/0
+      # Keys from .env will be injected by env_file
+    depends_on:
+      - spine-db
+      - spine-redis
+      - spine-api
+    volumes:
+      - ./spine:/app
+      - ./spine/credentials.json:/app/credentials.json
+    restart: unless-stopped
+
 volumes:
   spine_pgdata:
