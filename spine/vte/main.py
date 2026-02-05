@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from vte.db import get_db
-from vte.api import routes, auth
+from vte.api import routes, auth, connect
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
@@ -13,7 +13,8 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Development: Allow all (fixes localhost vs 127.0.0.1 issues)
+    allow_origins=["*"], # Allow ALL origins for Dogfooding/Dev
+    # allow_origin_regex="https?://localhost:\d+",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -30,6 +31,11 @@ from vte.orm import EvidenceBundle, DecisionObject # Ensure models are registere
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(routes.router, prefix="/api/v1", tags=["Decision Core"])
+app.include_router(connect.router, prefix="/api/v1/connect", tags=["Data Connection"])
+
+# Inventory Projections (Read-Only)
+from vte.api import inventory
+app.include_router(inventory.router, prefix="/api/v1/inventory", tags=["Inventory (Read Only)"])
 
 @app.get("/health", tags=["System"])
 def health_check(db: Session = Depends(get_db)):

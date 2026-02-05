@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from vte.core.security import create_access_token
 from vte.api.schema import Token
+import pydantic
 
 router = APIRouter()
 

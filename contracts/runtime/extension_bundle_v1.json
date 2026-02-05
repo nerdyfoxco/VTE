@@ -1,0 +1,7 @@
+{
+    "bundle_name": "extension_bundle_v1",
+    "version": "1.0.0",
+    "included_contracts": [
+        "contracts/features/vte_inventory_v1/scope_contract.json"
+    ]
+}

@@ -1,0 +1,81 @@
+{
+    "schema": "vte_feature_scope_v1",
+    "feature_id": "vte_inventory_v1",
+    "description": "Manages Property and Unit lifecycles, including tenant occupancy and maintenance states.",
+    "states": {
+        "unit": [
+            "PROPOSED",
+            "VACANT",
+            "OCCUPIED",
+            "MAINTENANCE",
+            "ARCHIVED"
+        ],
+        "property": [
+            "ACTIVE",
+            "ARCHIVED"
+        ]
+    },
+    "transitions": [
+        {
+            "target_type": "property",
+            "from": "*",
+            "to": "ACTIVE",
+            "trigger": "REGISTER_PROPERTY",
+            "required_evidence": [
+                "ownership_proof"
+            ]
+        },
+        {
+            "target_type": "unit",
+            "from": "*",
+            "to": "VACANT",
+            "trigger": "REGISTER_UNIT",
+            "required_evidence": [
+                "property_exists"
+            ]
+        },
+        {
+            "target_type": "unit",
+            "from": "VACANT",
+            "to": "OCCUPIED",
+            "trigger": "UPDATE_UNIT_TENANT",
+            "required_evidence": [
+                "lease_agreement"
+            ]
+        },
+        {
+            "target_type": "unit",
+            "from": "OCCUPIED",
+            "to": "VACANT",
+            "trigger": "MOVE_OUT",
+            "required_evidence": [
+                "inspection_report"
+            ]
+        },
+        {
+            "target_type": "unit",
+            "from": "OCCUPIED",
+            "to": "MAINTENANCE",
+            "trigger": "REPORT_ISSUE"
+        }
+    ],
+    "side_effects": {
+        "REGISTER_PROPERTY": [
+            "db_projection_property"
+        ],
+        "REGISTER_UNIT": [
+            "db_projection_unit"
+        ],
+        "UPDATE_UNIT_TENANT": [
+            "db_projection_unit_status",
+            "email_notification_welcome"
+        ],
+        "WRITE_NOTE": [
+            "appfolio_sync"
+        ]
+    },
+    "invariants": {
+        "unit_must_have_property": "True",
+        "occupied_unit_must_have_tenant_info": "True"
+    }
+}
