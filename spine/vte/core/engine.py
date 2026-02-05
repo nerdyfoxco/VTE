@@ -125,17 +125,23 @@ class WorkflowEngine:
             
         if target_type == "property":
             # For REGISTER, target might not exist yet.
-            prop = self.db.query(Property).filter(Property.property_id == target_id).first()
-            return prop.status if prop and hasattr(prop, 'status') else "VOID" # Property doesn't have status col yet? 
-            # In scope_contract, property states are ACTIVE, ARCHIVED.
-            # My ORM might need 'status' on Property if I want to track it.
-            # Checking orm.py... Property has 'name', 'address', 'external_ref_id'. No 'status'.
-            # Engine reveals a gap in the ORM! 
-            # For now, return "VOID" if not found, or "ACTIVE" if found.
+            try:
+                # Ensure UUID compatibility
+                pid = uuid.UUID(target_id)
+                prop = self.db.query(Property).filter(Property.property_id == pid).first()
+            except ValueError:
+                return "VOID" # Invalid UUID
+                
             return "ACTIVE" if prop else "VOID"
 
         elif target_type == "unit":
-            unit = self.db.query(Unit).filter(Unit.unit_id == target_id).first()
+            try:
+                # Ensure UUID compatibility
+                uid = uuid.UUID(target_id)
+                unit = self.db.query(Unit).filter(Unit.unit_id == uid).first()
+            except ValueError:
+                return "VOID"
+                
             return unit.status if unit else "VOID"
             
         return "UNKNOWN"
@@ -163,6 +169,9 @@ class WorkflowEngine:
             elif effect == "appfolio_sync":
                  self._execute_appfolio_sync(decision)
                  results.append("appfolio_sync")
+            elif effect == "db_update_tenant_info":
+                 self._project_unit_tenant_info(decision)
+                 results.append("db_update_tenant_info")
             elif effect == "email_notification_welcome":
                  pass
             else:
@@ -244,10 +253,38 @@ class WorkflowEngine:
 
     def _project_unit_status(self, decision: DecisionObject, new_status: str):
         import uuid
-        unit_id = uuid.UUID(decision.intent_target)
-        unit = self.db.query(Unit).filter(Unit.unit_id == unit_id).first()
-        if unit:
-            unit.status = new_status
-            unit.updated_at_decision_hash = decision.decision_hash
-            self.db.add(unit)
-            self.db.commit()
+        try:
+             unit_id = uuid.UUID(decision.intent_target)
+             unit = self.db.query(Unit).filter(Unit.unit_id == unit_id).first()
+             if unit:
+                unit.status = new_status
+                unit.updated_at_decision_hash = decision.decision_hash
+                self.db.add(unit)
+                self.db.commit()
+        except ValueError:
+             logger.error(f"Invalid UUID for unit target: {decision.intent_target}")
+
+    def _project_unit_tenant_info(self, decision: DecisionObject):
+        import uuid
+        try:
+             unit_id = uuid.UUID(decision.intent_target)
+             unit = self.db.query(Unit).filter(Unit.unit_id == unit_id).first()
+             if unit:
+                params = decision.intent_params or {}
+                # Update status if needed, but primary is tenant_info
+                # Logic: Update tenant info blobs
+                # Assume params has tenant details
+                current_info = unit.tenant_info or {}
+                # Merge?
+                current_info.update(params)
+                unit.tenant_info = current_info
+                
+                # Also implied OCCUPIED? Or separate transition?
+                # Contract says transition to OCCUPIED. 
+                # If transition handled status, this handles data.
+                
+                unit.updated_at_decision_hash = decision.decision_hash
+                self.db.add(unit)
+                self.db.commit()
+        except ValueError:
+             logger.error(f"Invalid UUID for unit target: {decision.intent_target}")

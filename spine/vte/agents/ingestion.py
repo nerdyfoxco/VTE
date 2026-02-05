@@ -128,8 +128,13 @@ class IngestionAgent:
             logger.info(f"Decision SUBMITTED: {decision_id}. Unit {unit.name} -> Occupied.")
             
             # Trigger Projection Immediately (or let background worker do it)
-            from vte.tasks import handle_inventory_projection
-            handle_inventory_projection(decision, self.db)
+            # Trigger Projection Immediately (or let background worker do it)
+            from vte.tasks import execute_decision
+            execute_decision(str(decision.decision_id)) # Sync call for now? Or .delay() if Celery
+            # In test, eager mode makes it sync. In prod, we want async.
+            # But execute_decision is a task. execute_decision.delay(...)
+            # If I call it directly, it runs sync. 
+            pass
             
         except Exception as e:
             logger.error(f"Failed to submit decision: {e}")

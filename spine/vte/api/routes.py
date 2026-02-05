@@ -137,7 +137,7 @@ def create_decision(draft: DecisionDraft, claims: dict = Depends(get_current_use
 
     # 4. Map to ORM (Flattened)
     db_obj = DecisionObject(
-        timestamp=now_iso, # sqlalchemy might try to cast string to TIMESTAMP, should work
+        timestamp=datetime.datetime.now(datetime.timezone.utc), # Use object, not string
         actor_user_id=draft.actor.user_id,
         actor_role=draft.actor.role, # Enum
         actor_session_id=draft.actor.session_id,

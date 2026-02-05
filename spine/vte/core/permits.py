@@ -105,9 +105,9 @@ class PermitIssuer:
         payload["authority"] = decision.actor_user_id
         
         recalc_sig = sign_payload(payload)
-        if not import hmac; hmac.compare_digest(recalc_sig, token.signature): # Syntax error in f-string usage logic
-             # Correction:
-             pass
+        import hmac # Moved import
+        # Old manual logic removed
+        pass
         
         # Use helper
         from vte.core.security import verify_signature 
