@@ -110,7 +110,8 @@ def test_ingestion_automation_flow():
     # 4. Verify Outcome
     db = SessionLocal()
     try:
-        updated_unit = db.query(Unit).filter(Unit.unit_id == target_unit_id).first()
+        import uuid
+        updated_unit = db.query(Unit).filter(Unit.unit_id == uuid.UUID(target_unit_id)).first()
         
         print(f"VERIFY: Unit Status is now: {updated_unit.status}")
         print(f"VERIFY: Tenant Info: {updated_unit.tenant_info}")
