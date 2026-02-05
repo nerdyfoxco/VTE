@@ -3,7 +3,8 @@ name = "spine"
 version = "0.1.0"
 description = "VTE Logic Spine - The Proof Authority"
 authors = ["VTE Team <dev@vte.local>"]
-package-mode = false
+package-mode = true
+packages = [{include = "vte"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
