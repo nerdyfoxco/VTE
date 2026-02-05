@@ -21,7 +21,7 @@ RUN pip install --upgrade pip
 COPY pyproject.toml poetry.lock ./
 
 # Install dependencies
-RUN poetry install --no-root --without dev
+RUN poetry install --no-root
 
 # Install Playwright Browsers (Chromium only to save space)
 RUN poetry run playwright install --with-deps chromium
