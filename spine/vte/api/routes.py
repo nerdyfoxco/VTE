@@ -179,7 +179,12 @@ def create_decision(draft: DecisionDraft, claims: dict = Depends(get_current_use
 
 @router.get("/decisions/{decision_id}", response_model=DecisionRead)
 def get_decision(decision_id: str, db: Session = Depends(get_db)):
-    obj = db.query(DecisionObject).filter(DecisionObject.decision_id == decision_id).first()
+    import uuid
+    try:
+        uid = uuid.UUID(decision_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid UUID")
+    obj = db.query(DecisionObject).filter(DecisionObject.decision_id == uid).first()
     if not obj:
         raise HTTPException(status_code=404, detail="Decision not found")
     return obj

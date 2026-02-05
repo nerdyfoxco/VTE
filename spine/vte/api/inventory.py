@@ -40,7 +40,12 @@ def get_property(property_id: str, db: Session = Depends(get_db)):
     """
     Get specific property + units.
     """
-    prop = db.query(Property).filter(Property.property_id == property_id).first()
+    import uuid
+    try:
+        pid = uuid.UUID(property_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid UUID")
+    prop = db.query(Property).filter(Property.property_id == pid).first()
     if not prop:
         raise HTTPException(status_code=404, detail="Property not found")
     return prop
@@ -57,7 +62,12 @@ def get_units(property_id: Optional[str] = None, db: Session = Depends(get_db)):
 
 @router.get("/units/{unit_id}", response_model=UnitRead)
 def get_unit(unit_id: str, db: Session = Depends(get_db)):
-    unit = db.query(Unit).filter(Unit.unit_id == unit_id).first()
+    import uuid
+    try:
+        uid = uuid.UUID(unit_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid UUID")
+    unit = db.query(Unit).filter(Unit.unit_id == uid).first()
     if not unit:
         raise HTTPException(status_code=404, detail="Unit not found")
     return unit
