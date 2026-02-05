@@ -94,7 +94,24 @@ def test_governance_flow():
     print("Celery Eager Mode: ON")
 
     # Mock AppFolioClient to verify it gets called by the backend
-    with patch("vte.tasks.AppFolioClient") as MockClient:
+    
+    mock_contract = {
+        "feature_id": "test_feature",
+        "transitions": [
+            {
+                "trigger": "write_note",
+                "from": "*",
+                "to": "OCCUPIED",
+                "target_type": "unit"
+            }
+        ],
+        "side_effects": {
+            "write_note": ["appfolio_sync"]
+        }
+    }
+
+    with patch("vte.adapters.appfolio.client.AppFolioClient") as MockClient, \
+         patch("vte.core.engine.WorkflowEngine._load_contracts", return_value={"test_feature": mock_contract}):
         # Setup Mock
         mock_instance = MockClient.return_value
         mock_instance.navigate_to_tenant.return_value = True

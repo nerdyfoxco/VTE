@@ -42,7 +42,7 @@ def test_inventory_api_wiring():
     # (Since we can't easily wait for Celery in this script)
     db = SessionLocal()
     from vte.orm import DecisionObject
-    from vte.tasks import handle_inventory_projection
+    # from vte.tasks import handle_inventory_projection
     
     decision_hash = f"hash_{uuid.uuid4()}"
     decision = DecisionObject(
@@ -61,7 +61,21 @@ def test_inventory_api_wiring():
     db.add(decision)
     db.commit()
     
-    handle_inventory_projection(decision, db) # Force Projection
+    # handle_inventory_projection(decision, db) # Force Projection
+    
+    # 2. Invoke Task Manually via Engine
+    from vte.tasks import execute_decision
+    from unittest.mock import patch
+    
+    # Patching engine contracts
+    mock_contract = {
+        "feature_id": "inventory",
+        "transitions": [{"trigger": "REGISTER_PROPERTY", "from": "*", "to": "*", "target_type": "property", "side_effects": ["db_projection_property"]}],
+        "side_effects": {"REGISTER_PROPERTY": ["db_projection_property"]}
+    }
+    
+    with patch("vte.core.engine.WorkflowEngine._load_contracts", return_value={"inventory": mock_contract}):
+         execute_decision(str(decision.decision_id))
     db.close()
     
     # 3. Read Again

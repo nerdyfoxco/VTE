@@ -53,9 +53,19 @@ def test_inventory_projection_flow():
         db.add(db_decision)
         db.commit()
         
-        # 2. Invoke Task Manually (Simulating Celery Worker)
-        from vte.tasks import handle_inventory_projection
-        handle_inventory_projection(db_decision, db)
+        # 2. Invoke Task Manually via Engine
+        from vte.tasks import execute_decision
+        from unittest.mock import patch
+        
+        # Patching engine contracts
+        mock_contract = {
+            "feature_id": "inventory",
+            "transitions": [{"trigger": "REGISTER_PROPERTY", "from": "*", "to": "*", "target_type": "property", "side_effects": ["db_projection_property"]}],
+            "side_effects": {"REGISTER_PROPERTY": ["db_projection_property"]}
+        }
+        
+        with patch("vte.core.engine.WorkflowEngine._load_contracts", return_value={"inventory": mock_contract}):
+             execute_decision(str(decision_id))
         
         # 3. Verify Projection
         prop = db.query(Property).filter(Property.property_id == prop_id).first()

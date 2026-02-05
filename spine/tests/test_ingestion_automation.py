@@ -81,7 +81,26 @@ def test_ingestion_automation_flow():
 
     # 3. Patch the Poller and Run Trigger
     # We patch `vte.adapters.gmail.poller.GmailPoller.poll_leases`
-    with patch("vte.adapters.gmail.poller.GmailPoller.poll_leases", return_value=[mock_email]):
+    
+    # Also patch Engine Contracts
+    mock_contract = {
+        "feature_id": "ingestion_contract",
+        "transitions": [
+            {
+                "trigger": "UPDATE_UNIT_TENANT", 
+                "from": "*", 
+                "to": "OCCUPIED", 
+                "target_type": "unit",
+                "side_effects": ["db_projection_unit_status", "db_update_tenant_info"]
+            }
+        ],
+        "side_effects": {
+            "UPDATE_UNIT_TENANT": ["db_projection_unit_status", "db_update_tenant_info"]
+        }
+    }
+
+    with patch("vte.adapters.gmail.poller.GmailPoller.poll_leases", return_value=[mock_email]), \
+         patch("vte.core.engine.WorkflowEngine._load_contracts", return_value={"ingestion_contract": mock_contract}):
         print("ACTION: Triggering Ingestion Agent...")
         resp = client.post("/api/v1/inventory/ingest/run")
         
@@ -97,7 +116,7 @@ def test_ingestion_automation_flow():
         print(f"VERIFY: Tenant Info: {updated_unit.tenant_info}")
         
         assert updated_unit.status == "OCCUPIED"
-        assert updated_unit.tenant_info["name"] == "newtenant@example.com"
+        assert updated_unit.tenant_info["tenant_name"] == "newtenant@example.com"
         
         print("SUCCESS: Automation Test Passed.")
         
