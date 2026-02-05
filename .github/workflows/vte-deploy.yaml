@@ -41,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: apps/backend-core/Dockerfile
+          file: spine/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/vte-spine:latest,${{ env.REGISTRY }}/${{ github.repository_owner }}/vte-spine:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
