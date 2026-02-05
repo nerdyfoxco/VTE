@@ -36,3 +36,4 @@ storage/cookies/*.json
 tools/debug_*.py
 page_dump.txt
 latest_failure.jpg
+*.db
