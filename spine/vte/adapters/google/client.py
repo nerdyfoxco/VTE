@@ -16,7 +16,11 @@ class GmailClient:
     Adapter for Gmail API.
     Handles OAuth2 flow and Message retrieval.
     """
-    def __init__(self, credentials_path: str = "credentials.json", token_path: str = "token.json"):
+    """
+    Adapter for Gmail API.
+    Handles OAuth2 flow and Message retrieval.
+    """
+    def __init__(self, credentials_path: str = "client_secret.json", token_path: str = "token.json"):
         self.creds = None
         self.credentials_path = credentials_path
         self.token_path = token_path
@@ -33,17 +37,15 @@ class GmailClient:
         if not self.creds or not self.creds.valid:
             if self.creds and self.creds.expired and self.creds.refresh_token:
                 self.creds.refresh(Request())
+                # Save the refreshed credentials
+                with open(self.token_path, 'w') as token:
+                    token.write(self.creds.to_json())
             else:
-                if not os.path.exists(self.credentials_path):
-                     raise FileNotFoundError(f"Missing {self.credentials_path}. Cannot authenticate with Google.")
-                
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    self.credentials_path, SCOPES)
-                self.creds = flow.run_local_server(port=0)
-            
-            # Save the credentials for the next run
-            with open(self.token_path, 'w') as token:
-                token.write(self.creds.to_json())
+                # HEADLESS MODE: We do NOT pop a browser here.
+                # The User must used the /connect UI to generate the token.json
+                raise Exception(
+                    "No valid token found. Please visit /connect to link Gmail account."
+                )
 
     def get_service(self):
         if not self._service:

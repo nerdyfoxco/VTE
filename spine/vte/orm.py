@@ -1,14 +1,15 @@
-from sqlalchemy import Column, String, TIMESTAMP, ForeignKey
+from sqlalchemy import Column, String, TIMESTAMP, ForeignKey, JSON, Enum
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID, JSONB, ENUM
+from sqlalchemy.dialects.postgresql import UUID # Keep UUID, SA usually handles it or we map it
+# from sqlalchemy.dialects.postgresql import UUID, JSONB, ENUM
 from sqlalchemy.sql import func
 from vte.db import Base
 import uuid
 
 # Define Enums (must match DB types)
-RoleEnum = ENUM('super_admin', 'admin', 'user', 'auditor', 'system_bot', name='role_enum', create_type=False)
-OutcomeEnum = ENUM('PROPOSED', 'APPROVED', 'DENIED', 'NEEDS_MORE_EVIDENCE', name='outcome_enum', create_type=False)
-CriticalityEnum = ENUM('HIGH', 'MEDIUM', 'LOW', name='criticality_enum', create_type=False)
+RoleEnum = Enum('super_admin', 'admin', 'user', 'auditor', 'system_bot', name='role_enum')
+OutcomeEnum = Enum('PROPOSED', 'APPROVED', 'DENIED', 'NEEDS_MORE_EVIDENCE', name='outcome_enum')
+CriticalityEnum = Enum('HIGH', 'MEDIUM', 'LOW', name='criticality_enum')
 
 class EvidenceBundle(Base):
     __tablename__ = "evidence_bundles"
@@ -16,7 +17,7 @@ class EvidenceBundle(Base):
     bundle_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     collected_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
     normalization_schema = Column(String, nullable=False)
-    items_json = Column(JSONB, nullable=False)
+    items_json = Column(JSON, nullable=False)
     bundle_hash = Column(String, nullable=False, unique=True)
 
     @property
@@ -37,7 +38,7 @@ class DecisionObject(Base):
     # Intent
     intent_action = Column(String, nullable=False)
     intent_target = Column(String, nullable=False)
-    intent_params = Column(JSONB, nullable=False, default={})
+    intent_params = Column(JSON, nullable=False, default={})
 
     # Evidence Link
     evidence_hash = Column(String, ForeignKey("evidence_bundles.bundle_hash"), nullable=True)
@@ -84,5 +85,38 @@ class PermitToken(Base):
     issued_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
     expires_at = Column(TIMESTAMP(timezone=True), nullable=False)
     
-    scope_json = Column(JSONB, nullable=False)
+    scope_json = Column(JSON, nullable=False)
     signature = Column(String, nullable=False)
+
+# --- Inventory Projections (Read Model) ---
+class Property(Base):
+    __tablename__ = "properties"
+    
+    property_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name = Column(String, nullable=False)
+    address = Column(String, nullable=True)
+    external_ref_id = Column(String, nullable=True, unique=True, index=True) # e.g. AppFolio ID
+    
+    # Audit Link
+    created_at_decision_hash = Column(String, ForeignKey("decision_objects.decision_hash"), nullable=False)
+    updated_at_decision_hash = Column(String, ForeignKey("decision_objects.decision_hash"), nullable=False)
+
+    # Relationships
+    units = relationship("Unit", back_populates="property")
+
+class Unit(Base):
+    __tablename__ = "units"
+    
+    unit_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    property_id = Column(UUID(as_uuid=True), ForeignKey("properties.property_id"), nullable=False)
+    
+    name = Column(String, nullable=False) # "101", "Apt B"
+    status = Column(String, nullable=False, default="VACANT") # VACANT, OCCUPIED, MAINTENANCE
+    tenant_info = Column(JSON, nullable=True) # Snapshot of current tenant
+    external_ref_id = Column(String, nullable=True, unique=True, index=True)
+    
+    # Audit Link
+    created_at_decision_hash = Column(String, ForeignKey("decision_objects.decision_hash"), nullable=False)
+    updated_at_decision_hash = Column(String, ForeignKey("decision_objects.decision_hash"), nullable=False)
+
+    property = relationship("Property", back_populates="units")
