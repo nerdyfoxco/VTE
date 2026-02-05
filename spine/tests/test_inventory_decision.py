@@ -68,7 +68,7 @@ def test_inventory_projection_flow():
              execute_decision(str(decision_id))
         
         # 3. Verify Projection
-        prop = db.query(Property).filter(Property.property_id == prop_id).first()
+        prop = db.query(Property).filter(Property.property_id == uuid.UUID(prop_id)).first()
         assert prop is not None, "Property should have been projected"
         assert prop.name == prop_name
         assert prop.created_at_decision_hash == decision_hash
