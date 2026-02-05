@@ -32,11 +32,11 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Install Dependencies
-        working-directory: ./apps/backend-core
+        working-directory: ./spine
         run: poetry install
 
       - name: Run Tests (Pytest)
-        working-directory: ./apps/backend-core
+        working-directory: ./spine
         run: poetry run pytest
 
   frontend-verification:
