@@ -109,7 +109,6 @@ def test_ingestion_automation_flow():
 
     # 4. Verify Outcome
     db = SessionLocal()
-    import uuid
     try:
         updated_unit = db.query(Unit).filter(Unit.unit_id == uuid.UUID(target_unit_id)).first()
         
