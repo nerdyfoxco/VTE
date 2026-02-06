@@ -31,6 +31,7 @@ def get_queue_items(
     order: str = "asc",
     status: Optional[str] = "PENDING",
     priority: Optional[int] = None,
+    search: Optional[str] = None,
     db: Session = Depends(get_db),
     current_user: DBUser = Depends(get_current_active_user)
 ):
@@ -45,12 +46,12 @@ def get_queue_items(
     if status is not None:
         if status.upper() != "ALL":
              query = query.filter(DBQueueItem.status == status.upper())
-    # Default behavior was PENDING only, now it's configurable. 
-    # If status is passed as None (not possible with default="PENDING" in signature, but good for safety), 
-    # we might want to default to PENDING. But here "PENDING" is explicit default.
     
     if priority is not None:
         query = query.filter(DBQueueItem.priority == priority)
+        
+    if search is not None and search.strip():
+        query = query.filter(DBQueueItem.title.ilike(f"%{search}%"))
     
     # 2. Apply Sorting
     sort_attr = getattr(DBQueueItem, sort_by)
