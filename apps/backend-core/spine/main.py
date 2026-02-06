@@ -3,10 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from spine.api.routers import queue, admin, auth, users
 from spine.core.concurrency import SimpleConcurrencyMiddleware
+from spine.api.routers import queue, admin, auth, users
+from spine.core.concurrency import SimpleConcurrencyMiddleware
 from spine.db.engine import engine, Base
-
-# DEV MODE: Auto-create tables (Safe for SQLite, dangerous for Prod if not careful, but useful here)
-Base.metadata.create_all(bind=engine)
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):

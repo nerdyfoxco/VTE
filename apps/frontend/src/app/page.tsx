@@ -2,6 +2,7 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 // Contract: contracts/ux/unified_queue_truth_v1.json
@@ -19,25 +20,41 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const router = useRouter(); // Requires import
+
     useEffect(() => {
         const fetchQueue = async () => {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                router.replace('/login');
+                return;
+            }
+
             try {
-                const token = localStorage.getItem('access_token');
                 const res = await axios.get('http://localhost:8000/api/v1/queue', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setItems(res.data);
+                setLoading(false); // Move here to prevent flash on error
             } catch (e: any) {
                 console.error("Failed to fetch queue", e);
-                setError(e.message);
-            } finally {
-                setLoading(false);
+                if (e.response && e.response.status === 401) {
+                    localStorage.removeItem('access_token');
+                    router.replace('/login');
+                } else {
+                    setError(e.message);
+                    setLoading(false);
+                }
             }
         };
         fetchQueue();
-    }, []);
+    }, [router]);
 
-    if (loading) return <div className="p-8">Loading Kevin's Workspace...</div>;
+    if (loading) return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="text-gray-500">Loading VTE...</div>
+        </div>
+    );
     if (error) return <div className="p-8 text-red-600">Error: {error}</div>;
 
     return (
