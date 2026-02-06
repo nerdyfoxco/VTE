@@ -217,7 +217,8 @@ export default function Dashboard() {
             </header>
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-white shadow overflow-hidden sm:rounded-md mb-6">
+                {/* Desktop View (Table) */}
+                <div className="hidden sm:block bg-white shadow overflow-hidden sm:rounded-md mb-6">
                     <ul role="list" className="divide-y divide-gray-200">
                         {items.length === 0 ? (
                             <div className="text-center py-12">
@@ -295,6 +296,46 @@ export default function Dashboard() {
                             </li>
                         ))}
                     </ul>
+                </div>
+
+                {/* Mobile View (Cards) */}
+                <div className="block sm:hidden space-y-4 mb-6">
+                    {items.length === 0 ? (
+                        <div className="text-center py-12 bg-white rounded-lg shadow">
+                            {/* Mobile Empty State */}
+                            <p className="text-gray-500">No items found.</p>
+                            <button
+                                onClick={() => { setSearchQuery(''); setFilterStatus('PENDING'); setFilterPriority('ALL'); setPage(1); }}
+                                className="mt-4 text-indigo-600 font-medium"
+                            >
+                                Reset Filters
+                            </button>
+                        </div>
+                    ) : items.map((item) => (
+                        <div key={item.id} className="bg-white shadow rounded-lg p-4">
+                            <div className="flex justify-between items-start">
+                                <h3 className="text-lg font-medium text-indigo-600 truncate w-3/4">
+                                    {item.title}
+                                </h3>
+                                <span className={`px-2 py-1 text-xs font-semibold rounded-full 
+                                    ${item.priority === 1 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
+                                    P{item.priority}
+                                </span>
+                            </div>
+                            <div className="mt-2 flex justify-between text-sm text-gray-500">
+                                <span>ID: {item.id}</span>
+                                <span>Due: {new Date(item.sla_deadline).toLocaleDateString()}</span>
+                            </div>
+                            <div className="mt-4">
+                                <button
+                                    className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                                    onClick={() => alert(`Processing ${item.id}`)}
+                                >
+                                    Process Item
+                                </button>
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
                 {/* Pagination Controls */}
