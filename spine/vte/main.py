@@ -33,6 +33,10 @@ app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(routes.router, prefix="/api/v1", tags=["Decision Core"])
 app.include_router(connect.router, prefix="/api/v1/connect", tags=["Data Connection"])
 
+# OIDC Discovery
+from vte.api import oidc
+app.include_router(oidc.router, prefix="/.well-known", tags=["OIDC Discovery"])
+
 # Inventory Projections (Read-Only)
 from vte.api import inventory
 app.include_router(inventory.router, prefix="/api/v1/inventory", tags=["Inventory (Read Only)"])
