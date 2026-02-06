@@ -1,36 +1,59 @@
-FROM python:3.11-slim
+# Gap 128: Pinning Base OS (Bookworm Slim)
+FROM python:3.11-slim-bookworm AS builder
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install build dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    libpq-dev \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="/root/.local/bin:$PATH"
-ENV POETRY_VIRTUALENVS_CREATE=false
+RUN pip install poetry
 
-# Upgrade pip
-RUN pip install --upgrade pip
-
-# Copy project files
 COPY pyproject.toml poetry.lock ./
 
-# Install dependencies
-RUN poetry install --no-root
+# Gap 127: Multi-Stage - Export requirements to avoid poetry in runtime
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
 
-# Install Playwright Browsers (Chromium only to save space)
-RUN poetry run playwright install --with-deps chromium
+# --- Runner Stage ---
+FROM python:3.11-slim-bookworm AS runner
 
-# Copy app code
+WORKDIR /app
+
+# Gap 126: Configure Non-Root User
+RUN groupadd -r vte && useradd -r -g vte vte_user
+
+# Runtime Dependencies & Playwright
+# Gap 134: Caching - optimized apt and pip
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    curl \
+    && pip install playwright \
+    && playwright install --with-deps chromium \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /root/.cache/pip
+
+# Install Python Deps from Builder
+COPY --from=builder /app/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy Application Code
 COPY . .
+
+# Gap 131: Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl --fail http://localhost:8000/health || exit 1
+
+# Gap 129/130: Scanning/Signing should happen in CI before push
+# Gap 133: Logging limits configured in runtime (docker-compose/k8s)
+
+# Switch to constrained user
+USER vte_user
 
 # Expose port
 EXPOSE 8000
 
 # Command
-CMD ["uvicorn", "vte.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "spine.main:app", "--host", "0.0.0.0", "--port", "8000"]
