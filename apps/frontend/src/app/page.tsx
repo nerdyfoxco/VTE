@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import SkeletonLoader from '../components/SkeletonLoader';
+import ErrorState from '../components/ErrorState';
 
 // Contract: contracts/ux/unified_queue_truth_v1.json
 interface QueueItem {
@@ -31,9 +32,30 @@ export default function Dashboard() {
 
     const router = useRouter();
 
+
+
+    useEffect(() => {
+        fetchQueue();
+    }, [router, page, sortBy, sortOrder, filterStatus, filterPriority, searchQuery]);
+
+    const fetchQueue = async () => { // Move fetchQueue out or ensure it's accessible or just inline the retry logic to reload or re-trigger effect by state
+        // Actually, better to just set a trigger state or define fetchQueue outside useEffect if possible, but inside component.
+        // Let's refactor slightly to allow retry.
+        setLoading(true);
+        setError(null);
+        // ... (logic)
+    };
+
+    // Wait, the previous useEffect defined fetchQueue INSIDE. I need to pull it out or use a "retry" counter state to trigger useEffect.
+
+    // START REPLACEMENT STRATEGY
+    // I will use a retry trigger state.
+    const [retryTrigger, setRetryTrigger] = useState(0);
+
     useEffect(() => {
         const fetchQueue = async () => {
             setLoading(true);
+            setError(null);
             const token = localStorage.getItem('access_token');
             if (!token) {
                 router.replace('/login');
@@ -63,13 +85,22 @@ export default function Dashboard() {
                     localStorage.removeItem('access_token');
                     router.replace('/login');
                 } else {
-                    setError(e.message);
+                    setError(e.message || "An unexpected error occurred");
                     setLoading(false);
                 }
             }
         };
         fetchQueue();
-    }, [router, page, sortBy, sortOrder, filterStatus, filterPriority, searchQuery]);
+    }, [router, page, sortBy, sortOrder, filterStatus, filterPriority, searchQuery, retryTrigger]);
+
+    // ...
+
+    if (error) return (
+        <ErrorState
+            message={error}
+            onRetry={() => setRetryTrigger(prev => prev + 1)}
+        />
+    );
 
     const handleSort = (field: string) => {
         if (sortBy === field) {
