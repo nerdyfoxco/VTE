@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import SkeletonLoader from '../components/SkeletonLoader';
 import ErrorState from '../components/ErrorState';
+import Breadcrumbs from '../components/Breadcrumbs';
 
 // Contract: contracts/ux/unified_queue_truth_v1.json
 interface QueueItem {
@@ -143,9 +144,14 @@ export default function Dashboard() {
     );
     if (error) return <div className="p-8 text-red-600">Error: {error}</div>;
 
+
+
     return (
         <div className="min-h-screen bg-gray-100 py-10">
             <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+                <div className="mb-4">
+                    <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Dashboard', href: '/dashboard' }, { label: "Kevin's Work Day" }]} />
+                </div>
                 <h1 className="text-3xl font-bold leading-tight text-gray-900">
                     Kevin's Work Day
                 </h1>
