@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import SkeletonLoader from '../components/SkeletonLoader';
 
 // Contract: contracts/ux/unified_queue_truth_v1.json
 interface QueueItem {
@@ -22,8 +23,9 @@ export default function Dashboard() {
     const [page, setPage] = useState(1);
     const [sortBy, setSortBy] = useState('priority');
     const [sortOrder, setSortOrder] = useState('asc');
-    const [filterStatus, setFilterStatus] = useState('PENDING');
+    const [filterStatus, setFilterStatus] = useState('PENDING'); // Default to PENDING
     const [filterPriority, setFilterPriority] = useState<string>('ALL');
+    const [searchQuery, setSearchQuery] = useState('');
 
     const pageSize = 5;
 
@@ -46,6 +48,10 @@ export default function Dashboard() {
                     url += `&priority=${filterPriority}`;
                 }
 
+                if (searchQuery) {
+                    url += `&search=${searchQuery}`;
+                }
+
                 const res = await axios.get(url, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -63,7 +69,7 @@ export default function Dashboard() {
             }
         };
         fetchQueue();
-    }, [router, page, sortBy, sortOrder, filterStatus, filterPriority]);
+    }, [router, page, sortBy, sortOrder, filterStatus, filterPriority, searchQuery]);
 
     const handleSort = (field: string) => {
         if (sortBy === field) {
@@ -80,9 +86,28 @@ export default function Dashboard() {
         return <span className="text-indigo-600 ml-1">{sortOrder === 'asc' ? '↑' : '↓'}</span>;
     };
 
+
+
     if (loading) return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="text-gray-500">Loading VTE...</div>
+        <div className="min-h-screen bg-gray-100 py-10">
+            <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+                <h1 className="text-3xl font-bold leading-tight text-gray-900">
+                    Kevin's Work Day
+                </h1>
+                <div className="h-4 w-48 bg-gray-200 rounded mt-2 animate-pulse"></div>
+
+                <div className="mt-6 flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:items-center sm:justify-between bg-white p-4 rounded-lg shadow-sm animate-pulse">
+                    <div className="h-10 bg-gray-200 rounded w-full sm:w-1/3"></div>
+                    <div className="flex space-x-4">
+                        <div className="h-10 bg-gray-200 rounded w-32"></div>
+                        <div className="h-10 bg-gray-200 rounded w-32"></div>
+                    </div>
+                </div>
+            </header>
+
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <SkeletonLoader />
+            </main>
         </div>
     );
     if (error) return <div className="p-8 text-red-600">Error: {error}</div>;
@@ -96,7 +121,24 @@ export default function Dashboard() {
                 <p className="mt-2 text-sm text-gray-600">
                     Page <span className="font-bold text-indigo-600">{page}</span> | Showing {items.length} items
                 </p>
-                <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white p-4 rounded-lg shadow-sm">
+                {/* Controls Area */}
+                <div className="mt-6 flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:items-center sm:justify-between bg-white p-4 rounded-lg shadow-sm">
+                    {/* Search */}
+                    <div className="flex-1 max-w-lg mr-4">
+                        <label htmlFor="search" className="sr-only">Search</label>
+                        <div className="relative rounded-md shadow-sm">
+                            <input
+                                type="text"
+                                name="search"
+                                id="search"
+                                className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-4 sm:text-sm border-gray-300 rounded-md py-2 px-3"
+                                placeholder="Search by Title..."
+                                value={searchQuery}
+                                onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
+                            />
+                        </div>
+                    </div>
+
                     {/* Filters */}
                     <div className="flex space-x-4 mb-4 sm:mb-0">
                         <select
@@ -141,7 +183,40 @@ export default function Dashboard() {
                 <div className="bg-white shadow overflow-hidden sm:rounded-md mb-6">
                     <ul role="list" className="divide-y divide-gray-200">
                         {items.length === 0 ? (
-                            <li className="px-4 py-8 text-center text-gray-500">No items available.</li>
+                            <div className="text-center py-12">
+                                <svg
+                                    className="mx-auto h-12 w-12 text-gray-400"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                                <h3 className="mt-2 text-sm font-medium text-gray-900">No items found</h3>
+                                <p className="mt-1 text-sm text-gray-500">
+                                    Try adjusting your search or filters to find what you're looking for.
+                                </p>
+                                <div className="mt-6">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setSearchQuery('');
+                                            setFilterStatus('PENDING');
+                                            setFilterPriority('ALL');
+                                            setPage(1);
+                                        }}
+                                        className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    >
+                                        Clear Filters
+                                    </button>
+                                </div>
+                            </div>
                         ) : items.map((item) => (
                             <li key={item.id}>
                                 <div className="px-4 py-4 sm:px-6 hover:bg-gray-50 flex items-center justify-between">
