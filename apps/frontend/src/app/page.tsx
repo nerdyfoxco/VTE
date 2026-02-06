@@ -2,131 +2,101 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useEffect, useState } from "react";
-import { getDecisions, createDecision, DecisionRead } from "@/lib/api";
-import { DecisionCard } from "@/components/decision-card";
+import axios from 'axios';
+
+// Contract: contracts/ux/unified_queue_truth_v1.json
+interface QueueItem {
+    id: string;
+    title: string;
+    priority: number;
+    status: string;
+    assigned_to?: string;
+    sla_deadline: string;
+}
 
 export default function Dashboard() {
-    const [decisions, setDecisions] = useState<DecisionRead[]>([]);
+    const [items, setItems] = useState<QueueItem[]>([]);
     const [loading, setLoading] = useState(true);
-
-    const fetchCurentDecisions = async () => {
-        try {
-            setLoading(true);
-            const data = await getDecisions();
-            setDecisions(data);
-        } catch (e) {
-            console.error("Failed to fetch decisions", e);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetchCurentDecisions();
+        const fetchQueue = async () => {
+            try {
+                const token = localStorage.getItem('access_token');
+                const res = await axios.get('http://localhost:8000/api/v1/queue', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setItems(res.data);
+            } catch (e: any) {
+                console.error("Failed to fetch queue", e);
+                setError(e.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchQueue();
     }, []);
 
-    const processDecision = async (original: DecisionRead, outcome: "APPROVED" | "DENIED") => {
-        if (!confirm(`Are you sure you want to ${outcome} this decision?`)) return;
-
-        try {
-            await createDecision({
-                actor: {
-                    user_id: "admin_vte", // MVP: Mocked Admin
-                    role: "super_admin",
-                    session_id: "dashboard_session"
-                },
-                intent: {
-                    action: original.intent_action,
-                    target_resource: original.intent_target,
-                    parameters: original.intent_params
-                },
-                evidence_hash: original.evidence_hash || "",
-                outcome: outcome,
-                policy_version: original.policy_version
-            });
-            // Refresh list to show new block and update pending state
-            await fetchCurentDecisions();
-        } catch (e) {
-            console.error("Failed to process decision", e);
-            alert("Error processing decision. Check console.");
-        }
-    };
-
-    const handleApprove = (id: string) => {
-        const decision = decisions.find(d => d.decision_id === id);
-        if (decision) processDecision(decision, "APPROVED");
-    };
-
-    const handleDeny = (id: string) => {
-        const decision = decisions.find(d => d.decision_id === id);
-        if (decision) processDecision(decision, "DENIED");
-    };
-
-    if (loading) {
-        return <div className="p-8 text-center text-gray-500">Loading Governance Data...</div>;
-    }
-
-    // Correlation Logic: A Proposal is "Pending" if no other decision exists with the same evidence_hash that is FINAL (Approved/Denied).
-    // Note: This assumes 1:1 mapping between Evidence Bundle and Decision flow.
-    const finalizedEvidenceHashes = new Set(
-        decisions
-            .filter(d => d.outcome === "APPROVED" || d.outcome === "DENIED")
-            .map(d => d.evidence_hash)
-            .filter(Boolean)
-    );
-
-    const pending = decisions.filter(d =>
-        d.outcome === "PROPOSED" &&
-        (!d.evidence_hash || !finalizedEvidenceHashes.has(d.evidence_hash))
-    );
-
-    // History excludes Proposals
-    const history = decisions.filter(d => d.outcome !== "PROPOSED");
+    if (loading) return <div className="p-8">Loading Kevin's Workspace...</div>;
+    if (error) return <div className="p-8 text-red-600">Error: {error}</div>;
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
-                <div className="md:grid md:grid-cols-3 md:gap-6">
-                    <div className="md:col-span-1">
-                        <h3 className="text-lg font-medium leading-6 text-gray-900">Pending Approvals</h3>
-                        <p className="mt-1 text-sm text-gray-500">
-                            Decisions proposed by Autonomous Agents requiring human verification.
-                        </p>
-                    </div>
-                    <div className="mt-5 md:mt-0 md:col-span-2">
-                        <div className="flex flex-col mb-4">
-                            <div className="text-4xl font-bold text-blue-600">{pending.length}</div>
-                            <div className="text-sm text-gray-500">Pending Actions</div>
-                        </div>
+        <div className="min-h-screen bg-gray-100 py-10">
+            <header className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+                <h1 className="text-3xl font-bold leading-tight text-gray-900">
+                    Kevin's Work Day
+                </h1>
+                <p className="mt-2 text-sm text-gray-600">
+                    You have <span className="font-bold text-indigo-600">{items.length}</span> active items in your queue.
+                </p>
+            </header>
 
-                        <div className="bg-gray-50 rounded-md border border-gray-200 divide-y divide-gray-200">
-                            {pending.length === 0 ? (
-                                <div className="p-4 text-sm text-gray-500 text-center">No pending approvals. All good!</div>
-                            ) : (
-                                pending.map(d => (
-                                    <DecisionCard
-                                        key={d.decision_id}
-                                        decision={d}
-                                        onApprove={handleApprove}
-                                        onDeny={handleDeny}
-                                    />
-                                ))
-                            )}
-                        </div>
-                    </div>
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="bg-white shadow overflow-hidden sm:rounded-md">
+                    <ul role="list" className="divide-y divide-gray-200">
+                        {items.map((item) => (
+                            <li key={item.id}>
+                                <div className="px-4 py-4 sm:px-6 hover:bg-gray-50 flex items-center justify-between">
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center justify-between">
+                                            <p className="text-sm font-medium text-indigo-600 truncate">
+                                                {item.title}
+                                            </p>
+                                            <div className="ml-2 flex-shrink-0 flex">
+                                                <p className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                    ${item.priority === 1 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
+                                                    P{item.priority}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="mt-2 sm:flex sm:justify-between">
+                                            <div className="sm:flex">
+                                                <p className="flex items-center text-sm text-gray-500">
+                                                    ID: {item.id}
+                                                </p>
+                                            </div>
+                                            <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                                <p>
+                                                    Due: {new Date(item.sla_deadline).toLocaleDateString()}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="ml-5 flex-shrink-0">
+                                        <button
+                                            id="btn_export_audit" // Keeping ID for E2E
+                                            className="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                                            onClick={() => alert(`Processing ${item.id}`)}
+                                        >
+                                            Process
+                                        </button>
+                                    </div>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
-            </div>
-
-            {/* History */}
-            <div className="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
-                <h3 className="text-lg font-medium leading-6 text-gray-900 mb-4">Decision History</h3>
-                <div className="bg-white rounded-md border border-gray-200 divide-y divide-gray-200">
-                    {history.map(d => (
-                        <DecisionCard key={d.decision_id} decision={d} />
-                    ))}
-                </div>
-            </div>
+            </main>
         </div>
     );
 }

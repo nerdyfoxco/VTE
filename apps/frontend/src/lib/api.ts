@@ -68,7 +68,24 @@ export const createDecision = async (draft: DecisionDraft): Promise<DecisionRead
     return response.data;
 };
 
+
 export const exchangeGoogleToken = async (idToken: string): Promise<string> => {
     const response = await api.post<{ access_token: string; token_type: string }>("/auth/google-exchange", { id_token: idToken });
     return response.data.access_token;
+};
+
+export interface QueueItem {
+    id: string;
+    priority: number;
+    sla_deadline: string;
+    assigned_to?: string;
+    // Enriched fields for UI
+    title: string;
+    status: "PENDING" | "IN_PROGRESS" | "DONE";
+}
+
+export const getQueueItems = async (): Promise<QueueItem[]> => {
+    const response = await api.get<QueueItem[]>("/queue");
+    // Ensure dates are parsed back to ISO strings if needed, or handled by UI
+    return response.data;
 };
