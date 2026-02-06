@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from spine.db.engine import get_db
 from spine.db.models import DBUser
 from spine.core.security import SecurityService
+from spine.ops.audit import AuditLogger
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -26,6 +27,8 @@ async def login_for_access_token(
     user = db.query(DBUser).filter(DBUser.username == form_data.username).first()
     if not user:
         # Gap 216: Timing Attack Mitigation
+        # Audit? Unknown user. May flood logs.
+        AuditLogger.log(db, "anonymous", "LOGIN_FAILED_UNKNOWN_USER", f"username:{form_data.username}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -34,6 +37,7 @@ async def login_for_access_token(
 
     # 2. Check Lockout (Gap 6)
     if SecurityService.check_lockout(user):
+        AuditLogger.log(db, user.username, "LOGIN_BLOCKED_LOCKED", "account_locked")
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail=f"Account locked. Try again after {user.locked_until}"
@@ -44,7 +48,9 @@ async def login_for_access_token(
         # Handle Failure
         is_locked = SecurityService.handle_failed_login(user)
         db.commit()
+        AuditLogger.log(db, user.username, "LOGIN_FAILED", "bad_password")
         if is_locked:
+             AuditLogger.log(db, user.username, "ACCOUNT_LOCKED", "too_many_failures")
              raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                 detail="Account locked due to too many failed attempts."
@@ -68,12 +74,14 @@ async def login_for_access_token(
                 headers={"X-MFA-Required": "true"}
             )
         if not SecurityService.verify_mfa(user.mfa_secret, mfa_code):
+             AuditLogger.log(db, user.username, "LOGIN_FAILED_MFA", "bad_mfa_code")
              raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid MFA Code"
             )
 
     db.commit()
+    AuditLogger.log(db, user.username, "LOGIN_SUCCESS", "token_granted")
 
     # 6. Generate Token
     return {

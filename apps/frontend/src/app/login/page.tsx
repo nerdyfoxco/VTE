@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 export default function LoginPage() {
-    const [username, setUsername] = useState('user');
-    const [password, setPassword] = useState('admin');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
@@ -14,14 +14,14 @@ export default function LoginPage() {
         e.preventDefault();
         setError(null);
 
-        const formData = new FormData();
+        const formData = new URLSearchParams();
         formData.append('username', username);
         formData.append('password', password);
 
         try {
             const res = await axios.post('http://localhost:8000/api/v1/auth/token', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
             });
 

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from spine.db.engine import get_db
 from spine.db.models import DBUser
 from spine.core.security import SecurityService
+from spine.ops.audit import AuditLogger
 import secrets
 
 router = APIRouter()
@@ -44,6 +45,8 @@ def invite_user(
     db.add(user)
     db.commit()
     
+    AuditLogger.log(db, "admin", "USER_INVITED", f"email:{invite.email}")
+
     # Mock Email Send
     print(f"EMAIL TO {invite.email}: Join VTE at /invite?token={token}")
     return {"message": "Invitation sent"}
@@ -56,6 +59,7 @@ def forgot_password(
 ):
     user = db.query(DBUser).filter(DBUser.username == request.username).first()
     if not user:
+        AuditLogger.log(db, "anonymous", "RESET_REQUEST_UNKNOWN", f"target:{request.username}")
         # Return 200 to prevent Enum attacks
         return {"message": "If user exists, email sent."}
     
@@ -64,6 +68,8 @@ def forgot_password(
     user.reset_token_expires_at = datetime.utcnow() + timedelta(minutes=15)
     db.commit()
     
+    AuditLogger.log(db, "anonymous", "RESET_REQUEST_INITIATED", f"target:{user.username}")
+
     # Mock Email
     print(f"EMAIL TO {user.username}: Reset at /reset?token={token}")
     return {"message": "If user exists, email sent."}
@@ -93,4 +99,5 @@ def reset_password_confirm(
     user.failed_login_attempts = 0
     
     db.commit()
+    AuditLogger.log(db, user.username, "PASSWORD_RESET_SUCCESS", "self_service")
     return {"message": "Password updated successfully"}
