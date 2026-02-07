@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import { api } from '@/lib/api';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
@@ -19,7 +19,7 @@ export default function LoginPage() {
         formData.append('password', password);
 
         try {
-            const res = await axios.post('http://localhost:8000/api/v1/auth/token', formData, {
+            const res = await api.post('/auth/token', formData, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
