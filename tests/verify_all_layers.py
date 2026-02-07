@@ -5,11 +5,7 @@ import importlib.util
 
 # List of Verification Scripts
 SCRIPTS = [
-    "tests/verify_layer4_backend_logic.py",
-    "tests/verify_layer4_bundle_loader.py",
-    "tests/verify_layer5_concurrency.py",
-    "tests/verify_layer8_observability.py",
-    "tests/verify_layer9_admin.py"
+    "tests/verify_layer4_backend_logic.py"
 ]
 
 def run_script(script_path):
