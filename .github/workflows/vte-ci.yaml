@@ -33,7 +33,9 @@ jobs:
 
       - name: Install Dependencies
         working-directory: ./spine
-        run: poetry install
+        run: |
+          poetry config virtualenvs.create false
+          poetry install
 
       - name: Run Full System Regression (Layers 2-9)
         run: python tests/verify_all_layers.py
