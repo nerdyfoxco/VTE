@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { API_URL } from '@/lib/api';
 
 import { Suspense } from 'react';
 
@@ -24,7 +25,7 @@ function CallbackContent() {
             try {
                 const token = localStorage.getItem('access_token');
 
-                await axios.post('http://localhost:8000/api/v1/connect/gmail/callback',
+                await axios.post(`${API_URL}/connect/gmail/callback`,
                     { code },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
