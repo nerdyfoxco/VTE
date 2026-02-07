@@ -3,13 +3,10 @@ import os
 import json
 from fastapi.testclient import TestClient
 
-# Add apps/backend-core to path so we can import spine
-sys.path.append(os.path.join(os.getcwd(), "apps", "backend-core"))
-
 try:
-    from spine.main import app
+    from vte.main import app
 except ImportError as e:
-    print(f"FAIL: Could not import spine.main: {e}")
+    print(f"FAIL: Could not import vte.main: {e}")
     sys.exit(1)
 
 client = TestClient(app)

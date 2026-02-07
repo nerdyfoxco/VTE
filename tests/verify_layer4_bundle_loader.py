@@ -2,13 +2,12 @@ import sys
 import os
 import unittest
 
-# Add apps/backend-core to path
-sys.path.append(os.path.join(os.getcwd(), "apps", "backend-core"))
+
 
 try:
-    from spine.core.loader import loader, BundleLoader
+    from vte.core.loader import loader, BundleLoader
 except ImportError as e:
-    print(f"FAIL: Could not import spine.core.loader: {e}")
+    print(f"FAIL: Could not import vte.core.loader: {e}")
     sys.exit(1)
 
 class TestBundleLoader(unittest.TestCase):
