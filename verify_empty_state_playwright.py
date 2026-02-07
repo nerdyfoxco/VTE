@@ -16,7 +16,7 @@ def run():
         page.click("button[type='submit']")
         
         print("Waiting for Dashboard...")
-        page.wait_for_url("**/dashboard")
+        page.wait_for_url("http://localhost:3001/")
         page.wait_for_selector("text=Kevin's Work Day")
         
         # Verify Search Input

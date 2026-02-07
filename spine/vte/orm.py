@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, TIMESTAMP, ForeignKey, JSON, Enum
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID # Keep UUID, SA usually handles it or we map it
+from sqlalchemy.types import Uuid as UUID
 # from sqlalchemy.dialects.postgresql import UUID, JSONB, ENUM
 from sqlalchemy.sql import func
 from vte.db import Base
@@ -120,3 +120,42 @@ class Unit(Base):
     updated_at_decision_hash = Column(String, ForeignKey("decision_objects.decision_hash"), nullable=False)
 
     property = relationship("Property", back_populates="units")
+
+# --- Security & Identity ---
+
+class TOTPDevice(Base):
+    __tablename__ = "totp_devices"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(String, nullable=False, index=True) # Linking to external/string User ID
+    name = Column(String, nullable=False) # e.g. "Kevin's iPhone"
+    secret = Column(String, nullable=False) # Encrypted or raw secret
+    created_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+    last_used_at = Column(TIMESTAMP(timezone=True), nullable=True)
+    confirmed = Column(String, default="false") # "true" after first verification
+
+class Permission(Base):
+    __tablename__ = "permissions"
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name = Column(String, unique=True, nullable=False) # e.g. "decision:create"
+    description = Column(String, nullable=True)
+
+class RolePermission(Base):
+    __tablename__ = "role_permissions"
+    
+    role = Column(RoleEnum, primary_key=True)
+    permission_id = Column(UUID(as_uuid=True), ForeignKey("permissions.id"), primary_key=True)
+
+class UserSession(Base):
+    __tablename__ = "user_sessions"
+    
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(String, nullable=False, index=True)
+    token_jti = Column(String, unique=True, nullable=False) # JWT ID
+    created_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+    expires_at = Column(TIMESTAMP(timezone=True), nullable=False)
+    ip_address = Column(String, nullable=True)
+    user_agent = Column(String, nullable=True)
+    revoked = Column(String, default="false")
+

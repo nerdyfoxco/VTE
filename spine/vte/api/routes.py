@@ -5,9 +5,10 @@ from vte.db import get_db
 from typing import List, Optional
 from vte.api.schema import DecisionDraft, DecisionRead, EvidenceBundleDraft, EvidenceBundleRead, OutcomeEnum
 from vte.orm import DecisionObject, EvidenceBundle
+from vte.orm import OutcomeEnum as DBOutcomeEnum
+
 from vte.core.verifier import ProofVerifier
 from vte.core.canonicalize import canonical_json_dumps
-import hashlib
 import hashlib
 import json
 import datetime
@@ -203,11 +204,163 @@ def get_decisions(status: Optional[OutcomeEnum] = None, limit: int = 50, db: Ses
     query = query.order_by(desc(DecisionObject.timestamp))
     return query.limit(limit).all()
 
-@router.post("/agents/ingest", status_code=status.HTTP_202_ACCEPTED)
-def trigger_ingest_agent():
-    """
-    Manually trigger the Ingestion Agent (Async).
-    """
-    from vte.tasks import run_ingest_agent
-    task = run_ingest_agent.delay()
     return {"status": "triggered", "task_id": str(task.id)}
+
+@router.get("/queue", tags=["Unified Queue"])
+def get_unified_queue(
+    skip: int = 0,
+    limit: int = 50,
+    search: Optional[str] = None,
+    sort_by: Optional[str] = "priority",
+    order: Optional[str] = "asc",
+    status: Optional[str] = "PENDING",
+    priority: Optional[str] = "ALL", 
+    db: Session = Depends(get_db)
+):
+    """
+    Unified Workbench Queue.
+    """
+    query = db.query(DecisionObject)
+    
+    # 1. Filtering
+    if status and status != "ALL":
+        if status == "PENDING":
+            query = query.filter(DecisionObject.outcome == "PROPOSED")
+        elif status == "COMPLETED":
+            query = query.filter(DecisionObject.outcome != "PROPOSED")
+            
+    # 2. Search
+    if search:
+        query = query.filter(DecisionObject.intent_action.contains(search)) 
+        
+    # 3. Sorting
+    sort_field = DecisionObject.timestamp
+    if sort_by == "sla_deadline":
+        sort_field = DecisionObject.timestamp
+    elif sort_by == "title":
+        # 'intent_action' is the field name in DecisionObject
+        sort_field = DecisionObject.intent_action
+        
+    if order == "desc":
+        query = query.order_by(desc(sort_field))
+    else:
+        query = query.order_by(sort_field)
+        
+    # Execute (Fetch all to filter by mock priority if needed, or just paginate)
+    all_items = query.all()
+    
+    result = []
+    for item in all_items:
+        # Mock Priority Logic
+        prio = 2
+        if item.intent_action and "High" in item.intent_action: prio = 1
+        elif item.intent_action and "Low" in item.intent_action: prio = 3
+        
+        # Filter Priority
+        if priority != "ALL" and str(prio) != priority:
+            continue
+            
+        # Outcome Access
+        status_val = str(item.outcome)
+        if hasattr(item.outcome, "value"):
+            status_val = item.outcome.value
+
+        result.append({
+            "id": str(item.decision_id),
+            "title": f"{item.intent_action} {item.intent_target}",
+            "priority": prio,
+            "status": status_val,
+            "assigned_to": str(item.actor_user_id),
+            "sla_deadline": (item.timestamp + datetime.timedelta(days=1)).isoformat()
+        })
+        
+    # Manual Pagination after Priority Filter
+    start = skip
+    end = skip + limit
+    paginated = result[start:end]
+    
+    return paginated
+
+@router.get("/queue", tags=["Unified Queue"])
+def get_unified_queue(
+    skip: int = 0,
+    limit: int = 50,
+    search: Optional[str] = None,
+    sort_by: Optional[str] = "priority",
+    order: Optional[str] = "asc",
+    status: Optional[str] = "PENDING",
+    priority: Optional[str] = "ALL", 
+    db: Session = Depends(get_db)
+):
+    """
+    Unified Workbench Queue.
+    Aggregates Decisions (Tasks) and Evidence (New Signals).
+    Supports: Pagination, Sorting, Filtering, Search.
+    """
+    query = db.query(DecisionObject)
+    
+    # 1. Filtering
+    if status and status != "ALL":
+        if status == "PENDING":
+            # Use string "PROPOSED" to match DB Enum value
+            query = query.filter(DecisionObject.outcome == "PROPOSED")
+        elif status == "COMPLETED":
+            query = query.filter(DecisionObject.outcome != "PROPOSED")
+            
+    # 2. Search
+    if search:
+        query = query.filter(DecisionObject.intent_action.contains(search)) 
+        
+    # 3. Sorting
+    sort_field = DecisionObject.timestamp
+    if sort_by == "sla_deadline":
+        sort_field = DecisionObject.timestamp
+    elif sort_by == "title":
+        # 'intent_action' is the field name in DecisionObject
+        sort_field = DecisionObject.intent_action
+        
+    if order == "desc":
+        query = query.order_by(desc(sort_field))
+    else:
+        query = query.order_by(sort_field)
+        
+    # Execute (Fetch all to filter by mock priority if needed, or just paginate)
+    # Note: Filtering priority in memory after fetch breaks pagination if we drop items.
+    # For MVP Gap Fix, we accept this or implement basic pagination without priority filter first.
+    # Given we have few items, fetching all then slicing is safer for correctness.
+    
+    all_items = query.all()
+    
+    result = []
+    for item in all_items:
+        # Mock Priority Logic
+        prio = 2
+        if item.intent_action and "High" in item.intent_action: prio = 1
+        elif item.intent_action and "Low" in item.intent_action: prio = 3
+        
+        # Filter Priority
+        if priority != "ALL" and str(prio) != priority:
+            continue
+            
+        # Outcome Access: item.outcome is likely a string or Enum proxy. 
+        # Safe access via str() or .value check
+        status_val = str(item.outcome)
+        if hasattr(item.outcome, "value"):
+            status_val = item.outcome.value
+
+        result.append({
+            "id": str(item.decision_id),
+            "title": f"{item.intent_action} {item.intent_target}",
+            "priority": prio,
+            "status": status_val,
+            "assigned_to": str(item.actor_user_id),
+            "sla_deadline": (item.timestamp + datetime.timedelta(days=1)).isoformat()
+        })
+        
+    # Manual Pagination after Priority Filter
+    total = len(result)
+    start = skip
+    end = skip + limit
+    paginated = result[start:end]
+    
+    return paginated

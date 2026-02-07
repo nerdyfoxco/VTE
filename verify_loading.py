@@ -12,7 +12,7 @@ def run():
         page.fill("input[name='username']", "admin")
         page.fill("input[name='password']", "Admin@123456!")
         page.click("button[type='submit']")
-        page.wait_for_url("**/dashboard")
+        page.wait_for_url("http://localhost:3001/")
         print("Logged in.")
 
         # Reload dashboard to trigger loading state again
