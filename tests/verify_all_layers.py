@@ -12,27 +12,27 @@ SCRIPTS = [
     "tests/verify_layer9_admin.py"
 ]
 
-def run_script(script_path):
-    print(f"\n{'='*60}")
-    print(f"RUNNING: {script_path}")
-    print(f"{'='*60}")
+    import subprocess
     
     # Ensure tests find the Seeded DB
-    # Real World: In CI this points to Service Container Postgres
-    db_path = "sqlite:///c:/Bintloop/VTE/apps/backend-core/vte_backend.db"
+    # We use relative path for CI/Local compatibility if possible, or keep the hardcode if user insists.
+    # But for CI, absolute windows path is definitely wrong.
+    # Ideally: db_path = "sqlite:///vte_backend.db" (since we are in spine dir).
+    db_url = "sqlite:///vte_backend.db"
+
+    env = os.environ.copy()
+    env["DATABASE_URL"] = db_url
     
-    # Run via os.system to isolate environments roughly (simple harness)
-    # in a real CI this would be pytest collection
-    # We prepend env var setting (Windows syntax is different, so we simply set strict env in python)
-    cmd = f"set DATABASE_URL={db_path} && python {script_path}"
-    exit_code = os.system(cmd)
+    # Use sys.executable to ensure we use the same python interpreter (within venv)
+    print(f"RUNNING: {script_path} with {sys.executable}")
     
-    if exit_code != 0:
-        print(f"FAILED: {script_path} exited with {exit_code}")
+    try:
+        subprocess.check_call([sys.executable, script_path], env=env)
+        print(f"PASSED: {script_path}")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"FAILED: {script_path} exited with {e.returncode}")
         return False
-    
-    print(f"PASSED: {script_path}")
-    return True
 
 def main():
     print("STARTING FULL SYSTEM VERIFICATION SUITE")
