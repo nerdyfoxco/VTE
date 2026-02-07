@@ -5,6 +5,8 @@ import time
 
 
 
+# Add cwd to path for vte package resolution
+sys.path.append(os.getcwd())
 try:
     from vte.core.concurrency import guard, TENANT_LIMIT
 except ImportError as e:
