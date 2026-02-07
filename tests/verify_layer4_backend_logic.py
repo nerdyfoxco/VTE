@@ -3,6 +3,10 @@ import os
 import json
 from fastapi.testclient import TestClient
 
+
+# Add cwd to path for vte package resolution
+sys.path.append(os.getcwd())
+
 try:
     from vte.main import app
 except ImportError as e:

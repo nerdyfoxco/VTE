@@ -7,6 +7,8 @@ from datetime import datetime
 
 
 
+# Add cwd to path for vte package resolution
+sys.path.append(os.getcwd())
 try:
     from vte.ops.logger import get_logger, JsonFormatter
     from vte.ops.timeline import TimelineExporter

@@ -4,6 +4,8 @@ import unittest
 
 
 
+# Add cwd to path for vte package resolution
+sys.path.append(os.getcwd())
 try:
     from vte.core.loader import loader, BundleLoader
 except ImportError as e:
