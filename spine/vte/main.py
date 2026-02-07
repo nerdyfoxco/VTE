@@ -25,8 +25,8 @@ from vte.orm import EvidenceBundle, DecisionObject # Ensure models are registere
 
 # MVP: Force Table Creation (Bypassing Alembic for immediate deployment)
 # WARN: Dropping all data on startup!
-# Base.metadata.drop_all(bind=engine)
-# Base.metadata.create_all(bind=engine)
+Base.metadata.drop_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])

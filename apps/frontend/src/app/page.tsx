@@ -33,8 +33,57 @@ export default function Dashboard() {
 
     const router = useRouter();
 
+    // Gap 43: Content Density
+    const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
 
+    // Gap 44: Favorites
+    const [favorites, setFavorites] = useState<string[]>([]);
+    const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
+    // Gap 45: Bulk Actions
+    const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+    useEffect(() => {
+        // Load settings from localStorage
+        const savedDensity = localStorage.getItem('vte_density');
+        if (savedDensity) setDensity(savedDensity as 'comfortable' | 'compact');
+
+        const savedFavorites = localStorage.getItem('vte_favorites');
+        if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
+    }, []);
+
+    const toggleDensity = () => {
+        const newDensity = density === 'comfortable' ? 'compact' : 'comfortable';
+        setDensity(newDensity);
+        localStorage.setItem('vte_density', newDensity);
+    };
+
+    const toggleFavorite = (id: string) => {
+        let newFavs;
+        if (favorites.includes(id)) {
+            newFavs = favorites.filter(f => f !== id);
+        } else {
+            newFavs = [...favorites, id];
+        }
+        setFavorites(newFavs);
+        localStorage.setItem('vte_favorites', JSON.stringify(newFavs));
+    };
+
+    const handleSelectRow = (id: string) => {
+        if (selectedItems.includes(id)) {
+            setSelectedItems(selectedItems.filter(i => i !== id));
+        } else {
+            setSelectedItems([...selectedItems, id]);
+        }
+    };
+
+    const handleSelectAll = () => {
+        if (selectedItems.length === items.length) {
+            setSelectedItems([]);
+        } else {
+            setSelectedItems(items.map(i => i.id));
+        }
+    };
     useEffect(() => {
         fetchQueue();
     }, [router, page, sortBy, sortOrder, filterStatus, filterPriority, searchQuery]);
@@ -78,7 +127,12 @@ export default function Dashboard() {
                 const res = await axios.get(url, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setItems(res.data);
+
+                let fetchedItems = res.data;
+                if (showFavoritesOnly) {
+                    fetchedItems = fetchedItems.filter((i: any) => favorites.includes(i.id));
+                }
+                setItems(fetchedItems);
                 setLoading(false);
             } catch (e: any) {
                 console.error("Failed to fetch queue", e);
@@ -216,10 +270,86 @@ export default function Dashboard() {
                 </div>
             </header>
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                {/* Bulk Action Bar */}
+                {selectedItems.length > 0 && (
+                    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-indigo-900 text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center space-x-4 animate-fade-in-up">
+                        <span className="font-medium">{selectedItems.length} items selected</span>
+                        <div className="h-4 w-px bg-indigo-700"></div>
+                        <button
+                            onClick={() => alert(`Processing ${selectedItems.length} items`)}
+                            className="hover:text-indigo-200 font-medium text-sm focus:outline-none"
+                        >
+                            Process Selected
+                        </button>
+                        <button
+                            onClick={() => setSelectedItems([])}
+                            className="text-indigo-400 hover:text-white text-sm focus:outline-none"
+                        >
+                            Clear
+                        </button>
+                    </div>
+                )}
+
+                {/* Filters & Controls */}
+                <div className="mb-4 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
+                    {/* Density Toggle */}
+                    <button
+                        id="btn-toggle-density"
+                        onClick={() => toggleDensity()}
+                        className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none"
+                        title="Toggle Density"
+                    >
+                        {density === 'comfortable' ? (
+                            <>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                                Comfortable
+                            </>
+                        ) : (
+                            <>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                </svg>
+                                Compact
+                            </>
+                        )}
+                    </button>
+
+                    {/* Favorites Filter */}
+                    <button
+                        id="btn-favorites-filter"
+                        onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                        className={`inline-flex items-center px-3 py-2 border shadow-sm text-sm leading-4 font-medium rounded-md focus:outline-none ${showFavoritesOnly ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'}`}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 mr-2 ${showFavoritesOnly ? 'text-yellow-400 fill-current' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                        </svg>
+                        {showFavoritesOnly ? 'Favorites Only' : 'Show All'}
+                    </button>
+                </div>
+
                 {/* Desktop View (Table) */}
                 <div className="hidden sm:block bg-white shadow overflow-hidden sm:rounded-md mb-6">
                     <ul role="list" className="divide-y divide-gray-200">
+                        {/* Table Header for Bulk Actions */}
+                        {items.length > 0 && (
+                            <li className="bg-gray-50 px-4 py-3 border-b border-gray-200 flex items-center">
+                                <div className="flex items-center h-5">
+                                    <input
+                                        id="select-all"
+                                        name="select-all"
+                                        type="checkbox"
+                                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                        checked={items.length > 0 && selectedItems.length === items.length}
+                                        onChange={handleSelectAll}
+                                    />
+                                </div>
+                                <span className="ml-3 text-xs text-gray-500 uppercase tracking-wider font-medium">Select All</span>
+                            </li>
+                        )}
+
                         {items.length === 0 ? (
                             <div className="text-center py-12">
                                 <svg
@@ -247,6 +377,7 @@ export default function Dashboard() {
                                             setSearchQuery('');
                                             setFilterStatus('PENDING');
                                             setFilterPriority('ALL');
+                                            setShowFavoritesOnly(false);
                                             setPage(1);
                                         }}
                                         className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -257,36 +388,58 @@ export default function Dashboard() {
                             </div>
                         ) : items.map((item) => (
                             <li key={item.id}>
-                                <div className="px-4 py-4 sm:px-6 hover:bg-gray-50 flex items-center justify-between">
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center justify-between">
-                                            <p className="text-sm font-medium text-indigo-600 truncate">
-                                                {item.title}
-                                            </p>
-                                            <div className="ml-2 flex-shrink-0 flex">
-                                                <p className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                    ${item.priority === 1 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
-                                                    P{item.priority}
-                                                </p>
-                                            </div>
+                                <div className={`px-4 ${density === 'compact' ? 'py-2' : 'py-4'} sm:px-6 hover:bg-gray-50 flex items-center justify-between transition-all duration-200`}>
+                                    <div className="flex items-center flex-1 min-w-0">
+                                        {/* Checkbox */}
+                                        <div className="flex items-center h-5 mr-4">
+                                            <input
+                                                type="checkbox"
+                                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                                checked={selectedItems.includes(item.id)}
+                                                onChange={() => handleSelectRow(item.id)}
+                                            />
                                         </div>
-                                        <div className="mt-2 sm:flex sm:justify-between">
-                                            <div className="sm:flex">
-                                                <p className="flex items-center text-sm text-gray-500">
-                                                    ID: {item.id}
+
+                                        {/* Star / Favorite */}
+                                        <button
+                                            onClick={() => toggleFavorite(item.id)}
+                                            className="mr-3 focus:outline-none"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${favorites.includes(item.id) ? 'text-yellow-400 fill-current' : 'text-gray-300 hover:text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                            </svg>
+                                        </button>
+
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center justify-between">
+                                                <p className="text-sm font-medium text-indigo-600 truncate">
+                                                    {item.title}
                                                 </p>
+                                                <div className="ml-2 flex-shrink-0 flex">
+                                                    <p className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                        ${item.priority === 1 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
+                                                        P{item.priority}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                                                <p>
-                                                    Due: {new Date(item.sla_deadline).toLocaleDateString()}
-                                                </p>
+                                            <div className={`mt-2 sm:flex sm:justify-between ${density === 'compact' ? 'hidden' : ''}`}> {/* Hide details in compact mode */}
+                                                <div className="sm:flex">
+                                                    <p className="flex items-center text-sm text-gray-500">
+                                                        ID: {item.id}
+                                                    </p>
+                                                </div>
+                                                <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                                    <p>
+                                                        Due: {new Date(item.sla_deadline).toLocaleDateString()}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="ml-5 flex-shrink-0">
                                         <button
                                             id={`btn_process_${item.id}`}
-                                            className="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                                            className={`${density === 'compact' ? 'px-3 py-1 text-xs' : 'px-4 py-2 text-sm'} inline-flex items-center border border-transparent font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700`}
                                             onClick={() => alert(`Processing ${item.id}`)}
                                         >
                                             Process
@@ -297,7 +450,6 @@ export default function Dashboard() {
                         ))}
                     </ul>
                 </div>
-
                 {/* Mobile View (Cards) */}
                 <div className="block sm:hidden space-y-4 mb-6">
                     {items.length === 0 ? (

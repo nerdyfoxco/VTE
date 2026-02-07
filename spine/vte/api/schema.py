@@ -7,6 +7,26 @@ from enum import Enum
 class Token(BaseModel):
     access_token: str
     token_type: str
+    mfa_required: bool = False # If true, token is partial (scoped only to verify-mfa)
+
+# --- Security Schemas ---
+class TOTPSetupResponse(BaseModel):
+    secret: str
+    uri: str # otpauth://...
+
+class TOTPVerifyRequest(BaseModel):
+    code: str
+
+class SessionRead(BaseModel):
+    session_id: str
+    user_id: str
+    created_at: datetime
+    last_active_at: Optional[datetime]
+    ip_address: Optional[str]
+    user_agent: Optional[str]
+
+    class Config:
+        from_attributes = True
 
 class RoleEnum(str, Enum):
     super_admin = "super_admin"

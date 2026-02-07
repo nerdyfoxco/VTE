@@ -1,7 +1,8 @@
 import requests
+from test_utils import get_valid_token
 
 BASE_URL = "http://localhost:8000/api/v1/queue"
-TOKEN = "fake-jwt-token-admin"
+TOKEN = get_valid_token()
 HEADERS = {"Authorization": f"Bearer {TOKEN}"}
 
 def verify_filtering():

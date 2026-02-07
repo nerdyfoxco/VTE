@@ -28,7 +28,7 @@ export default function LoginPage() {
             const { access_token } = res.data;
             localStorage.setItem('access_token', access_token);
             localStorage.setItem('username', username);
-            router.push('/evidence');
+            router.push('/');
         } catch (err: any) {
             setError('Login failed: ' + (err.response?.data?.detail || err.message));
         }
@@ -105,7 +105,7 @@ export default function LoginPage() {
 
                                     localStorage.setItem('access_token', token);
                                     localStorage.setItem('username', "kevin@anchorrealtypa.com");
-                                    router.push('/evidence');
+                                    router.push('/');
                                 } catch (err: any) {
                                     setError("Google Login Failed: " + (err.response?.data?.detail || err.message));
                                 }
