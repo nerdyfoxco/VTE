@@ -15,9 +15,36 @@ except ImportError as e:
 
 client = TestClient(app)
 
+# Mock Auth
+from vte.api.deps import get_current_user_claims
+app.dependency_overrides[get_current_user_claims] = lambda: {"user_id": "Kevin", "role": "admin", "session_id": "test"}
+
 def verify_queue_api():
     print("Verifying Layer 4: Backend Unified Queue API...")
     
+    # 0. Seed Data (Since DB is wiped on startup)
+    print("Seeding test data...")
+    seed_payload = {
+        "actor": {
+            "user_id": "Kevin",
+            "role": "admin", 
+            "session_id": "test-session"
+        },
+        "intent": {
+            "action": "Review High Priority Item",
+            "target_resource": "item-123",
+            "parameters": {}
+        },
+        "evidence_hash": "hash_123",
+        "outcome": "PROPOSED", # Status PENDING in Queue
+        "policy_version": "v1.0"
+    }
+    res = client.post("/api/v1/decisions", json=seed_payload)
+    if res.status_code != 201:
+        print(f"FAIL: Could not seed data. Status {res.status_code}: {res.text}")
+        sys.exit(1)
+
+    # 1. Verify Queue
     response = client.get("/api/v1/queue")
     
     if response.status_code != 200:
