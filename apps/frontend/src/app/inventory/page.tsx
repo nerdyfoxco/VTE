@@ -11,6 +11,7 @@ import {
     CheckCircleIcon,
     ExclamationCircleIcon
 } from '@heroicons/react/24/outline';
+import { API_URL } from '@/lib/api';
 
 // --- Types ---
 interface Unit {
@@ -66,7 +67,7 @@ export default function InventoryPage() {
     const fetchInventory = async () => {
         try {
             const token = localStorage.getItem('access_token');
-            const res = await axios.get('http://localhost:8000/api/v1/inventory/properties', {
+            const res = await axios.get(`${API_URL}/inventory/properties`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setProperties(res.data);
@@ -98,7 +99,7 @@ export default function InventoryPage() {
                 policy_version: "1.0"
             };
 
-            await axios.post('http://localhost:8000/api/v1/decisions', payload, {
+            await axios.post(`${API_URL}/decisions`, payload, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -133,7 +134,7 @@ export default function InventoryPage() {
                 policy_version: "1.0"
             };
 
-            await axios.post('http://localhost:8000/api/v1/decisions', payload, {
+            await axios.post(`${API_URL}/decisions`, payload, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -169,7 +170,7 @@ export default function InventoryPage() {
                 policy_version: "1.0"
             };
 
-            await axios.post('http://localhost:8000/api/v1/decisions', payload, {
+            await axios.post(`${API_URL}/decisions`, payload, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 

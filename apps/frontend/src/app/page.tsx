@@ -7,6 +7,7 @@ import axios from 'axios';
 import SkeletonLoader from '../components/SkeletonLoader';
 import ErrorState from '../components/ErrorState';
 import Breadcrumbs from '../components/Breadcrumbs';
+import { API_URL } from '@/lib/api';
 
 // Contract: contracts/ux/unified_queue_truth_v1.json
 interface QueueItem {
@@ -114,7 +115,7 @@ export default function Dashboard() {
 
             try {
                 const skip = (page - 1) * pageSize;
-                let url = `http://localhost:8000/api/v1/queue?skip=${skip}&limit=${pageSize}&sort_by=${sortBy}&order=${sortOrder}&status=${filterStatus}`;
+                let url = `${API_URL}/queue?skip=${skip}&limit=${pageSize}&sort_by=${sortBy}&order=${sortOrder}&status=${filterStatus}`;
 
                 if (filterPriority !== 'ALL') {
                     url += `&priority=${filterPriority}`;

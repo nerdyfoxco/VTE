@@ -12,6 +12,7 @@ SCRIPTS = [
     "tests/verify_layer9_admin.py"
 ]
 
+def run_script(script_path):
     import subprocess
     
     # Ensure tests find the Seeded DB

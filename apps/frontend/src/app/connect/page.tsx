@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { API_URL } from '@/lib/api';
 
 export default function ConnectPage() {
     const router = useRouter();
@@ -30,7 +31,7 @@ export default function ConnectPage() {
                         onClick={async () => {
                             try {
                                 const token = localStorage.getItem('access_token');
-                                const res = await axios.get('http://localhost:8000/api/v1/connect/gmail/auth-url', {
+                                const res = await axios.get(`${API_URL}/connect/gmail/auth-url`, {
                                     headers: { Authorization: `Bearer ${token}` }
                                 });
                                 window.location.href = res.data.url;
@@ -101,7 +102,7 @@ export default function ConnectPage() {
                                     if (!u || !p) { alert("Please enter both username and password"); return; }
 
                                     const token = localStorage.getItem('access_token');
-                                    await axios.post('http://localhost:8000/api/v1/connect/appfolio/credentials',
+                                    await axios.post(`${API_URL}/connect/appfolio/credentials`,
                                         { username: u, password: p },
                                         { headers: { Authorization: `Bearer ${token}` } }
                                     );
