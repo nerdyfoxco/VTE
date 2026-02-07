@@ -3,13 +3,12 @@ import sys
 import os
 import time
 
-# Add apps/backend-core to path
-sys.path.append(os.path.join(os.getcwd(), "apps", "backend-core"))
+
 
 try:
-    from spine.core.concurrency import guard, TENANT_LIMIT
+    from vte.core.concurrency import guard, TENANT_LIMIT
 except ImportError as e:
-    print(f"FAIL: Could not import spine.core.concurrency: {e}")
+    print(f"FAIL: Could not import vte.core.concurrency: {e}")
     sys.exit(1)
 
 async def simulate_request(tenant_id: str, hold_time: float):

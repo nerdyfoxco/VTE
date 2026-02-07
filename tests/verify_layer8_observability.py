@@ -5,14 +5,13 @@ import io
 import unittest
 from datetime import datetime
 
-# Add apps/backend-core to path
-sys.path.append(os.path.join(os.getcwd(), "apps", "backend-core"))
+
 
 try:
-    from spine.ops.logger import get_logger, JsonFormatter
-    from spine.ops.timeline import TimelineExporter
+    from vte.ops.logger import get_logger, JsonFormatter
+    from vte.ops.timeline import TimelineExporter
 except ImportError as e:
-    print(f"FAIL: Could not import spine.ops: {e}")
+    print(f"FAIL: Could not import vte.ops: {e}")
     sys.exit(1)
 
 class TestObservability(unittest.TestCase):
