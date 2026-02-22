@@ -1,0 +1,78 @@
+{
+  "ump_id": "UMP-0203",
+  "chapter_id": "CH-01",
+  "topic_id": "TP-01",
+  "phase_id": "PH-02",
+  "title": "Hold/Stop Engine",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "chapters/brain/contracts/ump/UMP-0203/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "chapters/brain/topic-orchestration/",
+    "allowed_paths": [
+      "chapters/brain/topic-orchestration/**"
+    ],
+    "forbidden_paths": [
+      "chapters/hands/**"
+    ],
+    "allowed_shared_paths": [
+      "foundation/contracts/**",
+      "chapters/brain/topic-policy-engine/**"
+    ]
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "chapters/brain/topic-orchestration/src/hold_stop_engine.py",
+      "operation": "create",
+      "context": "Phase 2 Brain Runtime",
+      "purpose": "A formal wrapper around the Policy Engine outcome that dictates whether a Work Item proceeds, suspends, or dies.",
+      "connectivity": {
+        "imports": [
+          "chapters.brain.topic_orchestration.src.workflow_state_machine",
+          "chapters.brain.topic_policy_engine.src.policy_engine"
+        ],
+        "exports": [
+          "HoldStopEngine",
+          "ExecutionAction"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create an orchestrator engine that accepts a FinalDecision and a WorkflowStateMachine, transitioning the state machine explicitly to HOLD or STOP if dictated by the decision.",
+      "json_spec_path": "chapters/brain/contracts/ump/UMP-0203/spec.hold_stop_engine.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "python chapters/brain/topic-orchestration/tests/test_hold_stop_engine.py"
+    ],
+    "acceptance_criteria": [
+      "A STOP decision transitions the state machine to STOP and returns ExecutionAction.TERMINATE.",
+      "A HOLD decision transitions the state machine to HOLD and returns ExecutionAction.SUSPEND.",
+      "A CONTACT decision allows the state machine to remain unaffected and returns ExecutionAction.PROCEED."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [],
+    "redaction": []
+  }
+}

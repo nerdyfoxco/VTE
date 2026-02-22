@@ -1,0 +1,9 @@
+{
+  "ump_id": "UMP-0001",
+  "timestamp": "2026-02-21T15:08:00Z",
+  "hashes": {
+    "spec.pipe_envelope_schema.json": "eae3f29e1bb64c4e5fe44176e8d2e5fa773ec556a9b8d3e6c2c11b9832f7ece2",
+    "spec.correlation_guard.py": "4090739b1ea559bad76b9bdf2e2d0cb65cf15bfc113b1016ea93bb88ebe8da9f",
+    "test_correlation_guard.py": "79cae946a1b0c134c65fd2ba5fc04cfc956b22ff3f4f0dbdfa35ae303e1c0c2a"
+  }
+}

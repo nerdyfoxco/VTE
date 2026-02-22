@@ -1,0 +1,8 @@
+{
+  "ump_id": "UMP-0303",
+  "timestamp": "2026-02-21T16:35:00Z",
+  "hashes": {
+    "spec.adapter_contract.py": "1ac9cf6cfc38a042629bfab3b3ad5fefcd9d009fedbb951c6e44614f9455f3b2",
+    "test_adapter_contract.py": "215fca0083d8c1a46ba9756816728ed9b3049d3fa7340f59eba7b8d7e46bc148"
+  }
+}

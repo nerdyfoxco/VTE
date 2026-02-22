@@ -10,7 +10,15 @@ DB_HOST = os.getenv("POSTGRES_HOST", "localhost")
 DB_PORT = os.getenv("POSTGRES_PORT", "5432")
 DB_NAME = os.getenv("POSTGRES_DB", "vte_spine")
 
-DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+# DATABASE_URL = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+# Robust Path Resolution
+BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # .../spine/vte
+SPINE_DIR = os.path.dirname(BASE_DIR) # .../spine
+PROJECT_ROOT = os.path.dirname(SPINE_DIR) # .../VTE
+
+# Force DB to live in spine directory consistently
+DB_PATH = os.path.join(SPINE_DIR, "vte_spine.db")
+DATABASE_URL = f"sqlite:///{DB_PATH}"
 
 # Create Engine
 # pool_pre_ping=True handles DB connection drops gracefully

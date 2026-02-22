@@ -1,0 +1,78 @@
+{
+  "ump_id": "UMP-0102",
+  "chapter_id": "CH-01",
+  "topic_id": "TP-02",
+  "phase_id": "PH-01",
+  "title": "Approval Engine",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "chapters/brain/contracts/ump/UMP-0102/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "chapters/brain/topic-policy-engine/",
+    "allowed_paths": [
+      "chapters/brain/topic-policy-engine/**"
+    ],
+    "forbidden_paths": [
+      "chapters/hands/**",
+      "chapters/eyes/**"
+    ],
+    "allowed_shared_paths": [
+      "foundation/contracts/**"
+    ]
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "chapters/brain/topic-policy-engine/src/approval_guard.py",
+      "operation": "create",
+      "context": "Phase 1 Control Plane",
+      "purpose": "Ensures no Hands execution occurs without valid approval metadata if approval is required.",
+      "connectivity": {
+        "imports": [],
+        "exports": [
+          "ApprovalGuard",
+          "ApprovalStatus",
+          "ApprovalRequirementError"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create an enforcer class that checks a WorkItem's approval block. Raise an exception if execution is attempted without required APPROVED status.",
+      "json_spec_path": "chapters/brain/contracts/ump/UMP-0102/spec.approval_guard.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "python chapters/brain/topic-policy-engine/tests/test_approval_guard.py"
+    ],
+    "acceptance_criteria": [
+      "Execution blocked if approval is required but status is PENDING or REJECTED.",
+      "Execution passes if approval is not required.",
+      "Execution passes if approval is REQUIRED and status is APPROVED."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [
+      "Approval ID must be recorded for audit trail."
+    ],
+    "redaction": []
+  }
+}

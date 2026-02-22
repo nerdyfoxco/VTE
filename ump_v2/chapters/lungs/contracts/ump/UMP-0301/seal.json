@@ -1,0 +1,8 @@
+{
+  "ump_id": "UMP-0301",
+  "timestamp": "2026-02-21T16:15:00Z",
+  "hashes": {
+    "spec.backpressure.py": "6e91126fce7ffee0e027a96969c3b924895c4df0b8347cbd79f12768e62977f3",
+    "test_backpressure_manager.py": "b1ba070c2cfcf0d97b87cb66ffd7611b5e0989313fc86f74ed02b4dde0eac171"
+  }
+}

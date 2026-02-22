@@ -1,0 +1,73 @@
+{
+  "ump_id": "UMP-0101",
+  "chapter_id": "CH-01",
+  "topic_id": "TP-02",
+  "phase_id": "PH-01",
+  "title": "Policy Engine Core",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "chapters/brain/contracts/ump/UMP-0101/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "chapters/brain/topic-policy-engine/",
+    "allowed_paths": [
+      "chapters/brain/topic-policy-engine/**"
+    ],
+    "forbidden_paths": [
+      "chapters/hands/**",
+      "chapters/eyes/**"
+    ],
+    "allowed_shared_paths": [
+      "foundation/contracts/**"
+    ]
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "chapters/brain/topic-policy-engine/src/policy_engine.py",
+      "operation": "create",
+      "context": "Phase 1 Control Plane",
+      "purpose": "Enforces output precedence: STOP overrides HOLD overrides CONTACT.",
+      "connectivity": {
+        "imports": [],
+        "exports": [
+          "PolicyEngine",
+          "PolicyDecisionType"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create an evaluator class that accepts an array of proposed decisions and strict-reduces them to the highest precedence decision.",
+      "json_spec_path": "chapters/brain/contracts/ump/UMP-0101/spec.policy_engine.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "python chapters/brain/topic-policy-engine/tests/test_policy_engine.py"
+    ],
+    "acceptance_criteria": [
+      "STOP overrides HOLD overrides CONTACT."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [],
+    "redaction": []
+  }
+}

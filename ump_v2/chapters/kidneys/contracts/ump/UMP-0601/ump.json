@@ -1,0 +1,87 @@
+{
+  "ump_id": "UMP-0601",
+  "chapter_id": "CH-07",
+  "topic_id": "TP-01",
+  "phase_id": "PH-06",
+  "title": "Kidneys Compliance Hardening",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "chapters/kidneys/contracts/ump/UMP-0601/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "chapters/kidneys/",
+    "allowed_paths": [
+      "chapters/kidneys/**"
+    ],
+    "forbidden_paths": [
+      "chapters/brain/**",
+      "chapters/hands/**"
+    ],
+    "allowed_shared_paths": [
+      "foundation/contracts/**"
+    ]
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "chapters/kidneys/topic-compliance/src/jurisdiction_rules.json",
+      "operation": "create",
+      "context": "Phase 6 Compliance",
+      "purpose": "Defines geographical restrictions on outbound engagements.",
+      "connectivity": {
+        "imports": [],
+        "exports": [],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create a JSON dictionary mapping allowed jurisdictions.",
+      "json_spec_path": "chapters/kidneys/contracts/ump/UMP-0601/spec.jurisdiction.json"
+    },
+    {
+      "path": "chapters/kidneys/topic-compliance/src/consent_registry.py",
+      "operation": "create",
+      "context": "Phase 6 Compliance",
+      "purpose": "Mechanically checks outbound intent against user consent.",
+      "connectivity": {
+        "imports": [],
+        "exports": [
+          "ConsentRegistry",
+          "ConsentViolationError"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create a ConsentRegistry that verifies operations against a user ID. Fail if not consented.",
+      "json_spec_path": "chapters/kidneys/contracts/ump/UMP-0601/spec.consent.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "python chapters/kidneys/topic-compliance/tests/test_consent_registry.py"
+    ],
+    "acceptance_criteria": [
+      "Missing consent raises ConsentViolationError."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [],
+    "redaction": []
+  }
+}

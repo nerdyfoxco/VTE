@@ -1,0 +1,22 @@
+{
+  "description": "Contract for submitting the Time-Based One-Time Password.",
+  "properties": {
+    "mfa_token_id": {
+      "title": "Mfa Token Id",
+      "type": "string"
+    },
+    "totp_code": {
+      "description": "The 6-digit authenticator code.",
+      "maxLength": 6,
+      "minLength": 6,
+      "title": "Totp Code",
+      "type": "string"
+    }
+  },
+  "required": [
+    "mfa_token_id",
+    "totp_code"
+  ],
+  "title": "MFAVerify",
+  "type": "object"
+}

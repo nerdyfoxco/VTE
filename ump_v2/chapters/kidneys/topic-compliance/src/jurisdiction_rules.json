@@ -1,0 +1,16 @@
+{
+    "allowed_regions": [
+        "US",
+        "CA",
+        "GB"
+    ],
+    "blocked_regions": [
+        "NK",
+        "SY",
+        "IR",
+        "CU"
+    ],
+    "requires_enhanced_consent": [
+        "EU"
+    ]
+}

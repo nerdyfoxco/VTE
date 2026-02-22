@@ -2,7 +2,7 @@ name: VTE Publish (GHCR)
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "feat/*"]
     tags: ["v*"]
 
 permissions:
@@ -40,17 +40,17 @@ jobs:
       - name: Build and push Spine (Backend)
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: apps/backend-core/Dockerfile
+          context: spine
+          file: spine/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/vte-spine:latest,${{ env.REGISTRY }}/${{ github.repository_owner }}/vte-spine:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Build and push Web (Frontend)
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: apps/frontend/Dockerfile
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/vte-web:latest,${{ env.REGISTRY }}/${{ github.repository_owner }}/vte-web:${{ github.sha }}
-          labels: ${{ steps.meta.outputs.labels }}
+      # - name: Build and push Web (Frontend)
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: apps/frontend/Dockerfile
+      #     push: true
+      #     tags: ${{ env.REGISTRY }}/${{ github.repository_owner }}/vte-web:latest,${{ env.REGISTRY }}/${{ github.repository_owner }}/vte-web:${{ github.sha }}
+      #     labels: ${{ steps.meta.outputs.labels }}

@@ -1,0 +1,79 @@
+{
+  "ump_id": "UMP-0003",
+  "chapter_id": "CH-00",
+  "topic_id": "TP-00",
+  "phase_id": "PH-00",
+  "title": "Boundary Linter Enforcements",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "foundation/contracts/ump/UMP-0003/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "tools/boundary-linter/",
+    "allowed_paths": [
+      "tools/boundary-linter/**",
+      ".importlinter"
+    ],
+    "forbidden_paths": [
+      "chapters/**",
+      "spine/**",
+      "foundation/**"
+    ],
+    "allowed_shared_paths": []
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": ".importlinter",
+      "operation": "create",
+      "context": "Phase 0 System Invariant",
+      "purpose": "Define the strict Python import limitations matching the Spine-and-Organs architecture map.",
+      "connectivity": {
+        "imports": [],
+        "exports": [],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create an import-linter INI config that forbids 'chapters' from importing from other 'chapters', and 'foundation' from importing anything else.",
+      "json_spec_path": "foundation/contracts/ump/UMP-0003/spec.importlinter.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "lint-imports"
+    ],
+    "acceptance_criteria": [
+      "If a fake cross-chapter import is added, lint-imports fails. Normal workspace passes.",
+      "Run lint-imports against the current workspace."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [
+      "Architectural Integrity Validation via import analysis."
+    ],
+    "redaction": []
+  },
+  "risks": [
+    {
+      "risk": "Linter not running in CI",
+      "mitigation": "To be added to phase 5 github actions blueprint."
+    }
+  ]
+}

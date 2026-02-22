@@ -1,0 +1,37 @@
+{
+  "description": "Contract for creating a new Multi-Tenant Identity.\nEnforces strict password complexity.",
+  "properties": {
+    "email": {
+      "description": "The user's email address.",
+      "format": "email",
+      "title": "Email",
+      "type": "string"
+    },
+    "password": {
+      "description": "At least 12 characters required by VTE Tier 1 standards.",
+      "maxLength": 128,
+      "minLength": 12,
+      "title": "Password",
+      "type": "string"
+    },
+    "full_name": {
+      "maxLength": 100,
+      "minLength": 2,
+      "title": "Full Name",
+      "type": "string"
+    },
+    "tenant_id": {
+      "description": "The workspace this user belongs to.",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "email",
+    "password",
+    "full_name",
+    "tenant_id"
+  ],
+  "title": "SignUp",
+  "type": "object"
+}

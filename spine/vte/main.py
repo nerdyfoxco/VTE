@@ -2,7 +2,8 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from vte.db import get_db
-from vte.api.routes import router as api_router
+from vte.api import routes, auth, connect
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="VTE Proof Spine API",
@@ -10,7 +11,35 @@ app = FastAPI(
     version="1.0.0"
 )
 
-app.include_router(api_router, prefix="/api/v1", tags=["Decision Core"])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Allow ALL origins for Dogfooding/Dev
+    # allow_origin_regex="https?://localhost:\d+",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+from vte.db import engine, Base
+from vte.orm import EvidenceBundle, DecisionObject # Ensure models are registered
+
+# MVP: Force Table Creation (Bypassing Alembic for immediate deployment)
+# WARN: Dropping all data on startup!
+Base.metadata.drop_all(bind=engine)
+Base.metadata.create_all(bind=engine)
+
+
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
+app.include_router(routes.router, prefix="/api/v1", tags=["Decision Core"])
+app.include_router(connect.router, prefix="/api/v1/connect", tags=["Data Connection"])
+
+# OIDC Discovery
+from vte.api import oidc
+app.include_router(oidc.router, prefix="/.well-known", tags=["OIDC Discovery"])
+
+# Inventory Projections (Read-Only)
+from vte.api import inventory
+app.include_router(inventory.router, prefix="/api/v1/inventory", tags=["Inventory (Read Only)"])
 
 @app.get("/health", tags=["System"])
 def health_check(db: Session = Depends(get_db)):

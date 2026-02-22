@@ -1,0 +1,8 @@
+{
+  "ump_id": "UMP-0203",
+  "timestamp": "2026-02-21T16:05:00Z",
+  "hashes": {
+    "spec.hold_stop_engine.py": "930073378593b2afb163c8f0bab5b34984d900164341ac01e10799fab7285190",
+    "test_hold_stop_engine.py": "a626ebda237517df56cb43bfbccf6b7a61fe976a5ed60098fd2798c67072c6c6"
+  }
+}

@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: vte_admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: vte_spine
+    ports:
+      - "5432:5432"
+    volumes:
+      - vte_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U vte_admin -d vte_spine" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  spine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # AsyncPG connection string mapped to the internal docker network resolving to the `db` service
+      - DATABASE_URL=postgresql+asyncpg://vte_admin:password@db:5432/vte_spine
+      # Mock keys for Local Sandbox. In production these are injected by the hosting provider.
+      - STRIPE_SECRET_KEY=sk_test_mock
+      - STRIPE_WEBHOOK_SECRET=whsec_mock
+      - SENDGRID_API_KEY=mock_sg_key
+      - TWILIO_ACCOUNT_SID=ACmock
+      - TWILIO_AUTH_TOKEN=mock_token
+    volumes:
+      - .:/app # Optional: Mount for live-reloading during dev
+    command: >
+      sh -c "poetry run alembic upgrade head &&
+             poetry run uvicorn src.main:app --host 0.0.0.0 --port 8080"
+
+volumes:
+  vte_postgres_data:

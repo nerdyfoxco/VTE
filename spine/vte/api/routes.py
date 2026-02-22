@@ -2,12 +2,16 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import text, desc
 from vte.db import get_db
-from vte.api.schema import DecisionDraft, DecisionRead, EvidenceBundleDraft, EvidenceBundleRead
+from typing import List, Optional
+from vte.api.schema import DecisionDraft, DecisionRead, EvidenceBundleDraft, EvidenceBundleRead, OutcomeEnum
 from vte.orm import DecisionObject, EvidenceBundle
+from vte.orm import OutcomeEnum as DBOutcomeEnum
+
 from vte.core.verifier import ProofVerifier
 from vte.core.canonicalize import canonical_json_dumps
 import hashlib
 import json
+import datetime
 
 router = APIRouter()
 verifier = ProofVerifier()
@@ -32,8 +36,8 @@ def create_evidence(draft: EvidenceBundleDraft, db: Session = Depends(get_db)):
     # 'Collected At' is part of the fact "I saw this at time T".
     # So we should include it.
     
-    from datetime import datetime
-    now_iso = datetime.utcnow().isoformat() + "Z"
+    # from datetime import datetime
+    now_iso = datetime.datetime.utcnow().isoformat() + "Z"
     
     # Payload for hashing
     hash_payload = payload.copy()
@@ -45,9 +49,11 @@ def create_evidence(draft: EvidenceBundleDraft, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Canonicalization failed: {str(e)}")
 
-    # 2. Persist
+    # Create Bundle
+    # For SQLite compatibility, pass datetime object, not ISO string.
+    # SA will handle conversion.
     db_obj = EvidenceBundle(
-        collected_at=now_iso,
+        collected_at=datetime.datetime.now(datetime.timezone.utc),
         normalization_schema=draft.normalization_schema,
         items_json=json.loads(json.dumps(draft.model_dump()["items"], default=str)), # Ensure valid JSON
         bundle_hash=bundle_hash
@@ -65,12 +71,30 @@ def create_evidence(draft: EvidenceBundleDraft, db: Session = Depends(get_db)):
 
     return db_obj
 
+from vte.api.deps import get_current_user_claims
+from vte.core.policy import PolicyEngine
+
+policy_engine = PolicyEngine()
+
 @router.post("/decisions", response_model=DecisionRead, status_code=status.HTTP_201_CREATED)
-def create_decision(draft: DecisionDraft, db: Session = Depends(get_db)):
+def create_decision(draft: DecisionDraft, claims: dict = Depends(get_current_user_claims), db: Session = Depends(get_db)):
     """
-    Ingests a Decision Draft, canonicalizes it, links it to the chain, and persists it.
+    Ingests a Decision Draft. Requires JWT Auth.
+    Ensures 'actor' in draft matches the authenticated user token.
+    Enforces Policy Rules via PolicyEngine.
     """
-    # 1. Get Previous Hash (Locking recommended in hi-concurrency, skipping generic lock for Phase 1 simple)
+    # 0. Security Enforcement: Overwrite Actor with Trusted Token Claims
+    draft.actor.user_id = claims["user_id"]
+    
+    # 0.5 Policy Enforcement
+    policy_result = policy_engine.evaluate(draft, claims)
+    if not policy_result.allowed:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=policy_result.reason
+        )
+    
+    # 1. Get Previous Hash...
     # In a real app we'd use select ... for update or advisory lock here.
     # We rely on the DB trigger to optimistic check, but we need the value to calc hash.
     
@@ -102,8 +126,7 @@ def create_decision(draft: DecisionDraft, db: Session = Depends(get_db)):
     }
     
     # Add timestamp
-    from datetime import datetime
-    now_iso = datetime.utcnow().isoformat() + "Z" 
+    now_iso = datetime.datetime.utcnow().isoformat() + "Z" 
     payload["timestamp"] = now_iso
     
     # 3. Canonicalize & Hash
@@ -115,7 +138,7 @@ def create_decision(draft: DecisionDraft, db: Session = Depends(get_db)):
 
     # 4. Map to ORM (Flattened)
     db_obj = DecisionObject(
-        timestamp=now_iso, # sqlalchemy might try to cast string to TIMESTAMP, should work
+        timestamp=datetime.datetime.now(datetime.timezone.utc), # Use object, not string
         actor_user_id=draft.actor.user_id,
         actor_role=draft.actor.role, # Enum
         actor_session_id=draft.actor.session_id,
@@ -138,11 +161,206 @@ def create_decision(draft: DecisionDraft, db: Session = Depends(get_db)):
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Persistence failed: {str(e)}")
 
+    # 5. Trigger Execution (Side Effect)
+    # If the decision is APPROVED, we must execute the intent.
+    # We do this asynchronously via Celery.
+    if db_obj.outcome == OutcomeEnum.APPROVED:
+        try:
+            from vte.tasks import execute_decision
+            # We use delay() to send to Redis queue
+            execute_decision.delay(decision_id=str(db_obj.decision_id))
+        except Exception as e:
+            # We do NOT rollback the decision - it is committed.
+            # But we log the failure to enqueue.
+            # In a real system, we might need a reliable outbox pattern here.
+            # For VTE Phase 17, logging is sufficient.
+            print(f"CRITICAL: Failed to enqueue execution task: {e}")
+
     return db_obj
 
 @router.get("/decisions/{decision_id}", response_model=DecisionRead)
 def get_decision(decision_id: str, db: Session = Depends(get_db)):
-    obj = db.query(DecisionObject).filter(DecisionObject.decision_id == decision_id).first()
+    import uuid
+    try:
+        uid = uuid.UUID(decision_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid UUID")
+    obj = db.query(DecisionObject).filter(DecisionObject.decision_id == uid).first()
     if not obj:
         raise HTTPException(status_code=404, detail="Decision not found")
     return obj
+
+@router.get("/decisions", response_model=List[DecisionRead])
+def get_decisions(status: Optional[OutcomeEnum] = None, limit: int = 50, db: Session = Depends(get_db)):
+    """
+    Get list of decisions, optionally filtered by status (e.g., PROPOSED).
+    Returns most recent first.
+    """
+    query = db.query(DecisionObject)
+    
+    if status:
+        query = query.filter(DecisionObject.outcome == status)
+        
+    query = query.order_by(desc(DecisionObject.timestamp))
+    return query.limit(limit).all()
+
+    return {"status": "triggered", "task_id": str(task.id)}
+
+@router.get("/queue", tags=["Unified Queue"])
+def get_unified_queue(
+    skip: int = 0,
+    limit: int = 50,
+    search: Optional[str] = None,
+    sort_by: Optional[str] = "priority",
+    order: Optional[str] = "asc",
+    status: Optional[str] = "PENDING",
+    priority: Optional[str] = "ALL", 
+    db: Session = Depends(get_db)
+):
+    """
+    Unified Workbench Queue.
+    """
+    query = db.query(DecisionObject)
+    
+    # 1. Filtering
+    if status and status != "ALL":
+        if status == "PENDING":
+            query = query.filter(DecisionObject.outcome == "PROPOSED")
+        elif status == "COMPLETED":
+            query = query.filter(DecisionObject.outcome != "PROPOSED")
+            
+    # 2. Search
+    if search:
+        query = query.filter(DecisionObject.intent_action.contains(search)) 
+        
+    # 3. Sorting
+    sort_field = DecisionObject.timestamp
+    if sort_by == "sla_deadline":
+        sort_field = DecisionObject.timestamp
+    elif sort_by == "title":
+        # 'intent_action' is the field name in DecisionObject
+        sort_field = DecisionObject.intent_action
+        
+    if order == "desc":
+        query = query.order_by(desc(sort_field))
+    else:
+        query = query.order_by(sort_field)
+        
+    # Execute (Fetch all to filter by mock priority if needed, or just paginate)
+    all_items = query.all()
+    
+    result = []
+    for item in all_items:
+        # Mock Priority Logic
+        prio = 2
+        if item.intent_action and "High" in item.intent_action: prio = 1
+        elif item.intent_action and "Low" in item.intent_action: prio = 3
+        
+        # Filter Priority
+        if priority != "ALL" and str(prio) != priority:
+            continue
+            
+        # Outcome Access
+        status_val = str(item.outcome)
+        if hasattr(item.outcome, "value"):
+            status_val = item.outcome.value
+
+        result.append({
+            "id": str(item.decision_id),
+            "title": f"{item.intent_action} {item.intent_target}",
+            "priority": prio,
+            "status": status_val,
+            "assigned_to": str(item.actor_user_id),
+            "sla_deadline": (item.timestamp + datetime.timedelta(days=1)).isoformat()
+        })
+        
+    # Manual Pagination after Priority Filter
+    start = skip
+    end = skip + limit
+    paginated = result[start:end]
+    
+    return paginated
+
+@router.get("/queue", tags=["Unified Queue"])
+def get_unified_queue(
+    skip: int = 0,
+    limit: int = 50,
+    search: Optional[str] = None,
+    sort_by: Optional[str] = "priority",
+    order: Optional[str] = "asc",
+    status: Optional[str] = "PENDING",
+    priority: Optional[str] = "ALL", 
+    db: Session = Depends(get_db)
+):
+    """
+    Unified Workbench Queue.
+    Aggregates Decisions (Tasks) and Evidence (New Signals).
+    Supports: Pagination, Sorting, Filtering, Search.
+    """
+    query = db.query(DecisionObject)
+    
+    # 1. Filtering
+    if status and status != "ALL":
+        if status == "PENDING":
+            # Use string "PROPOSED" to match DB Enum value
+            query = query.filter(DecisionObject.outcome == "PROPOSED")
+        elif status == "COMPLETED":
+            query = query.filter(DecisionObject.outcome != "PROPOSED")
+            
+    # 2. Search
+    if search:
+        query = query.filter(DecisionObject.intent_action.contains(search)) 
+        
+    # 3. Sorting
+    sort_field = DecisionObject.timestamp
+    if sort_by == "sla_deadline":
+        sort_field = DecisionObject.timestamp
+    elif sort_by == "title":
+        # 'intent_action' is the field name in DecisionObject
+        sort_field = DecisionObject.intent_action
+        
+    if order == "desc":
+        query = query.order_by(desc(sort_field))
+    else:
+        query = query.order_by(sort_field)
+        
+    # Execute (Fetch all to filter by mock priority if needed, or just paginate)
+    # Note: Filtering priority in memory after fetch breaks pagination if we drop items.
+    # For MVP Gap Fix, we accept this or implement basic pagination without priority filter first.
+    # Given we have few items, fetching all then slicing is safer for correctness.
+    
+    all_items = query.all()
+    
+    result = []
+    for item in all_items:
+        # Mock Priority Logic
+        prio = 2
+        if item.intent_action and "High" in item.intent_action: prio = 1
+        elif item.intent_action and "Low" in item.intent_action: prio = 3
+        
+        # Filter Priority
+        if priority != "ALL" and str(prio) != priority:
+            continue
+            
+        # Outcome Access: item.outcome is likely a string or Enum proxy. 
+        # Safe access via str() or .value check
+        status_val = str(item.outcome)
+        if hasattr(item.outcome, "value"):
+            status_val = item.outcome.value
+
+        result.append({
+            "id": str(item.decision_id),
+            "title": f"{item.intent_action} {item.intent_target}",
+            "priority": prio,
+            "status": status_val,
+            "assigned_to": str(item.actor_user_id),
+            "sla_deadline": (item.timestamp + datetime.timedelta(days=1)).isoformat()
+        })
+        
+    # Manual Pagination after Priority Filter
+    total = len(result)
+    start = skip
+    end = skip + limit
+    paginated = result[start:end]
+    
+    return paginated

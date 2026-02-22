@@ -1,0 +1,8 @@
+{
+  "ump_id": "UMP-0101",
+  "timestamp": "2026-02-21T15:45:00Z",
+  "hashes": {
+    "spec.policy_engine.py": "edbaa473354cb42e810c8c7f4d112e4fa7e4575cb3baf22b6c8df840cf16b2e6",
+    "test_policy_engine.py": "1bc6b24bd14bf6328cc97083bbb22e1d0e4e01c00535ec4358908fa72ada1398"
+  }
+}

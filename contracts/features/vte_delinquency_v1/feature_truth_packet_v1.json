@@ -8,8 +8,100 @@
         "scope": "contracts/features/vte_delinquency_v1/scope_contract.json",
         "journey": "contracts/journeys/vte_delinquency_golden_journey_v1.json",
         "evidence_ladder": "contracts/evidence/evidence_ladder_v1.json",
-        "side_effects": "contracts/side_effect_surface.json",
         "failure_rules": "contracts/partial_failure_semantics.json"
+    },
+    "state_machine_binding": {
+        "transitions": [
+            {
+                "from": "GOOD_STANDING",
+                "to": "WARNING_SENT",
+                "trigger": "payment_missed",
+                "evidence_requirement": {
+                    "min_rank": 1,
+                    "justification": "Payment status must be verified via Direct API"
+                }
+            },
+            {
+                "from": "WARNING_SENT",
+                "to": "SUSPENDED",
+                "trigger": "grace_period_expired",
+                "evidence_requirement": {
+                    "min_rank": 1,
+                    "justification": "Time expiration must be system verified"
+                }
+            },
+            {
+                "from": "WARNING_SENT",
+                "to": "GOOD_STANDING",
+                "trigger": "payment_received",
+                "evidence_requirement": {
+                    "min_rank": 1,
+                    "justification": "Payment receipt must come from Ledger API"
+                }
+            },
+            {
+                "from": "SUSPENDED",
+                "to": "TERMINATED",
+                "trigger": "manual_review_decision",
+                "evidence_requirement": {
+                    "min_rank": 2,
+                    "justification": "Manual review requires verified Browser DOM snapshot of AppFolio state"
+                }
+            }
+        ]
+    },
+    "irreversible_actions": {
+        "revoke_access_token": {
+            "permit_type": "ACCESS_REVOCATION_PERMIT",
+            "risk_level": "HIGH",
+            "requires_step_up": false
+        },
+        "archive_user_data": {
+            "permit_type": "DATA_ARCHIVAL_PERMIT",
+            "risk_level": "CRITICAL",
+            "requires_step_up": true
+        },
+        "final_bill_generation": {
+            "permit_type": "FINANCIAL_LEDGER_WRITE",
+            "risk_level": "HIGH",
+            "requires_step_up": false
+        }
+    },
+    "evidence_ladder": {
+        "DIRECT_API": {
+            "rank": 1,
+            "artifacts": [
+                "raw_json_response",
+                "trace_id"
+            ]
+        },
+        "BROWSER_DOM_SNAPSHOT": {
+            "rank": 2,
+            "artifacts": [
+                "dom_snapshot_html",
+                "screenshot_png"
+            ]
+        },
+        "OCR_SCREENSHOT": {
+            "rank": 3,
+            "artifacts": [
+                "ocr_text_content"
+            ]
+        },
+        "USER_ASSERTION": {
+            "rank": 4,
+            "artifacts": [
+                "user_id",
+                "assertion_text"
+            ]
+        }
+    },
+    "idempotency_keys": {
+        "email_notification_v1": "email_v1_::{user_id}::{date}",
+        "email_notification_v2": "email_v2_::{user_id}::{date}",
+        "revoke_access_token": "revoke_::{token_id}::{timestamp}",
+        "archive_user_data": "archive_::{user_id}::{termination_date}",
+        "final_bill_generation": "bill_::{user_id}::{cycle_id}"
     },
     "constraints": {
         "no_bloat": "Must not import workflows outside of declared scope.",
