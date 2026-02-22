@@ -1,0 +1,8 @@
+{
+  "ump_id": "UMP-0201",
+  "timestamp": "2026-02-21T15:45:00Z",
+  "hashes": {
+    "spec.workflow_state_machine.py": "ee80e9dea9232df4e2fb84eeaed95eb4a92f95639549f5645c26d68703b94a12",
+    "test_workflow_state_machine.py": "6255684ba839be951cf0e03512a1a7f04a8fe8afa77450bb2c6afa34c3fba735"
+  }
+}

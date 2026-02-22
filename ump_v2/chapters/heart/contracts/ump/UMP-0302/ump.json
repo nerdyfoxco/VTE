@@ -1,0 +1,74 @@
+{
+  "ump_id": "UMP-0302",
+  "chapter_id": "CH-05",
+  "topic_id": "TP-01",
+  "phase_id": "PH-03",
+  "title": "Idempotency and Retry Engine (Heart)",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "chapters/heart/contracts/ump/UMP-0302/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "chapters/heart/",
+    "allowed_paths": [
+      "chapters/heart/**"
+    ],
+    "forbidden_paths": [
+      "chapters/brain/**",
+      "chapters/hands/**"
+    ],
+    "allowed_shared_paths": [
+      "foundation/contracts/**"
+    ]
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "chapters/heart/topic-idempotency/src/idempotency_middleware.py",
+      "operation": "create",
+      "context": "Phase 3 Data Plane Execution",
+      "purpose": "A guard preventing duplicate task execution over a time window.",
+      "connectivity": {
+        "imports": [],
+        "exports": [
+          "IdempotencyMiddleware",
+          "DuplicateExecutionError"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create a middleware that hashes intent args and stores them. Block if the same hash is executed while still inflight.",
+      "json_spec_path": "chapters/heart/contracts/ump/UMP-0302/spec.idempotency.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "python chapters/heart/topic-idempotency/tests/test_idempotency_middleware.py"
+    ],
+    "acceptance_criteria": [
+      "Duplicate execution requests within the TTL throw a DuplicateExecutionError.",
+      "Unique requests proceed unchanged."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [],
+    "redaction": []
+  }
+}

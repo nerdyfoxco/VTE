@@ -1,0 +1,9 @@
+{
+  "ump_id": "UMP-0103",
+  "timestamp": "2026-02-21T16:05:00Z",
+  "hashes": {
+    "spec.prompts.json": "4036c199b73ee7359bd8f3b26f47aaa3e50e19497c67a6eb123dfaef93d70fdf",
+    "spec.prompt_fetcher.py": "1a65c8fb2fc21676a58103546a914da11b4287b00645570bf9b8b59aebfe76d0",
+    "test_prompt_registry.py": "a1ce24de9567318830b8c2d1674c569d696d8f88dccdc742c72226c1a2427b0a"
+  }
+}

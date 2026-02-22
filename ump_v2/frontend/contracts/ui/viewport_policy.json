@@ -1,0 +1,28 @@
+{
+    "policy_version": "1.0.0",
+    "description": "VTE 2.0 Operator Interface Constraints",
+    "rules": [
+        {
+            "constraint": "min_width",
+            "value_px": 320,
+            "action": "HALT",
+            "reason": "VTE Dashboard is not supported on viewports narrower than an iPhone SE."
+        },
+        {
+            "constraint": "responsive_layout",
+            "framework_enforcement": "tailwindcss",
+            "required_classes": [
+                "sm:block",
+                "md:grid",
+                "lg:flex"
+            ],
+            "action": "WARN"
+        },
+        {
+            "constraint": "high_contrast_mode",
+            "required": true,
+            "action": "ENFORCE",
+            "reason": "WCAG 2.1 AA Compliance for Accessibility."
+        }
+    ]
+}

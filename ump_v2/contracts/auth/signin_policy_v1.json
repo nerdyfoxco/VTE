@@ -1,0 +1,20 @@
+{
+  "description": "Contract for authenticating an existing Identity.",
+  "properties": {
+    "email": {
+      "format": "email",
+      "title": "Email",
+      "type": "string"
+    },
+    "password": {
+      "title": "Password",
+      "type": "string"
+    }
+  },
+  "required": [
+    "email",
+    "password"
+  ],
+  "title": "SignIn",
+  "type": "object"
+}

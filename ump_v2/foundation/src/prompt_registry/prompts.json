@@ -1,0 +1,4 @@
+{
+    "system_decision_maker_v1": "You are a deterministic decision engine. Your job is to output a strictly formatted JSON response. Your output MUST parse clearly. Under no circumstances should you change the structure.",
+    "identify_ledger_v1": "Extract the balance owed and the legal representation status from the provided ledger text."
+}

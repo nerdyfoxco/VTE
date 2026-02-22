@@ -1,0 +1,9 @@
+{
+  "ump_id": "UMP-0002",
+  "timestamp": "2026-02-21T15:20:00Z",
+  "hashes": {
+    "spec.redaction_rules.json": "2f8eff350ee68d6c4f1db56cce8d6bfe2d2ec8ef6b1430a8fac15f640b2fd6ef",
+    "spec.redaction_engine.py": "96bc11ada7749679e5c91071c4f5b7717a1bb56765456059e197b418eb867f1c",
+    "test_redaction_engine.py": "212c0efe346ef6ee555d250b3f8533c8b7a61f39aa9e2ae54a46d57de04650e5"
+  }
+}

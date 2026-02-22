@@ -1,0 +1,8 @@
+{
+  "ump_id": "UMP-0102",
+  "timestamp": "2026-02-21T15:55:00Z",
+  "hashes": {
+    "spec.approval_guard.py": "2473ef44348652ef98d34a95718aad1b6869b2652ab59967b4081a910d00eaa0",
+    "test_approval_guard.py": "117a6172d74911f5d5716d44e0841e088bc153b647d310b679b2ab25ee686962"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "ump_id": "UMP-0303",
+  "chapter_id": "CH-03",
+  "topic_id": "TP-01",
+  "phase_id": "PH-03",
+  "title": "Adapter Contract Rules",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "chapters/eyes/contracts/ump/UMP-0303/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "chapters/eyes/",
+    "allowed_paths": [
+      "chapters/eyes/**"
+    ],
+    "forbidden_paths": [
+      "chapters/brain/**",
+      "chapters/hands/**"
+    ],
+    "allowed_shared_paths": [
+      "foundation/contracts/**"
+    ]
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "chapters/eyes/src/adapter_contract.py",
+      "operation": "create",
+      "context": "Phase 3 Data Plane Execution",
+      "purpose": "A base class ensuring external adapters adhere strictly to the Pipe Envelope contract when publishing data to the system.",
+      "connectivity": {
+        "imports": [
+          "foundation.src.security.correlation_guard"
+        ],
+        "exports": [
+          "BaseAdapter",
+          "AdapterDriftError"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create an abstract BaseAdapter that forces implementers to yield data wrapped in a PipeEnvelope. If an adapter yields raw non-envelope data, fail-closed with AdapterDriftError.",
+      "json_spec_path": "chapters/eyes/contracts/ump/UMP-0303/spec.adapter_contract.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "python chapters/eyes/tests/test_adapter_contract.py"
+    ],
+    "acceptance_criteria": [
+      "If the implemented adapter yields a non-envelope dict, AdapterDriftError is thrown."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [],
+    "redaction": []
+  }
+}
