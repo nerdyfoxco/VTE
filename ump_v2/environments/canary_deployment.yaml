@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: vte-ump-system
+  namespace: vte-prod
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: vte-ump-system
+  template:
+    metadata:
+      labels:
+        app: vte-ump-system
+    spec:
+      containers:
+      - name: vte-ump-system
+        image: bintloop/vte-ump-system:v2.0.0
+        ports:
+        - containerPort: 8080
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+  strategy:
+    canary:
+      # Start by routing 5% of traffic to the new VTE Spine and Organs
+      steps:
+      - setWeight: 5
+      - pause: {duration: 15m}
+      - setWeight: 20
+      - pause: {duration: 1h}
+      - setWeight: 50
+      - pause: {duration: 2h}
+      - setWeight: 100

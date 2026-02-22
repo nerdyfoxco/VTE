@@ -1,0 +1,23 @@
+[importlinter]
+root_package = ""
+include_external_packages = True
+
+[importlinter:contract:1]
+name = Strict Organ Independence
+type = independence
+modules =
+    chapters.brain
+    chapters.hands
+    chapters.eyes
+    chapters.legs
+    chapters.heart
+    chapters.lungs
+    chapters.kidneys
+
+[importlinter:contract:2]
+name = Foundation Invariance
+type = layers
+layers =
+    foundation
+    spine
+    chapters

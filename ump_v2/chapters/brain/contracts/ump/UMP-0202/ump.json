@@ -1,0 +1,76 @@
+{
+  "ump_id": "UMP-0202",
+  "chapter_id": "CH-01",
+  "topic_id": "TP-01",
+  "phase_id": "PH-02",
+  "title": "Decision Table Compiler",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "chapters/brain/contracts/ump/UMP-0202/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "chapters/brain/topic-orchestration/",
+    "allowed_paths": [
+      "chapters/brain/topic-orchestration/**"
+    ],
+    "forbidden_paths": [
+      "chapters/hands/**"
+    ],
+    "allowed_shared_paths": [
+      "foundation/contracts/**",
+      "chapters/brain/topic-policy-engine/**"
+    ]
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "chapters/brain/topic-orchestration/src/decision_table_compiler.py",
+      "operation": "create",
+      "context": "Phase 2 Brain Runtime",
+      "purpose": "Compiles raw decision rules into a static, deterministic evaluation graph.",
+      "connectivity": {
+        "imports": [
+          "chapters.brain.topic_policy_engine.src.policy_engine"
+        ],
+        "exports": [
+          "DecisionTableCompiler",
+          "DecisionRule"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create a compiler that ingests a list of dictionary 'rules' and returns an executable evaluation function that produces a ProposedDecision list.",
+      "json_spec_path": "chapters/brain/contracts/ump/UMP-0202/spec.decision_table_compiler.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "python chapters/brain/topic-orchestration/tests/test_decision_table_compiler.py"
+    ],
+    "acceptance_criteria": [
+      "Rules evaluate deterministically.",
+      "Ambiguities or conflicting rules yield a HOLD proposal."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [],
+    "redaction": []
+  }
+}

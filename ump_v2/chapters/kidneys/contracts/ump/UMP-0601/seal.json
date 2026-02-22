@@ -1,0 +1,9 @@
+{
+  "ump_id": "UMP-0601",
+  "timestamp": "2026-02-21T16:45:00Z",
+  "hashes": {
+    "spec.jurisdiction.json": "559dbfb85c86c33537579ca78d2ead4ff5511279168837dc1c6ddf8b2b2c45fb",
+    "spec.consent.py": "ec479204868874d0177d4e1d27b3f8bc279ef7704b4041d024fbc6740ec671a3",
+    "test_consent_registry.py": "2335ba4f626d9279fe052bc7d13e60068f3c098e103f8a1f76e594252add8938"
+  }
+}

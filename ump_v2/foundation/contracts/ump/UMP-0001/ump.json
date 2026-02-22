@@ -1,0 +1,97 @@
+{
+  "ump_id": "UMP-0001",
+  "chapter_id": "CH-00",
+  "topic_id": "TP-00",
+  "phase_id": "PH-00",
+  "title": "Pipe Envelope Contract",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "foundation/contracts/ump/UMP-0001/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "foundation/",
+    "allowed_paths": [
+      "foundation/contracts/**",
+      "foundation/src/security/**"
+    ],
+    "forbidden_paths": [
+      "chapters/**",
+      "spine/**"
+    ],
+    "allowed_shared_paths": []
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "foundation/contracts/pipes/schemas/pipe_envelope_schema.json",
+      "operation": "create",
+      "context": "Phase 0 System Invariant",
+      "purpose": "Define universal event structure for all pipes. Fail-closed on missing payload keys.",
+      "connectivity": {
+        "imports": [],
+        "exports": [],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create strictly validated JSON Schema requiring workspace_id, work_item_id, correlation_id.",
+      "json_spec_path": "foundation/contracts/ump/UMP-0001/spec.pipe_envelope_schema.json"
+    },
+    {
+      "path": "foundation/src/security/correlation_guard.py",
+      "operation": "create",
+      "context": "Phase 0 System Invariant",
+      "purpose": "Python implementation to validate incoming payloads against the pipe envelope schema.",
+      "connectivity": {
+        "imports": [
+          "pydantic",
+          "json"
+        ],
+        "exports": [
+          "validate_envelope"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Use Pydantic to load pipe_envelope_schema.json and validate a generic payload dict. Raise explicit exceptions on failure.",
+      "json_spec_path": "foundation/contracts/ump/UMP-0001/spec.correlation_guard.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "pytest foundation/src/security/"
+    ],
+    "acceptance_criteria": [
+      "Payload missing workspace_id throws RejectPipe event.",
+      "Valid payload passes silently."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [
+      "Strict schema validation before any processing."
+    ],
+    "redaction": []
+  },
+  "risks": [
+    {
+      "risk": "Modules bypassing guard",
+      "mitigation": "Boundary linter ensures all receivers use guard."
+    }
+  ]
+}

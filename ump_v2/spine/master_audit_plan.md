@@ -1,0 +1,9944 @@
+# VTE Master Audit & Execution Plan
+
+Extracted from Original Source Notebooks and Text Files.
+
+## Source: Comprehensive Plan - VTE 18.txt
+- **Directive**: "Fail-Closed. Zero Ambiguity. Flutter Universal."
+- 7.  **Request Binding**: `valid_request` requires `correlation_id`, `session_id`, `tenant_id`, `actor_id`. Missing = 403.
+- 21. **Vendor Halt**: >10% Error rate trips Circuit Breaker.
+- 29. **Psychological Safety**: UI warns high risk.
+- 28. **Insider Threat**: "Break-Glass" access requires 2-person approval (or heavy operational log).
+- 39. **UI Consistency**: Design System tokens (Colors/Type) enforced in code.
+- 3.  **Cost Circuit Breaker**: If OpenAI Spend > $X/hr, downgrade to "Rule-Based".
+- 11. **Confidence Score**: AI returns 0.0-1.0. UI displays "Low Confidence" visual.
+- 15. **Throughput**: HITL Dashboard warns if queue > 10 items/person.
+- 17. **Ontology Lock**: "Definition of Delinquency" defined in Shared Lib, not UI/PDF.
+- 34. **Feature Rot**: Usage tracking. < 5 uses/month -> Deprecate.
+- 40. **Stopping**: "Go/No-Go" checklist required for Release.
+- 5.  **Neg. Canary**: `negative_canary_suite` successfully FAILS on bad inputs.
+- 6.  **UI**: Verified on Mobile, Tablet, Desktop, Web.
+- 12. **Feature Flag**: Feature guarded by LaunchDarkly/EnvVar.
+- 13. **Seed Data**: Demo Tenant works with new feature.
+- 18. **Mobile**: Builds on iOS Simulator & Android Emulator.
+- 19. **Desktop**: Builds on Windows & macOS.
+- 29. **Empty State**: UI looks good with 0 data.
+- 30. **Error State**: UI handles 500/404/403 gracefully.
+- 35. **Dependencies**: `pubspec.yaml` / `requirements.txt` locked.
+- 36. **Artifacts**: Docker Image built & signed.
+- 37. **Evidence**: Screenshots of UI in PR.
+- 36. **Voice**: TTS/STT matches UI language.
+- 13. **CI**: Paths-filter to only build changed apps.
+- 28. **Refactor**: Large refactors require "Refactor Plan".
+- 30. **Branches**: `feature/`, `fix/`, `release/`.
+- 32. **Review**: 1 approval required.
+- 33. **Build**: Parallel builds in CI.
+- 37. **Sync**: DB Models -> API Schemas -> UI Models strict chain.
+- 31. **Circuit**: Breaker for dependent services.
+- 2.  **RLS**: Row Level Security policies `USING (tenant_id = current_setting('app.current_tenant')::uuid)`.
+- 6.  **Gate**: `require_tenant_context()` function in DB throws `ERR_TENANT_CONTEXT` if context missing.
+- *   **Break Glass**: Requires `app.break_glass_ticket_id`.
+- 11. **Ids**: UUIDv7 (Time-sortable) primary keys.
+- 34. **Extensions**: `uuid-ossp`, `pg_trgm`.
+- 5.  **Metadata**: `tenant_id` (Required).
+- ## 11. "Universally Adaptive" UI Layout
+- 3.  **Widget**: `ResponsiveBuilder` wrapper.
+- 13. **Orientation**: Layout rebuilds on rotate.
+- 29. **Zoom**: UI Scaling support.
+- 3.  **UI**: Passive View (renders State).
+- 14. **Scoping**: Global vs Feature vs Page.
+- 26. **Selector**: `BlocSelector` for partial rebuilds.
+- 27. **Builder**: `BlocBuilder` for UI updates.
+- 31. **Separation**: No UI code in Bloc. No API code in Bloc.
+- 7.  **Idempotency**: UUID generated on Client (Server checks `seen_ids` table).
+- 8.  **Optimistic**: Update UI immediately, queue Req.
+- 9.  **Rollback**: Revert UI if Sync fails (and not retryable).
+- ## 14. UI Contracts & Schema Alignment
+- 13. **Required**: Assert required fields.
+- 26. **Repo**: Separate from UI.
+- 4.  **Contrast**: 4.5:1 text, 3:1 UI.
+- 30. **Orientation**: Lock or Fluid? Fluid.
+- 14. **Custom**: Custom UI validation.
+- 7.  **UI**: `StartUpGate` checks Perms to hide/show UI.
+- 23. **UI**: "View As" capability for debugging (Dev only).
+- 26. **Security**: Role IDs are UUIDs.
+- 29. **Approval**: Role upgrade requires 2nd Admin approval.
+- 7.  **Access**: "View PII" requires explicit intent click (Audit).
+- 10. **Masking**: UI displays `***-**-1234`.
+- 39. **Review**: Privacy Impact Assessment (PIA) for new features.
+- 2.  **Negative**: `negative_canary_suite` attempts breaks.
+- 15. **Disaster**: Business Continuity Plan PDF.
+- # 🧭 SECTION 5: USER JOURNEYS & DASHBOARDS (HEADERS 21-25)
+- # 🧭 SECTION 5: USER JOURNEYS, DASHBOARDS & PERSONAS (HEADERS 21-25)
+- 19. **Done**: Redirect to Dashboard (Confetti).
+- 21. **Tour**: Interactive Tour (driver.js) of Key Features.
+- 1.  **Route**: `/admin/dashboard` (IP Whitelisted + VPN).
+- 9.  **Sales**: Lead Pipeline (New Inquiries, Demos Booked, Conversion Rate).
+- 12. **Feature**: Feature Flag Toggles (Global/Tenant/User Percentage).
+- ## 23. Tenant Admin & Team Dashboards (The Office)
+- 1.  **Route**: `/dashboard` (Context: Current Tenant).
+- 17. **Quick**: Quick Actions (+ Tenant, + Ticket).
+- 33. **Print**: "Print Dashboard" report.
+- 9.  **Output**: Edited response Preview.
+- 35. **Help**: "Policy Guide" sidebar (SOPs).
+- 39. **PDF**: Built-in PDF Viewer (No download).
+- 10. **Community**: Building Announcements / News.
+- 12. **Format**: JSON Output enforcement via Pydantic.
+- 21. **Functions**: OpenAI Function Calling for Tools (Database, Calculator).
+- 3.  **Structured Output**: Regulated Flows MUST use JSON output (Body = Template + Vars). **Prose BANNED**.
+- 16. **Guardrails**: NeMo Guardrails check input/output safety.
+- 28. **Pattern**: "Circuit Breaker" per Provider.
+- 30. **Schema**: Strict Input/Output Schemas.
+- 7.  **MFA**: "OTP Required" Signal -> Escalates to HITL UI ("Please enter code sent to phone").
+- 18. **Mapping**: "Column Mapper" UI for CSV uploads.
+- 26. **Output**: Standardized `ImportResult` object.
+- 35. **Visualize**: Dashboard of Model Performance.
+- 15. **UI**: Elements Disabled/Hidden for Bot user role.
+- 17. **Draft**: AI can *Draft* notices (e.g., "Draft Pay or Quit") but NOT "Post".
+- 23. **Explanation**: UI says "AI cannot do this due to [PolicyName]".
+- 29. **Visual**: "Human Required" Icon ( 👤 ) on protected buttons.
+- 40. **Verify**: Verification in E2E Suite (Lawyer-Approved Tests).
+- *   **Collision**: If 1 Phone -> 2 Tenants, Store "ResolutionRequest" in DB. UI prompts Kevin to link.
+- 11. **Templates**: "Quick Replies" with Variable Injection.
+- 9.  **Outbound**: Click-to-Call from Dashboard (Bridge).
+- 37. **Format**: Use Google Card Builder (JSON).
+- 2.  **Parity Gate**: `infra-test` asserts Staging matched Prod on: Auth, CORS, WAF Rules, Quotas, Feature Flags.
+- 7.  **Schema**: `openapi-diff` blocks build if API changes without Schema update.
+- 13. **Canary**: Negative Canary Suite MUST fail for build to pass.
+- 14. **Build**: Docker Buildkit (Layer Caching).
+- 17. **IaC**: Terraform Plan required on PR.
+- 27. **Diff**: TurboRepo smart build logic.
+- 29. **Output**: Job Summary Markdown.
+- 31. **Policy**: 2 Reviewers required.
+- 39. **Playwright**: E2E Suite runs on Preview context.
+- 7.  **Dash**: "Golden Signals" Dashboard (Auto-provisioned).
+- 32. **Config**: Dashboards as Code (Jsonnet/Terraform).
+- 9.  **AI**: Token-Bucket Cost calculation (Input/Output).
+- 16. **Dashboard**: "Cost of Goods Sold" (COGS) per Tenant live.
+- 27. **Trial**: 14-day Trial (Card required vs No Card).
+- 32. **Upgrade**: UX-driven Upsell paths ("Unlock this feature").
+- 38. **Granularity**: Feature-level Cost Tracking.
+- 7.  **Contain**: Kill Switches (Feature Flags, Circuit Breakers).
+- # 🔧 SECTION 9: IMPLEMENTATION PHASES (HEADERS 41-45)
+- ## 41. Phase 1: The "Golden Path" (E2E Proven Spine)
+- 15. **Artifacts**: CI outputs `trace.zip` and `evidence.pdf`.
+- ## 42. Phase 2: Core Data (Weeks 4-6)
+- 3.  **UI**: List/Create/Edit Pages for Core Models.
+- 4.  **Import**: "Magic Moment" Import Agent (Playwright) - Scrapes AppFolio/Buildium.
+- 5.  **Migration**: Data Migration Wizard for AppFolio, Yardi, Buildium Exports.
+- 10. **MFA**: "OTP Required" Signal -> Escalates to HITL UI.
+- 15. **Dashboard**: Tenant Admin Dashboard v1.
+- 25. **Errors**: UI Error States.
+- 32. **Restore**: Soft-Delete Restore UI.
+- ## 43. Phase 3: Communication (Weeks 7-9)
+- 1.  **Inbox**: Unified Inbox UI (Email Threading).
+- ## 44. Phase 4: Intelligence (Weeks 10-12)
+- 6.  **HITL**: HITL Dashboard UI.
+- 21. **Explain**: "Why did AI do this?" UI.
+- ## 45. Phase 5: Hardening & Launch (Weeks 13-14)
+- 8.  **Monitor**: Dashboards & Alerts tuning.
+- 13. **Perf**: UI Perf tuning (Lighthouse).
+- 30. **Feature**: Flags Cleanup.
+- 6.  **Quota**: UI Alert "Quota Exceeded" -> Block sending, allow reading.
+- 8.  **Degraded**: 'Degraded Mode' State Machine (Normal -> Retrying -> Backoff -> Circuit Open).
+- 13. **Degraded**: UI Banner "Email Delayed - Provider Issue" (Transparency).
+- 16. **Twilio**: Segment calculation (UCS-2 vs GSM-7) warning in UI.
+- 27. **Mock**: Mock Limits in Test Suite (Simulate 429).
+- 28. **Admin**: "Provider Status" Dashboard Widget.
+- 32. **Safety**: Circuit Breakers open after 50% failure rate.
+- 33. **Dashboard**: User sees "Syncing..." spin state.
+- 2.  **Completeness**: Export Fails if `required_evidence_matrix.json` artifacts missing.
+- 38. **UX**: "Evidence Locker" in Admin Dashboard.
+- 3.  **UI Visibility**: Admin Dashboard shows Active Kill Switches + Incident Links.
+- ## 49. Phase-Based Delivery & "No Silent Bypass" Checklist
+- **"No Silent Bypass" Acceptance Criteria** (Required for Every PR):
+- ## 50. Phased Execution Plan & Breaker Tests
+- 1.  **Phase 1A: Golden Path Spine**: Session -> Context -> Case -> Draft -> Permit -> Email -> Evidence (E2E Proven).
+- 2.  **Phase 1B: Guardrail Reinforcement**: Block SDK Imports, Enforce Context Guards, Outbox Unknowns, Evidence Matrix.
+- 3.  **Phase 1C: Operator Workbench**: Feed Shell, HITL Queue, Admin Kill-Switch UI.
+- *   **Version Drift**: Client v1 calls Server v2 -> Assert 4xx Upgrade Required.
+- *   **Golden Path**: "One-Command" setup (`make dev`) works or Build Failed.
+- 11. **License**: GPL dependency fails the build.
+- 12. **Secret**: Found secret fails the build.
+- 13. **Coverage**: Drop in coverage fails the build.
+- 14. **Cycle**: Cyclic Import fails the build.
+- 15. **Dead**: Dead Code fails the build.
+- 16. **Format**: Bad Formatting fails the build.
+- 17. **Typing**: Type Error fails the build.
+- 18. **Docs**: Missing Docs fails the build (Public API).
+- 19. **Version**: Version mismatch fails the build.
+- 20. **Conflict**: Merge Conflict fails the build.
+- 22. **Manual**: Manual Gate requires "Dossier Link".
+- 39. **Result**: Green Build = Shippable Artifact.
+- *   **Binding**: Each Key maps to `EscalationPolicy`, `RecoveryPath`, and `ArtifactRequirements`.
+- *   **Requirement**: "300 Scenarios" are loaded as Data Packs, not Code.
+- *   **Schema**: `Scenario(id, trigger_event, required_preconditions, obligation_type, cadence_ref)`.
+- *   **Ambiguity**: "Next few days" -> Normalizes to `Now() + 3 Business Days`.
+- *   **Requirement**: A Promise is INVALID without `confirmation_mode` (Explicit Yes, Signed Link, Portal Click).
+- *   **States**: `OPT_IN`, `STOP_REQUESTED`, `QUIET_HOURS`, `LEGAL_BAN`.
+- *   **Rule**: "Invoice" requires "Total Page". "Ledger" requires "Summary Row".
+- *   **Write Discipline**: Service Wrapper requires transactional Obligation update with every Task change.
+- *   **Output**: Deterministic `DueAt`.
+- *   **Test**: **Quiet**: Attempt 3AM Call -> Assert Queued.
+- *   **Payload**: JSON of `(FieldsShown, UI_Version, Locale, Timezone, WarningsDisplayed)`.
+- 2.  **Completeness**: `contracts/evidence/required_evidence_matrix_v2_1.json`.
+- *   **Map**: `ActionType` -> `RequiredArtifacts[]` (e.g., `ConsentState`, `PromiseId`).
+- *   **Precedence**: `LEGAL_BAN > STOP_REQUEST > QUIET_HOURS > OPT_IN`.
+- *   **Log**: `(Input, MatchedScenario, PreconditionResults, Output)`.
+- *   **Rule**: Toggle `DEGRADED_MODE` requires `TicketID` + `2-Person-Approval` (via API).
+- *   **Output**: `JurisdictionCode` (e.g., `US-CA-SF`).
+- *   **Truth**: "Sheet Row" is Input. "DB Row" is Output.
+- *   **Requirement**: "I did nothing because DNC matches" -> Must generate `Evidence(Type=DNC_HIT)`.
+- *   **UI**: "Resolution Workbench" for Unknowns.
+- 1.  **Suite**: `tests/e2e/day_in_life_canary/`.
+- 1.  **Contract**: `contracts/ui/operator_workbench_contract_v1.json`.
+- 2.  **Proof of Non-Action UI**:
+- *   **Feature**: "Do Nothing" button requires selecting a `ReasonCode` (DNC, Grace Period, etc.).
+- 2.  **Execution**: `ScenarioInterpreter` is the ONLY execution engine. No hardcoded logic in UI.
+- *   **Capture**: HITL Correction -> `TrainingExample` (Input + HumanOutput).
+- ## 79. UI Contracts & Cleanliness
+- 1.  **Component Contract**: `contracts/ui/component_state_binding_v1.json`.
+- *   **Rule**: UI Components strictly bind to `DomainState`. No local "Form State" drift.
+- *   **Rule**: UI cannot invent new `Actions`. Must pick from `ActionRegistry`.
+- 1.  **Contract**: `contracts/front_end/ui_architecture_boundary_v1.json`.
+- *   **Rule**: `Modules` are strictly isolated. No cross-import `FeatureA` -> `FeatureB`.
+- 2.  **Wiring Matrix**: `contracts/front_end/ui_wiring_matrix_v1.json`.
+- *   **Map**: `UI_Field(Login.Email)` <-> `API_Field(user.email)`.
+- *   **Drift**: CI fails if API Schema changes type without UI updating.
+- ## 82. UI Behavioral Physics & Idempotency
+- *   **States**: All Valid UI States (Idle, Loading, Success, PartialFail, Blocked).
+- *   **Transitions**: Explicit Guard functions required for every transition.
+- *   **Gate**: CI Build FAILS if limits exceeded.
+- *   **View**: `Dashboard`, `TaskQueue`, `AuditLog`, `Settings`.
+- 1.  **Confidence**: `UI` shows `ModelConfidence%`. If < 80% and > 20%, show "Uncertainty Indicator".
+- *   **Require**: System Map, Risk Register, Kill Switch Status, Owner Sign-off.
+- 2.  **Negative Canary**: `tests/e2e/negative_canary_ui_pack/`.
+- *   **Scenario**: Offline Mode, 20s Latency API, 500 Error Storm. UI must handle Gracefully.
+- *   **Verification**: Mobile `DeviceAttestation` required for highly sensitive actions.
+- *   **Promotion**: Cross-Tenant promotion requires `Anonymization` + `HumanReview`.
+- *   **Action**: Candidate Side-Effect (Requires Permit).
+- *   **Lifecycle**: `Permits` required per action type. `Reversible=False` flags.
+- *   **Inputs**: Golden Inputs -> Expected Outputs (Deterministic).
+- *   **Rule**: NO Feature adds side-effects without `Registry` update.
+- ## 108. UI Authorization & State Compilation
+- 1.  **Auth**: `contracts/ui/ui_action_authorization_v1.json`.
+- *   **Rule**: UI Button DISABLED unless `ActionRegistry` permits + `RBAC` allows + `Status` valid.
+- *   **Compiler**: State Machine Registry generates UI Guard code.
+- *   **Identity**: `CaseID` and `ThreadID` use `UUIDv7` for sortable time-identity.
+- ## 115. UI Command Bus (Action Dispatcher)
+- 1.  **Spec**: `contracts/ui/ui_command_bus_spec_v1.json`.
+- ## 125. Superiority Benchmark & Adversarial Suite
+- *   **UI**: Irreversible Actions require `ExplicitConfirmation` + `2-Step`.
+- *   **Gate**: `SchemaChange` requires `MigrationScript` + `BackwardsCompatTest`.
+- *   **Authority**: `SecurityContracts` require `CISO_Key`. `LegalPolicy` require `GeneralCounsel_Key`.
+- *   **Certification**: Adapter cannot deploy unless it passes `DriftSuite`, `RateLimitSuite`, `ErrorSuite`.
+- *   **Dataset**: `GoldenSet_v1` (Real-world ambiguity).
+- *   **Privilege**: `Support` access requires `TicketID`. `Dev` access requires `BreakGlass`.
+- *   **Definition**: The `K0` set of contracts required to boot the OS.
+- *   **Dependency**: `FeatureUI` cannot load without `KernelInvariants`.
+- 1.  **Policy**: `contracts/ui/human_intent_binding_policy_v1.json`.
+- # 🎭 SECTION 19: VTE 10.0 PERSONA & UI CLOSURE (HEADERS 146-155)
+- ## 146. Persona Dashboard & SLA OS
+- 1.  **Contract**: `contracts/ui/persona_dashboard_contracts_v1.json`.
+- *   **Precedence**: `Admin > User`. If `DualRole`, default to `Dashboard(Admin)`.
+- *   **Switching**: Explicit `SwitchHat` action required to change Context.
+- ## 154. UI E2E Golden Path Registry
+- 1.  **Registry**: `contracts/ui/ui_e2e_golden_path_registry_v1.json`.
+- *   **Flows**: `Login` -> `Dashboard` -> `ApprovePermit` -> `Logout`.
+- *   **Contract**: UI Tests MUST verify `EvidenceCapture` and `WarningDisplay`.
+- ## 155. The Final "Persona & UI" Artifact Matrix (VTE 10.0)
+- **STATUS**: READY FOR PHASE 2 SCAFFOLDING (THE LIVING OS)
+- ## 168. Persona E2E Suite Registry
+- 1.  **Registry**: `contracts/ui/persona_e2e_suite_registry_v1.json`.
+- *   **Suites**: `Admin_Golden`, `HITL_Review`, `Support_Impersonate`.
+- *   **Evidence**: Tests must output `Screenshots` + `TraceIDs` + `ActionHashes`.
+- *   **Provenance**: Template Source + Render Inputs + Output Hash = `LegalProof`.
+- **STATUS**: READY FOR PHASE 2 SCAFFOLDING (NO MORE GAPS)
+- ## 176. Atomic UI Component Contracts
+- 1.  **Registry**: `contracts/ui/ui_component_library_contract_v1.json`.
+- ## 177. Dynamic Functionality & Feature Flags
+- 1.  **Registry**: `contracts/registry/dynamic_functionality_registry_v1.json`.
+- *   **Toggles**: `EnableFeature(NewPaymentFlow, TenantID=123)`.
+- *   **Lifecycle**: Flags MUST have `ExpirationDate`. Stale flags trigger `BuildWarning`.
+- **STATUS**: READY FOR PHASE 2 SCAFFOLDING (THE ANSWER TO EVERYTHING)
+- *   **Logic**: `UserScopes` -> `DefaultScope` or `BlockAmbiguity`.
+- *   **Physics**: Agent gets `Lease(TaskID, 10min)`. Renew required.
+- *   **Gate**: `Feedback` -> `CandidateRule` -> `ValidationSuite` -> `PromotedRule`.
+- ## 188. UI Contract Compiler Spec
+- 1.  **Spec**: `contracts/ui/ui_contract_compiler_spec_v1.json`.
+- *   **Output**: Generates `GuardCode`, `Validators`, `TestScaffolds`.
+- *   **Output**: `Hash` + `StructuredLog` -> "Action X took place because Policy Y matched Fact Z."
+- **STATUS**: READY FOR PHASE 2 SCAFFOLDING (THE END OF PLANNING)
+- *   **Rule**: Build FAILS if any Mandatory Contract lacks a Reference Module.
+- *   **Check**: `SpecClosure`, `EnforcementClosure`, `UIClosure`, `EvidenceClosure`, `OpsClosure`, `MigrationClosure`.
+- ## 197. UI Guard Generation Pipeline
+- 1.  **Pipeline**: `contracts/ui/ui_guard_generation_pipeline_v1.json`.
+- *   **Output**: `canExecute(Action)` function generated for Flutter.
+- ## 200. The Final "Buildable & Enforceable" Artifact Matrix (VTE 15.0)
+- ## 201. UI Route Authorization Compiler
+- 1.  **Compiler**: `contracts/ui/ui_route_authorization_compiler_v1.json`.
+- *   **Map**: `Route` -> `RequiredPerms` + `RequiredState` + `AllowedRoles`.
+- *   **Build**: Fails if any route is defined without an entry map.
+- *   **Impersonate**: `Support` requires `TicketID` + `Timebox`.
+- *   **Destructive**: `SuperAdmin` requires `DualControl` for config changes.
+- *   **Backpressure**: Defines UI degradation when limits overlap.
+- 1.  **Policy**: `contracts/ui/cross_device_session_conflict_policy_v1.json`.
+- *   **Auth**: `LegalTemplate` changes require `GeneralCounsel_Sign`.
+- *   **Violations**: Build fails if PII regex matches telemetry output.
+- *   **DLQ**: Explicit UI views for `InboundFail`, `DriftFail`, `NotifyFail`.
+- 1.  **Matrix**: `contracts/ui/frontend_performance_budget_matrix_v1.json`.
+- *   **GitOps**: All contract changes managed via PR with required checks.
+- *   **Evidence**: "Done" action requires `OutcomeProof` (e.g., Sent Message Hash or Note ID).
+- *   **TieBreak**: If multiple rules match, strict `RuleID` sort order applies. No ambiguity.
+- 1.  **Suite**: `contracts/kernel/binding_manifest_verification_suite_v1.json`.
+- *   **Gate**: Build **FAILS** if coverage < 100%.
+- *   **Workbench**: UI for `Reconcile` or `ForceTerminal`.
+- *   **Client**: Generates `RequestID` (UUIDv7).
+- "suite_id": "canary.day_in_life_v1",
+- "evidence_output": "artifacts/canary/day_in_life_evidence.json"
+- *   **Test**: Attempt bypass via `UI_Click`, `API_Call`, `DB_Insert`.
+- *   **UI**: Captures `RenderWarnings`, `UserConsent`.
+- ## 236. EXECUTION ORDER (PHASE 2 SCAFFOLDING)
+
+## Source: Implementation Plan 2A.txt
+- Task: Perform a read-only audit of the project for Feature X and report execution blockers to reach “Proven E2E” readiness.
+- E2E Proof Path: step-by-step execution path (UI → API → DB → worker → external side effect)
+- Fix Plan: minimal diffs + acceptance criteria + required tests (including negative canary)
+- A Release Readiness Dossier per feature/tenant that contains:
+
+## Source: Kevin Work Cycle.txt
+- i) Link to Open the Sheet  https://docs.google.com/spreadsheets/d/1cZWX-Io8v3M6MlKaTiBXkzwIG8QeuI-4U-Vif7uTdzQ/edit?usp=sharing
+- Task: Perform a read-only audit of the project for Feature X and report execution blockers to reach “Proven E2E” readiness.
+- E2E Proof Path: step-by-step execution path (UI → API → DB → worker → external side effect)
+- Fix Plan: minimal diffs + acceptance criteria + required tests (including negative canary)
+- A Release Readiness Dossier per feature/tenant that contains:
+- ## C. UI Contracts, Schema Alignment, and Drift Control (27–40)
+- ## E. State Machines, Idempotency, and UI Consistency (55–74)
+- 27. Is this planned **E2E** with a single traceable path: UI → API → DB → worker → external side effect?
+- ## 9) Email Categorization and Business Suite Coverage
+- ## 10) UI/UX, Cross-Platform, and Store/Policy Constraints
+- ## 14) Drift, Looping, and “Are We Still Building the Right Thing?”
+- 101. What is the comprehensive **last-mile checklist** per feature: gates, canaries, negative canaries, evidence, runbooks?
+- * **Task B2:** Add `ui_wiring_matrix.json` + tests that fail on drift.
+- * **Task D3:** Define degraded mode behavior + UI states + escalation queues.
+- * **Task F1:** Build a “security package” folder:
+- **Task:** Perform a read-only audit of Feature X and report blockers to reach “Proven E2E” readiness.
+- **Output (strict):**
+- Task: Perform a read‑only audit of Feature X across backend and frontend to reach “Proven E2E” readiness.
+- B2: Define a ui_wiring_matrix.json mapping UI fields to backend fields and write tests that fail on drift.
+- C2: Configure CI to store Playwright traces, screenshots and HAR files as build artifacts. These artifacts form part of the evidence bundle.
+- D3: Define degraded‑mode behavior for provider outages (e.g., queue messages for later, alert HITL) and ensure UI surfaces the state appropriately.
+- Hard Requirement: contracts/product/vte_product_scope_v2.json (Sole source of truth for features, roles, surfaces, prohibitions).
+- Hard Requirement: contracts/product/case_state_machine_v1.json (DB migrations + state guards + invalid transition tests).
+- Hard Requirement: contracts/product/scenario_coverage_matrix_v1.json (The "God object": Scenario -> Policy -> Allowed Actions -> Evidence).
+- Why it fails: External APIs fail. Without contracts, the UI lies, and audits fail.
+- Hard Requirement: contracts/product/data_surface_inventory_v1.json (Truth source per field, update authority, merge policy).
+- Why it fails: Compliance requires proving restraint (DNC, legal holds).
+- Hard Requirement: EVIDENCE.NON_ACTION_REASON evidence type + Gate enforcement.
+- Missing: A regulated daily-driver UI that loads tasks, binds fields, and blocks actions until safe.
+- Hard Requirement: frontend/src/features/workbench/ treated as a regulated surface.
+- GP-PROD-07: UI–Backend Truth Binding: Fails if UI shows unbound values.
+- Requirements: Target binding (URL/Identity), Evidence Type (DOM/Screenshot/OCR), Verification Rule (Exact/Logic), Failure Semantics.
+- Transitions: Valid paths, required evidence for entry/exit.
+- Phase 1: Foundation & Contracts [ ]
+- Phase 2: Core Architecture & Gate Enforcement [ ]
+- GP-PROD-07: UI–Backend Truth Binding
+- Phase 3: Evidence & Compliance [ ]
+- Phase 4: Operational Canaries [ ]
+- Phase 5: Operator Workbench (VTE 2.0 UI) [ ]
+- Phase 6: E2E Verification & Documentation [ ]
+- You didn’t include these, but they are required for correctness:
+- Why: Overlaps create duplicate reminders, duplicate review, and inconsistent UI.
+- Required order (example, non-negotiable):
+- Required fields:
+- linked_task_id: null | "task_uuid",
+- Rule: UI/labels/notifications must be derived from this record, not vice versa.
+- Required pipeline:
+- linked_task_id: null | "uuid",
+
+## Source: trello_dump.txt
+- Card: RAY - Quinnea Braxton (443) 703-6338 - I need an face to face appointment with someone asasp!!
+- Desc: ANCHOR Realty, NE 2200 Michener St., Suite 9 Philadelphia, PA 19115
+- Card: RENTAL ASSISTANCE PHASE 4 HELPLINE NUMBER
+- Card: Rental Suitability License has expired
+
+## Source: VTE Comprehensive Implementation Plan.txt
+- **Version**: 6.0.PHASE_1
+- 1.  **Financial Atomicity**: Zero funds move without `Idempotency-Key` (UUIDv4) and `Transaction_Lock` row in DB.
+- 5.  **Offline Resilience**: App functions Read/Write when API is 503/Down. Syncs via `MutationQueue`.
+- 10. **Schema Truth**: DB Schema is the Source of Truth. UI adapts to DB, not vice-versa.
+- 12. **Vendor Halt**: If Twilio/OpenAI errors > 10%, circuit breaker opens. Fallback to Email/Manual.
+- 20. **Psychological Safety**: UI warns human "This is high risk" before confirmation.
+- 28. **Insider Threat**: "Break-Glass" access requires 2-person approval (or heavy operational log).
+- 39. **UI Consistency**: Design System tokens (Colors/Type) enforced in code.
+- 3.  **Cost Circuit Breaker**: If OpenAI Spend > $X/hr, downgrade to "Rule-Based".
+- 11. **Confidence Score**: AI returns 0.0-1.0. UI displays "Low Confidence" visual.
+- 15. **Throughput**: HITL Dashboard warns if queue > 10 items/person.
+- 17. **Ontology Lock**: "Definition of Delinquency" defined in Shared Lib, not UI/PDF.
+- 34. **Feature Rot**: Usage tracking. < 5 uses/month -> Deprecate.
+- 40. **Stopping**: "Go/No-Go" checklist required for Release.
+- 5.  **Neg. Canary**: `negative_canary_suite` successfully FAILS on bad inputs.
+- 6.  **UI**: Verified on Mobile, Tablet, Desktop, Web.
+- 12. **Feature Flag**: Feature guarded by LaunchDarkly/EnvVar.
+- 13. **Seed Data**: Demo Tenant works with new feature.
+- 18. **Mobile**: Builds on iOS Simulator & Android Emulator.
+- 19. **Desktop**: Builds on Windows & macOS.
+- 29. **Empty State**: UI looks good with 0 data.
+- 30. **Error State**: UI handles 500/404/403 gracefully.
+- 35. **Dependencies**: `pubspec.yaml` / `requirements.txt` locked.
+- 36. **Artifacts**: Docker Image built & signed.
+- 37. **Evidence**: Screenshots of UI in PR.
+- 10. **Responsiveness**: `LayoutBuilder` + `Flex` used everywhere.
+- 36. **Voice**: TTS/STT matches UI language.
+- 13. **CI**: Paths-filter to only build changed apps.
+- 28. **Refactor**: Large refactors require "Refactor Plan".
+- 30. **Branches**: `feature/`, `fix/`, `release/`.
+- 32. **Review**: 1 approval required.
+- 33. **Build**: Parallel builds in CI.
+- 37. **Sync**: DB Models -> API Schemas -> UI Models strict chain.
+- 16. **Validation**: Pydantic input/output validation.
+- 31. **Circuit**: Breaker for dependent services.
+- 7.  **Ids**: UUIDv7 (Time-sortable) primary keys.
+- 34. **Extensions**: `uuid-ossp`, `pg_trgm`.
+- 7.  **Retry**: Exponential backoff built-in.
+- 9.  **Monitoring**: Flower Dashboard.
+- 24. **Dedup**: Prevent duplicate queuing.
+- 5.  **Metadata**: `tenant_id` (Required).
+- ## 11. "Universally Adaptive" UI Layout
+- 3.  **Widget**: `ResponsiveBuilder` wrapper.
+- 13. **Orientation**: Layout rebuilds on rotate.
+- 29. **Zoom**: UI Scaling support.
+- 3.  **UI**: Passive View (renders State).
+- 14. **Scoping**: Global vs Feature vs Page.
+- 26. **Selector**: `BlocSelector` for partial rebuilds.
+- 27. **Builder**: `BlocBuilder` for UI updates.
+- 31. **Separation**: No UI code in Bloc. No API code in Bloc.
+- 7.  **Idempotency**: UUID generated on Client.
+- 8.  **Optimistic**: Update UI immediately, queue Req.
+- 9.  **Rollback**: Revert UI if Sync fails (and not retryable).
+- ## 14. UI Contracts & Schema Alignment
+- 13. **Required**: Assert required fields.
+- 26. **Repo**: Separate from UI.
+- 4.  **Contrast**: 4.5:1 text, 3:1 UI.
+- 30. **Orientation**: Lock or Fluid? Fluid.
+- 14. **Custom**: Custom UI validation.
+- 7.  **UI**: `StartUpGate` checks Perms to hide/show UI.
+- 23. **UI**: "View As" capability for debugging (Dev only).
+- 26. **Security**: Role IDs are UUIDs.
+- 29. **Approval**: Role upgrade requires 2nd Admin approval.
+- 7.  **Access**: "View PII" requires explicit intent click (Audit).
+- 10. **Masking**: UI displays `***-**-1234`.
+- 39. **Review**: Privacy Impact Assessment (PIA) for new features.
+- 2.  **Negative**: `negative_canary_suite` attempts breaks.
+- 15. **Disaster**: Business Continuity Plan PDF.
+- # 🧭 SECTION 5: USER JOURNEYS & DASHBOARDS (HEADERS 21-25)
+- # 🧭 SECTION 5: USER JOURNEYS, DASHBOARDS & PERSONAS (HEADERS 21-25)
+- 19. **Done**: Redirect to Dashboard (Confetti).
+- 21. **Tour**: Interactive Tour (driver.js) of Key Features.
+- 1.  **Route**: `/admin/dashboard` (IP Whitelisted + VPN).
+- 9.  **Sales**: Lead Pipeline (New Inquiries, Demos Booked, Conversion Rate).
+- 12. **Feature**: Feature Flag Toggles (Global/Tenant/User Percentage).
+- ## 23. Tenant Admin & Team Dashboards (The Office)
+- 1.  **Route**: `/dashboard` (Context: Current Tenant).
+- 17. **Quick**: Quick Actions (+ Tenant, + Ticket).
+- 33. **Print**: "Print Dashboard" report.
+- 9.  **Output**: Edited response Preview.
+- 35. **Help**: "Policy Guide" sidebar (SOPs).
+- 39. **PDF**: Built-in PDF Viewer (No download).
+- 10. **Community**: Building Announcements / News.
+- 10. **Format**: JSON Output enforcement via Pydantic.
+- 19. **Functions**: OpenAI Function Calling for Tools (Database, Calculator).
+- 19. **Stream**: Stream progress to UI.
+- 30. **Output**: Intermediate JSON.
+- 37. **Sources**: AppFolio, Buildium, Yardi, RentManager.
+- 35. **Visualize**: Dashboard of Model Performance.
+- 15. **UI**: Elements Disabled/Hidden for Bot user role.
+- 17. **Draft**: AI can *Draft* notices (e.g., "Draft Pay or Quit") but NOT "Post".
+- 23. **Explanation**: UI says "AI cannot do this due to [PolicyName]".
+- 29. **Visual**: "Human Required" Icon ( 👤 ) on protected buttons.
+- 40. **Verify**: Verification in E2E Suite (Lawyer-Approved Tests).
+- 6.  **Reply**: Reply via Email/SMS from VTE Dashboard.
+- 8.  **Templates**: "Thank you for your payment" Quick Reply.
+- 11. **SLA**: "Reply Required by 5pm" indicator.
+- 9.  **Outbound**: Click-to-Call from Dashboard (Bridge).
+- 37. **Format**: Use Google Card Builder (JSON).
+- 9.  **Build**: Docker Buildkit (Layer Caching) for all apps.
+- 26. **Output**: Job Summary (Markdown) identifying failures clearly.
+- 27. **Debug**: Archive build logs for 90 days.
+- 28. **Policy**: Branch Protection (Require Signed Commits, 2 Reviews).
+- 38. **Neg-Canary**: Negative Canary Suite execution.
+- 39. **Proof**: Build Attestations (SLSA Level 2).
+- 40. **Sign-off**: Release Dossier link required for Prod.
+- 7.  **Dash**: "Golden Signals" Dashboard (Auto-provisioned).
+- 32. **Config**: Dashboards as Code (Jsonnet/Terraform).
+- 9.  **AI**: Token-Bucket Cost calculation (Input/Output).
+- 16. **Dashboard**: "Cost of Goods Sold" (COGS) per Tenant live.
+- 27. **Trial**: 14-day Trial (Card required vs No Card).
+- 32. **Upgrade**: UX-driven Upsell paths ("Unlock this feature").
+- 38. **Granularity**: Feature-level Cost Tracking.
+- 7.  **Contain**: Kill Switches (Feature Flags, Circuit Breakers).
+- # 🔧 SECTION 9: IMPLEMENTATION PHASES (HEADERS 41-45)
+- ## 41. Phase 1: Foundation (Weeks 1-3)
+- 14. **Artifacts**: Docker Build passing.
+- 39. **Plan**: Detailed Kanban for Phase 2.
+- ## 42. Phase 2: Core Data (Weeks 4-6)
+- 3.  **UI**: List/Create/Edit Pages for Core Models.
+- 4.  **Import**: "Magic Moment" Import Agent (Playwright) - Scrapes AppFolio/Buildium.
+- 5.  **Migration**: Data Migration Wizard for AppFolio, Yardi, Buildium Exports.
+- 15. **Dashboard**: Tenant Admin Dashboard v1.
+- 25. **Errors**: UI Error States.
+- 32. **Restore**: Soft-Delete Restore UI.
+- ## 43. Phase 3: Communication (Weeks 7-9)
+- 1.  **Inbox**: Unified Inbox UI (Email Threading).
+- ## 44. Phase 4: Intelligence (Weeks 10-12)
+- 6.  **HITL**: HITL Dashboard UI.
+- 21. **Explain**: "Why did AI do this?" UI.
+- ## 45. Phase 5: Hardening & Launch (Weeks 13-14)
+- 8.  **Monitor**: Dashboards & Alerts tuning.
+- 13. **Perf**: UI Perf tuning (Lighthouse).
+- 30. **Feature**: Flags Cleanup.
+- 6.  **Quota**: UI Alert "Quota Exceeded" -> Block sending, allow reading.
+- 13. **Degraded**: UI Banner "Email Delayed - Provider Issue" (Transparency).
+- 16. **Twilio**: Segment calculation (UCS-2 vs GSM-7) warning in UI.
+- 27. **Mock**: Mock Limits in Test Suite (Simulate 429).
+- 28. **Admin**: "Provider Status" Dashboard Widget.
+- 32. **Safety**: Circuit Breakers open after 50% failure rate.
+- 33. **Dashboard**: User sees "Syncing..." spin state.
+- 21. **Screen**: DOM Snapshot captured for critical UI states.
+- 35. **UX**: "Evidence Locker" in Admin Dashboard.
+- 6.  **Drift**: Schema Drift fails the build.
+- 7.  **Silo**: Dependency Rule Violation fails the build.
+- 8.  **Cost**: Performance Regression fails the build.
+- 9.  **Security**: Vulnerability found fails the build.
+- 10. **A11y**: Accessibility Score drop fails the build.
+- 11. **License**: GPL dependency fails the build.
+- 12. **Secret**: Found secret fails the build.
+- 13. **Coverage**: Drop in coverage fails the build.
+- 14. **Cycle**: Cyclic Import fails the build.
+- 15. **Dead**: Dead Code fails the build.
+- 16. **Format**: Bad Formatting fails the build.
+- 17. **Typing**: Type Error fails the build.
+- 18. **Docs**: Missing Docs fails the build (Public API).
+- 19. **Version**: Version mismatch fails the build.
+- 20. **Conflict**: Merge Conflict fails the build.
+- 22. **Manual**: Manual Gate requires "Dossier Link".
+- 39. **Result**: Green Build = Shippable Artifact.
+
+## Source: VTEAlready_Implemented.txt
+- *   **The Problem**: Kevin makes mistakes. He texts "Pay up" to a dead tenant (Lawsuit). He forgets to evict (Revenue Loss).
+- *   **Output**: A cryptographically signed **Permit** for every action (Text, Email, Charge).
+- *   **Required Build**:
+- *   **Required Build**:
+- ### ⚡ PHASE 1: THE NERVOUS SYSTEM (Async + Auth)
+- ### ⚡ PHASE 2: THE HANDS (Connectors)
+- 1.  **Google**: Build `spine/adapters/google` (Real Gmail/Sheets).
+- 2.  **AppFolio**: Build `spine/adapters/appfolio` (Real Playwright Driver).
+- ### ⚡ PHASE 3: THE BODY (Subsystems)
+- ### ⚡ PHASE 4: THE FACE (Frontend)
+
+## Source: Kevin Work Cycle.txt
+- i) Link to Open the Sheet  https://docs.google.com/spreadsheets/d/1cZWX-Io8v3M6MlKaTiBXkzwIG8QeuI-4U-Vif7uTdzQ/edit?usp=sharing
+- Task: Perform a read-only audit of the project for Feature X and report execution blockers to reach “Proven E2E” readiness.
+- E2E Proof Path: step-by-step execution path (UI → API → DB → worker → external side effect)
+- Fix Plan: minimal diffs + acceptance criteria + required tests (including negative canary)
+- A Release Readiness Dossier per feature/tenant that contains:
+- ## C. UI Contracts, Schema Alignment, and Drift Control (27–40)
+- ## E. State Machines, Idempotency, and UI Consistency (55–74)
+- 27. Is this planned **E2E** with a single traceable path: UI → API → DB → worker → external side effect?
+- ## 9) Email Categorization and Business Suite Coverage
+- ## 10) UI/UX, Cross-Platform, and Store/Policy Constraints
+- ## 14) Drift, Looping, and “Are We Still Building the Right Thing?”
+- 101. What is the comprehensive **last-mile checklist** per feature: gates, canaries, negative canaries, evidence, runbooks?
+- * **Task B2:** Add `ui_wiring_matrix.json` + tests that fail on drift.
+- * **Task D3:** Define degraded mode behavior + UI states + escalation queues.
+- * **Task F1:** Build a “security package” folder:
+- **Task:** Perform a read-only audit of Feature X and report blockers to reach “Proven E2E” readiness.
+- **Output (strict):**
+- Task: Perform a read‑only audit of Feature X across backend and frontend to reach “Proven E2E” readiness.
+- B2: Define a ui_wiring_matrix.json mapping UI fields to backend fields and write tests that fail on drift.
+- C2: Configure CI to store Playwright traces, screenshots and HAR files as build artifacts. These artifacts form part of the evidence bundle.
+- D3: Define degraded‑mode behavior for provider outages (e.g., queue messages for later, alert HITL) and ensure UI surfaces the state appropriately.
+- Hard Requirement: contracts/product/vte_product_scope_v2.json (Sole source of truth for features, roles, surfaces, prohibitions).
+- Hard Requirement: contracts/product/case_state_machine_v1.json (DB migrations + state guards + invalid transition tests).
+- Hard Requirement: contracts/product/scenario_coverage_matrix_v1.json (The "God object": Scenario -> Policy -> Allowed Actions -> Evidence).
+- Why it fails: External APIs fail. Without contracts, the UI lies, and audits fail.
+- Hard Requirement: contracts/product/data_surface_inventory_v1.json (Truth source per field, update authority, merge policy).
+- Why it fails: Compliance requires proving restraint (DNC, legal holds).
+- Hard Requirement: EVIDENCE.NON_ACTION_REASON evidence type + Gate enforcement.
+- Missing: A regulated daily-driver UI that loads tasks, binds fields, and blocks actions until safe.
+- Hard Requirement: frontend/src/features/workbench/ treated as a regulated surface.
+- GP-PROD-07: UI–Backend Truth Binding: Fails if UI shows unbound values.
+- Requirements: Target binding (URL/Identity), Evidence Type (DOM/Screenshot/OCR), Verification Rule (Exact/Logic), Failure Semantics.
+- Transitions: Valid paths, required evidence for entry/exit.
+- Phase 1: Foundation & Contracts [ ]
+- Phase 2: Core Architecture & Gate Enforcement [ ]
+- GP-PROD-07: UI–Backend Truth Binding
+- Phase 3: Evidence & Compliance [ ]
+- Phase 4: Operational Canaries [ ]
+- Phase 5: Operator Workbench (VTE 2.0 UI) [ ]
+- Phase 6: E2E Verification & Documentation [ ]
+- You didn’t include these, but they are required for correctness:
+- Why: Overlaps create duplicate reminders, duplicate review, and inconsistent UI.
+- Required order (example, non-negotiable):
+- Required fields:
+- linked_task_id: null | "task_uuid",
+- Rule: UI/labels/notifications must be derived from this record, not vice versa.
+- Required pipeline:
+- linked_task_id: null | "uuid",
+
+## Source: AI Story and Journey.txt
+- WorkItem states drive UI modes + allowed actions:
+- Your requirements: UI must render state, blockers, trace link; STOP renders no execution controls.
+- Explicit: fail ⇒ HOLD-OUTSIDE_OUTREACH_WINDOW; UI shows next eligible window.
+- Acceptance: emergency stop blocks outbound actions; UI surfaces banner in DP; audit trail written.
+- Contracted endpoints exist for revoke + impact report; requirement: revocation freezes future actions and lists prior executed actions.
+- → (UI: bootstrap, read-only)
+- → (UI: live evidence fetch + identity match controls)
+- → (UI: ledger summary + unmapped label detector)
+- → (UI: deterministic gate inspector)
+- → (UI: decision artifact visible + reason codes)
+- → (UI: gates satisfied, preview now allowed)
+- → (UI: rendered template; template version; decision trace; compliance PASS/FAIL; allowed channels)
+- → (UI: execute controls enabled only when approved + compliance pass/override approvals)
+- → (UI: read-only summary; outcome exported; next task CTA)
+- Minimum required CI assertions:
+- 600 structured gaps across phases with:
+- You required both, so each journey below has:
+- HOLD requires a resolution event:
+- EXECUTION requires:
+- any upload requires:
+- Phase 10 — Deliverable: “E2E AI Stories / AI Journeys” (what you now have)
+- If you reply “Proceed”, I will output a fully expanded, agent-ready build pack in the same phase-wise structure containing:
+- Say: “Proceed with Agent Build Pack”.
+- This is the implementation-grade pack for AI agents to build the platform end-to-end under your locked constraints:
+- EXECUTION requires all gates: compliance PASS + approvals PASS + no emergency stop + no revocation + channel allowed.
+- All endpoints require:
+- "hold_code": "HOLD-APPROVAL_REQUIRED",
+- "reason_codes": ["RC_QUIET_HOURS", "RC_HIGH_BALANCE"],
+- "approval": "REQUIRED",
+- Important: rendered_preview.body is returned to UI but must never be stored in DB/logs. UI must treat it as ephemeral.
+- "required_level": "SINGLE",
+- Overrides require:
+- If HOLD: show HoldReason + required resolution action
+- Trigger: connector/RPA emits OTP required
+- This is the recommended order so agents can build and validate incrementally:
+- required: true
+- required: false
+- required: false
+- required: [code, message]
+- - HOLD-APPROVAL_REQUIRED
+- required: [work_item_id, risk_tier, current_state, created_at, correlation_id]
+- approval: { type: string, enum: [PASS, REQUIRED, FAIL, UNKNOWN] }
+- required: [decision_trace_id, policy_version_hash, reason_codes, gate_results]
+- required: [preview, execute, request_approval]
+- required: [work_item, decision_trace, actions_allowed]
+- required: [work_item_id, workspace_id, current_state, risk_tier, policy_version_hash, correlation_id]
+- required: [actor_role, actor_id, lease_seconds]
+- required: [work_item_id, claimed, lease_expires_at, correlation_id]
+- required: [channel, template_version, actor_role]
+- required: [status, reason_codes]
+- required: [preview_id, channel, rendered_preview, expires_at, compliance]
+- required: [subject, body]
+- required: [requested_mode, actor_role, channel, preview_id, confirmations]
+- required: [compliance_ack, approval_ack]
+- required: [run_id, status, mode_selected, correlation_id]
+- required: [work_item_id, required_level, reason_codes, requested_by_role]
+- required_level: { type: string, enum: [NONE, SINGLE, DUAL, EXTERNAL_OK] }
+- required: [approval_id, status]
+- required: [decision, actor_role, reason_code]
+- required: [work_item_id, confirmed_by_role, verification_method, evidence_ref, notes_redacted]
+- required: [actor_role, reason_code, freeze_future_actions]
+- required: [approval_id, status, impact_report_id]
+- required: [impact_report_id, executed_actions_summary]
+- required: [action, at]
+- required: [scope, reason_code, actor_role]
+- required: [stop_id, is_active]
+- required: [stop_id, reason_code, actor_role]
+- required: [work_item_id, state_history, decision_trace, execution_runs]
+- required: [state, at, result]
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- "required": ["event_id", "event_type", "occurred_at", "tenant_id", "workspace_id", "schema_version", "payload"],
+- "required_payload": ["source_event_id", "work_type", "risk_tier", "policy_version_hash"],
+- "required_payload": ["from_state", "to_state", "reason_codes"],
+- "required_payload": ["hold_code", "reason_codes", "owner_role"],
+- "required_payload": ["stop_code", "reason_codes"],
+- "required_payload": ["approval_id", "required_level"],
+- "required_level": { "type": "string", "enum": ["NONE","SINGLE","DUAL","EXTERNAL_OK"] }
+- "required_payload": ["approval_id", "status", "method"],
+- "required_payload": ["approval_id", "impact_report_id"],
+- "required_payload": ["run_id", "mode_selected"],
+- "required_payload": ["run_id", "step_name", "status"],
+- "required_payload": ["run_id", "outcome_code"],
+- "required_payload": ["escalation_id", "type", "session_id"],
+- "required_payload": ["escalation_id", "resolution_code"],
+- "required_payload": ["stop_id", "scope", "reason_code"],
+- "required_payload": ["drift_id", "severity"],
+- "required_payload": ["shadow_id", "reason_code"],
+- - STOP state: no execute controls rendered; no execute request allowed from UI.
+- - HOLD state: render HoldReason + required resolution CTA; block preview/execute as per actions_allowed.
+- UI rules:
+- - STOP => show StopBanner(stop_code) and disable/hide Preview/Execute UI.
+- - HOLD-APPROVAL_REQUIRED => "Request Approval"
+- - If expires_at passed => require regeneration (no cached display)
+- - POST /v1/approvals/request (optional UI, usually triggered by DP)
+- - Decision requires reason_code.
+- - Revoke requires reason_code and triggers impact report link.
+- - UI must show session expiry countdown and audit notices.
+- - name: Run oracle suite
+- - name: Prompt registry change requires approval
+- If you want, I can also output:
+- You asked “Proceed” again, so this extends the Agent Build Pack with three additional, agent-executable artifacts:
+- Phase 5 — Execution Service: API-first → RPA fallback → Hybrid (Algorithm Contract)
+- export function createTestClient(): {
+- export async function seedStopWorkItem(input: { stopCode: string }): Promise<{
+- export async function seedClaimableWorkItem(): Promise<{
+- export async function seedWorkItemReadyToExecute(): Promise<{
+- export async function seedApprovedWorkItemThenRevoke(): Promise<{
+- export async function seedWorkItemWithHistory(): Promise<{
+- I can output complete working code skeletons (not just interfaces) for:
+- { name: "address", re: /\b(street|st\.|ave|avenue|road|rd\.|blvd|lane|ln\.|apt|suite)\b/i }
+- export function dlpScanString(input: string, deny = DEFAULT_DENY_PATTERNS): DlpResult {
+- export function dlpScanUnknown(input: unknown, deny = DEFAULT_DENY_PATTERNS): DlpResult {
+- export function assertDlpOk(input: unknown, context: string): void {
+- export function redactObject<T extends Record<string, any>>(obj: T): Partial<T> {
+- export function toSafeLogValue(input: unknown): unknown {
+- function emit(level: LogLevel, ctx: LogContext, msg: string, meta?: unknown) {
+- export function createLogger(base: LogContext = {}): SafeLogger {
+- export function idempotencyScope(params: {
+- getApprovalGateStatus(work_item_id: string): Promise<"PASS" | "REQUIRED" | "FAIL">;
+- // Optional: "next allowed at" for quiet hours; only used in preview response, not persisted
+- export async function generateImpactReport(repo: ImpactReportRepo, approval_id: string, work_item_id: string): Promise<ImpactReport> {
+- report_id: `ir_${randomUUID()}`,
+- required_level: "SINGLE" | "DUAL" | "EXTERNAL_OK";
+- scope: { required_level: params.required_level, reason_codes: params.reason_codes }
+- getApprovalGateStatus(work_item_id: string): Promise<"PASS" | "REQUIRED" | "FAIL">;
+- event_id: `evt_${randomUUID()}`,
+- export function safeLoggingMiddleware(req: Request, res: Response, next: NextFunction) {
+- // NOTE: In real build, repo is a DB-backed implementation.
+- If you say “Proceed” again, I will output the DB repo implementations (pg) for:
+- Phase 2 — DB Migration: Idempotency Table
+- export function createPool(cfg: PgConfig): Pool {
+- export async function withTx<T>(pool: Pool, fn: (c: PoolClient) => Promise<T>): Promise<T> {
+- export async function q<T = any>(client: Pool | PoolClient, text: string, params: any[] = []): Promise<QueryResult<T>> {
+- function mapWorkItemRow(r: any): WorkItemRow {
+- async getApprovalGateStatus(work_item_id: string): Promise<"PASS" | "REQUIRED" | "FAIL"> {
+- function mapApproval(r: any): ApprovalRow {
+- function cryptoRandom(): string {
+- async getApprovalGateStatus(work_item_id: string): Promise<"PASS" | "REQUIRED" | "FAIL"> {
+- The execution repo derives compliance from DecisionTrace.gate_results. In a full build, you will:
+- If you say Proceed again, I will output the missing “pgRepo” for the Orchestrator’s event emission + state_history, including:
+- Phase 2 — DB Migration: Immutable Work Item State History
+- Phase 3 — DB Migration: Event Outbox (Optional but Recommended)
+- Phase 4 — Shared Events Package: Outbox Repo + Kafka Producer
+- function sleep(ms: number) {
+- function mapWorkItemRow(r: any): WorkItemRow {
+- async getApprovalGateStatus(work_item_id: string): Promise<"PASS" | "REQUIRED" | "FAIL"> {
+- outbox_id: `evt_${randomUUID()}`,
+- If you say Proceed, I will output:
+- export function topicForEventType(eventType: string): TopicName {
+- "build": "tsc -p tsconfig.json",
+- function env(name: string, def?: string) {
+- # Copy only what we need in a real build pipeline; for skeleton keep simple:
+- -- Optional: retention helper function. Deletes published outbox rows older than N days.
+- function requireRole(req: Request, allowed: string[]) {
+- export function replayRoutes(replaySvc: ReplayService) {
+- If you say Proceed again, I will output the auth/rbac package skeleton (RBAC matrix for all RL roles + HR-01/HR-02) and the K8s manifests to deploy:
+- This “Proceed” outputs the missing E2E components you requested:
+- Phase 2 — RBAC Model: Roles, Scopes, and Enforcement Philosophy
+- export function hasScope(role: Role, scope: Scope): boolean {
+- export function authorize(input: {
+- required_scope: Scope;
+- return { ok: false, code: "FORBIDDEN", detail: `missing_scope:${input.required_scope}` };
+- export function actorFromHeaders(req: Request): Actor {
+- export function requireScope(req: Request, scope: Scope, tenant_id: string, workspace_id?: string) {
+- const res = authorize({ actor, required_scope: scope, tenant_id, workspace_id });
+- Phase 6 — Baseline Security: Default Deny NetworkPolicy
+- Phase 10 — Reliability: PodDisruptionBudgets + Anti-Affinity
+- If you say Proceed, I will output:
+- This “proceed” outputs the next blocking E2E artifacts, file-by-file, exactly as promised:
+- function b64urlToBuf(s: string): Buffer {
+- function decodeJwtParts(token: string): { header: any; payload: any; signingInput: string; sig: Buffer } {
+- async function fetchJson(url: string, timeoutMs: number): Promise<any> {
+- async function getJwks(cfg: JwtVerifyConfig): Promise<Jwks> {
+- function rsaPublicKeyFromJwk(jwk: JwksKey): crypto.KeyObject {
+- function verifyRs256(signingInput: string, sig: Buffer, pub: crypto.KeyObject): boolean {
+- function assertClaims(cfg: JwtVerifyConfig, payload: any): VerifiedClaims {
+- export async function verifyJwt(cfg: JwtVerifyConfig, token: string): Promise<VerifiedClaims> {
+- function bearer(req: Request): string | null {
+- export function authMiddleware(cfg: JwtVerifyConfig) {
+- return async (req: Request, res: Response, next: NextFunction) => {
+- export function actorFromRequest(req: Request): Actor {
+- export function requireScope(req: Request, scope: Scope, tenant_id: string, workspace_id?: string) {
+- const res = authorize({ actor, required_scope: scope, tenant_id, workspace_id });
+- name: k8srequiredresources
+- kind: K8sRequiredResources
+- required:
+- required := input.parameters.required
+- missing := required[_]
+- kind: K8sRequiredResources
+- name: require-requests-limits
+- required: ["requests", "limits"]
+- msg := sprintf("image tag required (no implicit latest): %v -> %v", [c.name, c.image])
+- build-test:
+- - name: Typecheck/Build
+- run: npm run build
+- "build": "tsc -p tsconfig.base.json",
+- If you say Proceed again, I will output the JWT config wiring end-to-end:
+- Phase 2 — Config Package: Env Schema + Validation
+- // Fail-closed: missing required values cause process startup failure.
+- function required(name: keyof ServiceEnv, v: string | undefined): string {
+- function optional(name: keyof ServiceEnv, v: string | undefined): string | undefined {
+- function oneOf<T extends string>(name: string, v: string, allowed: readonly T[]): T {
+- function mustBeUrl(name: string, v: string): string {
+- export function loadEnv(overrides: Partial<Record<keyof ServiceEnv, string>> = {}): ServiceEnv {
+- export function jwtConfigFromEnv(env: ServiceEnv) {
+- Phase 3 — API Gateway: Full Server Wiring (Logging + Auth + Routes)
+- // Example: Execute route placeholder (forward to execution-service in real build)
+- Phase 4 — K8s: JWT Env Vars (ConfigMap + Secret)
+- If you say Proceed again, I will output one of the following E2E packs (you can just say “Proceed” and I’ll do both, but they are large):
+- This response delivers three E2E packs, each broken into sub-phases with file-by-file artifacts:
+- Phase 4 — Pack A Code: HTTPS Server + mTLS Validation
+- export function loadTlsMaterial(files: MtlsFiles) {
+- export function assertClientAuthorized(req: any, opts?: { allowedCommonNames?: string[] }) {
+- Phase 4.2 Example: make api-gateway listen on HTTPS internally
+- Phase 5 — Pack A K8s: Mount certs into pods + switch ports
+- Phase 6.1 Ingress annotations: rate limiting + timeouts + size
+- # Requires: kubectl, psql, envsubst
+- require() { if [[ -z "${!1:-}" ]]; then echo "Missing env: $1" >&2; exit 1; fi; }
+- require() { if [[ -z "${!1:-}" ]]; then echo "Missing env: $1" >&2; exit 1; fi; }
+- If you say Proceed again, I will deliver a SPIFFE/SPIRE-based mTLS upgrade plan in the same phased style, including:
+- Phase 2 — Architectural Choice: Why SPIFFE/SPIRE Here
+- Phase 5.1 Option 1 (Recommended): Registration by ServiceAccount + Namespace
+- require() { if [[ -z "${!1:-}" ]]; then echo "Missing env: $1" >&2; exit 1; fi; }
+- Phase 6 — Envoy Sidecar: mTLS Using SPIFFE SVIDs
+- require_client_certificate: true
+- Phase 7 — Authorization: Who Can Call Whom (SPIFFE ID Allowlist)
+- require_client_certificate: true
+- Phase 8.2 Optional: pass peer SPIFFE ID to app
+- This response delivers the complete per-service Envoy sidecar pack for your tenant-isolated namespace model, in phases, with file-by-file artifacts:
+- require_client_certificate: true
+- require_client_certificate: true
+- require_client_certificate: true
+- require_client_certificate: true
+- require_client_certificate: true
+- # Some SPIRE outputs include bundle separately; if bundle missing, reuse client.crt for CA just to avoid tool failure.
+- Phase 2 — Design: Local Egress Listeners per Upstream
+- Phase 3 — File: api-gateway Envoy Config (Inbound + Egress Origination)
+- require_client_certificate: true
+- Phase 4 — File: api-gateway Deployment Patch (Egress Base URLs)
+- function reqEnv(name: string): string {
+- Phase 6 — Deterministic Validation Add-on: Prove Egress Origination Works
+- After this phase:
+- This phase delivers the “hardening finish” pack in three sub-packs, each provided file-by-file:
+- Phase 2 — Pack D: Ingress → api-gateway mTLS
+- Phase 2.1 Option D1 (Pragmatic, recommended first): Public TLS at Ingress, internal link hardened by NetPol
+- Phase 2.2 Option D2 (Strictest): Ingress → api-gateway over mTLS with SPIFFE
+- Phase 3 — Pack E: Central Call-Graph Policy File
+- Phase 4 — Pack F: Generator (Policy → Envoy RBAC + NetPol + SPIRE entries)
+- outputs: {
+- Phase 6 — Optional: Envoy Config Placeholder Convention (Recommended)
+- The compiler assumes the schema from the previous phase:
+- function mkdirp(p) { fs.mkdirSync(p, { recursive: true }); }
+- require_client_certificate: true
+- outputs: {
+- Phase 7 — Required Wiring: How Services Consume Envoy ConfigMaps
+- Your deployment patches (from earlier phases) must mount the appropriate ConfigMap:
+- Phase 2.1 File: policy/templates/call-graph.template.yaml
+- Phase 3.1 File: infra/k8s/validation/mtls-validate-job.yaml
+- Phase 3.2 File: infra/k8s/validation/egress-validate-job.yaml
+- Phase 4.1 File: scripts/provision-tenant-e2e.sh
+- # Required env:
+- require() { if [[ -z "${!1:-}" ]]; then echo "Missing env: $1" >&2; exit 1; fi; }
+- req_bin() { command -v "$1" >/dev/null 2>&1 || { echo "Missing required binary: $1" >&2; exit 1; }; }
+- Phase 5.1 File: scripts/rollback-tenant-e2e.sh
+- require() { if [[ -z "${!1:-}" ]]; then echo "Missing env: $1" >&2; exit 1; fi; }
+- Phase 3.1 File: tenants/<TENANT_ID>/tenant-values.env
+- # Feature toggles
+- Phase 4.1 File: scripts/tenant-lib.sh
+- require() { if [[ -z "${!1:-}" ]]; then echo "Missing env: $1" >&2; exit 1; fi; }
+- command -v "$b" >/dev/null 2>&1 || { echo "Missing required binary: $b" >&2; exit 1; }
+- Phase 5.1 File: Makefile
+- echo "TENANT is required. Example: make tenant-up TENANT=acme" >&2; exit 1; \
+- Phase 6.1 File: tenants/<TENANT_ID>/README.md
+- # Phase 7 — CI Integration (Deterministic Reproducibility)
+- ## Phase 7.1 CI job command
+- Then change CI step to ensure generator runs but does not require git diff clean. In that case:
+- Phase 8 — Optional: “Tenant bundle” as a single file (strictest UX)
+- This phase delivers, file-by-file, an E2E “agent-proof” runner that:
+- Executes the tenant bring-up in deterministic phases:
+- Phase 3.1 File: tools/tenant_runner/schema.py
+- raise SchemaError(f"Missing required env: {k}")
+- # issuer often ends with '/' but not required
+- Phase 4 — Utilities: Env loader + command runner
+- Phase 4.1 File: tools/tenant_runner/utils.py
+- raise RuntimeError(f"Missing required binary: {b}")
+- Phase 5.1 File: tools/tenant_runner/reporting.py
+- Phase 6.1 File: tools/tenant_runner/kube_lock.py
+- acquired: bool = False
+- def acquire(self) -> None:
+- "acquireTime": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(now)),
+- if not self.acquired:
+- Phase 7.1 File: tools/tenant_runner/tenant_up.py
+- # Acquire idempotency lock
+- with step(report, "acquire_lock", {"lease": lock.lease_name}):
+- # Phase: create namespace
+- Phase 8.1 File: infra/k8s/rbac/tenant-runner-lease-rbac.yaml
+- Phase 9 — Makefile Update: Use Python Runner
+- Phase 9.1 File: tools/tenant_runner/__init__.py
+- Phase 3.1 UPDATE: tools/tenant_runner/reporting.py
+- Phase 4.1 NEW: tools/tenant_runner/postmortem.py
+- def build_postmortem_markdown(report: TenantUpReport) -> str:
+- if step_name == "acquire_lock":
+- Phase 5 — Runner Update: Write Both Reports + Include Postmortem
+- Phase 5.1 UPDATE: tools/tenant_runner/tenant_up.py
+- with step(report, "acquire_lock", {"lease": lock.lease_name}):
+- # Build postmortem only after final state is known
+- This phase upgrades the Python tenant runner to capture step-level command stdout/stderr, tail-limited, and attaches it to:
+- Phase 3.1 NEW: tools/tenant_runner/log_capture.py
+- # Common key=value secrets in outputs
+- Phase 4 — UPDATE Utils: Logged Command Runner
+- Phase 4.1 UPDATE: tools/tenant_runner/utils.py
+- Phase 5 — Runner Update: Debug Flags + StepLogger Wiring
+- Phase 5.1 UPDATE: tools/tenant_runner/tenant_up.py
+- with step(report, "acquire_lock", {"lease": lock.lease_name}) as s:
+- Phase 6 — Makefile Update: Debug Toggle (Optional)
+- This phase adds an operator-grade “doctor” tool that:
+- Phase 4 — NEW: Doctor Reporting Module
+- Phase 4.1 File: tools/tenant_runner/doctor_reporting.py
+- Phase 5 — NEW: Doctor Tool
+- Phase 5.1 File: tools/tenant_runner/doctor.py
+- f"List compiler outputs: `ls -R generated/tenant/{namespace}/envoy/configmaps`",
+- # heuristic: namespace appears in entries output
+- # validate_mtls / validate_egress / wait_rollouts commonly require these:
+- Phase 6.1 UPDATE: Makefile
+- This phase delivers a safe, tenant-scoped auto-remediation wrapper:
+- Phase 3.1 NEW: tools/tenant_runner/auto_reporting.py
+- Phase 4.1 NEW: tools/tenant_runner/auto_remediate.py
+- a.details["tenant_up_output_tail"] = text[-4000:] if len(text) > 4000 else text
+- # If tenant-up failed, require we have a JSON report
+- a.details["doctor_output_tail"] = text[-4000:] if len(text) > 4000 else text
+- # 3) Build safe remediation plan
+- Phase 4.1 File: tools/tenant_runner/guardrails.py
+- # if no namespace specified, this might target default/current; block to avoid ambiguity
+- Phase 5 — UPDATE: Utils to Enforce Guardrails + Dry-Run
+- Phase 5.1 File: tools/tenant_runner/utils.py (updated)
+- Phase 6 — UPDATE: tenant_up.py to Support --dry-run + Guardrails
+- Phase 7 — UPDATE: doctor.py Dry-Run Semantics
+- Phase 8 — UPDATE: auto_remediate.py Dry-Run Semantics
+- This phase adds plan-to-apply integrity so you can:
+- Phase 2 — Core Concept: “Plan” Is the Only Executable Contract
+- Phase 3 — NEW: Plan Integrity Module
+- Phase 3.1 File: tools/tenant_runner/plan_integrity.py
+- def require_signature(d: Dict[str, Any], required: bool) -> Tuple[bool, str]:
+- if not required:
+- Phase 5 — UPDATE: tenant_up.py to Emit and Apply a Plan
+- --require-signature: fail unless plan has signature fields
+- Phase 5.3 Concrete file change: add a “plan builder” section
+- def build_inputs_fingerprint(tenant_id: str, namespace: str, env_redacted: dict) -> dict:
+- Phase 7 — UPDATE: auto_remediate.py to Support Plans
+- You can later implement verification in plan_integrity.require_signature() for:
+- This phase adds a plan signing helper that:
+- Phase 3.1 UPDATE: tools/tenant_runner/plan_integrity.py
+- Add the following functions at the bottom of the file:
+- Phase 4.1 File: tools/tenant_runner/sign_plan.py
+- --path <file-or-dir> (required)
+- --require-signature (optional)
+- Phase 3.1 File: tools/tenant_runner/verify_plan.py
+- if allowed is not None and args.require_signature:
+- --require-signature \
+- Or if you don’t require signing in all branches:
+- Phase 6 — End State: Compliance-Grade Control Loop
+- This phase delivers a single operator + agent handbook:
+- Phase 2 — NEW File: tools/tenant_runner/README.md
+- - deterministic phases
+- ## 1) Prerequisites
+- ### 1.1 Required binaries on the execution host (CI runner / operator machine)
+- ### 1.2 Cluster prerequisites
+- ### 1.3 Repo prerequisites
+- Doctor outputs:
+- Auto-remediate outputs:
+- Output:
+- Require signing and allowed signature types:
+- --require-signature \
+- --require-signature \
+
+## Source: Customer Support Journey.txt
+- Replay output must be a redacted reconstruction:
+- UI renders:
+- UI renders:
+- If customer action required: provide exact UI path and required change (policy/template/routing).
+- If internal escalation required: open incident case and attach replay artifact references.
+- If you answer the Phase 0 questions, I will “lock” RBAC and produce the next increment as:
+- Output structure preference:
+- Phase 1 — Source Files: Confirmation Before I Read “File-by-File”
+- Output structure preference:
+- Build:
+- Below is the file-by-file extraction and then a phase-wise, linear, build-ready specification for:
+- Support UI must show CP vs DP sources of truth:
+- Support must operate on the “contracted” envelope: required IDs, hashes, correlation.
+- Support case creation requires contract validation:
+- Build order clarifies dependencies that Support features require:
+- Console UI expectations: operator mental model, state transitions, action gating, evidence panes.
+- Security and UI invariants:
+- “Support features” are not just UI—they require:
+- Implementation requirements:
+- P1 (Critical): Major feature down for a workspace; executions blocked; cannot operate business process.
+- Evidence bundle required: transcript/screenshot set + approval snapshot + replay reference.
+- Replay UI shows:
+- Support chooses category (simple UI label) mapped to deterministic code:
+- If “select cases”: customer admin approval required
+- Support opens Health Dashboard:
+- 7.6 Screen: AppFolio Health Dashboard (V1 yes)
+- Minimum services/modules required:
+- UI state tables: Yes/No
+- UI state tables: Yes
+- Every read/write endpoint requires workspace scoping, implemented as:
+- Header: X-Workspace-Id (required)
+- Optional: X-Org-Id (required for enterprise aggregation endpoints only)
+- required: true
+- description: Required workspace scope. All endpoints are workspace-scoped.
+- required: false
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- required: [error, request_id]
+- required: [code, message]
+- example: WORKSPACE_SCOPE_REQUIRED
+- required:
+- taxonomy_ui:
+- description: UI-friendly category label
+- approvals_required:
+- supervisor_required: { type: boolean, default: false }
+- customer_admin_required: { type: boolean, default: false }
+- required: [case_type, severity, channels, subject, description]
+- taxonomy_ui: { type: string }
+- required: [links]
+- required: [inbox_item_id, workspace_id, channel, received_at, payload_redacted, status]
+- required: [evidence_id, case_id, workspace_id, evidence_type, storage_ref, redaction_level, created_at]
+- required: [case_id, evidence_type, content_ref]
+- required: [work_item_id, workspace_id, state_history, decision_trace, execution_runs, redaction_level]
+- required: [state, at, result]
+- required: [event_id, workspace_id, event_type, actor_role, created_at, payload_hash]
+- required: [action_id, case_id, workspace_id, action_type, status, requested_by, created_at]
+- required: [case_id, action_type, target_ref, reason_code]
+- required: [approval_id, case_id, decision, actor_role, decided_at]
+- required: [workspace_id, connector_instance_id, collected_at, api_status, rpa_status]
+- required: [drift_id, workspace_id, status, selector_key, confidence_score, created_at]
+- required: [reason_code, patch_payload]
+- required: [case_id, payment_intent_id, amount_cents, currency, reason_code]
+- customer_admin_required: { type: boolean, default: false }
+- required: true
+- required: [items]
+- required: true
+- required: true
+- required: [items]
+- required: true
+- required: true
+- required: [case_id]
+- required: true
+- required: true
+- required: [items]
+- required: [items]
+- summary: Request a privileged support action (may require approvals)
+- required: true
+- required: true
+- required: [items]
+- required: true
+- required: true
+- required: [items]
+- required: true
+- required: [selector_key, confidence_score]
+- required: true
+- required: true
+- "required": [
+- "required": ["actor_id", "actor_role"],
+- "required": ["request_id"],
+- "required": ["case_type", "severity", "channels", "subject_redacted"],
+- "taxonomy_ui": { "type": "string" },
+- "required": ["from_status", "to_status"],
+- "required": ["closure_checklist"],
+- "required": ["customer_informed", "fix_deployed_or_plan", "policy_updated_if_needed", "refund_handled_if_needed"],
+- "required": ["work_item_id"],
+- "required": ["work_item_id", "state_count", "run_count"],
+- "required": ["work_item_id", "error_code"],
+- "required": ["action_type", "target_ref", "requested_severity"],
+- "requires_supervisor": { "type": "boolean" },
+- "requires_customer_admin": { "type": "boolean" }
+- "required": ["action_type", "execution_result"],
+- "required": ["approval_actor_role", "decision"],
+- "required": ["execution_result"],
+- Envelope: backward compatible only (never remove required fields)
+- You requested UI state tables at wireframe-level. Below are the core V1 screens with:
+- You already approved OpenAPI + events + UI states. The next logical “agent build accelerators” are:
+- -- SLA timestamps (denormalized for fast UI)
+- Non-P0 emergency stop: supervisor approval required
+- Stripe refunds: supervisor required + customer admin in select cases
+- "case": { "type": "INCIDENT", "severity": "P0", "customer_admin_required": false }
+- # Require workspace_id to be present
+- default decision = {"allowed": false, "requires": [], "auto_execute": false}
+- decision = {"allowed": true, "requires": [], "auto_execute": true} {
+- # Non-P0 emergency stop requires supervisor approval
+- decision = {"allowed": true, "requires": ["HR-02"], "auto_execute": false} {
+- # Freeze workflow requires supervisor if customer-impacting (simplified)
+- decision = {"allowed": true, "requires": ["HR-02"], "auto_execute": false} {
+- # Revoke approval allowed; supervisor required if customer-admin required
+- decision = {"allowed": true, "requires": reqs, "auto_execute": false} {
+- # Connector quarantine / rotate credentials allowed; require supervisor when not incident P0
+- decision = {"allowed": true, "requires": ["HR-02"], "auto_execute": false} {
+- decision = {"allowed": true, "requires": ["HR-02"], "auto_execute": false} {
+- decision = {"allowed": true, "requires": [], "auto_execute": false} {
+- # Stripe refunds: supervisor required; customer admin required if flagged select case
+- decision = {"allowed": true, "requires": reqs, "auto_execute": false} {
+- Output:
+- If you want full agent autonomy for build/deploy, the remaining “hard artifacts” are:
+- You requested three additional build artifacts:
+- Your Support UI needs fast list views and dashboards without expensive joins across:
+- Read model: projection tables updated by consumers for O(1) UI queries
+- Health dashboard: SELECT * FROM rm_appfolio_health_current WHERE workspace_id=? ORDER BY collected_at DESC
+- "required": ["registry_version", "provider", "flows"],
+- "required": ["flow_key", "pages"],
+- "required": ["page_key", "signature", "elements"],
+- "required": ["signature_hash", "signature_version"],
+- "required": ["element_key", "primary", "fallbacks", "constraints"],
+- "required": ["kind", "value"],
+- "visible_required": { "type": "boolean", "default": true }
+- "visible_required": true,
+- "constraints": { "visible_required": true }
+- ui_category: simplified UI category
+- evidence_required: transcript/screenshot/video flags
+- "ui_category": "Configuration",
+- "evidence_required": { "transcript": false, "screenshot": true, "incident_video": false }
+- "ui_category": "Approvals & Governance",
+- "evidence_required": { "transcript": true, "screenshot": true, "incident_video": false }
+- "ui_category": "Approvals & Governance",
+- "evidence_required": { "transcript": true, "screenshot": false, "incident_video": false }
+- "ui_category": "Idempotency",
+- "evidence_required": { "transcript": false, "screenshot": false, "incident_video": false }
+- "ui_category": "AppFolio API",
+- "evidence_required": { "transcript": true, "screenshot": false, "incident_video": false }
+- "ui_category": "AppFolio API",
+- "evidence_required": { "transcript": false, "screenshot": false, "incident_video": false }
+- "ui_category": "RPA / Selector Drift",
+- "evidence_required": { "transcript": true, "screenshot": true, "incident_video": false }
+- "ui_category": "RPA / Selector Drift",
+- "evidence_required": { "transcript": true, "screenshot": true, "incident_video": false }
+- "code": "HITL_OTP_REQUIRED",
+- "ui_category": "MFA / OTP",
+- "evidence_required": { "transcript": true, "screenshot": true, "incident_video": false }
+- "ui_category": "MFA / OTP",
+- "evidence_required": { "transcript": true, "screenshot": true, "incident_video": true }
+- "ui_category": "Credentials",
+- "evidence_required": { "transcript": true, "screenshot": true, "incident_video": false }
+- "ui_category": "Compliance",
+- "evidence_required": { "transcript": true, "screenshot": true, "incident_video": false }
+- "ui_category": "Emergency Stop",
+- "evidence_required": { "transcript": true, "screenshot": true, "incident_video": true }
+- "ui_category": "Platform Runtime",
+- "evidence_required": { "transcript": true, "screenshot": false, "incident_video": false }
+- "code": "ROLLBACK_REQUIRED",
+- "ui_category": "Rollback",
+- "evidence_required": { "transcript": true, "screenshot": false, "incident_video": false }
+- "ui_category": "Billing",
+- "evidence_required": { "transcript": true, "screenshot": false, "incident_video": false }
+- Note: SASL user/password wiring should be injected via Kubernetes Secrets (see Phase 6).
+- build_push_images:
+- - name: Build and push
+- uses: docker/build-push-action@v6
+- playwright_drift_suite:
+- - name: Build OPA bundle tarball
+- needs: [build_push_images, validate_migrations, playwright_drift_suite, package_opa_bundle]
+- - API responses: `400 WORKSPACE_SCOPE_REQUIRED` or `403 WORKSPACE_ACCESS_DENIED`
+- - UI bug: workspace switcher not persisted
+- - Fix UI header propagation
+- - If enterprise aggregation is enabled, ensure org-level view still requires workspace drilldown
+- ## Audit Requirements
+- - If approval is required:
+- - If approval should not be required:
+- - Support may not bypass approval requirements by retrying blindly.
+- - Any policy/config change requires Supervisor approval and possibly Customer Admin approval.
+- ## Audit Requirements
+- ## Audit Requirements
+- ## Audit Requirements
+- - Health dashboard: elevated API error rate/latency
+- ## Audit Requirements
+- # RB-AF-SELECTOR-DRIFT — RPA Selector Drift / UI Change
+- ## Audit Requirements
+- # RB-AF-OTP-HITL — MFA/OTP Required or Failed
+- - Reason codes: `HITL_OTP_REQUIRED`, `HITL_OTP_FAILED`
+- - Health dashboard indicates MFA required
+- 3. If compromise suspected: quarantine connector immediately (Supervisor if required).
+- - Health dashboard returns auth_state=OK
+- ## Audit Requirements
+- - Dispute case may be required
+- ## Audit Requirements
+- ## Evidence Requirements
+- ## Closure Requirements
+- - All actions logged and approved where required
+- - Reason code: `ROLLBACK_REQUIRED`
+- - Drift patch regression requiring rollback
+- - Support case requires refund remediation
+- - Supervisor approval required for all refunds
+- - Customer admin approval required in select cases (flag on case)
+- ## Audit Requirements
+- Remaining “last-mile” artifacts that typically eliminate ambiguity for agents:
+- Phase 2 — Helm Chart: vte-app ✅
+- Required: must be present or service refuses to start
+- build: ./services/support-service
+- WORKSPACE_SCOPE_REQUIRED: "true"
+- build: ./services/selector-drift-service
+- WORKSPACE_SCOPE_REQUIRED: "true"
+- build: ./services/connector-health-service
+- WORKSPACE_SCOPE_REQUIRED: "true"
+- build: ./services/retention-enforcer
+- WORKSPACE_SCOPE_REQUIRED: "true"
+- build: ./services/support-console-backend
+- WORKSPACE_SCOPE_REQUIRED: "true"
+- UI_FEATURE_SELECTOR_DRIFT: "true"
+- UI_FEATURE_HEALTH_DASHBOARD: "true"
+- WORKSPACE_SCOPE_REQUIRED: "true"
+- WORKSPACE_SCOPE_REQUIRED: "true"
+- These choices affect final production hardening but do not block build/deploy:
+- If you reply, I will output the remaining concrete Terraform files:
+- Rationale: you have production governance features (approvals, audit, emergency stop). Losing Postgres = losing support case control-plane.
+- Phase 3 — EKS: Public Endpoint Restricted + Private Enabled
+- Phase 4 — RDS Postgres: Multi-AZ, Encrypted, Private, Production Safe
+- Phase 5 — MSK: TLS + IAM Auth + Private Brokers
+- Phase 10 — Terraform Helm Releases: Wire Real AWS Endpoints
+- RDS: Multi-AZ + encrypted + deletion protection + final snapshot required
+- If you want, I can also output:
+- "case":{"type":"INCIDENT","severity":"P0","customer_admin_required":false}
+- 3.2 Terraform: ACM certificate + DNS validation (Route53 required)
+- Option B: AWS CodeBuild pipeline for deploy stage
+- To be fully “zero ambiguity,” you’ll decide whether you want:
+- This is the key: private endpoint requires the runner inside the VPC.
+- Phase 5 — Extra: ALB HTTPS with ACM in Private-only Mode
+- echo "CONSOLE_URL is required, e.g. https://console.example.com/readyz"
+- A) Build/test jobs (GitHub-hosted): unchanged
+- Examples: lint/test, docker build/push, unit tests, packaging OPA bundle, terraform plan for infra.
+
+## Source: HITL Journey + Story.txt
+- This output is structured as:
+- Agent-Builder Spec Writer: produce implementation-ready artifacts (IDs, contracts, tests)
+- WorkItem state enum drives UI mode + allowed actions:
+- WorkItem transitions: HOLD → AWAITING_APPROVAL (or equivalent)
+- if approval required: transition to HOLD
+- If you answer the 5 questions at the top, I will lock a “zero-ambiguity final” version that also includes:
+- You’re right. My previous output did not follow your project operating rules in two critical ways:
+- These are the minimum decisions needed to lock “zero ambiguity” without rework:
+- This is structured in a strict Phase-wise, linear, deterministic manner with:
+- Rule: UI actions are derived from state + policy; no ad-hoc controls.
+- Then system requires:
+- You asked for “journey maps,” plural. For AI-agent build clarity, you need two views per journey:
+- Below is the Final E2E Human-in-the-Loop Specification rebuilt to fully align with:
+- Required fields:
+- Next Logical Step: Canonical HOLD/STOP Taxonomy (Reason Codes → Owners → SLA → Escalation → Required Artifacts)
+- approval_status (enum: NOT_REQUIRED, PENDING, APPROVED, REJECTED, EXPIRED, REVOKED)
+- T-03: CLAIMED → EVIDENCE_REQUIRED
+- T-04: EVIDENCE_REQUIRED → IDENTITY_CHECK
+- If you want strict sequencing, say Proceed and I will output:
+- approver_identity_verification_method (enum, required for external):
+- Each action requires:
+- Output:
+- else HOLD or EVIDENCE_REQUIRED (choose consistent rule; recommended: EVIDENCE_REQUIRED)
+- You explicitly require:
+- You require:
+- Contract requirements:
+- The next logical step is the PolicyBundle + SOP Engine Contract, because you explicitly require:
+- This contract implements your explicit requirement:
+- outputs (structured object):
+- Combine outputs using deterministic merge rules:
+- If sourcing requirements unmet:
+- Tabs required:
+- ledger feature summary:
+- Purpose: view approval requirements and status
+- Deterministic requirements:
+- UI renders:
+- The next logical step to enable “Design, Build, Deploy E2E” is:
+- Hard requirements:
+- required: true
+- required: false
+- required: true
+- required: true
+- required: true
+- required: [error_code, error_type, message, owner_role, audit_event_emitted]
+- - EVIDENCE_REQUIRED
+- - ROLLBACK_REQUIRED
+- enum: [NOT_REQUIRED, PENDING, APPROVED, REJECTED, EXPIRED, REVOKED]
+- approval_required: { type: boolean }
+- edit_requires_supervisor: { type: boolean }
+- required: [work_item_id, state, priority_tier, risk_tier, created_at, sla_deadline_at]
+- approval_required: { type: boolean }
+- required: [items]
+- required: [assignee_role]
+- required: [fetch_reason]
+- required: [requested_approver_role, scope]
+- required: [decision_reason_code]
+- required: [action_type, channels_allowed, time_constraints, template_constraints]
+- required: [template_edit_policy]
+- required: [valid_from_at, expires_at]
+- required: [days, start_time, end_time]
+- requires_dual_control_for_override: { type: boolean }
+- required: [approver_role, verification_method, external_channel, external_timestamp_claimed_at, scope, external_artifact_summary_hash]
+- required: [diff_hash, diff_format_version]
+- required: [channel, channel_idempotency_key]
+- required: [execution_outcome_code]
+- required: [security, compliance, eligibility, approval, tone, sourcing, escalation]
+- required: [rule_id, rule_version, rule_type, severity, priority, enabled, action, conditions, outputs]
+- enum: [ALLOW, BLOCK, REQUIRE_APPROVAL, REQUIRE_OVERRIDE_DUAL_CONTROL, WARN, ROUTE_TO_HOLD_OWNER, STOP]
+- outputs:
+- description: "Typed outputs; see policy contract."
+- required: false
+- required: false
+- required: false
+- required: false
+- required: true
+- required: true
+- required: true
+- summary: Submit message edit diff (requires HR-02 approval).
+- required: true
+- description: Updated WorkItem (typically HOLD-EDIT_REQUIRES_SUPERVISOR)
+- required: true
+- description: Updated WorkItem (EXECUTING, HOLD-OTP_REQUIRED, HOLD-CHALLENGE_DETECTED, COMPLETE)
+- required: true
+- required: false
+- required: false
+- required: false
+- required: true
+- required: true
+- required: true
+- summary: Revoke approval (immediate freeze; executed-before list required if any steps ran).
+- required: true
+- required: [revocation_reason_code]
+- required: true
+- required: true
+- required: true
+- required: false
+- required: true
+- required: true
+- "required": ["event_id", "topic", "timestamp", "payload", "payload_hash", "policy_bundle_version", "workflow_version"],
+- "required": ["rule_id","rule_version","rule_type","severity","priority","enabled","action","conditions","outputs"],
+- "action": { "type": "string", "enum": ["ALLOW","BLOCK","REQUIRE_APPROVAL","REQUIRE_OVERRIDE_DUAL_CONTROL","WARN","ROUTE_TO_HOLD_OWNER","STOP"] },
+- "outputs": { "type": "object" },
+- "required": ["event_type", "work_item_id", "workspace_id", "from_state", "to_state", "state_version", "allowed_actions"],
+- "required": ["event_type", "approval_id", "workspace_id", "work_item_id", "status", "scope_hash", "expires_at"],
+- "required": ["event_type","workspace_id","work_item_id","execution_run_id","execution_plan_hash"],
+- Stage 7: Build + Package
+- .PHONY: ci lint typecheck schema sql proto unit contract integration pii replay build
+- ci: lint typecheck schema sql proto unit contract integration pii replay build
+- build:
+- I can output a monorepo folder structure with:
+- .PHONY: ci lint typecheck schema sql proto unit contract integration pii replay build
+- ci: lint typecheck schema sql proto unit contract integration pii replay build
+- build:
+- required: true
+- required: false
+- required: true
+- required: true
+- required: true
+- required: [error_code, error_type, message, owner_role, audit_event_emitted]
+- - EVIDENCE_REQUIRED
+- - ROLLBACK_REQUIRED
+- enum: [NOT_REQUIRED, PENDING, APPROVED, REJECTED, EXPIRED, REVOKED]
+- approval_required: { type: boolean }
+- edit_requires_supervisor: { type: boolean }
+- required: false
+- required: false
+- required: false
+- required: false
+- approval_required: { type: boolean }
+- required: true
+- required: [assignee_role]
+- required: true
+- required: [fetch_reason]
+- required: true
+- required: [requested_approver_role, scope]
+- summary: Submit message edit diff (requires HR-02 approval).
+- required: true
+- required: [diff_hash, diff_format_version]
+- required: true
+- required: [channel, channel_idempotency_key]
+- required: true
+- required: [decision_reason_code]
+- required: true
+- required: [approver_role, verification_method, external_channel, external_timestamp_claimed_at, scope, external_artifact_summary_hash]
+- required: [action_type, channels_allowed, time_constraints, template_constraints]
+- required: [template_edit_policy]
+- required: [valid_from_at, expires_at]
+- "required": ["event_id", "topic", "timestamp", "payload", "payload_hash", "policy_bundle_version", "workflow_version"],
+- "required": ["event_type", "work_item_id", "workspace_id", "from_state", "to_state", "state_version", "allowed_actions"],
+- "required": ["event_type", "approval_id", "workspace_id", "work_item_id", "status", "scope_hash", "expires_at"],
+- "required": ["event_type","workspace_id","work_item_id","execution_run_id","execution_plan_hash"],
+- "required": ["rule_id","rule_version","rule_type","severity","priority","enabled","action","conditions","outputs"],
+- "action": { "type": "string", "enum": ["ALLOW","BLOCK","REQUIRE_APPROVAL","REQUIRE_OVERRIDE_DUAL_CONTROL","WARN","ROUTE_TO_HOLD_OWNER","STOP"] },
+- "outputs": { "type": "object" },
+
+## Source: Journey + Story Trials.txt
+- Below is the Ultra-Extensive, Sequential, Phase-Wise, Deterministic Journey + Story for:
+- UI: CP-SIGNUP-01
+- UI: CP-DASHBOARD-01
+- UI: CP-INTEGRATION-GOOGLE-01
+- UI: CP-INTEGRATION-APPFOLIO-01
+- UI: CP-WORKFLOW-EDITOR-01
+- UI: DP-WORK-QUEUE-01
+- If approval required:
+- Required Milestones:
+- If required next, I can produce:
+- Below is a fully deterministic, phase-wise, linear, implementation-grade Journey + Story for:
+- "workspace_id": "string (required)",
+- "work_item_id": "string (required)",
+- "correlation_id": "uuid (required)",
+- Onboarding requirements: POLICY_ONB_30D_V1
+- "correlation_id": "uuidv4",
+- Deterministic outputs:
+- "quiet_hours": {"start":"HH:MM","end":"HH:MM","tz":"IANA"},
+- "MEDIUM":"requires_approval",
+- "HIGH":"requires_approval"
+- "channels_requiring_approval": ["TWILIO_SMS","WHATSAPP","GOOGLE_CHAT","MS_TEAMS"],
+- "trial_mode": { "always_require_approval": true }
+- Deterministic capability detection output:
+- Surface: CP / Workflow Builder
+- Required transition sequence (allowed branches):
+- Because trial mode sets always_require_approval=true:
+- Feature flags example:
+- Approval requirements update example:
+- Trial: require approval always
+- Paid: require approval by risk/channel rules
+- Event: EVT_FEATURE_FLAGS_UPDATED must already have enabled them.
+- The system refuses ambiguity:
+- Below is the deep, deterministic, build-ready explanation of the three items you flagged as unclear:
+- I’ll do it phase-wise and in a way that an AI agent can turn directly into:
+- Output:
+- For build agents, SLA tiers matter because:
+- P3: functional bug with workaround / localized failure
+- PHASE 4 — JOURNEY MAP (CONSTANTS-LOCKED): JM-RL01-TRIAL-002
+- If not done, any DP execution that requires messaging must yield:
+- Required transition chain:
+- If exceeded: HOLD-QUOTA-EXECUTION-THROTTLED (next eligible timestamp required)
+- PHASE 5 — NEW USER (RL-01) ONBOARDING ENGINE: ONB-30D-001 (MILESTONE-BASED)
+- You required: milestone-based completion; 30 days is a cap, not auto-complete.
+- PHASE 7 — STORY (CONSTANTS-LOCKED): ST-RL01-TRIAL-002
+- "workspace_id": "string (required)",
+- "work_item_id": "string (required unless CP-only; use 'N/A')",
+- "correlation_id": "uuid (required)",
+- PHASE 2 — ENTITLEMENTS: DATA MODEL (CANONICAL CONTRACT)
+- "feature_flags": {
+- PHASE 3 — ENTITLEMENTS: BUNDLES (LOCKED VALUES)
+- approval profile: AP_TRIAL_STRICT_V1 (always_require_approval=true)
+- paid channel features: all false
+- paid channel features: true
+- PHASE 4 — ENTITLEMENTS: STORAGE (DB SCHEMA) AND IMMUTABILITY
+- PHASE 5 — METERING: USAGE EVENT SPEC (CANONICAL)
+- "correlation_id": "uuidv4",
+- PHASE 6 — METERING: COUNTERS, WINDOWS, AND DEDUP (DETERMINISTIC)
+- Required dedup table: usage_event_dedup
+- Request requires:
+- PHASE 1 — APPROVAL: CANONICAL DATA MODEL
+- "default_decision": "REQUIRE_APPROVAL|AUTO_APPROVE",
+- "approval_required_when": [],
+- "approval_not_required_when": [],
+- "approval_decision": "AUTO_APPROVE|REQUIRE_APPROVAL|STOP",
+- "reason_code": "NONE|HOLD-APPROVAL-REQUIRED|STOP-POLICY-VIOLATION",
+- "required_responses": 1,
+- Goal: Trial is safe-by-default; always require approval before any execution side effects.
+- "default_decision": "REQUIRE_APPROVAL",
+- "approval_required_when": [
+- "requirement": {
+- "required_responses": 1,
+- "approval_not_required_when": [],
+- "hold_reason_code": "HOLD-APPROVAL-REQUIRED"
+- "audit_required": true
+- Goal: Reduce friction; approvals required only for higher-risk actions, paid-only channels, or policy-defined conditions.
+- "approval_required_when": [
+- "requirement": {
+- "required_responses": 1,
+- "reason": "PAID_RISK_OR_CHANNEL_REQUIRES_APPROVAL"
+- "approval_not_required_when": [
+- "hold_reason_code": "HOLD-APPROVAL-REQUIRED"
+- "audit_required": true
+- Goal: Highest control. Optional two-person approval for high risk. Stronger routing and shorter TTL, 24x7 expectation.
+- "approval_required_when": [
+- "requirement": {
+- "required_responses": 1,
+- "reason": "ENT_RISK_OR_CHANNEL_REQUIRES_APPROVAL"
+- "requirement": {
+- "required_responses": 2,
+- "reason": "ENT_HIGH_RISK_REQUIRES_TWO_APPROVERS"
+- "approval_not_required_when": [
+- "hold_reason_code": "HOLD-APPROVAL-REQUIRED"
+- "audit_required": true
+- If mode=RISK_BASED and any required field missing:
+- RiskOutput must include:
+- If any required RiskInput field is missing or invalid:
+- PHASE 2 — SCHEMA REGISTRY: DESIGN PRINCIPLES (DETERMINISTIC, VERSIONED)
+- "required": [
+- "required": [
+- "required": ["is_quiet_hours","local_time_bucket"],
+- "is_quiet_hours": { "type": "boolean" },
+- "required": ["ledger_parse_confidence","identity_confidence"],
+- "required": ["jurisdiction_tag","compliance_rule_hash"],
+- 3.3 Schema: vte.risk_output.v1
+- "$id": "vte.risk_output.v1",
+- "required": [
+- "required": ["event_type","event_body"],
+- "required": [
+- "risk_output": { "$ref": "vte.risk_output.v1" }
+- "required": ["event_type","event_body"],
+- "required": [
+- "enum": ["MISSING_REQUIRED_FIELD","INVALID_ENUM_VALUE","INVALID_RANGE","SCHEMA_VALIDATION_FAILED"]
+- Paid: risk_score=70 triggers approval required
+- Enterprise: risk_score=50 triggers approval required
+- Enterprise: risk_score=85 triggers required_responses=2
+- "required": ["event_type","event_body"],
+- "required": [
+- "risk_output": { "$ref": "vte.risk_output.v1" }
+- "required": ["event_type","event_body"],
+- "required": [
+- If you want the next deterministic “build pack”, the correct order is:
+- Deterministic requirement: DP must be able to retrieve the exact tables corresponding to those table hashes, not merely the bundle header.
+- PHASE 3 — CONTROL PLANE: STORAGE MODEL (DB TABLES)
+- PHASE 4 — CONTROL PLANE: DRAFT → COMPILE → PUBLISH WORKFLOW (DETERMINISTIC)
+- Create bundle header JSON (as in Phase 2.2), then compute:
+- PHASE 5 — CONTROL PLANE: APIS (COMPILER + QUERY)
+- For DP scoring events: partition key = workspace_id (as previously required)
+- PHASE 7 — DATA PLANE: RISK POLICY RESOLVER (PURPOSE AND CONTRACT)
+- PHASE 8 — DATA PLANE: RESOLVER STORAGE + CACHING
+- PHASE 9 — DATA PLANE: RESOLVER APIS (INTERNAL)
+- PHASE 10 — DP RESOLVER CONSUMER: LISTEN TO PUBLISH EVENTS
+- Determinism note: cache warming is an optimization; not required for correctness.
+- QUIET_HOURS:
+- Compiler produces four outputs:
+- Deterministic requirement: Both editors must produce identical RPDSL canonical text when exported.
+- Validation outputs:
+- Outputs:
+- Publish action requires:
+- PHASE 7 — CP ADMIN UX: SCREEN-LEVEL ACCEPTANCE CRITERIA
+- Build artifacts: canonical JSON tables + hashes + bundle snapshot header
+- (optional: shared library reference, not required here)
+- feature/*: PR branches
+- Recommendation for simplicity: feature branches → PR → merge to main → publish.
+- For paid: crossing 70 boundary changes approval requirement
+- "build_sha": "def456..."
+- PHASE 3 — GITHUB ACTIONS: CI (PULL REQUEST) WORKFLOW YAML
+- # Expected outputs produced by compiler:
+- --expected-dir "${TEST_VECTORS_DIR}/expected_outputs" \
+- PHASE 4 — GITHUB ACTIONS: CD (MAIN MERGE) WORKFLOW YAML
+- --expected-dir "${TEST_VECTORS_DIR}/expected_outputs" \
+- - name: Build Evidence Binder Package (local)
+- PHASE 5 — AWS IAM: OIDC ROLE FOR GITHUB ACTIONS (PUBLISH PIPELINE)
+- PHASE 6 — AWS KMS: SIGNING KEY + KEY POLICY (FOR CP COMPILER SIGNING)
+- PHASE 8 — THREAT MODEL: POLICY SUPPLY CHAIN (STRUCTURED)
+- Branch protection: require PR, require ≥2 approvals, require status checks, signed commits
+- Threat B1: CI runner injects modified compile outputs
+- Require status checks:
+- Deterministic ownership requirements:
+- Operational note (deterministic): CODEOWNERS alone does not enforce review; branch protection must require CODEOWNERS review (Phase 2).
+- # Required status check contexts — MUST match your workflow job names or check run names.
+- # Optional: require signed commits (GitHub setting; not always available in provider)
+- # required_linear_history = true  # enable if supported by provider version
+- Deterministic requirement: The contexts string(s) must match the check run names exactly. If you change workflow job names, update this list.
+- Branch protection requires:
+- Note: github_repository_file requires repo contents write access, and branch protection requires admin-level privileges.
+- Required variable: CloudTrail log group
+- - GitHub CODEOWNERS + branch protection (2-person rule support via protection + required checks)
+- - Confirm the required status check context name matches your actual workflow check.
+
+## Source: Sales Journey and Map.txt
+- Qualification rubric: what minimum fields are required before “Qualified”?
+- Because you also require progress without stalling, I will proceed using explicit defaults:
+- Output includes: lead_id, workspace_prospect_id.
+- Sales Console module: PipelineDashboard (committed task)
+- Determinism rule: stage shown is always backend-provided; UI never infers stage.
+- This map emphasizes your determinism constraint: backend signals drive stage; UI never infers.
+- Determinism: “no UI-side inference of conversion state.”
+- Qualification rubric: what minimum fields are required before “Qualified”?
+- Funnel Stage Source of Truth: Strictly backend telemetry (UI never infers)
+- We require:
+- Below is the next deterministic build pack you requested, in the required order:
+- Deterministic eventing: stage transitions occur via event processors and projectors, not UI mutations
+- X-Correlation-Id: required; generated at edge if missing
+- X-Idempotency-Key: required for all write endpoints
+- Authorization: Bearer <JWT>: required for authenticated endpoints
+- "correlation_id": "uuid-or-ulid",
+- "lead_id": "uuid",
+- "workspace_prospect_id": "uuid",
+- "lead_id": "uuid",
+- "demo_event_id": "uuid",
+- "lead_id": "uuid",
+- "workspace_prospect_id": "uuid",
+- "trial_handoff_id": "uuid",
+- "trial_handoff_id": "uuid",
+- "workspace_id": "uuid|null",
+- "entity_id": "uuid",
+- "entity_id": "uuid",
+- Fail-closed: missing required rubric inputs caps score and surfaces “NEEDS_INFO” reason
+- For each feature bucket, produce reason codes when they materially contribute:
+- Backend-truth funnel stage: UI must never infer stage; all stages are read models updated by event processors.
+- sales-projection: Funnel Projector and any read model builders
+- Validation rule: cannot set QUALIFIED unless all rubric required fields are present.
+- Invariant: UI reads funnel stage only from this table.
+- Outputs: lead_id, workspace_prospect_id, current stage, next actions
+- Outputs: paginated list with lead summary, funnel state, score, next action
+- Outputs: qualification, demos, funnel milestones, score reasons
+- Outputs: updated qualification status + stage
+- Outputs: demo object + stage update
+- Outputs: trial_handoff object status
+- Outputs: status, workspace_id if created, failure reason if failed
+- Outputs: stage + milestone timestamps
+- Outputs: score, grade, computed_at, top reasons
+- Outputs: usage milestones (metadata), upsell eligibility, renewal timeline
+- Outputs: renewal window, risk flags, playbooks
+- Outputs: winback stage and actions (metadata only)
+- PHASE 1 — EVENT-BASED TRIAL PROVISIONING: FINAL ARCHITECTURE (NO CODE)
+- Sales UI must:
+- Replaying Kafka topics from earliest offset must rebuild:
+- For a pipeline row, UI must render using:
+- UI must not compute:
+- BFF should compute “next action” as a rule output, never as an implicit inference:
+- Replaying all Kafka topics from offset 0 rebuilds:
+- UI shows: “Provisioning pending (Attempt #N)”.
+- PHASE 7 — OPERATIONS: RECONCILIATION AND STUCK ATTEMPTS
+- To implement append-only attempts correctly, the build must include:
+- Sales UI:
+- PHASE 4 — TRIAL-HANDOFF-SERVICE: AUTHORITATIVE PROCESSING RULES (OPTION A)
+- UI-visible result immediately: “Attempt #N pending”.
+- PHASE 5 — FUNNEL PROJECTOR: TRUTH-ONLY UPDATE RULES
+- PHASE 8 — SCORING: ATTEMPT-AWARE, DETERMINISTIC, EXPLAINABLE
+- Deploy UI/BFF updates:
+- Operational dashboards must be updated to show:
+- PHASE 4 — EVENTING: REQUIRED POST-SALE EVENT TYPES (NO CODE)
+- PHASE 7 — SCORING EXTENSION: RENEWAL/WINBACK/EXPANSION (DETERMINISTIC)
+- Extend sales-bff + UI dashboards for:
+- Hard UI rule:
+- PHASE 3 — SALES ORG CONSOLE: SCREEN-BY-SCREEN
+- Screen SALES-ORG-SCR-01: Pipeline Dashboard
+- Action hints: derived rule output (BFF)
+- Screen SALES-ORG-SCR-04: Activation Tracker Dashboard
+- Screen SALES-ORG-SCR-06: Expansion Dashboard
+- Screen SALES-ORG-SCR-08: Renewals Dashboard
+- Screen SALES-ORG-SCR-10: Winback Dashboard
+- PHASE 4 — TENANT SALES CONSOLE: SCREEN-BY-SCREEN
+- To build deterministically, define as catalogs (tables/config) not free text:
+- Pipeline query returns required nested objects:
+- Test E1: Required envelope fields present
+- (Implementation note: UI may show stage advanced while trial ledger pending; this must be treated as eventual consistency acceptable. See UI tests.)
+- These tests validate UI behavior against the doctrine: truth-only stage, ledger-only actions.
+- PHASE 4 — EVENT REGISTRY: ACQUISITION (LEAD + QUALIFICATION + DEMO)
+- Required payload fields:
+- Required payload fields:
+- Required payload fields:
+- Producer: demo-service (via UI action or webhook)
+- Required payload fields:
+- PHASE 5 — EVENT REGISTRY: TRIAL PROVISIONING (MODE 1)
+- Required payload fields:
+- Required payload fields:
+- Required payload fields:
+- PHASE 6 — EVENT REGISTRY: ACTIVATION (WORKSPACE MILESTONES)
+- Required payload fields:
+- PHASE 7 — EVENT REGISTRY: BILLING + SUBSCRIPTION
+- Required payload fields:
+- PHASE 8 — EVENT REGISTRY: POST-SALE LEDGERS (EXPANSION / RENEWAL / WINBACK)
+- Breaking changes require major:
+- PHASE 2 — D1: SALES DOMAIN LOGICAL SERVICE MAP
+- Sales Web UI calls Sales BFF for:
+- PHASE 3 — D2: EVENT FLOW MAP (TOPICS + PRODUCERS/CONSUMERS)
+- PHASE 4 — D3: DATA STORAGE MAP (TRANSACTIONAL VS READ MODELS)
+- optional: dashboard aggregates (materialized views)
+- PHASE 5 — D4: DEPLOYMENT TOPOLOGY (AWS + EKS + NETWORK BOUNDARIES)
+- sales-edge: Sales Web UI, Sales BFF
+- PHASE 6 — D5: SECURITY & TRUST BOUNDARIES
+- PHASE 7 — D6: FAILURE MODES & RECOVERY PATHS
+- Key icon: idempotency key required
+- Automated IDOR suite: random workspace ids must 403
+- Control: hashing required for any personal identifiers.
+- If deletion request requires unlinking:
+- If required:
+- The Sales Domain AI layer is built as:
+- HITL Mode requires:
+- Minimum required average score: 4.5+
+- If all phases pass:
+- PHASE 3 — ISO 27001:2022 ANNEX A MAPPING
+- The Sales Domain is built on a deterministic, event-driven architecture designed to provide:
+- The platform is built around the following foundational principles:
+- Where identifiers are required:
+- Webhook endpoints require:
+- It is suitable for:
+- Objective:
+- This suite supports:
+
+## Source: Technical Architecture and Tech Stack.txt
+- Execution method for AppFolio: API-first, RPA-first (Playwright/Puppeteer), or hybrid? (the SOP implies UI navigation + OTP + cookie persistence)
+- Messaging channels: outbound SMS provider (Twilio/etc.) vs AppFolio built-in messaging vs Gmail only?
+- Auth: SSO/SAML required day-1 or later?
+- Compliance jurisdiction rules: US-only? state-specific quiet hours?
+- This is an execution directive: if an agent follows this, they can build deterministically.
+- Also defines mandatory outputs per work item:
+- Security requirements: RBAC/ABAC, audit, redaction, secrets, compliance gates
+- Compliance Officer: defines contact rules, quiet hours, DNC enforcement; audits
+- Kidneys: validate, redact, compliance gates (quiet hours, channel legality)
+- Schema (required fields):
+- decision_trace[]: {decision_table_id, inputs_hash, output, reason_code, timestamp}
+- approval: {required, status, approval_id}
+- Must output:
+- Brain builds execution context: workspace_id, correlation_id, pinned policy_version
+- APPROVED: requires Approval Engine state satisfied
+- App shell split: CP UI + DP Ops UI
+- UI doctrine: Apple-like feel; deterministic state-driven UX; HOLD/STOP first-class UI states
+- Contracted FE/BE sync: versioned APIs + schema validation; no “best effort UI”
+- PRD requirement: selection must be made in a dedicated “Streaming Substrate Selection UMP” using deterministic criteria:
+- Full UI/UX screen inventory (CP + DP) with:
+- Cloud choice (must be sealed in Phase-2/3): AWS vs GCP vs Azure vs on-prem?
+- Required files:
+- Required files:
+- Required files:
+- This phase defines CP data models and service boundaries in a way that respects the invariant:
+- Required files:
+- Policy precedence rule (explicit in build order):
+- constraints: allowed channels / required approval / next_eligible_at rules
+- Required files:
+- Required files:
+- Output: DecisionOutput (STOP/HOLD/CONTACT + reason_code + constraints)
+- Required files (from build order):
+- Required files (from build order):
+- (listed as “UMP-0302 — IDEMPOTENCY + RETRY ENGINE Files:” in the build order; implement under chapters/heart/ and chapters/brain/ integration points)
+- Required files: (build order lists this UMP; implement in ci/contract-tests/)
+- When Phase-0 + Phase-1 + Phase-2 are implemented, the system will have:
+- Execution method for AppFolio: API-first, RPA-first (Playwright/Puppeteer), or hybrid? (the SOP implies UI navigation + OTP + cookie persistence)
+- Messaging channels: outbound SMS provider (Twilio/etc.) vs AppFolio built-in messaging vs Gmail only?
+- Auth: SSO/SAML required day-1 or later?
+- Compliance jurisdiction rules: US-only? state-specific quiet hours?
+- Messaging channels: AppFolio built-in messaging only (SMS via AppFolio channel), no Gmail SMS
+- Auth: Required Day-1 (SSO/SAML Day-1)
+- This seals a major execution design constraint and creates a new required organ-level abstraction: “Capability Router” for AppFolio.
+- Goal: determine at runtime whether the required operation is possible via API; otherwise RPA.
+- Phase-2C — Messaging Channel Sealed: AppFolio Built-in Messaging Only
+- Phase-2E — Compliance Model: Jurisdiction is Workspace/Operator Country
+- SQS FIFO can work but requires:
+- Hybrid AppFolio router requires CP to store:
+- EXECUTE OUTREACH (Phase 3: AppFolio messaging-only)
+- Messaging: AppFolio built-in messaging only (no external SMS provider; no Gmail SMS)
+- Auth day-1: SSO/SAML required
+- PHASE 3.1 — UMP-0401: Workflow Engine (Brain Runtime Core)
+- PHASE 3.2 — UMP-0402: Decision Compiler (Decision Tables → Executable Deterministic Functions)
+- 3.2.1 Deliverable: Compiled Decision Functions
+- Decision tables in VTE - Learn 2.txt must be compiled into pure functions with:
+- foundation/contracts/reason-codes.schema.json must include (minimum from your DT outputs):
+- plus Phase-3 additions needed for hybrid execution:
+- export function runMasterExec(inputs: MasterExecInputs): MasterExecOutput {
+- // 13) Channel allow (Phase-3 modified: AppFolio messaging only)
+- PHASE 3.3 — UMP-0403: HOLD/STOP Engine (Fail-Closed Taxonomy + Evidence Contract)
+- Your runtime spec requires:
+- HOLD output must include:
+- PHASE 3.4 — UMP-0404: AWS Streaming Integration (Lungs + Ordering + DLQ + Schema Hash)
+- PHASE 3.5 — UMP-0405: Hybrid AppFolio Router (API-first, RPA fallback per step)
+- Outputs:
+- Produces DecisionOutput artifact:
+- Because you require governance and approvals:
+- APPROVED checks if approval required (policy says so). If required:
+- After Phase 3 is built, you will have:
+- SQS FIFO fails multiple of these requirements:
+- Direct SAML inside CP violates this requirement because:
+- Your SOP requires:
+- AppFolio anti-bot posture: do you expect CAPTCHA / additional challenges? (Phase 4 designs a fail-closed “ChallengeDetected → HOLD” path.)
+- Scope (Phase 4):
+- Messaging: AppFolio built-in messaging only
+- Provide deterministic acquisition:
+- You stated OTP comes via text and requires Team Lead assistance. Since we cannot automate AppFolio OTP reception, the correct design is:
+- SOP requires:
+- PHASE 4.5 — AppFolio Hands: Built-in Messaging + Note Writing (RPA)
+- You provided three binding requirements that materially change the Phase-4 adapter architecture:
+- Fail-closed rule: if a workspace is configured for OAuth and no user token exists → HOLD SHEETS_OAUTH_REQUIRED.
+- In your CP UI: Integrations → Google Sheets → “Upload Service Account JSON”
+- Customer shares the required Sheets with the service account email:
+- CP UI runs verification:
+- To avoid friction, the CP UI must guide the user:
+- reason: OTP_REQUIRED
+- In CP UI: Integrations → Google Sheets → Upload JSON
+- Messaging: AppFolio built-in messaging only
+- quiet_hours:
+- - consent_required_for_marketing (future)
+- quiet_hours:
+- quiet_hours:
+- Approval required when:
+- Trigger: OTP_REQUIRED
+- Trigger: APPFOLIO_CHALLENGE_REQUIRES_HITL
+- After Phase 5 is implemented you will have:
+- You required:
+- After implementing this phase:
+- POST /cp/workspaces/:id/templates/:template_id/versions/:ver/edit-as-hitl (audit required)
+- You required:
+- Below is DELIVERY PHASE 8 — the Implementation-Ready Backlog converted into:
+- Agent-D: Observability dashboards
+- All outputs emit:
+- Dashboards:
+- After Phase 9:
+- If a required signal is missing or ambiguous, code must return:
+- Agent-9 (CP UI + Onboarding): wizard, templates editor, approvals console
+- Agent-10 (Observability/Infra): Terraform/CDK, dashboards, SLOs, DR
+- A build is “done” only when all are true:
+- Use this exact wrapper for each agent to keep outputs consistent:
+- - Fail-closed: ambiguity => HOLD with reason_code.
+- Every payload requires:
+- A build is complete only when:
+
+## Source: ULTRA-EXTENSIVE PRODUCT REQUIREMENT PRD - 1.txt
+- This is **PHASE-WISE, LINEAR, SEQUENTIAL** and written for:
+- # MASTER EXECUTION SPEC (PHASE-WISE)
+- # 0) OBJECTIVE
+- ### DecisionOutput
+- ### Objective
+- Required Files:
+- ### Objective
+- ### Objective
+- # 7) DECISION TABLE ENFORCEMENT (PRODUCT REQUIREMENTS)
+- # 8) UX / PRODUCT REQUIREMENTS
+- ## 8.1 Control Plane UI
+- ## 8.2 Data Plane UI
+- # 9) SECURITY REQUIREMENTS
+- # 11) PHASE-WISE IMPLEMENTATION PLAN
+- ## PHASE-0 — SYSTEM INVARIANTS
+- ## PHASE-1 — CONTROL PLANE
+- ## PHASE-2 — BRAIN RUNTIME
+- ## PHASE-3 — INGESTION + EXECUTION
+- ## PHASE-4 — RELIABILITY
+- ## PHASE-5 — UX + OPERATIONS
+- ## PHASE-6 — SCALE + GOVERNANCE
+- # 14) CHAPTER → TOPIC → PHASE → UMP EXPANSION
+- ### Objective
+- ### Phase FND-P1 — Pipe Envelope
+- ### Phase FND-P2 — DecisionOutput Schema
+- ### Phase FND-SEC-1 Redaction Engine
+- ### Phase FND-SEC-2 Boundary Linter
+- Features:
+- ### Phase SPN-P1 Schema Registry
+- ### Phase SPN-P2 Tenant Isolation
+- ### Phase BRN-P1 Workflow State Machine
+- ### Phase BRN-P2 Decision Engine Compiler
+- ### Phase BRN-P3 Approval Guard
+- ### Phase EYE-P1 AppFolio Parser
+- Functions:
+- ### Phase EYE-P2 Sheet Reader
+- Functions:
+- ## 15.1 Control Plane UI
+- ## 15.2 Data Plane UI
+- Agents must follow build order:
+- # 18) FAILURE HANDLING REQUIREMENTS
+- # 19) TESTING REQUIREMENTS
+- Your project depth requires a final expansion covering:
+- # FINAL PART 3 — DEPLOYMENT + UI + API + SECURITY
+- ## Objective
+- ### Required Services
+- ### Feature Rollout Requirements
+- # 21) FULL UI ARCHITECTURE
+- ## 21.1 Control Plane UI (Governance)
+- ### CP-SCR-01 Workspace Dashboard
+- Features:
+- ## 21.2 Data Plane UI (Operations)
+- ### DP-SCR-03 HOLD Dashboard
+- ## PIPE-02 — DecisionOutputEvent
+- Requirements:
+- ## 25.3 Observability Requirements
+- ### 2) **UI/UX was hand-wavy**
+- ### 3) **Enterprise/SaaS governance hard requirements**
+- Now: PRD encodes workspace-scoped requirements from your security gap material:
+- Previously: I didn’t bind PRD requirements to the XLSX register.
+- ### **Agent Build Pack**
+- * [Download VTE Agent Build Pack (ZIP)](sandbox:/mnt/data/VTE_Agent_Build_Pack.zip)
+- ### 3) **Decision tables extracted as build inputs**
+- ### 5) **UMP-by-UMP build prompts (agent-ready)**
+- ### 6) **UI/UX doctrine**
+- ### 8) **Execution spine + build order references**
+- Given your **VTE_Agent_Build_Pack.zip** (or extracted folder), it:
+- # Option A: build from the VTE Agent Pack ZIP
+- # Option B: build from extracted VTE_Agent_Build_Pack folder
+- ## What to build next
+- ## Output artifacts
+- ## Required checks
+- ## Build a CLI
+- # 6) UI Contract Validator
+- ## Build:
+- ## Quick start (in your real repo)
+- --pack /path/to/VTE_Agent_Build_Pack.zip \
+- ## Output conventions in your repo
+- * uses **Structured Outputs** (`response_format: { type: "json_schema", ... strict: true }`)
+- * `strict: true` schema adherence is the supported mechanism for deterministic structured output. ([OpenAI Platform][2])
+- [1]: https://platform.openai.com/docs/guides/prompting?utm_source=chatgpt.com "Prompting | OpenAI API"
+- * with strict JSON schema output:
+- --pack /path/to/VTE_Agent_Build_Pack.zip \
+- Requires:
+- Outputs `{ from, to, umps:[…sorted…] }` using:
+- Detects UMPs for range then runs D.6-equivalent verification for each:
+
+## Source: User Stories + Journey Maps.txt
+- ## Phase 0 — Zero-Ambiguity Questions (I will **not** write User Stories / Journey Maps until you answer)
+- ### 0.1 Scope & Output Control
+- ### 0.3 “Dynamic SOP” Requirement (Making it reusable for others)
+- ### 0.5 Deliverable Format (So agents can build E2E)
+- ## Phase 0 — What I will do immediately after you answer
+- ## Phase 1 — Resolve the 2 Remaining Ambiguities (Roles + “Primary user for daily SOP”)
+- * **Core actions:** Troubleshoot runs, view audit logs, diagnose provider issues, guide configuration changes.
+- * **Who:** Builds adapters, policies, workflows, debug tooling.
+- * **Why it matters:** Build/deploy E2E workflows.
+- * Produces: Approval inbox, escalations UI, reason-code governance.
+- ### Question P1 — Who is the primary user for Phase 1 Journeys?
+- # 3) One final operational ordering question (so Phase 1 starts cleanly)
+- ## Question O1 — Confirm the phase ordering
+- Once you send that, I will begin **Phase 1 deliverables**:
+- ## Phase 1 — Clarifying “Roles In Scope” (Rephrased, Concrete, Zero Abstraction)
+- Because every person type interacting with the system requires:
+- For Phase 1–3 delivery, should I write User Stories & Journey Maps for:
+- # Before I Begin Phase 1 Deliverable
+- # Phase 1 Deliverable (Golden Path — HITL First)
+- ## Phase 1 — Role Normalization & Structural Alignment (Before Writing 200+ Stories)
+- # Phase 1.1 — Role Deduplication & Canonical Mapping
+- # Phase 1.2 — Canonical Role Model (Proposed)
+- * Builds:
+- # Phase 1.3 — Authority Clarification You Stated
+- # Phase 1.4 — Critical Governance Question
+- # Phase 1.5 — Two Final Critical Questions Before Phase 1 Delivery
+- # Phase 2 — Golden Path (HITL Daily Execution Lifecycle)
+- ## Phase 1 — Governance Model Confirmation & Authority Encoding (Pre-Execution Lock)
+- # Phase 1.1 — Role Model Confirmation
+- # Phase 1.2 — HITL Authority Model (Formalized)
+- # Phase 1.3 — Critical Architectural Implications
+- # Phase 1.4 — Consent Flow Model (Very Important)
+- ### Question Before Phase 2 Begins
+- # Phase 1.5 — Final Confirmation Before Execution Phase
+- # Phase 2 — Golden Path (HITL Daily Execution Lifecycle)
+- Deliverables in Phase 2:
+- ## Phase 1 — Final Governance Lock (Hybrid Approval Model Formalization)
+- # Phase 1.6 — Approval Capture Architecture (Authoritative Model)
+- # Phase 1.7 — Critical Risk Question (Must Be Defined)
+- ### Option B — OTP Verification Required
+- # Phase 1.8 — Legal Authority Encoding
+- Does the system require:
+- # Phase 1.9 — Audit Model Lock
+- # Phase 1.10 — Approval Expiry Policy
+- # Phase 2 — Golden Path: HITL Daily Execution Lifecycle
+- ## Phase 1 — Governance & Consent Model Locked (Final Structural Contract Before Execution Stories)
+- # Phase 1.11 — Finalized Approval Architecture
+- # Phase 1.12 — Identity Verification Model
+- This requires:
+- # Phase 1.13 — Legal Authority Encoding
+- # Phase 1.14 — Audit Storage Model
+- # Phase 1.15 — Approval Expiry Model
+- # Phase 1.16 — Additional Implication (Critical)
+- # Phase 1.17 — Governance Model Summary (Locked So Far)
+- # One Final Lock Before Execution Phase
+- # Phase 2 Begins — Golden Path: HITL Daily Execution Lifecycle
+- # Phase 1 — Governance Model Fully Locked
+- # Phase 1.18 — Revocation Policy Finalization
+- # Phase 1.19 — Revocation Runtime Model
+- # Phase 1.20 — State Machine Extension (Approval States)
+- # Phase 1.21 — Audit Schema (Finalized)
+- # Phase 1.22 — Governance Model Is Now Stable
+- # PHASE 2 BEGINS
+- This phase will include:
+- # PHASE 2 — Section 1
+- # PHASE 2 — Section 2
+- # PHASE 2 — Section 3
+- # PHASE 2 — Section 4
+- Phase 2 has delivered:
+- # Phase 3 Will Expand To:
+- ## Phase 3 — Expansion Pack 1
+- # Phase 3.1 — Canonical Roles (Operational Meaning)
+- * **Primary purpose:** Resolve ambiguity, approve/reject holds, approve controlled changes (when configured), provide definitive decisions.
+- # Phase 3.2 — System Objects (What Must Exist for E2E Build)
+- # Phase 3.3 — User Stories (Deterministic IDs)
+- * Each item includes: context summary, proposed action, policy check result, required consent type(s)
+- * UI previews: “what tasks this will authorize”
+- ### US-CR02-CP-008 — Audit & Reporting Dashboard (Admin View)
+- * Override requires:
+- # Phase 3.4 — Journey Maps (Both Formats)
+- * Monitor dashboards:
+- # Phase 3.5 — Clean Boundary: What’s Done vs Next
+- ## Completed in Phase 3
+- ## Next Phase (Phase 4) — Expansion Pack 2
+- # Phase 4 — Expansion Pack 2
+- # Phase 4.1 — CR-01 Trial Owner / New User
+- # Phase 4.2 — Trial Onboarding Lifecycle (Stage-Based Journey)
+- # Phase 4.3 — User Stories (CR-01)
+- ### US-CR01-CP-004 — Trial Metrics Dashboard
+- # Phase 4.4 — CR-05 Standard User (Operational Recipient)
+- # Phase 4.5 — Standard User Journey (Stage-Based)
+- # Phase 4.6 — User Stories (CR-05)
+- # Phase 4.7 — HR-02 HITL Supervisor (Governance & QA)
+- # Phase 4.8 — Supervisor Journey (Stage-Based)
+- ### Stage 1 — Oversight Dashboard
+- # Phase 4.9 — User Stories (HR-02)
+- ### US-HR02-DP-004 — SLA Monitoring Dashboard
+- # Phase 4.10 — State Machine Extensions (Supervisor Layer)
+- # Phase 4.11 — Clean Boundary
+- Phase 4 delivered:
+- # Phase 5 Will Cover (Internal Platform Roles)
+- # Phase 5 — Internal Platform & Operations Layer
+- # Phase 5.1 — PR-01 Super Admin / Platform Ops
+- ### US-PR01-CP-003 — Provider Health Dashboard
+- # Phase 5.2 — PR-03 Customer Support
+- * Guide user to:
+- ### US-PR03-CP-003 — Dispute Case Dashboard
+- # Phase 5.3 — PR-04 Sales (Demo & Trial Automation)
+- ### Stage 2 — Guided Demo Mode
+- # Phase 5.4 — PR-02 Engineering (Platform Build & Deployment)
+- Builds and maintains:
+- # Phase 5.5 — Global State Machine (Platform Level)
+- # Phase 5.6 — What Is Now Covered (Full Option C Scope)
+- # Phase 6 — Data Architecture, Event Model, API Contracts & Runtime Topology
+- **Objective:** Convert all previously defined user stories and journeys into a deterministic, build-ready system specification covering:
+- # Phase 6.1 — Core Architectural Doctrine (Locked Constraints Recap)
+- # Phase 6.2 — High-Level System Topology
+- # Phase 6.3 — Multi-Tenant Isolation Model
+- # Phase 6.4 — Data Model (Schema-Level Definitions)
+- # Phase 6.5 — Event Taxonomy (Deterministic Audit Events)
+- # Phase 6.6 — Runtime Approval Evaluator (Deterministic Algorithm)
+- function evaluateApproval(task):
+- # Phase 6.7 — API Contract Structure (Logical)
+- # Phase 6.8 — Provider Adapter Interface (Abstract)
+- # Phase 6.9 — Fallback Orchestration
+- # Phase 6.10 — Security Model
+- 2. MFA required for:
+- # Phase 6.11 — Scalability Model
+- Horizontal scaling required for:
+- # Phase 6.12 — Observability Stack
+- # Phase 6.13 — Disaster Recovery
+- # Phase 6.14 — Clean Boundary
+- Phase 6 delivered:
+- # Next Possible Phase (Phase 7)
+- # Phase 7 — UI/UX Information Architecture + Screen-by-Screen Product Surface
+- **Objective:** Convert the deterministic runtime + executable system map into a **buildable UI spec** that matches:
+- This phase is aligned to the repo surfaces explicitly referenced in your runtime spec/system map:
+- ## Phase 7.1 — Global UX Principles (Non-Negotiable)
+- UI must be designed around:
+- ### 7.1.4 Risky Actions Require Review UI
+- Any action that triggers Hands (writes) requires:
+- ## Phase 7.2 — Primary Navigation Model (Role-Adaptive)
+- ## Phase 7.3 — Screen Inventory (Authoritative)
+- #### Screen A1 — Work Queue Dashboard
+- * Risk filter: compliance flagged, approval required, API degraded/RPA fallback
+- * Table: decision_table_id, inputs_hash, output, reason_code, timestamp
+- * Approve/Reject requires:
+- Features:
+- Features:
+- **Special rule:** user-specific template edits by HITL require supervisor consent and cannot change global.
+- Features:
+- Features:
+- ## Phase 7.4 — UI-State Mapping to WorkItem State Machine (Authoritative)
+- WorkItem state enum (from runtime contract/spec) maps to UI affordances:
+- ## Phase 7.5 — “No Silent Pages” Enforcement Checks (UI CI)
+- From system map: **UI state enforcement checks** + accessibility tests.
+- ## Phase 7.6 — Role-Based Access Control at UI Layer (RBAC/ABAC)
+- UI must compute effective permissions from PolicyEngine (CP) and hide/disable controls accordingly:
+- ## Phase 7.7 — Clean Boundary
+- Phase 7 delivered:
+- # Next Phase (Phase 8) — Threat Model + Abuse Cases + Security Controls
+- # Phase 8 — Threat Model, Abuse Cases, Security Controls & Hardening Plan
+- **Objective:** Provide a build-ready security specification that covers:
+- # Phase 8.1 — Security Scope & Assets
+- # Phase 8.2 — Threat Actors
+- # Phase 8.3 — Attack Surfaces (System Decomposition)
+- ## 8.3.1 UI Layer
+- # Phase 8.4 — Core Security Principles (Deterministic)
+- # Phase 8.5 — Abuse Cases & Controls (Key Scenarios)
+- # Phase 8.6 — Concrete Security Controls Checklist (Implementation Backlog)
+- * MFA (TOTP/WebAuthn preferred) required for:
+- # Phase 8.7 — Security Testing Plan (Build-Ready)
+- # Phase 8.8 — Incident Response Playbooks (Operational)
+- 6. If confirmed fraud: rotate credentials, require OTP going forward
+- # Phase 8.9 — Clean Boundary
+- Phase 8 delivered:
+- # Phase 9 (Next) — Performance, Capacity Planning & SLA Model
+- This is the next build-critical layer because you have:
+- # Phase 9 — Performance Architecture, Capacity Planning & SLA Model
+- **Objective:** Define deterministic performance envelopes, scaling mechanics, SLA contracts, queue discipline, and capacity models for:
+- # Phase 9.1 — Performance Domains (System Segmentation)
+- # Phase 9.2 — Baseline Throughput Assumptions
+- # Phase 9.3 — Work Queue Capacity Model
+- ## 9.3.2 Required Guarantees
+- # Phase 9.4 — Execution Latency Budget (Per Task)
+- # Phase 9.5 — Approval Latency Model
+- # Phase 9.6 — RPA Capacity Planning
+- Concurrency required:
+- # Phase 9.7 — Backpressure & Rate Limiting
+- # Phase 9.8 — SLA Definitions (Formal)
+- # Phase 9.9 — Horizontal Scaling Strategy
+- # Phase 9.10 — Multi-Region Strategy
+- # Phase 9.11 — Observability & Performance Metrics
+- # Phase 9.12 — Revocation Performance Consideration
+- Immediate revocation requires:
+- # Phase 9.13 — Capacity Safety Margins
+- # Phase 9.14 — Failure Mode Simulation
+- # Phase 9.15 — Clean Boundary
+- Phase 9 delivered:
+- # Phase 10 (Next) — AI Confidence Scoring, Learning Loop & Knowledge Engine Architecture
+- # Phase 10 — AI Confidence Scoring, Learning Loop, Knowledge Engine & Explainability Architecture
+- This phase is explicitly designed to remain compatible with:
+- ## Phase 10.1 — Non-Negotiable Design Principle
+- AI outputs **must never directly cause irreversible side effects** unless:
+- ## Phase 10.2 — AI/ML Components (Logical Modules)
+- Outputs:
+- ### 10.2.3 “Scribe” — Explainability + Decision Trace Builder
+- ## Phase 10.3 — Confidence Scoring Model (Build-Ready)
+- **Important:** the function `f` is not learned at runtime; it is configured in CP.
+- * **Band B — Auto-Prepare**: AI pre-fills drafts, requires HITL execute
+- * **Band D — Force HOLD**: ambiguity or risk too high
+- ## Phase 10.4 — When HITL Is Required (Routing Rules)
+- ### 10.4.1 HITL Required Triggers (Deterministic)
+- ## Phase 10.5 — Learning Loop Architecture (No-PII Compliant)
+- ## Phase 10.6 — Feedback Capture (Structured, Deterministic)
+- ### 10.6.2 Operator UI: “Correction Panel”
+- ## Phase 10.7 — Policy Improvement Pipeline (CP)
+- ### 10.7.2 Governance Gate (Human Approval Required)
+- ## Phase 10.8 — SOP Knowledge Engine (Law/SOP/Playbook Layer)
+- At runtime, the operator UI can show:
+- ## Phase 10.9 — Explainability Architecture (Decision Trace + Proof)
+- ## Phase 10.10 — Drift Detection & Safety Monitoring
+- ## Phase 10.11 — Auto-Execution (“Autopilot”) Constraints
+- Autopilot requires:
+- ## Phase 10.12 — Test Plan (AI + Deterministic Gates)
+- 1. **Fail-Closed tests**: unknown outputs ⇒ HOLD
+- ### 10.12.2 Golden Regression Suites
+- Use historical *feature hashes + outcomes* to validate:
+- ## Phase 10.13 — Clean Boundary
+- Phase 10 delivered:
+- # Phase 11 (Next) — End-to-End Build Plan: Repo Structure, Services, Deployment Pipelines, Environments, and “Day-0 to Day-2 Ops”
+- # Phase 11 — End-to-End Build Plan
+- ## Phase 11.1 — Target Operating Model (What “Running VTE” Means)
+- ### Day-0 (Build/Ship)
+- # Phase 11.2 — Service Decomposition (Concrete Microservices)
+- # Phase 11.3 — Storage Plan (DBs, Streams, Retention)
+- * **Postgres** (or equivalent) for:
+- # Phase 11.4 — Repo Structure (Concrete)
+- # Phase 11.5 — API Gateway & Contracts
+- # Phase 11.6 — Environment Strategy (Dev → Staging → Canary → Prod)
+- # Phase 11.7 — CI/CD Pipelines (Buildable)
+- ## Pipeline P4 — E2E UI Tests
+- # Phase 11.8 — Deployment Topology (Kubernetes Baseline)
+- # Phase 11.9 — Day-1 Ops: Dashboards & Alerts
+- ## Dashboards
+- # Phase 11.10 — Day-1 Runbooks (Minimum Set)
+- # Phase 11.11 — Day-2 Improvement Loop (Operational)
+- # Phase 11.12 — “Definition of Done” for MVP vs V1
+- # Phase 11.13 — Clean Boundary
+- Phase 11 delivered:
+- # Phase 12 (Next) — Turn This Into a 200+ Deterministic Backlog
+- You asked for 200+ user stories. We now have the structure and key stories per role; Phase 12 will:
+- # Phase 12 — Deterministic 200+ User Story Backlog
+- **Objective:** Convert the entire system (CP + DP + UI + Security + AI + Ops) into a structured, build-ready backlog with:
+- ### US-R1-001 (DP) — Work Queue UI
+- ### US-R4-003 — SLA Dashboard
+- ### US-R4-008 — Provider Health Dashboard
+- If you want the next phase, we can now:
+- # Phase 13 — Master Product Requirements Document (PRD)
+- **Objective:** Consolidate all prior phases into a single, production-grade PRD suitable for engineering, design, compliance, and GTM alignment.
+- Requires:
+- # 6. Functional Requirements (Condensed by Domain)
+- # 7. Non-Functional Requirements
+- # 8. AI & Learning Requirements
+- # Phase 14 — Detailed OpenAPI Specification (Control Plane + Data Plane)
+- **Objective:** Provide a production-grade API contract blueprint covering:
+- "tenant_ids": ["uuid"]
+- "tenant_id": "uuid",
+- "user_id": "uuid",
+- ### GET `/v1/cp/policies?tenant_id=uuid`
+- "tenant_id": "uuid",
+- "tenant_id": "uuid",
+- "parent_template_id": "uuid",
+- "tenant_id": "uuid",
+- "otp_required": true,
+- "tenant_id": "uuid",
+- "workflow_id": "uuid",
+- "tenant_id": "uuid",
+- "workflow_id": "uuid",
+- "revocation_id": "uuid",
+- ### GET `/v1/cp/compliance/queue?tenant_id=uuid`
+- "tenant_id": "uuid",
+- "approval_id": "uuid",
+- ### GET `/v1/dp/work-queue?tenant_id=uuid`
+- "work_item_id": "uuid",
+- "reason_code": "AMBIGUITY",
+- "execution_id": "uuid",
+- "event_id": "uuid",
+- "tenant_id": "uuid",
+- "actor_id": "uuid",
+- "object_id": "uuid",
+- "reason_code": "HOLD_AMBIGUITY",
+- "correlation_id": "uuid"
+- Phase 14 delivered:
+- # Next Possible Phase
+- # Phase 15 — Database DDL, Indexing, Constraints & Retention Model
+- # Phase 15.1 — PostgreSQL Extensions & Conventions
+- # Phase 15.2 — Core Tenancy & Identity Tables
+- # Phase 15.3 — Governance Objects (Versioned CP Config)
+- UNIQUE (tenant_id, template_key, level, COALESCE(user_id, '00000000-0000-0000-0000-000000000000'::uuid), version)
+- # Phase 15.4 — Approvals, External Transcripts, Revocations
+- # Phase 15.5 — Compliance & Disputes (Case Management)
+- # Phase 15.6 — Notifications (Delivery Tracking)
+- # Phase 15.7 — Audit/Event Store (Append-Only, Tamper-Evident)
+- # Phase 15.8 — “No-PII Persistence” Guardrails (DB-Level)
+- # Phase 15.9 — Row-Level Security (RLS) for Tenant Isolation (Recommended)
+- USING (tenant_id = current_setting('app.tenant_id')::uuid);
+- # Phase 15.10 — Index Strategy Summary (Why These Indexes)
+- # Phase 15.11 — Object Storage Reference Model (Transcripts / Screenshots / Evidence)
+- # Phase 15.12 — Migration & Compatibility Rules
+- # Phase 15.13 — Clean Boundary
+- Phase 15 delivered:
+- # Next Phase Options (Pick-your-next “Proceed”)
+- ## Phase 16 — Terraform + Kubernetes IaC Templates
+- ## Phase 17 — 24-Week Sprint Roadmap (Release Trains → Sprints)
+- ## Phase 18 — SOC2 / ISO Control Mapping
+- Long answer: **It is necessary but not yet sufficient** if your goal is deterministic, zero-ambiguity AI-driven build execution.
+- "condition": "approval_required == true"
+- ### ❌ 3. No Build Order Graph
+- **This is Phase A: Human-Readable Master Architecture**
+- ### Phase B: Machine-Executable System Contract
+- ## 2️⃣ Build Plan Layer
+- Then the next phase must be:
+- # Phase 16 — Machine-Executable System Contract (MESC)
+- An AI agent can build E2E reliably only when the spec is:
+- comms_primary: "APPFOLIO_BUILTIN"
+- unknown_decision_output: "HOLD"
+- rule: "If work_item.state == STOP then execute_action must be disabled at UI and blocked at API"
+- - ui_state_to_actions
+- guard: "decision.requires_approval == true OR confidence.ambiguity < thresholds.min_ambiguity"
+- guard: "compliance.severity == 'HIGH' OR policy.output == 'STOP'"
+- tenant_id: uuid
+- work_item_id: uuid
+- output:
+- required_events_on_block:
+- ### 4.5 `spec/00_manifest/build.dag.yaml`
+- build_dag:
+- outputs: ["postgres.ddl.sql"]
+- outputs: ["cp.openapi.yaml", "approval.domain.yaml"]
+- outputs: ["workitem.sm.yaml", "dp.openapi.yaml"]
+- - id: N-UI-WORK-001
+- name: "Work UI"
+- outputs: ["ui.screens.yaml", "ui.state_to_actions.yaml"]
+- depends_on: ["N-UI-WORK-001"]
+- outputs: ["golden_paths.yaml", "failure_injection.yaml"]
+- ## 7) What I Recommend As The “Gold Standard Output” For Your Agents
+- ### **Phase 16 — Full MESC Pack Generation**
+- If you want a specific output format preference:
+- Generated **Phase 2 (expanded)**: **MESC Pack v2** with the additional AI-agent execution artifacts you asked for.
+- ## What Phase 2 adds (beyond v1)
+- This removes ambiguity by explicitly defining:
+- ## Clean boundary note (Phase 2 completed)
+- Phase 2 ends at a clean boundary: **we now have the “execution scaffolding layer”**:
+- ## Next Phase (Phase 3) — what I will do if you say “Proceed”
+- To move from scaffold → production-grade agent autonomy, Phase 3 will:
+- If you want Phase 3, reply: **Proceed**.
+- ### 3) Expanded OpenAPI Surface (Buildable)
+- ### 5) Jira Backlog for Autonomous Build (220 Stories)
+- ## What to do next (Phase 4 boundary)
+- If you say **Proceed**, Phase 4 will shift from “scaffold” → “operationally complete” by generating:
+- This is now suitable for AI agents performing:
+- # What Phase 5 Adds (AI-agent autonomous rollout format)
+- * **Inputs**: model outputs (confidence/ambiguity/risk), runtime signals (STOP, approvals, compliance), provider health
+- * **Outputs**: `AUTO_EXECUTE | HITL_REVIEW | HOLD_FOR_APPROVAL | STOP` + reason codes + emitted learning events
+- * change control requirements:
+- # Next Phase Options (pick one by saying “Proceed: <option>”)
+- # What Phase 6 Adds (Agent-executable security layer)
+- * Output: **lease_id + access_method** (`VAULT_PROXY_SESSION` preferred) + expiry + audit event id
+- Encodes your requirements:
+- # Next Phase (Most Logical): Phase 7 — Production Deployment Blueprint
+- If you say **Proceed**, I will generate Phase 7 artifacts:
+- # What Phase 7 Adds (Agent-executable productionization layer)
+- ## 5) Observability Pack (Metrics, Dashboards, Alerts)
+- ### Grafana dashboard JSON
+- # Next Phase Candidate (Phase 8)
+- If you say **Proceed**, the most logical next phase is:
+- ## Phase 8 — AppFolio Integration Binding (API schema + RPA playbooks + deterministic fallback)
+- # What Phase 8 Adds (Deterministic Provider Binding Layer)
+- * Required provider operations:
+- # System Status After Phase 8
+- # Logical Next Phases (Choose)
+- Reply with **Proceed: <Phase #>** to continue.
+- # What Phase 9 Adds (Provider-Agnostic “Adapter Layer”)
+- Hard requirements (hooks):
+- # Next Phase Options
+- If you want to continue (and keep the same “agent-executable spec pack” style), the most logical next phases are:
+- ## Phase 10 — Formal Verification Layer
+- ## Phase 11 — Economic Engine + Metering
+- # What Phase 10 Adds (Formal correctness + proof-driven CI gates)
+- * model variables required for correctness:
+- **Path:** `spec/35_formal_test_oracles/gherkin/trace_validation.feature`
+- # Next Phase Options
+- If you continue, the most logical “system completeness” phases are:
+- ## Phase 11 — Economic Engine + Metering + Quotas
+- Reply: **Proceed – Phase 11**.
+- # What Phase 11 Adds (Agent-executable monetization + governance)
+- Outputs:
+- **Path:** `spec/38_economic_test_oracles/gherkin/quota_enforcement.feature`
+- If you want to continue past Phase 11, the next logical options are:
+- # What Phase 12 Adds (Customer-facing billing + platform finance operations)
+- ## 1) Billing UX Screens Spec (UI-gen ready)
+- ## Gherkin suites
+- ## Next (if you want): Phase 13 — Enterprise Controls
+- If you say **Proceed – Phase 13**, I will generate:
+- # What Phase 13 Adds (Enterprise-Grade Governance Layer)
+- # Platform Status After Phase 13
+- # What Phase 14 Adds (Enterprise AI Control Plane)
+- HIGH risk requires:
+- # What Phase 15 Adds (Federated Enterprise Architecture)
+- **Gherkin Suite:**
+- # Platform Capability Status After Phase 15
+- # What Phase 16 Adds (Controlled App Marketplace)
+- Includes required:
+- # What Phase 17 Adds (Agent Graph Runtime + Safe Self-Improvement)
+- Defines a deterministic DAG of agents with explicit inputs/outputs/tools:
+- * integration requirements:
+- * **DS-GOLDEN-001**: golden traces regression suite
+- * **DS-EDGE-001**: adversarial/edge-case robustness suite
+- Required events:
+- # What Phase 19 Adds (Platform-Level Autonomy)
+- ## 3️⃣ Risk Circuit Breakers
+- If you want to continue, the next logical phase would be:
+- # What Phase 20 Adds (Strategic Layer Above Execution)
+- Outputs:
+- Objectives:
+- If you want to continue, the next logical phase would be:
+- If you wish to continue, the next logical phase would be:
+
+## Source: VTE - Architecture A to Z.txt
+- (From: *VTE Learn 1..7*, especially decision tables + CP/DP + gap registers + feature inventory.)
+- ## DELIVERY PHASE 1 — Product UX Architecture (Authoritative)
+- ### Objective
+- Deliver a **full-scale UI/UX + journey + funnel system** for a 10k-user SaaS automation platform where:
+- So the output is written as a **single coherent directive** with:
+- * Web app: **Next.js** (or equivalent), API: **Node/TS**, runtime: **Docker/K8s**
+- ## Requirements (Non-negotiable)
+- If data is missing/ambiguous/unreadable ⇒ UI must show:
+- ## Architecture Expectations (UI must mirror system architecture)
+- ### A) Two UI planes
+- #### 1) Control Plane UI (CP-UI)
+- #### 2) Operations UI (DP-UI)
+- **Rule:** Anything that changes execution behavior must live in CP (versioned, auditable). DP UI is operational, not definitional.
+- ## 2.2 Funnel UI (screens + acceptance)
+- * Output: lead_id, workspace_prospect_id
+- ### FNL-SCR-05 First Workflow Template (guided)
+- * Must output:
+- * UI must demonstrate:
+- Critical missing UI you must build:
+- Missing UI you must build:
+- Missing UI:
+- Missing UI:
+- Missing UI:
+- Missing UI:
+- Missing UI:
+- UI must treat a Work Item as an object with:
+- * UI must render a deterministic HOLD reason:
+- ## 6.1 RBAC/ABAC (UI must enforce visibility)
+- UI must provide CP configuration and DP enforcement visibility for:
+- * Compliance page: DNC, quiet hours, consent, audit
+- # DELIVERY PHASE 1 Deliverables (What you can implement immediately)
+- Type exactly: **PROCEED — DELIVERY PHASE 2**
+- In DELIVERY PHASE 2 I will produce (implementation-ready):
+- (From: *VTE Learn 1..7*, especially decision tables + CP/DP + gap registers + feature inventory.)
+- ## DELIVERY PHASE 1 — Product UX Architecture (Authoritative)
+- ### Objective
+- Deliver a **full-scale UI/UX + journey + funnel system** for a 10k-user SaaS automation platform where:
+- So the output is written as a **single coherent directive** with:
+- * Web app: **Next.js** (or equivalent), API: **Node/TS**, runtime: **Docker/K8s**
+- ## Requirements (Non-negotiable)
+- If data is missing/ambiguous/unreadable ⇒ UI must show:
+- ## Architecture Expectations (UI must mirror system architecture)
+- ### A) Two UI planes
+- #### 1) Control Plane UI (CP-UI)
+- #### 2) Operations UI (DP-UI)
+- **Rule:** Anything that changes execution behavior must live in CP (versioned, auditable). DP UI is operational, not definitional.
+- ## 2.2 Funnel UI (screens + acceptance)
+- * Output: lead_id, workspace_prospect_id
+- ### FNL-SCR-05 First Workflow Template (guided)
+- * Must output:
+- * UI must demonstrate:
+- Critical missing UI you must build:
+- Missing UI you must build:
+- Missing UI:
+- Missing UI:
+- Missing UI:
+- Missing UI:
+- Missing UI:
+- UI must treat a Work Item as an object with:
+- * UI must render a deterministic HOLD reason:
+- ## 6.1 RBAC/ABAC (UI must enforce visibility)
+- UI must provide CP configuration and DP enforcement visibility for:
+- * Compliance page: DNC, quiet hours, consent, audit
+- # DELIVERY PHASE 1 Deliverables (What you can implement immediately)
+- Type exactly: **PROCEED — DELIVERY PHASE 2**
+- In DELIVERY PHASE 2 I will produce (implementation-ready):
+- This phase translates Phase 1 architecture into **implementation-grade UI structures**, including:
+- # DELIVERY PHASE 2
+- ## 2.6 RIGHT PANEL — DECISION OUTPUT
+- Override requires:
+- CENTER: Rule Builder Canvas
+- ## 5.2 Rule Builder Blocks
+- ## 6.3 Decision Phase
+- If system output = CONTACT:
+- UI must enforce:
+- Support UI must:
+- Displayed on dashboard until:
+- # DELIVERY PHASE 2 OUTPUT SUMMARY
+- Phase 3 will include:
+- This phase provides:
+- UI Flow:
+- ## STEP 05 — Onboarding Checklist (Dashboard)
+- ## Activation Dashboard Copy
+- UI Message:
+- ## Admin Dashboard Copy
+- UI Elements:
+- ## QUIET HOURS ENFORCEMENT
+- # DELIVERY PHASE 3 OUTPUT SUMMARY
+- Phase 4 will define:
+- All operational screens derive UI state from:
+- ## 1.2 UI Layer
+- Must exist before any feature work:
+- ## 5.3 Patterns (Reusable Feature Blocks)
+- ## 6.3 Layer C — UI State (Local Interaction)
+- Mandatory features:
+- ## 8.2 Outputs
+- # 9) DP UI IMPLEMENTATION SPEC (WORK CONSOLE COMPONENT TREE)
+- # 10) CP UI IMPLEMENTATION SPEC (POLICY EDITOR + TEMPLATE EDITOR)
+- ### Policy Editor Required Validations (client renders backend results)
+- UI flow:
+- Minimum E2E suite:
+- ## Phase 4.1 — Foundations
+- ## Phase 4.2 — DP Core
+- ## Phase 4.3 — CP Core
+- ## Phase 4.4 — Consoles
+- ## Phase 4.5 — Hardening
+- This is the **contract pack** the frontend in Phase 4 requires. It includes:
+- * `X-Correlation-Id: <uuid>` (client-generated; required)
+- * `X-Workspace-Id: <workspace_id>` (required for workspace-scoped routes)
+- * `X-Idempotency-Key: <uuid>` (**required** for all POST/PUT/PATCH that causes side effects)
+- All responses must use a consistent envelope so the UI can fail-closed reliably:
+- "correlation_id": "uuid",
+- "meta": { "correlation_id": "uuid", "server_time": "..." }
+- ## 0.4 Error Severity → UI Rendering Contract
+- * environment: `quiet_hours_window`, `connector_health`
+- ## 2.2 Decision Outputs
+- ## 2.6 Allowed Actions (render-only contract for UI)
+- "output": "HOLD",
+- "status": "REQUIRED",
+- "correlation_id": "uuid"
+- "warnings": ["QUIET_HOURS_ACTIVE"]
+- "placeholders_required": ["{{quiet_hours}}", "{{opt_out}}", "{{jurisdiction}}"],
+- "correlation_id": "uuid"
+- ### CREATED → EVIDENCE_REQUIRED
+- ### EVIDENCE_REQUIRED → EVIDENCE_FETCHING
+- ### DECISION_READY → APPROVAL_REQUIRED
+- ### APPROVAL_REQUIRED → APPROVAL_PENDING
+- ### HOLD → EVIDENCE_REQUIRED (Resolve/Retry path)
+- "approval_required": true,
+- "quiet_hours_enforced": true
+- "approval_required": true,
+- ## 6.3 Policy Validation Output (returned to UI)
+- ### Feature Flags / Kill Switch (Super Admin)
+- ## 8.1 Cursor Pagination (required for 10k users)
+- ## 10.1 Required Event Types (minimum v1)
+- required: true
+- schema: { type: string, format: uuid }
+- required: true
+- required: true
+- required: [ok, data, meta]
+- With Phase 5 implemented, you can build without ambiguity:
+- # 0) PRIMARY OBJECTIVE OF PHASE 6
+- Implement a production system that satisfies **all prior phases**:
+- ## 2.4 Evidence Reference Store (TTL Required)
+- * UI must show: `EVIDENCE_EXPIRED → HOLD`
+- ## 3.1 Required Queues
+- If any required fact is missing/unreadable:
+- Output:
+- If output is HOLD/STOP:
+- If approval required:
+- If approval not required (rare; must be explicit policy):
+- If quiet hours active:
+- "quiet_hours_active": false,
+- ## THREAT-08 Quiet Hours / Compliance Violations
+- ## 10.2 CI/CD Requirements
+- # 11) BUILD ORDER (STRICTLY LINEAR)
+- ## Phase 6.1 — Core CP
+- ## Phase 6.2 — Core DP
+- ## Phase 6.3 — Execution
+- ## Phase 6.4 — Hardening
+- # 0) SECURITY PROGRAM OBJECTIVE (NON-NEGOTIABLE)
+- ### Required
+- ## 3.3 High-Risk Actions Require Step-Up Authentication
+- Actions requiring re-auth with MFA:
+- * Google: only scopes needed for draft/send (or draft-only if approval always required)
+- ## 5.2 CI Security Gates (Fail build if)
+- Required for:
+- Expose to UI:
+- Phase 8 turns everything into a trackable execution program: Jira-ready backlog, milestones, and “definition of done” per module.
+- ## PRD-SECTION-03 UI States
+- ### PRD-APP-12 Integrations Dashboard
+- Features:
+- Features:
+- ### Test Suites
+- ### Gate-A Functional
+- Across Phases 1–8 you now possess:
+- ## 3.2 Pull Request Requirements
+- High-risk modules require:
+- Required when:
+- Output:
+- Required when:
+- Required when:
+- ## 5.3 Feature Flags Policy
+- All risky features must:
+- ## Required Channels
+- ## Required Rituals
+- # WHAT YOU NOW HAVE (AFTER PHASE 9)
+- Across all phases, you now possess:
+- DELIVERY PHASE 10 — ULTRA EXPLICIT LAUNCH STRATEGY:
+- This converts everything you built (Phases 1–9) into a **commercial operating model**:
+- # 0) LAUNCH OBJECTIVE (NON-NEGOTIABLE)
+- Primary acquisition:
+- ## 4.1 Automated Checklist (Dashboard)
+- ## 4.2 Guided Onboarding Emails (Automated)
+- ## 8.1 Build Dependency Through:
+- ## Phase L-1 — Private Beta
+- ## Phase L-2 — Controlled Launch
+- ## Phase L-3 — Public Launch
+- ## Phase L-4 — Expansion
+- # 10) GTM METRICS (EXECUTIVE DASHBOARD)
+- Across Phases 1–10, you possess:
+- DELIVERY PHASE 11 — ULTRA EXPLICIT INVESTOR / EXECUTIVE PACKAGE:
+- # WHAT YOU NOW HAVE (AFTER PHASE 11)
+- DELIVERY PHASE 12 — ULTRA EXPLICIT SCALING BLUEPRINT:
+- # 0) SCALING OBJECTIVES (NON-NEGOTIABLE)
+- Tables requiring partitioning:
+- ## Phase P-1 (Next 12 Months)
+- ## Phase P-2 (12–24 Months)
+- ## Phase P-3 (24–36 Months)
+- ## Phase P-4 (36+ Months)
+- If you want to continue, the next logical phase is:
+- DELIVERY PHASE 13 — ULTRA EXPLICIT “CATEGORY CREATION” STRATEGY:
+- # 0) SCALING OBJECTIVES (NON-NEGOTIABLE)
+- Tables requiring partitioning:
+- ## Phase P-1 (Next 12 Months)
+- ## Phase P-2 (12–24 Months)
+- ## Phase P-3 (24–36 Months)
+- ## Phase P-4 (36+ Months)
+- If you want to continue, the next logical phase is:
+- DELIVERY PHASE 13 — ULTRA EXPLICIT “CATEGORY CREATION” STRATEGY:
+- # 0) CATEGORY OBJECTIVE (WHAT YOU ARE ACTUALLY BUILDING)
+- Category creation requires three parallel motions:
+- ## 4.1 Phase 1 — Define the Category (0–12 Months)
+- ## 4.2 Phase 2 — Standardize the Category (12–24 Months)
+- ## 4.3 Phase 3 — Expand the Category (24–36 Months)
+- ## 4.4 Phase 4 — Become Infrastructure (36+ Months)
+- ## Step 2 — Build Ecosystem
+- If you want to continue, the next phase would be:
+- DELIVERY PHASE 14 — ULTRA EXPLICIT “REALITY CHECK & CRITICAL GAPS”:
+- # 0) CATEGORY OBJECTIVE (WHAT YOU ARE ACTUALLY BUILDING)
+- Category creation requires three parallel motions:
+- ## 4.1 Phase 1 — Define the Category (0–12 Months)
+- ## 4.2 Phase 2 — Standardize the Category (12–24 Months)
+- ## 4.3 Phase 3 — Expand the Category (24–36 Months)
+- ## 4.4 Phase 4 — Become Infrastructure (36+ Months)
+- ## Step 2 — Build Ecosystem
+- If you want to continue, the next phase would be:
+- DELIVERY PHASE 14 — ULTRA EXPLICIT “REALITY CHECK & CRITICAL GAPS”:
+- ## 5.2 Competitors Rebranding Quickly
+- If you want to continue, the next phase would be:
+- DELIVERY PHASE 15 — ULTRA EXPLICIT “FIRST 180 DAYS EXECUTION MASTERPLAN”:
+- This is the **operational calendar** for turning Phases 1–14 into a real company. It specifies:
+- ## Phase A — Weeks 1–10 (Silent Build)
+- ## Phase B — Weeks 11–16 (Narrative Seeding)
+- ## Phase C — Weeks 17–20 (Private Beta)
+- ## Phase D — Weeks 21–24 (Controlled Launch)
+- # 4) WHAT YOU MUST NOT BUILD IN FIRST 6 MONTHS (ANTI-SCOPE)
+- ## 4.1 Do NOT Build Multi-Region Yet
+- ## 4.2 Do NOT Build Marketplace or Templates Library
+- ## 4.4 Do NOT Overbuild Analytics
+- ## 4.5 Do NOT Implement Advanced AI Features
+- 1. If a feature doesn’t directly improve:
+- If you want to continue, the next phase would be:
+- DELIVERY PHASE 16 — ULTRA EXPLICIT “YEAR 1 TO SERIES A STRATEGY”:
+- This phase translates everything built so far into a **12-month operating model** designed to reach a credible Series A narrative. It defines:
+- # 0) YEAR-1 OBJECTIVE (WHAT SERIES A REALLY REQUIRES)
+- ## 1.1 Revenue Phases
+- ### Phase A — Months 1–4 (Validation Revenue)
+- ### Phase B — Months 5–8 (Repeatability)
+- ### Phase C — Months 9–12 (Enterprise Motion)
+- Not rigid numbers — directional expectations:
+- ## 4.3 Proof Artifacts Required for Enterprise Deals
+- # 5) SERIES A INVESTOR EXPECTATIONS (REALISTIC)
+- ## 5.1 Product Expectations
+- ## 5.2 Revenue Expectations
+- ## 5.3 Operational Expectations
+- ## 5.4 Market Expectations
+- ## 7.2 Do NOT Add Autonomous AI Features
+- ## 7.3 Do NOT Overbuild Marketplace Ecosystem
+- If you want to continue, the next phase would be:
+- DELIVERY PHASE 17 — ULTRA EXPLICIT “FOUNDER OPERATING SYSTEM”:
+- This phase translates everything built so far into a **12-month operating model** designed to reach a credible Series A narrative. It defines:
+- # 0) YEAR-1 OBJECTIVE (WHAT SERIES A REALLY REQUIRES)
+- ## 1.1 Revenue Phases
+- ### Phase A — Months 1–4 (Validation Revenue)
+- ### Phase B — Months 5–8 (Repeatability)
+- ### Phase C — Months 9–12 (Enterprise Motion)
+- Not rigid numbers — directional expectations:
+- ## 4.3 Proof Artifacts Required for Enterprise Deals
+- # 5) SERIES A INVESTOR EXPECTATIONS (REALISTIC)
+- ## 5.1 Product Expectations
+- ## 5.2 Revenue Expectations
+- ## 5.3 Operational Expectations
+- ## 5.4 Market Expectations
+- ## 7.2 Do NOT Add Autonomous AI Features
+- ## 7.3 Do NOT Overbuild Marketplace Ecosystem
+- If you want to continue, the next phase would be:
+- DELIVERY PHASE 17 — ULTRA EXPLICIT “FOUNDER OPERATING SYSTEM”:
+- This phase defines:
+- ### Wednesday — Build Day
+- Requires:
+- Distinguish:
+- ## WHAT YOU NOW HAVE (AFTER PHASE 17)
+- Across Phases 1–17, you possess:
+- DELIVERY PHASE 18 — ULTRA EXPLICIT “LONG-TERM STRATEGIC RISKS & EXIT SCENARIOS”:
+- Later phases transitioned into:
+- Even after all phases, several **critical product-execution artifacts are still missing** or only partially specified:
+- ## 1) Actual Feature-Level Product Spec
+- ## 4) Component-Level Frontend Build Spec
+- But later phases drifted toward:
+- ## PRODUCT EXECUTION PHASE A — ULTRA EXPLICIT MVP PRODUCT SPEC
+- The goal of this phase is to remove ambiguity around:
+- Before defining features, these rules lock scope:
+- # 1) MVP FEATURE BOUNDARY (WHAT EXISTS)
+- ## 1.1 Identity & Access (Required)
+- # 2) MVP FEATURE ANTI-SCOPE (WHAT DOES NOT EXIST)
+- # 5) FRONTEND COMPONENT MAP (REAL BUILD CONTRACT)
+- # 6) API CONTRACT SURFACES REQUIRED FOR MVP
+- # 7) MVP BUILD ORDER (STRICT SEQUENCE)
+- PROCEED — PRODUCT EXECUTION PHASE B (ULTRA EXPLICIT ENGINEERING BUILD SPEC:
+- This is the **developer-level contract pack** that turns MVP scope (Phase A) into implementable work:
+- * transition: `CREATED → EVIDENCE_REQUIRED`
+- * transition: `EVIDENCE_REQUIRED → EVIDENCE_FETCHING`
+- If `decision.output = CONTACT` and policy says `approval_required=true`:
+- UI rules:
+- Redaction function must:
+- # 11) TEST HARNESS (WHAT QA MUST BUILD)
+- ## EPIC-05 UI
+- # OUTPUT OF PHASE B
+- PROCEED — PRODUCT EXECUTION PHASE C (ULTRA EXPLICIT IMPLEMENTATION ARTIFACTS:
+- -- Redacted logs (UI-safe)
+- required: true
+- schema: { type: string, format: uuid }
+- required: true
+- required: true
+- schema: { type: string, format: uuid }
+- required: [correlation_id, server_time]
+- correlation_id: { type: string, format: uuid }
+- required: [code, message, severity]
+- required: [ok, data, meta]
+- required: [ok, error, meta]
+- enum: [DASHBOARD, WORK_QUEUE, WORK_ITEMS, APPROVALS, POLICIES, TEMPLATES, INTEGRATIONS, USERS, AUDIT, SUPPORT]
+- - EVIDENCE_REQUIRED
+- - APPROVAL_REQUIRED
+- DecisionOutput:
+- required: [ref_id, type, status, expires_at, redaction_level]
+- required: [work_item_id, workspace_id, workflow_id, state, allowed_actions, correlation_id]
+- decision_output: { $ref: "#/components/schemas/DecisionOutput", nullable: true }
+- correlation_id: { type: string, format: uuid }
+- required: [approval_id, workspace_id, work_item_id, type, status, expires_at, requested_at]
+- required: [policy_id, workspace_id, name, status, current_version_id]
+- required: [template_id, workspace_id, name, channel, status, current_version_id]
+- required: [user_id, email, display_name, memberships, allowed_modules]
+- required: [workspace_id, role]
+- required: [items]
+- required: true
+- required: [name, dsl_json]
+- required: true
+- required: true
+- required: [policy_version_id]
+- required: [items]
+- required: true
+- required: [name, channel, content_json]
+- required: [subject, body]
+- required: false
+- required: [items]
+- required: true
+- required: [work_item_id, type, payload, policy_id, policy_version_id, template_id, template_version_id, expires_at]
+- required: true
+- required: false
+- required: true
+- required: true
+- required: [comment]
+- required: false
+- required: false
+- required: false
+- name: decision_output
+- required: false
+- schema: { $ref: "#/components/schemas/DecisionOutput" }
+- required: false
+- required: false
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- decision_output: DecisionOutput | null;
+- correlation_id: z.string().uuid(),
+- decision_output: zDecisionOutput.nullable(),
+- correlation_id: z.string().uuid(),
+- export function requireHeader(headers: Record<string, any>, name: string): string {
+- export function ok<T>(data: T, correlationId: string) {
+- export function err(code: string, message: string, severity: "STOP" | "HOLD" | "INFO", correlationId: string, detail?: any) {
+- export async function parseOrThrow<T>(schema: z.ZodSchema<T>, payload: unknown, onFail: (issues: any) => never): Promise<T> {
+- export function getCorrelationId(req: FastifyRequest): string {
+- export function getWorkspaceId(req: FastifyRequest): string {
+- export function getIdempotencyKey(req: FastifyRequest): string {
+- export function containsPII(s: string): boolean {
+- export function redactForUILog(msg: string): string {
+- decision_output: null,
+- return reply.status(202).send(ok({ work_item_id: workItemId, state: "EVIDENCE_REQUIRED" }, correlationId));
+- async function handleEvent(evt: Event) {
+- // TODO: transition CREATED -> EVIDENCE_REQUIRED, emit evidence refresh requested
+- export function createAppFolioClient(): AppFolioClient {
+- export function makeSafeUILog(raw: string): { safe: string; blocked: boolean } {
+- * [ ] Create folders exactly per Phase C scaffolding:
+- ## 3.1 CP Seed Requirements (`cp/0002_seed.sql`)
+- "approval_required": true,
+- { "if": { "fact": "legal_representation", "op": "eq", "value": true }, "then": { "output": "STOP", "reasons": ["LEGAL_REPRESENTATION_DETECTED"] } },
+- { "if": { "fact": "evidence_complete", "op": "eq", "value": false }, "then": { "output": "HOLD", "reasons": ["EVIDENCE_INCOMPLETE"] } }
+- "default": { "output": "CONTACT", "reasons": [] }
+- Placeholders required:
+- ## 3.2 DP Seed Requirements (`dp/0002_seed.sql`)
+- build: ./apps/cp-api
+- build: ./apps/dp-api
+- build: ./workers/dp-orchestrator
+- build: ./workers/dp-evidence-worker
+- build: ./workers/dp-runner-worker
+- build: ./workers/cp-approvals-worker
+- **Minimum MVP requirement regardless of option:**
+- # 6) CONNECTOR BUILD CHECKLIST (STUB → REAL)
+- ## 8.1 Functional
+- # OUTPUT OF PHASE D
+- This is a **build-ready frontend spec + code skeleton** for MVP:
+- ## 1.2 App (Requires auth)
+- # 3) UI FAIL-CLOSED PATTERN (MANDATORY)
+- export function newCorrelationId(): string {
+- // MVP: crypto random uuid
+- export function newIdempotencyKey(): string {
+- export function isOk<T>(e: ApiEnvelope<T>): e is EnvelopeOk<T> {
+- export function createApiClient(cfg: ApiConfig) {
+- # 6) REACT QUERY HOOKS (WITH POLLING WHERE REQUIRED)
+- export function useWorkItem(workItemId: string) {
+- decision_output?: DecisionOutput;
+- export function workQueueReducer(state: WorkQueueState, action: WorkQueueAction): WorkQueueState {
+- | { type: "SET_TAB"; tab: WorkItemUIState["activeTab"] }
+- | { type: "MUTATION_START"; kind: WorkItemUIState["mutation"]["kind"] }
+- export const initialWorkItemUIState: WorkItemUIState = {
+- export function workItemUIReducer(state: WorkItemUIState, action: WorkItemUIAction): WorkItemUIState {
+- export function AllowedActionsBar(props: AllowedActionsBarProps) {
+- export function HoldBanner(p: HoldBannerProps) {
+- export function StopScreen(p: { code: string; message: string }) {
+- # 11) UI PERMISSION GUARD IMPLEMENTATION
+- export function ModuleGate(props: { allowedModules: AllowedModule[]; need: AllowedModule; children: React.ReactNode }) {
+- * **Decision** output is one of: **CONTACT / HOLD / STOP**
+- * Email missing: “Email is required.”
+- * Password missing: “Password is required.”
+- Note: Integrations are required for evidence refresh and execution.
+- **Helper:** Integrations are required for evidence refresh and execution.
+- * State badge values: use state enum, but in UI display humanized:
+- * Decision: {decision_output}
+- * If quiet hours: “Schedule Execution” (MVP: show message only; scheduling can be deferred)
+- Placeholders required:
+- **Placeholders section title:** Placeholders required
+- * “Missing required placeholder: {{tenant_first_name}}”
+- # 12) SCREEN 12 — INTEGRATIONS DASHBOARD (ADMIN)
+- - Decision output
+- ### QUIET_HOURS_ACTIVE
+- Body: “Execution is paused due to quiet hours.”
+- You are “done” with Phase F when:
+- # 0) DESIGN SYSTEM OBJECTIVES (NON-NEGOTIABLE)
+- 4. **Permission-Truth**: UI does not imply capabilities user lacks.
+- 5. **Audit Alignment**: UI events map cleanly to audit events.
+- * Decision outputs:
+- Features (required):
+- Required for:
+- # 7) ACCESSIBILITY REQUIREMENTS (MINIMUM VIABLE AA)
+- If you want to proceed deeper into *execution*, the next phase should be:
+- # GLOBAL UI RUNTIME PATTERNS (APPLY TO ALL SCREENS)
+- Use Phase E WorkQueue reducer:
+- ## Local Reducer (UI-only)
+- From Phase E:
+- * UI:
+- * UI:
+- * UI:
+- # SCREEN 12 — INTEGRATIONS DASHBOARD (`/app/integrations`)
+- # “DONE” CHECKLIST FOR PHASE H
+- Phase H is complete when:
+- If you want the next phase, it should be **PRODUCT EXECUTION PHASE I — ULTRA EXPLICIT FRONTEND–BACKEND SYNC CONTRACTS**:
+- | `X-Correlation-Id: <uuid>`    |                         yes | FE       | tracing + audit correlation |
+- | `X-Idempotency-Key: <uuid>`   |      required for all POSTs | FE       | dedupe writes               |
+- "correlation_id": "uuid",
+- "correlation_id": "uuid",
+- # 3) PERMISSION ENGINE OUTPUT CONTRACT (DP Work Item)
+- ## 3.1 Work Item `allowed_actions[]` (required field)
+- # 7) ERROR TAXONOMY + UI MAPPING (BINDING)
+- ## 7.2 Error response requirements
+- # 9) EXACT ENDPOINT SHAPES (MVP) — FE EXPECTATIONS
+- "decision_output": "CONTACT",
+- "decision_output": "CONTACT",
+- "explanation": "Eligible to contact. Approval required.",
+- "correlation_id": "uuid"
+- { "accepted": true, "work_item_id": "wi_...", "state": "EVIDENCE_REQUIRED" }
+- # 11) AUDIT EVENT SYNC (UI ↔ AUDIT)
+- For every UI mutation, BE must emit a corresponding audit event:
+- # 12) “DONE” CHECKLIST FOR PHASE I (SYNC CONTRACT COMPLETE)
+- Phase I is complete when:
+- If you want the next phase (still product execution), it should be:
+- This is the **endpoint-by-endpoint build contract** for CP + DP:
+- # 0) SHARED BACKEND PRIMITIVES (REQUIRED ON DAY 1)
+- **Outputs:** `{ correlationId, workspaceId, userId, role, ip, userAgent }`
+- **Hard rule:** called on every mutation and critical read (optional for reads in MVP; required for writes/transitions).
+- ### DB transaction (required)
+- ## DP-1: `GET /dp/v1/work-queue?state&decision_output&hold_reason_code&cursor&limit`
+- AND ($3::text IS NULL OR decision_output = $3)
+- * If decision_output=CONTACT and approval_id is null and not STOP/HOLD:
+- 2. If approval required:
+- # 3) “PER ENDPOINT” TEST REQUIREMENTS (TEMPLATE)
+- # “DONE” CHECKLIST FOR PHASE J
+- Phase J is complete when:
+- If you want to continue, the next execution phase should be:
+- "correlation_id": "uuid",
+- ## Outputs (events it emits)
+- 7. If output CONTACT:
+- Output:
+- * `decision_output: CONTACT|HOLD|STOP`
+- ## Output events
+- ## Output events
+- # 5) CP→DP EVENT BRIDGE (REQUIRED IF USING TWO OUTBOXES)
+- # “DONE” CHECKLIST FOR PHASE K
+- Phase K is complete when:
+- This is the connector build spec for MVP with a **stub→real** migration path, including:
+- ## 3.1 Envelope pattern (required)
+- ### Output DTO (normalized evidence object)
+- ### Output DTO
+- # 8) “DONE” CHECKLIST FOR PHASE L
+- Phase L complete when:
+- This phase defines the **actual admin-facing UI** for integrations:
+- ## 0.1 Security-first UI constraints
+- # 2) SCREEN A — INTEGRATIONS DASHBOARD (`/app/integrations`)
+- * Subtitle: Required for evidence refresh.
+- Dashboard must auto-refresh integration status every:
+- Integration screens must reuse Phase G components:
+- Connector error → UI behavior:
+- # 12) “DONE” CHECKLIST FOR PHASE M
+- Phase M is complete when:
+- ## Next logical execution phase
+- This phase defines **admin-only governance interfaces** that directly affect runtime behavior:
+- 2. All governance changes require:
+- ## UI Behavior
+- # 5) SCREEN E — QUIET HOURS CONFIG (`/app/admin/safety`)
+- * UI copy:
+- Add quick filters:
+- ## Quiet Hours Active
+- # 8) PERMISSION ENGINE UI RULES
+- Must reuse Phase G components:
+- # 10) ACCESSIBILITY REQUIREMENTS
+- # 12) “DONE” CHECKLIST FOR PHASE N
+- Phase N is complete when:
+- ## Next execution phase
+- That phase will define:
+- These UI rules reduce mistakes:
+- # 13) AGENT ACCESSIBILITY REQUIREMENTS
+- # 15) “DONE” CHECKLIST FOR PHASE O
+- Phase O is complete when:
+- ## Next Execution Phase
+- That phase will define:
+- These UI rules reduce mistakes:
+- # 13) AGENT ACCESSIBILITY REQUIREMENTS
+- # 15) “DONE” CHECKLIST FOR PHASE O
+- Phase O is complete when:
+- ## Next Execution Phase
+- That phase will define:
+- ## Quick Filters
+- # 7) SCREEN G — OPERATIONAL HEALTH DASHBOARD (`/app/support/health`)
+- Reuse Phase G components:
+- # 13) “DONE” CHECKLIST FOR PHASE P
+- Phase P complete when:
+- ## Next Execution Phase
+- It connects acquisition → onboarding → activation → conversion → expansion directly to **real product states**:
+- # 2) SCREEN A — TRIAL LANDING DASHBOARD (`/app/trial`)
+- # 15) “DONE” CHECKLIST FOR PHASE Q
+- Phase Q is complete when:
+- ## Next execution phase
+- That phase will close the last critical gaps:
+- # 0) HARDENING OBJECTIVES
+- This phase ensures:
+- # 2) EDGE CASE GROUP A — WORKER/UI RACE CONDITIONS
+- ## UI Patterns
+- ### Reconciliation Worker (required)
+- ## UI Behavior
+- ## UI Hardening
+- ## UI Hardening
+- ### Never allow UI to guess backend state.
+- # 18) “DONE” CHECKLIST FOR PHASE R
+- Phase R is complete when:
+- If you want to continue, the next phase should be:
+- That phase would include:
+- # 6) FEATURE FLAG SYSTEM
+- ## Stage 5 — Build Artifacts
+- Governance changes require:
+- # 9) FEATURE DELIVERY SEQUENCING (FROM EMPTY REPO)
+- ## Phase S.1 — Foundations (Week 1–2)
+- Build:
+- ## Phase S.2 — Decision Plane Core (Week 3–4)
+- ## Phase S.3 — Control Plane Governance (Week 5)
+- ## Phase S.4 — Runner + Connectors (Week 6)
+- ## Phase S.5 — Frontend Core Screens (Week 7–8)
+- Build:
+- ## Phase S.6 — Support + Observability (Week 9)
+- ## Phase S.7 — Funnel + Activation (Week 10)
+- ## Phase S.8 — Hardening Pass (Week 11)
+- Alerts required:
+- # 17) ENGINEERING “DONE” CHECKLIST FOR PHASE S
+- ## What You Have After Phase S
+- If you want to continue further, the next phase would logically be:
+- That phase would translate this blueprint into:
+- # 6) FEATURE FLAG SYSTEM
+- ## Stage 5 — Build Artifacts
+- Governance changes require:
+- # 9) FEATURE DELIVERY SEQUENCING (FROM EMPTY REPO)
+- ## Phase S.1 — Foundations (Week 1–2)
+- Build:
+- ## Phase S.2 — Decision Plane Core (Week 3–4)
+- ## Phase S.3 — Control Plane Governance (Week 5)
+- ## Phase S.4 — Runner + Connectors (Week 6)
+- ## Phase S.5 — Frontend Core Screens (Week 7–8)
+- Build:
+- ## Phase S.6 — Support + Observability (Week 9)
+- ## Phase S.7 — Funnel + Activation (Week 10)
+- ## Phase S.8 — Hardening Pass (Week 11)
+- Alerts required:
+- # 17) ENGINEERING “DONE” CHECKLIST FOR PHASE S
+- ## What You Have After Phase S
+- If you want to continue further, the next phase would logically be:
+- That phase would translate this blueprint into:
+- ## Commit T7-6 — Reconciliation worker (Phase R)
+- ## Commit T9-4 — Integrations UX (Phase M)
+- ## Commit T9-5 — Approvals UX (Phase H/N)
+- ## Commit T9-6 — Admin governance UX (Phase N)
+- ## Commit T9-7 — HITL agent UX (Phase O)
+- ## Commit T9-8 — Support + observability UX (Phase P)
+- ## Commit T9-9 — Funnel UX (Phase Q)
+- # T.10 Hardening & Production Readiness (Phase R + S) Applied as Code
+- Support UI:
+- # Phase T “NO DEADLOCK” RULES (WHY THIS ORDER)
+- # FINAL “DONE” CHECKLIST FOR PHASE T
+- Phase T is complete when:
+- If you want the next step after Phase T, the only meaningful continuation is:
+- ## Commit T7-6 — Reconciliation worker (Phase R)
+- ## Commit T9-4 — Integrations UX (Phase M)
+- ## Commit T9-5 — Approvals UX (Phase H/N)
+- ## Commit T9-6 — Admin governance UX (Phase N)
+- ## Commit T9-7 — HITL agent UX (Phase O)
+- ## Commit T9-8 — Support + observability UX (Phase P)
+- ## Commit T9-9 — Funnel UX (Phase Q)
+- # T.10 Hardening & Production Readiness (Phase R + S) Applied as Code
+- Support UI:
+- # Phase T “NO DEADLOCK” RULES (WHY THIS ORDER)
+- # FINAL “DONE” CHECKLIST FOR PHASE T
+- Phase T is complete when:
+- If you want the next step after Phase T, the only meaningful continuation is:
+- export function nowIsoUtc(): string {
+- export function ok<T>(correlation_id: string, data: T): EnvelopeOk<T> {
+- decision_output: z.enum(DecisionOutputs).nullable(),
+- decision_output: z.enum(DecisionOutputs).nullable(),
+- export function requireHeader(h: unknown, name: string): string {
+- export function parseBearer(auth: unknown): string {
+- export function verifyJwtFake(token: string): { userId: string; role: Role } {
+- export function buildContext(req: any, requireWorkspace: boolean): RequestContext {
+- export function requireRole(ctx: { role: Role }, roles: Role[]) {
+- export function requireModule(ctx: { allowedModules?: Module[] }, module: Module) {
+- export async function registerRoutes(app: FastifyInstance) {
+- function modulesForRole(role: (typeof Roles)[number]): Module[] {
+- export async function meRoutes(app: FastifyInstance) {
+- export async function registerRoutes(app: FastifyInstance) {
+- export async function workQueueRoutes(app: FastifyInstance) {
+- state: "EVIDENCE_REQUIRED",
+- decision_output: null,
+- function computeAllowedActions(role: Role, state: string, decision: string | null, approvalId: string | null) {
+- export async function workItemRoutes(app: FastifyInstance) {
+- allowed_actions: computeAllowedActions(ctx.role, state, decision_output, approval_id),
+- const data = { accepted: true, work_item_id: String(req.params.id), state: "EVIDENCE_REQUIRED" };
+- export async function markProcessed(pool: Pool, table: string, event_id: string) {
+- export function backoffSeconds(attempt: number): number {
+- export function isRetryableFailure(code: string): boolean {
+- export async function writeDlq(pool: Pool, table: string, p: {
+- export async function handleWorkItemCreated(pool: Pool, e: OutboxRow) {
+- event_id: `evt_${crypto.randomUUID()}`,
+- async function handleRefreshRequested(e: any) {
+- event_id: `evt_${crypto.randomUUID()}`,
+- export function extractFacts(raw: any) {
+- export function containsPII(s: string): boolean {
+- export async function handleRunQueued(pool: Pool, e: any) {
+- event_id: `evt_${crypto.randomUUID()}`,
+- export function correlationId(): string {
+- export function ModuleGate(props: {
+- export function StopScreen(props: { code: string; message: string }) {
+- export function HoldBanner(props: { code: string; message: string; onRetry?: () => void }) {
+- ## File: `infra/migrations/cp/0008_feature_flags.sql`
+- -- optimistic locking (Phase R)
+- -- decision output
+- -- Feature flags baseline (enable incrementally)
+- # V.5 “DONE” CHECKLIST FOR PHASE V
+- Phase V is done when:
+- ## Next execution phase (only useful continuation)
+- ## Required tools
+- ## Required env file
+- ## Symptom 3 — “Evidence refs created but UI shows none”
+- ### Required resources
+- Required secrets:
+- Phase rollout:
+- Feature flags used to gate:
+- ### Required controls
+- # X.4 PRODUCTION FAILURE DRILLS (REQUIRED BEFORE GO-LIVE)
+- These are not blockers but required for maturity:
+- ## What Phase X Completes
+- If you want to continue further, the only meaningful next phase would be:
+- # Y.0 OPERATIONAL OBJECTIVES
+- # Y.3 SERVICE LEVEL OBJECTIVES (SLOs)
+- # Y.14 OBSERVABILITY DASHBOARD STRUCTURE
+- Your dashboards must include:
+- Every SEV1/SEV2 requires:
+- ## What Phase Y Completes
+- After this phase, your platform is:
+- # Y.0 OPERATIONAL OBJECTIVES
+- # Y.3 SERVICE LEVEL OBJECTIVES (SLOs)
+- # Y.14 OBSERVABILITY DASHBOARD STRUCTURE
+- Your dashboards must include:
+- Every SEV1/SEV2 requires:
+- ## What Phase Y Completes
+- After this phase, your platform is:
+- # Z.0 ENTERPRISE OBJECTIVES
+- Enterprise readiness requires:
+- Feature flag:
+- Output:
+- Enterprise dashboards:
+- # Z.9 WHAT PHASE Z COMPLETES
+- After this phase your platform becomes:
+- If you want to go one step further beyond Phase Z, the only meaningful continuation is:
+- # Z.0 ENTERPRISE OBJECTIVES
+- Enterprise readiness requires:
+- Feature flag:
+- Output:
+- Enterprise dashboards:
+- # Z.9 WHAT PHASE Z COMPLETES
+- After this phase your platform becomes:
+- If you want to go one step further beyond Phase Z, the only meaningful continuation is:
+- ## Governance Consistency Requirement
+- ## Audit Integrity Requirement
+- Requires:
+- Enterprise customers require:
+- Global dashboards:
+- Phase Ω complete when:
+- # What Phase Ω Achieves
+- After this phase the platform supports:
+
+## Source: VTE - Architecture Failiure Exceptions.txt
+- Evidence: the need for explicit build order exists because the architecture alone is not executable.
+- UMP rules require:
+- # Part 1 — Controlled Intuition Zone Model
+- ## Objective
+- * **Product/UX lead**: places intuition where it improves usability without corrupting truth.
+- ## Requirements (non-negotiable)
+- ### Z0 — Forbidden Zone (Zero Intuition)
+- ### Z1 — Deterministic Core Zone (Low/No Intuition)
+- **Allowed “intuition”:**
+- ### Z2 — Draft Intelligence Zone (Intuition Allowed, But Non-Authoritative)
+- Draft outputs must be **typed** and **non-binding**:
+- ### Z3 — Product UX Zone (Medium Intuition, Bounded)
+- * If state is HOLD/STOP, UI must *fail-closed*: show reason code + next required action.
+- ### Z4 — Experiment Zone (High Intuition, Isolated)
+- ### D3 — UI Truth Rendering Rules
+- UI rules:
+- 2. CI rule: any code in Z0/Z1 that calls LLM or uses freeform inference ⇒ fail build.
+- 3. CI rule: any attempt to persist tenant payload fields ⇒ fail build (static scan + runtime tests).
+- 4. UI rule: state machine drives all buttons (if HOLD/STOP, buttons disabled; show reason).
+- ## Objective
+- Build **one canonical end-to-end journey** that proves the system is real:
+- * **Program/CTO**: sequences UMP build order; enforces invariants.
+- ## Requirements
+- **Output:** Work Item created with source refs (sheet row refs), no tenant payload stored.
+- **Output:** `DecisionOutput` (truth) containing:
+- * **APPROVED**: if policy requires approval, Approval engine must transition here before preview/execution
+- ## Minimal UI required for the Golden Path
+- ## Build Order (implementation-ready) — mapped to your UMP sequencing
+- ### Phase GP-0: Invariants (must exist before anything)
+- ### Phase GP-1: Control Plane minimum
+- ### Phase GP-2: Brain Runtime (the real system)
+- ### Phase GP-3: Eyes + Kidneys for AppFolio + Sheets (stream-only)
+- ### Phase GP-4: Decision Engine (compile tables → deterministic outputs)
+- ### Phase GP-5: Hands execution + Heart reliability
+- ### Phase GP-6: Minimal UI for ops + approvals
+- 5. If CONTACT and approval required: wait until approved
+- ## What you should do next (choice required)
+- I will output the exact repo-level file list for GP-0 → GP-6 (per UMP), including:
+- ## Objective
+- * **Frontend Lead**: ensures UI renders authoritative WorkItem state and never “implies” CONTACT under HOLD/STOP.
+- ## Requirements
+- ## Architecture Expectations
+- "truth_outputs_allowed": true,
+- "draft_outputs_allowed": false,
+- "notes": "No intuition. Deterministic truth only."
+- "truth_outputs_allowed": true,
+- "draft_outputs_allowed": false,
+- "truth_outputs_allowed": false,
+- "draft_outputs_allowed": true,
+- "notes": "Draft outputs only. Must never resemble DecisionOutput."
+- "truth_outputs_allowed": false,
+- "draft_outputs_allowed": true,
+- "truth_outputs_allowed": false,
+- "draft_outputs_allowed": true,
+- This enforces your key split: **Truth** is deterministic runtime output; **Draft** is suggestion-only (AI cannot execute).
+- "outputs": ["WorkItem", "DecisionOutput", "PipeEnvelope"],
+- Example for UI Draft Copy (Z3):
+- "outputs": ["DraftMessage", "AISuggestion"],
+- Key UI rule: UI may **render** WorkItem state but must not **invent** state or override STOP/HOLD semantics.
+- # Execution Steps (Phase-wise, linear)
+- "truth_outputs_allowed": true,
+- "draft_outputs_allowed": false,
+- "notes": "No intuition. Deterministic truth only."
+- "truth_outputs_allowed": true,
+- "draft_outputs_allowed": false,
+- "truth_outputs_allowed": false,
+- "draft_outputs_allowed": true,
+- "notes": "Draft outputs only. Must never resemble DecisionOutput."
+- "truth_outputs_allowed": false,
+- "draft_outputs_allowed": true,
+- "truth_outputs_allowed": false,
+- "draft_outputs_allowed": true,
+- "required_pipe_fields": [
+- - AI may produce Draft outputs only.
+- - AI may not produce DecisionOutput or change WorkItem.state.
+- ## Required Per-Module Declaration
+- - Any construction/emission of PipeEnvelope without required fields.
+- "required": ["version", "zones", "truth_types", "draft_types", "required_pipe_fields", "forbidden_tenant_fields"],
+- "required": ["Z0", "Z1", "Z2", "Z3", "Z4"],
+- "required_pipe_fields": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+- "required": [
+- "truth_outputs_allowed": { "type": "boolean" },
+- "draft_outputs_allowed": { "type": "boolean" },
+- "build": "tsc -p tsconfig.json",
+- export function printViolations(violations: Violation[]) {
+- required_pipe_fields: string[];
+- export async function loadZoneMap(repoRoot: string): Promise<ZoneMap> {
+- export async function validateZoneMap(repoRoot: string, zoneMap: ZoneMap): Promise<string[]> {
+- export async function discoverModuleManifests(repoRoot: string): Promise<string[]> {
+- export function loadZoneManifest(manifestPath: string): ZoneManifest {
+- export async function moduleSourceFiles(moduleDir: string): Promise<string[]> {
+- export async function runRules(args: {
+- // RULE-ZMAP-04: PipeEnvelope construction must include required fields (best-effort static check)
+- message: `PipeEnvelope missing required field(s): ${pi.missing.join(", ")}`,
+- export async function scanFileForSignatures(filePath: string, signatures: string[]): Promise<SignatureHit[]> {
+- export async function scanFileForTypeExports(filePath: string): Promise<TypeExportHit[]> {
+- requiredFields: Set<string>
+- function getRepoRoot(): string {
+- # 7) Required per-module manifests (minimum you must add now)
+- # Next (required) step to make this non-toy
+- This remains aligned to your contract invariants: **PipeEnvelope required fields**  and **no tenant data persistence** .
+- "pipe_emit_function_signatures": [
+- * `redaction_wrapper_signatures`: logging tenant fields is allowed **only if** wrapped by a redaction function.
+- * `pipe_emit_function_signatures`: places where envelopes are emitted.
+- export function parseTsFile(filePath: string): AstFile {
+- export function nodeLine(sourceFile: ts.SourceFile, node: ts.Node): number {
+- export function getText(sourceFile: ts.SourceFile, node: ts.Node): string {
+- export function getQualifiedName(expr: ts.Expression): string | null {
+- export function isCallToAny(expr: ts.CallExpression, signatures: string[]): boolean {
+- export function isConsoleCall(expr: ts.CallExpression): boolean {
+- export function scanAstForLlmUse(filePath: string, llmImportSigs: string[]): LlmUseHit[] {
+- function visit(node: ts.Node) {
+- // Imports: import x from "openai" / require("openai")
+- export function scanAstForExportedTypes(filePath: string): ExportTypeHit[] {
+- function visit(node: ts.Node) {
+- function hasExportModifier(node: ts.Node): boolean {
+- requiresRedaction: boolean;
+- export function scanAstForTenantFieldSinks(args: {
+- function visit(node: ts.Node) {
+- requiresRedaction: isLog && !redacted
+- function isWrappedByRedaction(callNode: ts.CallExpression, wrappers: string[]): boolean {
+- function collectForbiddenFields(node: ts.Node, forbidden: Set<string>, found: Set<string>) {
+- function getPropName(name: ts.PropertyName): string | null {
+- export function scanAstForPipeEnvelopeIssues(args: {
+- requiredFields: Set<string>;
+- function visit(node: ts.Node) {
+- function looksLikeEnvelope(obj: ts.ObjectLiteralExpression): boolean {
+- function requiredMissing(obj: ts.ObjectLiteralExpression, required: Set<string>): string[] {
+- export async function runRules(args: {
+- message: `LLM import/require detected in forbidden zone: '${h.signature}'`,
+- message: `${msgBase} (log sink requires redaction wrapper)`,
+- // RULE-ZMAP-04: PipeEnvelope required fields at construction/emit sites
+- requiredFields: requiredPipeFields,
+- message: `PipeEnvelope missing required field(s): ${pi.missing.join(", ")} (${pi.context})`,
+- # 6) Update `tools/zone-linter/src/index.ts` (no functional change)
+- * **LLM ban in Z0/Z1**: detects `import ... from "openai"` and `require("openai")` reliably.
+- * **PipeEnvelope required fields**:
+- export function buildTaintEnv(sourceFile: ts.SourceFile, forbiddenFields: Set<string>): TaintEnv {
+- // Call expression: unknown function can return tainted if any argument is tainted (conservative)
+- // This catches: buildPayload(tenant_name) -> tainted
+- // Additional conservative rule: if function name includes "tenant" or "ledger", treat as tainted unknown.
+- function getPropName(name: ts.PropertyName): string | null {
+- function union(a?: Set<string>, b?: Set<string>): Set<string> {
+- function addAll(dst: Set<string>, src: Set<string>) {
+- export function scanAstForTenantFieldSinks(args: {
+- function visit(node: ts.Node) {
+- requiresRedaction: false
+- requiresRedaction: true
+- function collectTaintByIdentifierUse(node: ts.Node, env: Map<string, Set<string>>, out: Set<string>) {
+- ## Objective
+- export function isRedacted<T>(val: unknown): val is Redacted<T> {
+- export function redactForLog<T extends Record<string, any>>(obj: T): Redacted<Partial<T>> {
+- export function redactForAI<T extends Record<string, any>>(obj: T): Redacted<Partial<T>> {
+- function isRedactedArgument(arg: ts.Expression, redactedMarkerProp: string, redactionTypeName: string): boolean {
+- export function scanAstForTenantFieldSinks(args: {
+- 1. **Only canonical redaction functions may produce `Redacted<T>`**:
+- "canonical_redaction_functions": [
+- export function scanAstForRedactedTypeCasts(args: {
+- function visit(node: ts.Node) {
+- message: `Direct Redacted type cast is forbidden outside allowlist. Use canonical redaction functions only. Cast='${ch.typeText}'`,
+- 1. **The only trusted source of redaction is canonical functions**:
+- "canonical_redaction_functions": [
+- function isRedactedArgument(arg: ts.Expression, redactionTypeName: string): boolean {
+- export function scanAstForManualRedactionMarkerInjection(args: {
+- function visit(node: ts.Node) {
+- And ensure your function signature still includes:
+- function emit(level: "debug" | "info" | "warn" | "error", e: SecureLogEvent) {
+- export function scanAstForLockedLoggingViolations(args: {
+- function visit(node: ts.Node) {
+- export function scanAstForForbiddenSinkUse(args: {
+- function visit(node: ts.Node) {
+- "required_ctx_fields_z0z1": ["correlation_id", "work_item_id"]
+- export function scanAstForSecureLogContextIssues(args: {
+- requiredCtxFields: string[];          // correlation_id, work_item_id
+- function visit(node: ts.Node) {
+- missingCtxFields: [...args.requiredCtxFields],
+- missingCtxFields: [...args.requiredCtxFields],
+- // Fail-closed: ctx must be object literal so we can prove required fields exist.
+- missingCtxFields: [...args.requiredCtxFields],
+- reason: "ctx must be an object literal (fail-closed proof requirement)"
+- reason: "ctx missing required fields"
+- function findProperty(obj: ts.ObjectLiteralExpression, key: string): ts.ObjectLiteralElementLike | null {
+- // RULE-ZMAP-09: In Z0/Z1, secureLog.* must include ctx with required fields.
+- const requiredCtxFields: string[] = locked.required_ctx_fields_z0z1 ?? ["correlation_id", "work_item_id"];
+- secureLog.info({ msg: "x", ctx }); // RULE-ZMAP-09 (fail-closed proof requirement)
+- ## ❌ Fail (Z0/Z1): missing required fields
+- ## 1.1 Add a helper to build a `const` object-literal map
+- function buildConstObjectLiteralKeyMap(sourceFile: ts.SourceFile): Map<string, Set<string>> {
+- function visit(node: ts.Node) {
+- export function scanAstForSecureLogContextIssues(args: {
+- requiredCtxFields: string[];
+- function visit(node: ts.Node) {
+- missingCtxFields: [...args.requiredCtxFields],
+- missingCtxFields: [...args.requiredCtxFields],
+- reason: "ctx missing required fields"
+- missingCtxFields: [...args.requiredCtxFields],
+- reason: `ctx alias '${ctxInit.text}' missing required fields`
+- missingCtxFields: [...args.requiredCtxFields],
+- reason: "ctx must be an object literal or a const alias to an object literal (fail-closed proof requirement)"
+- ## ❌ Fail: ctx from function (not provable)
+- ## Change: Require **top-level** `const ctx = { ... }` only (Z0/Z1)
+- This removes shadowing/closure ambiguity and keeps the proof model deterministic: the linter only trusts **file-scope constants**.
+- # 1) Update the const-alias map builder
+- function buildConstObjectLiteralKeyMap(sourceFile: ts.SourceFile): Map<string, Set<string>> {
+- function visit(node: ts.Node) {
+- function buildTopLevelConstObjectLiteralKeyMap(sourceFile: ts.SourceFile): Map<string, Set<string>> {
+- missingCtxFields: [...args.requiredCtxFields],
+- missingCtxFields: [...args.requiredCtxFields],
+- // NEW: require the alias identifier name be exactly `ctx`
+- missingCtxFields: [...args.requiredCtxFields],
+- missingCtxFields: [...args.requiredCtxFields],
+- missingCtxFields: [...args.requiredCtxFields],
+- reason: `ctx alias 'ctx' missing required fields`
+
+## Source: VTE - Execution A to Z.txt
+- This is **DELIVERY 1** only: the **authoritative phase framework + the first execution tranche** (launch-blockers). At the end you’ll see **STOP**.
+- ## Objective
+- Create a **phase-wise, linear, sequential** plan that closes the major gaps you listed:
+- ## Architecture Expectations
+- ### AX-01 Control Plane vs Data Plane separation (must be visible in UI)
+- * **Control Plane UI**: policies, approvals, templates, integrations, RBAC, audit
+- * **Data Plane UI**: work queues, work items, holds, runs, operational telemetry
+- You asked for “everything explicitly.” The **phase system** below produces these deliverable families:
+- ## The New Phase System (Authoritative)
+- ### 0) Architectural Phases (already defined; we do NOT extend these)
+- # 1) Execution Phases (build the system)
+- **Objective:** make the system *impossible to run unsafely*.
+- **Objective:** the platform has authority, policy, approvals, and audit.
+- **Objective:** make SOP + decision tables executable and stateful.
+- **Objective:** safely read, validate, execute, retry, buffer.
+- ## EXE-4 — Full UI/UX build-out (funnels + all roles)
+- **Objective:** close the UI/UX gaps you listed: funnels, role journeys, HITL sync.
+- * Sales funnel UI: Lead → Trial → Paid (public + sales console)
+- **Objective:** remove “we do not have content for our pages.”
+- # 2) Optimization Phases (stabilize, scale, harden)
+- These are **post-build** phases; they do not change architecture, they improve:
+- # 3) Product Evolution Phases (capabilities expansion)
+- Next I will deliver **Execution Phase EXE-0 and EXE-1** as an **ultra-explicit build pack**:
+- Type **PROCEED: EXE-0 + EXE-1 BUILD PACK** to receive the **implementation-grade**, step-by-step execution plan for:
+- ## EXE-0 Build Pack — System Invariants (Launch-Blockers)
+- This phase corresponds to **PHASE-0 — SYSTEM INVARIANTS** in your UMP build order:
+- # 1) Output of EXE-0 (what gets shipped)
+- ### Files (required)
+- "workspace_id": "string (required)",
+- "work_item_id": "string (required)",
+- "correlation_id": "uuid (required)",
+- "organ_source": "string (required)",
+- "organ_target": "string (required)",
+- "timestamp": "ISO8601 (required)",
+- "policy_version": "string (required)",
+- ### Files (required)
+- ### Required API
+- * output includes:
+- * **Log scrub tests:** synthetic payloads containing PII must never appear in output
+- * **AI payload tests:** prompt inputs/outputs are scrubbed
+- * **Snapshot determinism:** same input produces same redacted output byte-for-byte
+- ### Files (required)
+- # 2) Required Engineering Decisions (lock these in EXE-0)
+- * fail build if:
+- # 4) Minimal UI Implications (yes, EXE-0 affects UI)
+- ## UI requirements created by EXE-0
+- Below is the **EXE-0 — SYSTEM INVARIANTS MASTER BUILD SPEC** rewritten to be:
+- # EXE-0 — SYSTEM INVARIANTS MASTER BUILD SPEC
+- ## Objective
+- ## Required directory map
+- ## Objective
+- ## Required Decisions
+- ## Objective
+- ## Objective
+- ## Required Engine
+- ## Objective
+- ## Objective
+- ## Redacted Output Format
+- ## Required Files
+- ## Objective
+- ## Objective
+- ## Objective
+- ## Objective
+- ## Required Reason Codes
+- ## Output Contract
+- ## Objective
+- **PROCEED: EXE-1 MASTER BUILD SPEC**
+- I will produce the Control Plane phase rewritten at this exact level — including:
+- # EXE-1 — CONTROL PLANE MASTER BUILD SPEC
+- ## Objective
+- ## Required Entities
+- ## Required Files
+- ## Objective
+- ## Required Modules
+- ## Objective
+- ## Required Roles (Baseline)
+- ## Required Files
+- ## Objective
+- ## Required Modules
+- ## Objective
+- ## Required Files
+- ## Objective
+- ## Required Files
+- ## Objective
+- ## Required API Groups
+- # EXE-1.8 — Role Console UI Foundations
+- ## Objective
+- ## Required Consoles
+- ## UI Rules
+- ## Required Tooling
+- If you want the next phase at the same depth, say:
+- **PROCEED: EXE-2 MASTER BUILD SPEC**
+- # EXE-2 — BRAIN RUNTIME MASTER BUILD SPEC
+- ## Objective
+- ## Objective
+- ## Required States
+- ## Required Files
+- ## Objective
+- ## Output Artifact
+- ## Objective
+- ## Output
+- ## Objective
+- ## Objective
+- ## Required Output Contract
+- ## Objective
+- ## Required File
+- ## Objective
+- ## Objective
+- ## UI Use
+- ## Objective
+- ## Required Events
+- ## Objective
+- If you want the next phase at this exact level of exhaustiveness, say:
+- **PROCEED: EXE-3 MASTER BUILD SPEC**
+- Below is the **EXE-3 — DATA PLANE ORGANS MASTER BUILD SPEC** written in the same style as EXE-0 / EXE-1 / EXE-2:
+- EXE-3 builds the **Data Plane Organs** and their **non-bypassable guarantees**:
+- # EXE-3 — DATA PLANE ORGANS MASTER BUILD SPEC
+- ### Objective
+- ### Required DP Event Families (must exist in schema registry)
+- ### Objective
+- ### Required modules / files
+- ### Implementation requirements (ultra explicit)
+- ### Objective
+- ### Required modules / files
+- ### Implementation requirements
+- ### Objective
+- ### Required modules / files
+- ### Objective
+- ### Required modules / files (per adapter)
+- ### Rate limits + circuit breaker
+- If Eyes relies on UI scraping:
+- ### Objective
+- ### Required modules / files (per execution adapter)
+- ### Objective
+- ### Objective
+- ### Required metrics (minimum)
+- ### Required logs/traces
+- ### Objective
+- ## EXE-3.9 — Minimal DP UI Surfaces (Only what DP requires)
+- ### Must-exist UI components (thin)
+- ### Hard UI rules
+- ### Objective
+- ### Required test suites
+- ### Objective
+- If you want the next phase at this same level:
+- **PROCEED: EXE-4 MASTER BUILD SPEC**
+- That will be the **full UI/UX build-out** you explicitly asked for:
+- This phase implements the **entire user-facing layer** on top of EXE-0/1/2/3:
+- # EXE-4 — UI/UX MASTER BUILD SPEC
+- # EXE-4.0 — UI Architecture Freeze
+- ## Objective
+- ## Required Layout Domains
+- ## Objective
+- # EXE-4.2 — Sales Funnel UI
+- ## Objective
+- ## Required Screens
+- ## Objective
+- ## Required UI Modules
+- ## Objective
+- ## Required Pages
+- ## UI Behaviors
+- ## Objective
+- ## Required Surfaces
+- ## Objective
+- ## Required Features
+- ## Objective
+- ## Objective
+- ## Required Features
+- ## Objective
+- ## Required Views
+- ## Objective
+- ## Requirements
+- ## Objective
+- title: "Approval Required"
+- ## Objective
+- ## Required UI Controls
+- ## Streaming UI Rules
+- ## Test Requirements
+- Next phases are no longer “build the system,” but:
+- OPT-1 does **not** introduce new features. It stabilizes and hardens the system you already built:
+- # OPT-1 — RELIABILITY & THROUGHPUT MASTER BUILD SPEC
+- OPT-1 transforms the platform from “functionally complete” into **production-grade reliable** by introducing:
+- The objective is:
+- ### Objective
+- ### Required Targets (baseline)
+- ### Objective
+- ### Required Changes (Lungs)
+- ### Objective
+- ### UI Requirements
+- ### Objective
+- ### Required Structure
+- ### Objective
+- ### Required Features
+- ### UI Additions
+- ### Objective
+- ### Required Enhancements
+- ### Objective
+- ### Required Controls
+- ### Objective
+- ### Objective
+- ### Required UX Changes
+- ### Dashboard Deliverables
+- ### Objective
+- ### Required Simulations
+- Next phases:
+- If you want the same exhaustive build spec next, say:
+- # OPT-2 — UX OPTIMIZATION MASTER BUILD SPEC
+- OPT-2 transforms the UI from “functional rendering” into:
+- The UI must remain:
+- ## Objective
+- ## Objective
+- ### Required Changes
+- ## Objective
+- ## Objective
+- ### Required Changes
+- ## Objective
+- ## Objective
+- ## Objective
+- ### Required UI Enhancements
+- ## Objective
+- ## Objective
+- ### Required Patterns
+- ## Objective
+- ### Required Components
+- ## Requirements
+- ## Objective
+- # OPT-2.12 — Performance Budgets + Build Enforcement
+- Fails build if:
+- Next phase:
+- # OPT-3 — SECURITY HARDENING MASTER BUILD SPEC
+- ### Objective
+- ### Objective
+- ### Required Capabilities
+- ### Objective
+- ### Required Changes
+- Require:
+- ### Objective
+- ### Required Controls
+- ### Objective
+- ### Required Controls
+- ### Objective
+- ### Required Controls
+- ### Objective
+- ### Required Controls
+- ### Objective
+- ### Required Controls
+- ### Objective
+- ### Objective
+- ### Required Controls
+- #### 2) Output Schema Enforcement
+- ### Objective
+- ### Required Controls
+- ### Objective
+- ### Required Alerts
+- ### Objective
+- ### Required Runbooks
+- ### Objective
+- ### Objective
+- If you want the next phase at the same level:
+- # OPT-4 — OBSERVABILITY & PRODUCT OPS MASTER BUILD SPEC
+- ### Objective
+- ### Objective
+- ### Required Event Families
+- ### Objective
+- ### Required Additions
+- ### Objective
+- ### Dashboard Deliverables
+- ### Objective
+- ### Objective
+- ### Objective
+- ## OPT-4.7 — UI Interaction Telemetry (Privacy-Preserving)
+- ### Objective
+- ## OPT-4.8 — Product Ops Dashboards
+- ### Required Dashboard Groups
+- ### Required Alert Types
+- ### Required SLOs
+- ### Objective
+- ### Required Playbooks
+- ### Objective
+- ### Toolkit Features
+- ### Objective
+- The remaining phase is:
+- # EVO-1 — PRODUCT EVOLUTION MASTER BUILD SPEC
+- ### Objective
+- Every new feature must declare:
+- ## EVO-1.1 — Feature Flag & Capability Layer
+- ### Objective
+- ### Required Model
+- ### Objective
+- ### Required Components
+- ### Objective
+- ### Requirements
+- ### Objective
+- ### Required Features
+- ### Objective
+- ### Objective
+- ### Objective
+- ### Objective
+- ### Objective
+- ### Required Tools
+- ### Objective
+- ### Features
+- ### Objective
+- ### Objective
+- ### Outputs
+- ### Objective
+- ### Required Tools
+- ### Objective
+- ### Required Gates
+- into one **chronological build program** with:
+- # PHASE DEPENDENCY GRAPH (LINEAR ORDER)
+- # DETAILED PHASE BREAKDOWN
+- Key Outputs:
+- Key Outputs:
+- Key Outputs:
+- ### EXE-4 — UI/UX Buildout
+- ### OPT-4 — Telemetry + Dashboards
+- Eyes, Hands, and Kidneys can be built in parallel once:
+- Parallel teams can build:
+- ## Risk Zone D — UI Desynchronization
+- ## Phase Dependencies
+- ## EPIC EXE-4 — Full UI & Funnel
+- ## EPIC OPT-4 — Telemetry & Dashboards
+- ### STORY OPT4-02 — Funnel Analytics Dashboard
+- ### STORY EVO1-01 — Feature Flag System
+- ## EPIC EXE-4 — Product UI Development
+- ### STORY EXE4-DEV-04 — Funnel UI Engine
+- ### STORY EVO1-DEV-01 — Feature Flag Engine
+- ## Generated outputs
+- # 6) Minimal “Start Here” Development Paths (By Phase)
+- If you want, I can output the same structure as:
+
+## Source: VTE - Learn 1.txt
+- i) Link to Open the Sheet  https://docs.google.com/spreadsheets/d/1cZWX-Io8v3M6MlKaTiBXkzwIG8QeuI-4U-Vif7uTdzQ/edit?usp=sharing
+- If OTP required:
+- What actions require:
+- “Every 4–5 days” ambiguity:
+- Output:
+- Evidence Required:
+- Rule: Human approval required, always.
+- HOB-4: Identity Ambiguity
+- Rule: Human resolution required before proceeding.
+- If any of these are true → output must be STOP + ESCALATE:
+- LLM outputs must include:
+- L4 additions: pagination drift, keyboard shortcuts, mobile UI variance, cached permissions
+- Below is a forensic correction, written in the same linear, phased, explicit style, that:
+- Ledger ambiguity:
+- PHASE 3 — FALSE CLAIM: “Provable Path to LLM + RPA Automation”
+- Each step must output:
+- A Decision Gate is a mandatory checkpoint that outputs exactly one of these states:
+- Extract required facts from:
+- If any gate output contains:
+- If you’re building this into a real automation system, the next required artifact is:
+- required_fields: ["agent_name", "agent_email"]
+- "ste": "suite"
+- prefixes: ["unit", "apt", "apartment", "suite", "ste", "#"]
+- - "lawsuit"
+- explicit_directive_required: true
+- # If an unmapped label affects the balance composition used for a decision, require HUMAN.
+- require_human_if_unmapped_affects_classification: true
+- require_appfolio_unique_id_if:
+- - "multi_building_same_address"
+- require_upcoming_activities_to_be_clear: true
+- call_requires_human_approval: false
+- text_requires_human_approval: true
+- email_requires_human_approval: true
+- - "explicit_notes_directive_requires_authority"
+- required:
+- required_variables:
+- required_variables:
+- required_variables:
+- required_variables:
+- required_variables:
+- - "tenant seems genuine"
+- explicit_notes_directive_requires_authority: true
+- # Do not dump full notes/ledger into LLM context; include only required excerpts/facts.
+- require_fact_only_summaries: true
+- - "context.multi_building_same_address"
+- - "context.multi_building_same_address == false"
+- - "context.multi_building_same_address == true"
+- - "multi_building_collision=true"
+- outputs:
+- # DT-DRAFT-001 (requires templates exist; no sending)
+- - "derived.scenario_flags.sympathy_required"
+- - "derived.scenario_flags.sympathy_required == true"
+- title: "Human Approval Requirement"
+- - "rules.channel_rules.permissions.text_requires_human_approval"
+- - "rules.channel_rules.permissions.email_requires_human_approval"
+- - "rules.channel_rules.permissions.call_requires_human_approval"
+- - "rules.channel_rules.permissions.text_requires_human_approval == true"
+- approval_required: true
+- - "approval_required=text"
+- - "rules.channel_rules.permissions.email_requires_human_approval == true"
+- approval_required: true
+- - "approval_required=email"
+- - "rules.channel_rules.permissions.call_requires_human_approval == true"
+- approval_required: true
+- - "approval_required=call"
+- approval_required: false
+- - "approval_not_required=true"
+- "required": ["run", "sheet", "appfolio", "signals", "derived", "rules_ref", "context"],
+- "required": ["run_id", "operator_id", "office_tz", "now_iso"],
+- "required": ["rules_pack_version", "templates_pack_version", "prohibited_pack_version"],
+- "required": ["multiple_search_matches_detected", "multi_building_same_address"],
+- "multi_building_same_address": { "type": "boolean" }
+- "required": ["property_address", "unit", "tenant_name", "tags_text", "amount_receivable", "normalized_property_address", "normalized_unit"],
+- "required": [
+- "required": ["note_iso", "note_text"],
+- "required": ["activity_date", "activity_type", "amount", "text"],
+- "required": ["number", "call_allowed", "text_allowed", "annotations"],
+- "required": ["email"],
+- "required": ["entry_date", "label", "debit", "credit"],
+- "required": [
+- "required": [
+- "required": ["sympathy_required", "maintenance_withholding", "payment_plan_reminder"],
+- "sympathy_required": { "type": "boolean" },
+- You didn’t explicitly ask, but without this the pack isn’t executable. Here is the minimal output schema the engine must produce per gate:
+- "$id": "https://example.local/schemas/gate_output.schema.json",
+- "title": "Gate Engine Output",
+- "required": ["proof", "decision"],
+- "required": [
+- "required": ["condition", "passed"],
+- "required": ["hold_reason", "allowed_channels", "escalation_target", "computed"],
+- If you want the next execution-grade artifact, the next thing needed is a reference implementation skeleton (pure functions) for:
+- PHASE 0 — CORE PRINCIPLE: “LEARNING” = GOVERNED RULE ACQUISITION
+- Output: STOP_HUMAN
+- Output: STOP_HUMAN
+- Output: STOP_HUMAN
+- Output: STOP_HUMAN
+- Question: “What unique identifier is required?”
+- Output: STOP_HUMAN
+- Output: STOP_HUMAN
+- exact_rule_text: (required if scope=COMPANY_WIDE)
+- expiry_date: (required for TENANT_ONLY unless “never expires” approved)
+- Changes require changelog entry:
+- Do we allow ledger label map updates without Accounts approval? (recommended: Accounts required)
+- evidence_required: what must be logged
+- expiry: required if tenant-only (default 90 days)
+- approver: required if company-wide
+- Validation required:
+- Validation required:
+- Governance required:
+- Validation required:
+- Validation required:
+- Validation required:
+- Validation required:
+- Similarity vector built from:
+- facts_snapshot_required_fields:
+- base_required:
+- governance_required:
+- - "approval_required"
+- - "requires_regression"
+- - "requires_nearest_neighbor"
+- - "required_signals_all"
+- - "outputs"             # template routing only; cannot change eligibility
+- - "evidence_required"
+- - "required_variables"
+- required:
+- required:
+- #   required: true
+- - "required_fields_present"
+- - "gate_outputs_allowed"
+- - "no_forbidden_patterns_in_outputs"
+- - "templates_must_include_required_compliance_lines_if_configured"
+- suites:
+- required: true
+- required: true
+- required: true
+- suite_id: "golden_v1"
+- then: "HUMAN_REVIEW_REQUIRED"
+- # Which candidate types require which approval role(s)
+- additional: []   # still requires human approval at execution per rules.yaml
+- regression_required_for:
+- # Nearest-neighbor configuration (deterministic similarity, no embeddings required).
+- feature_vector:
+- # Each feature yields a deterministic token set for Jaccard similarity.
+- # All features are facts derived from signals/derived fields.
+- features:
+- nearest_neighbor_suite:
+- required: true
+- PHASE 0 — RESET: WHAT WE ARE BUILDING (CORRECT SCOPE)
+- Agent (Kevin/Ray/etc.): executes the workflow, escalates ambiguity, never assumes
+- Team Lead: resolves operational ambiguity + policy interpretation
+- each with: inputs, outputs, owner (Agent/TL/Accounts/Legal), default safe behavior
+- PHASE 4 — REQUIRED: CHECK PAST TENANT RESPONSES (SMS + EMAIL)
+- Required AppFolio Note Example:
+- Required Action:
+- Required AppFolio Note Example:
+- Required AppFolio Note Example:
+- Required AppFolio Note Example:
+- Required Action:
+- Required AppFolio Note Example:
+- Required AppFolio Note Example:
+- Required AppFolio Note Example:
+- Agent: Executes workflow; cannot interpret ambiguity.
+- Output: 36 canonical gap clusters + priority tiers
+- Goal: Define the minimum closure frontier required before automation planning can resume safely
+- Gaps Covered: Day start ambiguity, greeting, timezone, holidays, late starts
+- Gaps Covered: Unmapped labels, posting ambiguity
+- Notice/Legal UI anchors: where exactly in AppFolio to read “notice served / eviction / mediation / lawyer contact only”
+- Owner Required: Team Lead
+- Owner Required: Team Lead
+- Owner Required: Accounts
+- Owner Required: Accounts
+- Owner Required: Accounts / Leadership
+- Owner Required: Team Lead / Legal
+- Owner Required: Legal
+- Owner Required: Compliance / Team Lead
+- Owner Required: Team Lead
+- Owner Required: Team Lead / Maintenance
+- Owner Required: Team Lead
+- Owner Required: Operations
+- Owner Required: Team Lead
+- Owner Required: Operations
+- Owner Required: Operations
+- Owner Required: Operations
+- Owner Required: Operations
+- Owner Required: Operations
+- Owner Required: Leadership
+- Policy Text: Standard payment plan requires full rent by the 5th, current water, and an additional amount toward outstanding balance by the 20th.
+- Approval Required: __
+- Conflict Type: Scope ambiguity (tenant vs number) + override ambiguity
+- Effective: quick, reversible
+- Required fields:
+- Rule: Read-only. These aids guide decisions; they do not override policy.
+- Required acknowledgement:
+- FOLLOW-UP REQUIRED:
+- FOLLOW-UP REQUIRED:
+- FOLLOW-UP REQUIRED:
+- PROHIBITED: arguing or demanding payment
+- Approvers: Policy owner + required reviewers
+- You will be ready to build an AI-assisted learning system only when:
+- Entity ID (required):
+- Required actions to exit:
+- Required outputs:
+- Outputs:
+- Outputs:
+- Outputs:
+- Outputs:
+- Output: Do nothing; record “No balance” in calling sheet.
+- Meaning: Ambiguous ledger/charges/notes require human ruling.
+- Outputs:
+- Meaning: Required outreach actions were completed and logged.
+- Outputs required:
+- Meaning: Outreach required, but one or more channels unavailable.
+- Outputs:
+- Outputs:
+- Team Lead (Operations Lead): approves exceptions, resolves ambiguity
+- STOP and escalate: Team Lead required.
+- OTP: [TEAM_LEAD_APPROVAL_REQUIRED]
+- Any correction requires:
+- Create normalized headers (add new required headers):
+- Output:
+- Phase A: RPA opens systems + health checks
+- Phase B: RPA copies rows into calling tab (or generates tab)
+- Phase C:
+- Phase D: auto-create escalation ticket with evidence pack
+- Phase E: auto-generate daily summary + metrics
+- If you want the next output, I can generate ready-to-use artifacts in the exact formats your team will adopt:
+- System requirement:
+- Level 2 (process): wrong state, missing required outreach channel without justification
+- Every change requires a CR record:
+- Operators: read/write only to today’s calling tab + required cells
+- PHASE 2 — Google Sheet vs CSV vs Excel: How you change, share, and map (and what if headers change)
+- You define a canonical schema (your required columns), e.g.:
+- PHASE 4 — “Wrong policy call but thinks it’s right”: how to prevent and contain errors
+- 4.2 Layer 2: Evidence requirement (“no evidence, no decision”)
+- PHASE 5 — Templates: “Anchor Realty embedded” problem (multi-company, employee churn)
+- 7.1 Required: Jurisdiction Policy Profiles
+- Instead of rewriting SOP per company, build:
+- Run “Policy test suite” (10 sample tenants):
+- Layer A: “Onboarding Wizard” (UI or form-driven)
+- 4.1 Guardrail 1: “Onboarding must pass a Test Suite”
+- When a new company is onboarded, system runs a test suite:
+- This launches one guided flow that produces:
+- A toggle: “Require legal approval before activating a new city/county policy” (default ON)
+- 4) “We can’t download everything” → correct: use an Incremental Policy Acquisition workflow
+- Require: Team Lead + Compliance approval before using any “local-specific” behavior
+- Requirement: Template Packs must be language-keyed
+- PHASE 2 — Inbound SMS in AppFolio triggers an Email: How to process and respond
+- Important: send via AppFolio SMS UI/API so it stays in the thread.
+- ES: Recibimos su mensaje. Un supervisor lo revisará y le dará seguimiento. Si es urgente, llame al [OfficePhone].
+- TAB: SLA_DASHBOARD_SCHEMA (Inbound response management)
+- Output: STRUCTURED_RESPONSE JSON
+- Below are the four deliverables you asked for, written E2E, ultra-explicit, and production-grade, broken into phases:
+- Required facts: must exist in FACT_CONTEXT to send
+- Required disclosures: tokens, not literal text (so multilingual)
+- Required facts: TenantFirstName (optional), CompanyName, OfficePhone, PropertyAddress
+- Required facts: same as above
+- Required facts: PromisePayDate (verified from inbound), optional Amount (only if tenant stated it or verified)
+- Required facts: PromisePayDate (from log), contact info
+- Required facts: payment confirmation boolean; do not include amount unless verified
+- Required facts: office contact info; optionally “please call”
+- Required facts: due date (from plan), contact info
+- Required disclosures: DISC_HIGH_RISK_ACK_ONLY
+- Required facts: dispute instructions token
+- Forbidden: arguing facts, asserting correctness without review
+- Required: timeframe token (“we will review”)
+- Required: verified resolution note
+- Required: office contact info; request for documentation process
+- Required: list of acceptable documents (policy-defined, not LLM invented)
+- Required: acknowledgement + next steps
+- Required: opt-out confirmation line
+- Required: acknowledgement + confirm preference
+- for each intent: which template IDs exist and required variables
+- If you want, I can output the paste-ready tables for:
+- for each intent: which template IDs exist and required variables
+- If you want, I can output the paste-ready tables for:
+- (For each intent: which template IDs exist + required variables)
+- If required variables are missing, system must:
+- Approval required:
+- TAB: INTENT_TO_TEMPLATE_REQUIREMENTS
+- Inputs (required):
+- Output (required):
+- requires_human_review: bool
+- Opt-out gate: if required and missing → BLOCK
+- TAB: INTENT_TO_TEMPLATE_REQUIREMENTS
+- PHASE 3 — Translation Memory: how it is generated, stored, and reused
+- Spanish dispute ack required:
+- PHASE 1 — Core Principle: Follow-ups must be contractual, not conversational
+- PHASE 8 — Example: “I’ll pay you in 2 days”
+- Below is the complete production-grade Follow-Up System v1.0 covering all items you listed, E2E, broken into phases:
+- Your engine must expose these functions (same behavior everywhere):
+- All computed outputs are logged with:
+- Required vars: TenantFirstName (optional), PromisePayDate, OfficePhone, CompanyName
+- Required vars: TenantFirstName (optional), PromisePayDate, OfficePhone, CompanyName
+- If you want the next step, I can output the paste-ready config tabs for:
+- FURS-ARPA-ASST-BASE	ARPA	ASSISTANCE	3	BUSINESS_DAYS	2	BUSINESS_DAYS	1	2	21	17:00	TRUE	CW-ARPA-STD	Assistance requires buffers
+- Step 4 — Example sets: US-FED + PA (with approvals required)
+- If you want, I can now output example rows for:
+- This requires TWO tables working together:
+- 10) INTENT_TO_TEMPLATE_REQUIREMENTS — Minimum: 6 rows
+- 17–20) Holiday tabs — Minimum for onboarding: none required to start
+- "MaxCallsPerTenantPerDay":1,"MaxCallsPerTenantPer7Days":3,"RequireSMSOptOutLine":True
+- "WorksheetRule":"Decisions","HeaderRow":1,"WriteStartRow":2,"HeaderProtection":True,"Notes":"Primary ops output"}
+- "OutputDestinationID":"DST-NEWCO-OPS","OutputWriteMode":"UPSERT","Notes":"Wizard generated"
+- "Required":True,"Transform":"TRIM","DefaultValue":"","ValidationRule":"NON_EMPTY","FailureAction":"FAIL_ROW"},
+- "Required":True,"Transform":"NORMALIZE_PHONE","DefaultValue":"","ValidationRule":"VALID_PHONE","FailureAction":"FAIL_ROW"},
+- "Required":True,"Transform":"TRIM","DefaultValue":"","ValidationRule":"NON_EMPTY","FailureAction":"FAIL_ROW"},
+- "Required":True,"Transform":"TRIM","DefaultValue":"","ValidationRule":"NON_EMPTY","FailureAction":"FAIL_ROW"},
+- "Required":True,"Transform":"TRIM","DefaultValue":"","ValidationRule":"NON_EMPTY","FailureAction":"FAIL_ROW"},
+- "Required":True,"Transform":"TO_BOOL","DefaultValue":"FALSE","ValidationRule":"BOOL","FailureAction":"FAIL_ROW"},
+- "Required":False,"Transform":"TO_BOOL","DefaultValue":"FALSE","ValidationRule":"BOOL","FailureAction":"DEFAULT"},
+- "Required":False,"Transform":"LOWER","DefaultValue":"en","ValidationRule":"IN_LIST","FailureAction":"DEFAULT"},
+- "AllowedChannels":"SMS","RequiresOptOutLine":True,"LocksThreadAfterSend":True,"Priority":10,"Active":True,"ApprovedBy":"WIZARD","ApprovedAt":"AUTO"},
+- "MinLintScoreRequired":95,"RequiresApprovalIfRuntimeTranslated":False},
+- "MinLintScoreRequired":95,"RequiresApprovalIfRuntimeTranslated":False},
+- "MinLintScoreRequired":97,"RequiresApprovalIfRuntimeTranslated":True},
+- "MinAvgLintScore":95,"AllowIfAnyReviewEvents":False,"RequiredApprovalRole":"TEAM_LEAD","CreateTemplateStatus":"DRAFT"
+- "RequiresOptOutLine":True,"RiskClass":"MED","LintProfileID":"LINT-BASE-ANY","Source":"MANUAL","Version":"v1.0.0","Status":"ACTIVE"},
+- "RequiresOptOutLine":True,"RiskClass":"MED","LintProfileID":"LINT-BASE-ANY","Source":"MANUAL","Version":"v1.0.0","Status":"ACTIVE"},
+- "RequiresOptOutLine":True,"RiskClass":"HIGH","LintProfileID":"LINT-HR-ANY","Source":"MANUAL","Version":"v1.0.0","Status":"ACTIVE"},
+- "RequiresOptOutLine":False,"RiskClass":"LOW","LintProfileID":"LINT-BASE-ANY","Source":"MANUAL","Version":"v1.0.0","Status":"ACTIVE"},
+- # ---------- Build workbook ----------
+- {"Section":"Note","Details":"Fields ApprovedAt='AUTO' indicate wizard runtime timestamp; replace with actual timestamps if required."},
+- # ---------- Dry-run validation output CSV ----------
+- # Mapping fields required set
+- "All required fields present" if not missing else f"Missing: {sorted(list(missing))}",
+- "Required classifications present" if not missing_classes else f"Missing: {sorted(list(missing_classes))}",
+- Add a required config.yaml concept:
+- AppFolio tenant notes: required format.
+- For every WorkItem processed, the system must output:
+- Required updates:
+- Trigger: Any required SheetRow fields missing or unparseable:
+- Effect: FAIL_ENRICHMENT or ESCALATE (config-driven). Recommended: ESCALATE → DATA_FIX_REQUIRED
+- Effect: HOLD (default) OR ESCALATE DATA_FIX_REQUIRED if config says missing contact info requires fix.
+- requires_manager_review_threshold_amount: number
+- response_code_required_on_contact: boolean
+- audit_output_path: string
+- Pros: stable, testable, fewer UI breakages
+- Hard requirement for RPA: selectors must be specified and versioned; no “click the button that looks like”.
+- If you want this to become immediately buildable, your next additions should be:
+- Calling sheet schema: header row + sample outputs.
+- Calling sheet schema: header row + sample outputs.
+- Below is an E2E, build-ready package you can copy into your doc. Since you have not pasted your real headers, I’m providing:
+- Required: program must reject row if missing/unparseable
+- Contract requirement: the system must record utility_post_date_source = LEDGER|CHARGES_PANEL|NOTES|NONE in evidence.
+- If MFA required every login: program must stop and request operator intervention (explicit flow)
+- If two rows share the same row_key in the same month tab → ESCALATE: DATA_FIX_REQUIRED (duplicates cannot be safely automated).
+- Must have “UI drift detection”: if selector missing → classify APPFOLIO_UI_CHANGED and stop
+- https://docs.google.com/spreadsheets/d/1cZWX-Io8v3M6MlKaTiBXkzwIG8QeuI-4U-Vif7uTdzQ/edit?usp=sharing
+- calling_sheet_id: 1cZWX-Io8v3M6MlKaTiBXkzwIG8QeuI-4U-Vif7uTdzQ
+- requires_manager_review_threshold_amount: 10000
+- audit_output_path: "/mnt/data/outgoing/audit_{{run_id}}.json"
+- VALIDATION: DATA_FIX_REQUIRED
+- These four are not separate—they are hard requirements inside those layers:
+- This is a Domain Configuration Layer requirement:
+- Short answer: yes — but only a small number, and they are genuinely last-mile system layers.
+- API: containerized service (ECS/Fargate or equivalent)
+- Phase 1 covers:
+- Next phases will cover:
+- Phase 2: Run State Machine
+- Phase 3: Config Schema
+- Phase 4: RPA Selector Spec
+- Phase 5: Completeness check + what remains missing
+- run_id: string (ULID/UUID; unique)
+- status: enum RunStatus (see Run State Machine in Phase 2)
+- requires_manager_review: bool
+- response_code: enum ResponseCode? (required for CONTACT attempts when completed)
+- Output: DecisionOutcome
+- Phase 1 is complete when you confirm:
+- Meaning: Run can proceed but with reduced features.
+- Build list of Attempt objects using config:
+- Meaning: System writes authoritative outputs to downstream surfaces.
+- requires_manager_review_threshold_amount: decimal
+- requires_response_on_done: bool (true)
+- login_strategy: enum (SESSION_REUSE|INTERACTIVE_MFA_REQUIRED)
+- required: bool
+- if required selector fails: error_class = APPFOLIO_UI_CHANGED and halt affected work item
+- Below is Phase 6–Phase 9 (in order):
+- Phase 6: Physical DB schema + explicit purpose of DB given your constraint (“stream tenant data; do not store it”)
+- Phase 7: API contract
+- Phase 8: UX wire-level spec
+- Phase 9: Fixture suite spec + runbooks
+- This is wire-level: pages, components, required fields, validations, actions.
+- Output:
+- Required sections:
+- Output:
+- required: true
+- required: false
+- required: false
+- required: false
+- required: false
+- required: false
+- required: false
+- required: false
+- required: false
+- required: true
+- required: true
+- required: true
+- required: true
+- required: true
+- description: Required for all mutating endpoints.
+- required: true
+- schema: { type: string, format: uuid }
+- required: true
+- schema: { type: string, format: uuid }
+- required: [ok, ts]
+- required: [ok, health_gate, blocked_reasons, dependencies]
+- required: [team_id, run_date_local, capacity_target, mode]
+- run_id: { type: string, format: uuid }
+- required:
+- required: [runs]
+- run_id: { type: string, format: uuid }
+- required: [run_id, accepted, status]
+- required: []
+- run_id: { type: string, format: uuid }
+- required: [run_id, attempts_updated, invalid_responses, errors]
+- work_item_id: { type: string, format: uuid }
+- run_id: { type: string, format: uuid }
+- required:
+- required: [work_items]
+- attempt_id: { type: string, format: uuid }
+- run_id: { type: string, format: uuid }
+- work_item_id: { type: string, format: uuid }
+- required:
+- required: [attempts]
+- required: [override_type, reason_code, override_payload]
+- override_id: { type: string, format: uuid }
+- run_id: { type: string, format: uuid, nullable: true }
+- work_item_id: { type: string, format: uuid, nullable: true }
+- required:
+- required: [scope, config_json, change_reason_code]
+- required: [config_version, created_ts, created_by_user_id, scope, config_json, config_hash]
+- required: [error_code, message, details, correlation_id]
+- Phase 12: Concrete enums (RunStatus, DecisionType, ResponseCode) + /v1/metadata/* endpoints
+- Phase 13: Auth provider integration (JWT issuer, roles)
+- Phase 14: Sheets/AppFolio adapters (internal modules, not API-exposed)
+- Phase 15: DB seed migration for initial global/team config versions
+- Phase 16: OpenAPI additions for metadata endpoints returning enum sets + policy ranges (capacity, cadence) so UI does not hardcode
+- UI must not hardcode: it fetches from metadata endpoints.
+- Baseline required ResponseCodes (starter set; you can add more via config versioning):
+- returns policy ranges and values for UI rendering:
+- "requires_manager_review_threshold_amount": 5000,
+- "requires_response_on_done": true,
+- Returns active policy values and ranges for UI:
+- summary: Get stable enum sets used by the UI
+- required: true
+- required: true
+- required: [run_status, decision_type, work_item_status, attempt_status, channel]
+- required: [team_id, config_version, response_codes, response_code_groups]
+- required: [min, max, default]
+- required: [min_interval_hours, max_attempts_per_day_per_tenant, max_attempts_per_week_per_tenant]
+- required: [rent_grace_day, utility_wait_days]
+- required: [team_id, config_version, timezone, capacity, cadence, grace]
+- Your “file” is not a buildable/executable project spec. It’s a long, mixed artifact that contains:
+- Fix (required):
+- Structured inputs/outputs: JSON schema for every step
+- Error handling and retries: timeouts, stale UI, sheet locks, partial failures
+- Result: even a capable agent can’t reliably “build the project,” because there’s no concrete executable spec.
+- If AppFolio steps are done through the browser, then UI drift + session expiry + latency make 100% unattended automation unrealistic unless you:
+- Phase C — Accept the reality: AppFolio likely needs RPA + HITL
+- Human-in-the-loop gates (required):
+- Phase C — Accept the reality: AppFolio likely needs RPA + HITL
+- Human-in-the-loop gates (required):
+- AppFolio: retrieve ledger, add notes, possibly post events (UI/RPA)
+- Operator: runs daily job, resolves holds, validates outputs
+- Team Lead: provides OTP when required
+- Decision engine is pure: input snapshot → deterministic output
+- Any OTP requirement triggers HOLD: NEED_OTP
+- Phase C — AppFolio Reality: RPA + HITL
+- require_opt_out_footer: true
+- APPFOLIO_AUTH_REF: "secrets://appfolio/auth"      # may require HITL OTP
+- phases:
+- outputs:
+- outputs:
+- outputs:
+- outputs:
+- tab_name: "{{steps.S3_SELECT_MONTH_TAB.outputs.tab_name}}"
+- outputs:
+- raw_rows: "{{steps.S4_READ_ROWS.outputs.rows}}"
+- outputs:
+- calling_rows: "{{steps.S5_NORMALIZE_ROWS.outputs.calling_rows}}"
+- - "required_fields_present"
+- outputs:
+- run_id: "{{steps.S0_CREATE_RUN.outputs.run_id}}"
+- selected_rows: "{{steps.S6_SELECT_N.outputs.selected}}"
+- outputs:
+- items: "{{steps.S7_CREATE_WORK_ITEMS.outputs.work_items}}"
+- outputs:
+- outputs:
+- work_item: "{{steps.W0_LOAD_STATE.outputs.work_item}}"
+- outputs:
+- outputs:
+- outputs:
+- tenant_snapshot: "{{steps.W3_FETCH_TENANT_SNAPSHOT.outputs.snapshot}}"
+- outputs:
+- action_plan: "{{steps.W4_DECIDE.outputs.action_plan}}"
+- response_code: "{{steps.W4_DECIDE.outputs.response_code}}"
+- outputs:
+- note_payload: "{{steps.W5_EXECUTE_OUTREACH.outputs.outreach_result.note_payload}}"
+- outputs:
+- response_code: "{{steps.W4_DECIDE.outputs.response_code}}"
+- note_compact: "{{steps.W5_EXECUTE_OUTREACH.outputs.outreach_result.note_compact}}"
+- outputs:
+- response_code: "{{steps.W4_DECIDE.outputs.response_code}}"
+- evidence_refs: "{{steps.W3_FETCH_TENANT_SNAPSHOT.outputs.evidence}}"
+- outreach: "{{steps.W5_EXECUTE_OUTREACH.outputs.outreach_result}}"
+- outputs:
+- outputs:
+- outputs:
+- outputs:
+- outputs:
+- outputs:
+- outputs:
+- "required": ["amount", "currency"],
+- "required": ["type", "uri"],
+- "required": [
+- "required": ["spreadsheet_id", "tab_name", "row_index_1_based"],
+- "required": ["date", "description", "amount", "category"],
+- "required": [
+- "required": ["display_name", "property_address", "unit", "confidence"],
+- "required": ["is_eligible", "reasons", "hold_required"],
+- "hold_required": { "type": "boolean" },
+- "required": ["action", "channel", "template_id"],
+- "required": ["run_id", "work_item_key", "event_type", "at", "payload"],
+- "if": { "tags_contains_any": ["NO RENTAL SUITABILITY", "RENTAL LICENSE ISSUE", "FILED FTPR CASE"] },
+- { "code": "HOLD_NEED_OTP_OR_LOGIN", "terminal": true, "category": "HOLD", "sheet_phrase": "Hold: OTP/login required" },
+- These cases are designed to break fragile automations: OTP, ambiguity, mixed balances, opt-out unknown, frequency caps, and sheet idempotency.
+- This is where most “agent builds” fail:
+- Observability: workflow/event history is a built-in audit spine.
+- You cannot guarantee AppFolio UI never changes. So “100%” must mean:
+- Temporal is built for that:
+- 3) The “different reason”: Temporal is the runtime guarantee, the agent is the builder
+- Temporal: building foundation + electrical code compliance (guarantees the building doesn’t collapse when something fails)
+- Track A (production-grade): Antigravity + Agent for build + Temporal for execution
+- Track B (simpler ops): Antigravity + Agent for build + Prefect for execution
+- Track A (production-grade): Antigravity + Agent for build + Temporal for execution
+- When an activity returns OTP_REQUIRED:
+- Instead of “build the project”, instruct it to:
+- Require the agent to:
+- "build": "tsc -p tsconfig.json",
+- temporal-ui:
+- image: temporalio/ui:2.31.2
+- Temporal UI will be at http://localhost:8080.
+- hold_required: boolean;
+- export function sha256(input: string): string {
+- export function makeTenantKey(property_id: string, unit_id: string, tenant_id: string): string {
+- export function makeWorkItemKey(tenant_key: string, run_date: string): string {
+- ensureAppFolioSession(run_id: string): Promise<{ status: "OK" | "OTP_REQUIRED"; evidence?: EvidenceRef[] }>;
+- evaluateDecision(args: { row: CallingSheetRow; snapshot: AppFolioTenantSnapshot; ruleset_id: string }): Promise<DecisionOutput>;
+- executeOutreach(args: { row: CallingSheetRow; decision: DecisionOutput }): Promise<OutreachResult>;
+- export async function delinquencyDailyWorkflow(args: { run_date: string; n: number; ruleset_id: string }) {
+- export async function createRun(run_date: string): Promise<RunInit> {
+- export async function healthcheck(): Promise<{ ok: boolean; details: Record<string, unknown> }> {
+- export async function loadCallingRows(run_date: string): Promise<CallingSheetRow[]> {
+- export async function selectDailyBatch(rows: CallingSheetRow[], n: number, run_date: string): Promise<CallingSheetRow[]> {
+- export async function ensureAppFolioSession(run_id: string): Promise<{ status: "OK" | "OTP_REQUIRED"; evidence?: EvidenceRef[] }> {
+- // TODO: Playwright login/session check. If OTP needed return OTP_REQUIRED.
+- export async function fetchTenantSnapshot(row: CallingSheetRow): Promise<{ snapshot: AppFolioTenantSnapshot; evidence: EvidenceRef[] }> {
+- export async function executeOutreach(args: { row: CallingSheetRow; decision: DecisionOutput }): Promise<OutreachResult> {
+- function loadRules(): RulesFile {
+- export function loadRulesAndEvaluate(row: CallingSheetRow, snapshot: AppFolioTenantSnapshot, ruleset_id: string): DecisionOutput {
+- decision: { is_eligible: false, hold_required: true, reasons: ["IDENTITY_UNRESOLVED"] },
+- decision: { is_eligible: false, hold_required: false, reasons: ["OPTED_OUT"], disqualifiers: ["TENANT_OPTED_OUT"] },
+- decision: { is_eligible: false, hold_required: true, reasons: ["OPT_OUT_UNKNOWN"] },
+- decision: { is_eligible: false, hold_required: false, reasons: ["NO_BALANCE"] },
+- decision: { is_eligible: true, hold_required: false, reasons: ["DEFAULT_SEND"] },
+- function normalize(s: string): string {
+- Say: “Generate the connectors + OTP signal CLI” and I’ll output the exact code files in the same explicit format.
+- function mustGet(k: string): string {
+- if (!v) throw new Error(`Missing required env var: ${k}`);
+- function escapeTab(tabName: string) {
+- function buildRawEmail(from: string, to: string, subject: string, bodyText: string): string {
+- export async function ensureEvidenceDir(): Promise<string> {
+- export async function openAppFolioSession(): Promise<AppFolioSession> {
+- export async function persistStorageState(session: AppFolioSession) {
+- export async function closeSession(session: AppFolioSession) {
+- function fileExists(p: string): boolean {
+- export type LoginResult = { status: "OK" | "OTP_REQUIRED"; reason?: string };
+- export async function ensureLoggedIn(page: Page): Promise<LoginResult> {
+- return { status: "OTP_REQUIRED", reason: "MFA/OTP challenge detected" };
+- // Conservative: treat as OTP-required or login-required (HOLD)
+- return { status: "OTP_REQUIRED", reason: "Login unresolved (possible SSO/MFA)" };
+- async function attemptPasswordLogin(page: Page, username: string, password: string) {
+- async function looksLoggedIn(page: Page): Promise<boolean> {
+- async function looksLikeOtp(page: Page): Promise<boolean> {
+- function mustGet(k: string): string {
+- if (!v) throw new Error(`Missing required env var: ${k}`);
+- function mustGet(k: string): string {
+- if (!v) throw new Error(`Missing required env var: ${k}`);
+- export async function createRun(run_date: string): Promise<RunInit> {
+- export async function healthcheck(): Promise<{ ok: boolean; details: Record<string, unknown> }> {
+- export async function loadCallingRows(run_date: string): Promise<CallingSheetRow[]> {
+- // NOTE: If you do not have property_id/unit_id/tenant_id, you must accept HOLD on ambiguity later.
+- export async function selectDailyBatch(rows: CallingSheetRow[], n: number, run_date: string): Promise<CallingSheetRow[]> {
+- export async function ensureAppFolioSession(run_id: string): Promise<{ status: "OK" | "OTP_REQUIRED"; evidence?: EvidenceRef[] }> {
+- return { status: "OTP_REQUIRED", evidence: [ev1, ev2] };
+- export async function fetchTenantSnapshot(row: CallingSheetRow): Promise<{ snapshot: AppFolioTenantSnapshot; evidence: EvidenceRef[] }> {
+- export async function executeOutreach(args: { row: CallingSheetRow; decision: DecisionOutput }): Promise<OutreachResult> {
+- async function selectTabForRunDate(spreadsheetId: string, run_date: string): Promise<string> {
+- function parseMoney(s: string): number {
+- function pick(row: Record<string, string>, keys: string[]): string {
+- function pickOptional(row: Record<string, string>, keys: string[]): string | null {
+- function normalize(s: string): string {
+- function toA1Column(col1Based: number): string {
+- function buildEmailBody(row: CallingSheetRow, decision: DecisionOutput): string {
+- function mustGet(k: string): string {
+- if (!v) throw new Error(`Missing required env var: ${k}`);
+- To be fully functional, you now implement in this order:
+- export async function findTenantCandidates(page: Page, args: {
+- export async function openCandidate(page: Page, candidate: TenantIdentityCandidate): Promise<boolean> {
+- async function collectResults(page: Page): Promise<Array<Omit<TenantIdentityCandidate, "confidence">>> {
+- function parseResultText(text: string): { display_name: string; property_address: string; unit: string } {
+- function fuzzyScore(a: string, b: string): number {
+- function buildQuery(name: string, addr: string, unit: string): string {
+- function normalize(s: string): string {
+- function clamp(n: number, lo: number, hi: number): number {
+- function escapeQuotes(s: string): string {
+- async function firstVisibleLocator(page: Page, selectors: string[]) {
+- export async function openLedger(page: Page): Promise<boolean> {
+- export async function parseLedger(page: Page): Promise<LedgerParseResult> {
+- async function firstExisting(page: Page, selectors: string[]) {
+- function parseMoney(s: string): number {
+- function normalizeDate(s: string): string {
+- function classify(description: string): LedgerLineItem["category"] {
+- function sumBalances(items: LedgerLineItem[]) {
+- function round2(n: number) {
+- export async function openNotes(page: Page): Promise<boolean> {
+- export async function noteMarkerExists(page: Page, marker: string): Promise<boolean> {
+- export async function addNote(page: Page, noteText: string): Promise<boolean> {
+- async function firstExisting(page: Page, selectors: string[]) {
+- function escapeForTextSelector(s: string): string {
+- export async function fetchTenantSnapshot(row: CallingSheetRow): Promise<{ snapshot: AppFolioTenantSnapshot; evidence: EvidenceRef[] }> {
+- // Opt-out status: if you have a definitive UI indicator, implement it here.
+- export async function appendDailySlotNoteIdempotent(args: {
+- function findSlotForDate(header: string[], runDate: string): Slot | null {
+- function looksLikeDateHeader(s: string): boolean {
+- function normalize(s: string): string {
+- function formatISOshort(runDate: string): string {
+- function formatMDY(runDate: string): string {
+- function formatMD(runDate: string): string {
+- function formatHeaderDate(runDate: string): string {
+- function toA1(col1: number): string {
+- export async function appendSheetNoteIdempotent(args: {
+- For each UI surface (Search → Ledger → Notes), I will:
+- Add UI drift assertions: if expected header/button is missing → return HOLD + evidence (never “click random stuff”)
+- UI	Temporal UI	Workflow visibility + ops	temporalio/ui:2.44.0	docker-compose.yml image tag
+- temporalio/ui:2.44.0
+- Workflow engine (exec)	Temporal Server (dev)	temporalio/temporal:1.5.1	Easiest local/CI dev server (includes UI + persistence)
+- Note: where npm “latest” is fast-moving, I’m pinning versions explicitly so the agent builds are deterministic.
+- "uuid": "9.0.1",
+- "@types/uuid": "9.0.8",
+- "clean": "rm -rf dist .tsbuildinfo",
+- "build": "npm run clean && tsc -p tsconfig.json",
+- "ci": "npm ci && npm run typecheck && npm run lint && npm run test && npm run build"
+- "uuid": "9.0.1",
+- "@types/uuid": "9.0.8",
+- UI: Temporal UI behind auth
+- Optional: Redis (only if you need caching; not required)
+- Why: UI failures require artifacts for fast recovery; local disk won’t scale or survive restarts.
+- A small internal web UI:
+- Why: “100% operational” means holds are processed quickly and safely.
+- Why: Without alerting + dashboards, issues become “silent failures” (the exact thing you’re trying to prevent).
+- Alerting	PagerDuty / SNS → Slack	required	Alert on: run failure, HOLD backlog, repeated OTP holds, RPA failure rate.
+- Temporal UI image	container tag	temporalio/ui:2.44.0 (pin a tag; don’t float)
+- Temporal requires:
+- Use temporalio/ui:2.44.0 pinned
+- Require fields:
+- Minimum dashboards/alerts:
+- Functions:
+- Say “generate the pinned Helm values + Kubernetes manifests”, and I will output:
+- # UI image pinned: temporalio/ui:2.44.0
+- # Temporal Web UI
+- repository: temporalio/ui
+- name: temporal-ui
+- - host: temporal-ui.internal.example.com
+- # Keep defaults unless you have a cluster-wide policy requiring overrides.
+- Default output format [None]: json
+- The only remaining required input you must fill is your EKS OIDC provider hostpath, which looks like:
+- --output text
+- Output example:
+- For each Work Item, you must output:
+- C3	If AFUnit exists AND SheetUnit exists: Normalized match required	proceed
+- (Later phases define escalation for unmapped labels. Here, rule is simply: unmapped = HOLD.)
+- Scope: every HOLD/STOP state produced in Phase-1 that requires human intervention or policy confirmation.
+- SUBJECT: IDENTITY VALIDATION REQUIRED
+- ACTION REQUIRED:
+- SUBJECT: DATA CONFLICT — SOURCE OF TRUTH REQUIRED
+- SUBJECT: LEDGER CLASSIFICATION REQUIRED
+- - minimal ambiguity
+- Input fields required:
+- IF WorkItem produces HOLD or STOP requiring escalation:
+- - minimal ambiguity
+- Form: phase-wise, linear, sequential, implementation-ready. No overlapping rules.
+- LLM must output only structured fields (no freeform policy):
+- LLM must NOT output:
+- - If ambiguity/conflict exists: escalate.
+- Fail-Closed Behavior: when uncertain, output a structured escalation trigger instead of guessing.
+- Schema-Strict Outputs: all outputs must match defined structures exactly.
+- The LLM must refuse the operation and output an escalation trigger if asked to:
+- If any required field missing → output:
+- LLM must output exactly one of the following:
+- LLM must not output:
+- - Generate templated outputs strictly from system decisions.
+- This next phase will define:
+- Format: phase-wise, linear, sequential, implementation-ready, minimal ambiguity.
+- Non-negotiable: If a step violates a Human-Only boundary (Phase 3), it cannot exceed A1.
+- Human Required: approving structural changes to sheet.
+- Human Required: resolving ambiguous search results.
+- Human Required: any legal/compliance interpretation beyond explicit matching.
+- Human Required: ambiguity resolution.
+- Human Required: mapping new labels.
+- Human Required: consent policy interpretation if not recorded.
+- - If time-based → set NextEligibleDate; no escalation required.
+- “Proceed: Phase 6” (I will create a final consolidated “single master SOP” that merges Phases 1–5 into one end-to-end sequential runbook), or
+- Proceed: Phase 6
+- Purpose: unify Phases 1–5 into one single, linear, deterministic runbook.
+- Required WorkItem fields:
+- Ownership ambiguity:
+- Consent ambiguity:
+- Outputs:
+- If any HOLD/STOP requiring human review occurs:
+- Before any LLM output:
+- IF DecisionState = HOLD or STOP requiring human:
+- Goal: eliminate ambiguity by making the process executable as a strict automaton.
+- Invariant: At most one outgoing guard evaluates true per state; otherwise ambiguity triggers escalation.
+- To: S_ESCALATION_REQUIRED
+- To: S_ESCALATION_REQUIRED
+- To: S_ESCALATION_REQUIRED
+- To: S_ESCALATION_REQUIRED
+- To: S_ESCALATION_REQUIRED
+- To: S_ESCALATION_REQUIRED
+- From: S_ESCALATION_REQUIRED
+- If you reply “Proceed: Phase 8”, I will produce the Implementation Blueprint including:
+- Reply “Proceed: 8B” for API contracts + guard function specs
+- Deterministic requirement: orchestrator must treat:
+- required_human_role: STRING
+- Hard requirement: if decision_state != CONTACT_ALLOWED, LLM must not generate outreach language; only documentation/envelope is allowed.
+- unit missing: require tenant name match
+- Every transition in Phase 7 must have:
+- You must maintain a “golden suite” of WorkItems with expected terminal states:
+- Proceed: Phase 9
+- "type": "TransformationOutput",
+- "type": "EscalationTriggerOutput",
+- "required_human_role": "<string>"
+- "type": "RefusalOutput",
+- Hard constraint: output must be valid JSON (double quotes, no trailing commas).
+- Return TransformationOutput with:
+- If conflicting values appear (e.g., two different property addresses in different blocks) and cannot be disambiguated → EscalationTriggerOutput:
+- "type": "TransformationOutput",
+- "type": "TransformationOutput",
+- "type": "EscalationTriggerOutput",
+- "required_human_role": "Accounting"
+- This section completes Phase 9 with the last two constrained LLM roles:
+- Function: Generate AppFolio note text and Delinquency-sheet note text strictly from execution flags and system decisions.
+- If call_executed=true → output one line per phone:
+- "type": "TransformationOutput",
+- Function: Create human-readable escalation messages from structured packet data.
+- "type": "TransformationOutput",
+- If you want to continue, I can produce PHASE 10 — PRODUCTION HARDENING SPEC:
+- “Proceed: Phase 10.”
+- Constraint: phase-wise, linear, sequential, implementation-ready, minimal ambiguity.
+- Reply “Proceed: 10C” for monitoring/alerts + SLOs + compliance/audit dashboards + runbooks
+- Condition: AMBIGUITY_DETECTED logged but no escalation created within 5 minutes
+- “Proceed: Phase 11” → Single “Engine Spec” Document
+- (One file style: all phases merged, all schemas/enums listed once, full transition table, full API contracts, full runbooks, no duplication).
+- Purpose: provide a single authoritative specification that merges Phases 1–10 into one deterministic, implementation-ready document.
+- IF DecisionState = HOLD or STOP requiring review:
+- Feature Flags:
+- “Proceed: Phase 12.”
+- If >1 guard true simultaneously → treat as ambiguity:
+- RequiredInputs: system config present; connectors reachable; sheet schema known
+- DecisionStateOutput:
+- RequiredInputs: property_address_raw from sheet
+- DecisionStateOutput:
+- RequiredInputs: normalized sheet address/unit/name; normalized AppFolio address/unit/name
+- DecisionStateOutput:
+- RequiredInputs: AFCurrentBalance (nullable)
+- DecisionStateOutput:
+- RequiredInputs: AFTags[]; optional SheetTags[]
+- DecisionStateOutput:
+- RequiredInputs: notes_raw[] from AppFolio snapshot
+- DecisionStateOutput:
+- RequiredInputs: AFTags[], activities[]
+- DecisionStateOutput: HOLD for all paths
+- RequiredInputs: ledger_rows[], taxonomy_map
+- DecisionStateOutput: HOLD
+- RequiredInputs: balance_components[], today, water_post_date
+- DecisionStateOutput: HOLD
+- RequiredInputs: last_outreach_date, today
+- DecisionStateOutput: HOLD
+- RequiredInputs: contacts.parties[] (roles/status)
+- DecisionStateOutput:
+- RequiredInputs: phones[], emails[] (raw + annotations)
+- DecisionStateOutput: HOLD
+- RequiredInputs: extracted callable phones; emails; delivery evidence; consent policy flags
+- DecisionStateOutput: HOLD
+- AllowedLLMRoles: none (LLM not required; can be used only for formatting)
+- RequiredInputs: AllowedChannels[], now, business_calendar
+- DecisionStateOutput:
+- RequiredInputs: execution tooling available; feature flag FF_OUTREACH_EXECUTION_ENABLED; AllowedChannels
+- DecisionStateOutput:
+- RequiredInputs: execution_flags; idempotency keys; feature flags for writes
+- DecisionStateOutput: CONTACT_ALLOWED
+- RequiredInputs: none
+- DecisionStateOutput: CONTACT_ALLOWED (historical)
+- CurrentState: S_ESCALATION_REQUIRED
+- RequiredInputs: hold_reason_code, trigger_rule_id, observed_snapshot_id, dedupe key components
+- DecisionStateOutput: HOLD
+- AllowedLLMRoles: ROLE 5 optional for envelope formatting (not required)
+- RequiredInputs: packet_id
+- DecisionStateOutput: HOLD
+- RequiredInputs: stored resolution_json for packet_id
+- DecisionStateOutput:
+- Any missing required input at any row must route to:
+- PHASE 13 — GAP 1 PATCH: CONSENT & CHANNEL POLICY (DETERMINISTIC SPEC)
+- 13.6.1 Function: determine_allowed_channels()
+- PHASE 14 — GAP 2 PATCH: BUSINESS CALENDAR + TIMEZONE + OUTREACH HOURS (DETERMINISTIC SPEC)
+- PHASE 15 — GAP 3 PATCH: APPFOLIO SEARCH DISAMBIGUATION (TIE-BREAK LADDER)
+- If the initial search results do not include phones/emails/names required for T2–T4:
+- PHASE 16 — GAP 4 PATCH: LEDGER TAXONOMY GOVERNANCE (VERSIONING + APPROVAL + ROLLBACK)
+- ROLE 3 output must include:
+- PHASE 17 — GAP 5 PATCH: LAST OUTREACH DATE (SOURCE OF TRUTH + PARSER + CONFLICT RULES)
+- CALL line in the required format: (<PHONE>) CALL
+- PHASE 18 — GAP 6 PATCH: OUTREACH EXECUTION SUBSYSTEM (RESULT CODES + MID-CONTACT COMPLIANCE EVENTS)
+- If any required field missing:
+- PHASE 19 — GAP 7 PATCH: SINGLE DAILY NOTE AGGREGATION + COLLISION PREVENTION (APPFOLIO)
+- “Proceed: Phase 20”
+- PHASE 21 — GAP 8 PATCH: SHEET DATE/NOTE PAIR APPEND ALGORITHM (NO OVERWRITE, STRUCTURALLY STABLE)
+- Requirement: The orchestrator must know N at runtime from schema version (not by guessing).
+- PHASE 22 — GAP 9 PATCH: SECURITY, RBAC, FEATURE-FLAG GOVERNANCE, AUDIT IMMUTABILITY (DETERMINISTIC)
+- Fail-closed: any auth ambiguity → deny.
+- Turning kill switch off requires:
+- Require two-person approval (four-eyes) for:
+- Provide a single deterministic function:
+- PHASE 23 — GAP 10 PATCH: PII HANDLING, LLM DATA MINIMIZATION, REDACTION, RETENTION (DETERMINISTIC)
+- Add to Phase 10C alarms:
+- Option A — “Phase 24: Hidden Failure Modes Audit”
+- Option B — “Phase 25: Code-Ready Architecture Blueprint”
+- Require human resolution path to:
+- Required-nonempty validator: for fields that must not be empty (e.g., extracted tenant_names when required)
+- Acquisition Point: immediately after AppFolio record selection (at/after S_AF_RECORD_LOCATED).
+- deterministic function of:
+- A build is production-eligible only if:
+- “Phase 26” — I will produce a full integration test plan:
+- Two variants are required:
+- Setup: AMBIGUITY_DETECTED audit emitted without packet in 5 minutes
+- Expected: block apply + require revalidation
+- Your only job: take a HOLD or STOP emitted by Phase-1, and execute exactly one of the following outcomes:
+- Phase-1 outputs:
+- Fail-closed: if any required field is missing/unreadable → ESCALATION_CONTEXT_INCOMPLETE and stop.
+- Every escalation must be replayable: a reviewer can re-run Phase-1 with the packet and reach the same HOLD/STOP.
+- LedgerSnapshot: only the minimum required subset (entries relevant to the trigger)
+- Reply “Proceed” and I will deliver PHASE 2B (still Phase-2, next screen) containing:
+- This phase removes ambiguity by:
+- From Phase-2A:
+- DecisionNotes: string (required),
+- UpdatedFields: object (required if UPDATE_DATA),
+- Reply “Proceed” to receive PHASE 3 — Resume Engine & Post-Resolution Execution Model, which will define:
+- Rebuild execution environment using:
+- Reply “Proceed” to receive PHASE 4 — Outreach Execution Engine (Deterministic Messaging & Agent Interaction Model), which will define:
+- Reply “Proceed” to receive PHASE 5 — Response Handling & Conversation State Engine, which will define:
+- My phases add:
+- Your Phase-1 rules can produce:
+- Deterministic: same inputs → same outputs.
+- Least privilege: read-only where possible; write only where required (e.g., outreach logs / status).
+- Output: DecisionOutput (no side effects)
+- What’s missing = everything required to run it unattended:
+- Reply “Proceed” and I will deliver PHASE 5 — Response Handling & Conversation State Engine (Automation-Grade) in the same explicit format, including:
+- No hidden persuasion: message outputs must be template-based.
+- Classifier outputs exactly one:
+- NextState: S4_VERIFICATION_REQUIRED then S11_ESCALATED_LOCKED
+- Reply “Proceed” for PHASE 5B, which will include (automation-grade, copy/paste ready):
+- You output only:
+- From Phase 5:
+- Reply “Proceed” for PHASE 6 — Data Model & Persistence (DB schemas, idempotency constraints, and event sourcing), including:
+- Reply “Proceed” for PHASE 7 — Integration Contracts & Runtime Orchestration (AppFolio + Sheets + Messaging Providers + Webhooks), including:
+- outbound_action_id: "UUID",
+- outbound_action_id: "UUID",
+- work_item_id: "UUID",
+- Deliver the operational control plane required for Full Automation:
+- DB entities from Phase 6:
+- Remember: category routing is deterministic from Phase 2
+- UI must collect:
+- Step 8.6 — Observability: Metrics, Dashboards, Alerts
+- Reply “Proceed” for PHASE 9 — End-to-End Runbook (Daily Operations, Incident Response, and Verification Checklists), including:
+- Reply “Proceed” to receive PHASE 10 — System Validation & Go-Live Checklist, which will include:
+- This phase ensures:
+- The output of this phase is a binary launch decision:
+- Build an unattended, production-stable delinquency outreach automation system that:
+- Deterministic: same inputs → same outputs (including escalation category).
+- Rule: Outbound sends require BOTH:
+- Postgres (or equivalent) implementing:
+- Output: WorkItems created/updated
+- Output: ObservedDataSnapshot + HydrationStatus
+- Build ObservedDataSnapshot:
+- Output: DecisionOutput
+- Output: resolution persisted + trigger Resume Engine
+- Reply “Proceed” for PHASE 11B, which will provide the remaining “single-document completeness” items in one final screen:
+- IDs: UUID unless stated otherwise
+- "required": [
+- "work_item_id": { "type": "string", "format": "uuid" },
+- "lock_escalation_id": { "type": ["string","null"], "format": "uuid" },
+- "required": [
+- "snapshot_id": { "type": "string", "format": "uuid" },
+- "work_item_id": { "type": "string", "format": "uuid" },
+- "required": ["sheet", "appfolio"],
+- "required": ["property_address_raw", "unit_raw", "tenant_name_raw"],
+- "required": ["appfolio_record_id", "tenant_identity", "compliance", "financials", "notes", "contact_methods"],
+- "required": ["tenant_names", "status", "address_norm", "unit_norm"],
+- "required": ["phones", "emails"],
+- "required": ["value", "type", "is_primary"],
+- "required": ["value", "is_primary"],
+- "required": ["tags", "channel_restrictions"],
+- "required": ["current_balance", "ledger_entries"],
+- "required": ["date", "code", "label", "amount"],
+- "required": ["timestamp", "author", "text"],
+- "required": ["date", "type", "text"],
+- "required": [
+- "decision_id": { "type": "string", "format": "uuid" },
+- "work_item_id": { "type": "string", "format": "uuid" },
+- "snapshot_id": { "type": "string", "format": "uuid" },
+- "required": [
+- "escalation_id": { "type": "string", "format": "uuid" },
+- "work_item_id": { "type": "string", "format": "uuid" },
+- "packet_snapshot_id": { "type": "string", "format": "uuid" },
+- "required": [
+- "resolution_id": { "type": "string", "format": "uuid" },
+- "escalation_id": { "type": "string", "format": "uuid" },
+- "work_item_id": { "type": "string", "format": "uuid" },
+- "required": [
+- "outbound_action_id": { "type": "string", "format": "uuid" },
+- "work_item_id": { "type": "string", "format": "uuid" },
+- "required": [
+- "inbound_event_id": { "type": "string", "format": "uuid" },
+- "work_item_id": { "type": "string", "format": "uuid" },
+- If you want a final “packaged” artifact: I can output PHASE 11C as a single consolidated implementation spec that includes:
+- Provide a single build-packaged specification that a team can implement with minimal ambiguity:
+- Hard rule: contracts/ and registries/ are treated as immutable once deployed; changes require version bump.
+- Output: WorkItem(s) created/updated + Event(s)
+- Output: ObservedDataSnapshot
+- Output: DecisionOutput
+- Input: DecisionOutput where HOLD/STOP
+- Output: EscalationPacket + lock
+- Output: stored resolution + triggers resume
+- Output: unlock + rehydrate + rerun decision
+- Input: DecisionOutput where CONTACT
+- Output: OutboundAction queued
+- Output: provider send attempt + events
+- Output: DeliveryWebhook or InboundEvent canonical record + events
+- Output: IntentCode + Conversation transition + optional outbound reply or escalation
+- At the end of Phase 11C, you have a packaged implementation spec with:
+- File 2: “PHASE 1 — Decision Tables” + canonical definitions; it references future phases but does not include them.
+- Tool touchpoints: Gmail, Google Chat, Google Sheets, AppFolio UI navigation
+- Deterministic “rule engine” intent: Phase 1 is framed as “rules only.”
+- Reply “Proceed” for PHASE 12B, where I will produce an actionable remediation plan that is purely gap-driven:
+- No human-only steps remain as “requirements” unless converted into:
+- File 2: Keep as logic source (convert to /rules/phase1_engine)
+- Into a “pure function” module:
+- output: DecisionOutput
+- Reply “Proceed” for PHASE 13 — “Hybrid-to-Full” Transitional Design, which will specify:
+- This phase ensures:
+- task_id: "UUID",
+- work_item_id: "UUID",
+- escalation_id: "UUID|null",
+- decision_id: "UUID",
+- Fail-closed rule: If recipient contact detail is missing for the chosen channel → do not create task; escalate PROCESS_OVERRIDE_REQUIRED.
+- Reply “Proceed” for PHASE 14 — Agent/Resolver UI Specification (Screens, fields, validations, and RBAC), including:
+- Define a minimal but safety-maximizing UI that supports:
+- UI can be:
+- if FAILED: required failure reason code (enum)
+- tenant name: T**** (optional) with “reveal” requiring RBAC
+- Hard rule: Any change affecting contact permissibility requires Compliance approval.
+- This phase establishes:
+- Every dashboard and report must display:
+- Reply “Proceed” for PHASE 19 — Failure Modes & Chaos Testing Spec, which will cover:
+- This phase specifies:
+- At the end of Phase 19:
+- Provide a single compressed reference that summarizes the entire Full Automation system (Phases 1–19) into:
+- Phase 10 scenario suite: PASS
+- Goal: Build deterministic input pipeline.
+- If you want, I can generate a PHASE 22 — “Reality Check” Risk Map, which shows:
+- All previously defined phases are assumed implemented:
+- You are not building:
+- You are building:
+- You are building a governed execution platform that matures along three axes:
+- At Phase 25, the platform is no longer just a technical system — it is a governed operating model where:
+- Dashboards must support filters by:
+- At Phase 26, the system becomes a true enterprise platform:
+- Establish permanent boundaries so that future features, requests, or integrations do not:
+- Analytics outputs may:
+- A feature request must be escalated to governance review if it:
+- - minimal ambiguity
+- - Objective
+- - Requirements
+- - Architecture Expectations
+- # Objective
+- Design and output an **Ultra Micro Plan – E2E** for a software system using a **strict, deterministic, agent-oriented structure**:
+- - **Chapters** = deployable **modules** (independently build/test/deploy).
+- - **Phases** = sequential build blocks for a Topic.
+- - **Ultra Micro Phases (UMPs)** = atomic, testable, executable “bricks” that are **immutable once created**.
+- The output must be:
+- - **Minimal ambiguity**
+- 3. For every UMP, output:
+- - Build/test commands
+- - DEPLOYMENT_MODEL (mono-repo, multi-repo; but you MUST output a canonical mono-repo tree unless explicitly forbidden)
+- - NON_FUNCTIONAL_REQUIREMENTS (security, latency, cost, compliance)
+- - INTERFACE_SURFACES (APIs, UI, CLI, events, pipelines)
+- - ORGANS_REQUIRED (default: brain, spine, hands, eyes, legs, heart, lungs, kidneys)
+- - TEST_LEVELS_REQUIRED (default: unit + contract + integration + e2e)
+- # Requirements
+- ## Output Format Requirements (Non-negotiable)
+- Your output must be in the following strict order and section headings:
+- - Each Topic includes Phases
+- - Each Phase includes UMPs
+- # Architecture Expectations
+- You MUST output a full-scale, canonical mono-repo tree that includes:
+- - build scripts per module
+- - build command
+- - Any change requires a new UMP ID and a migration plan.
+- 1. **Atomicity**: one UMP = one narrowly defined objective + test.
+- 3. **Deterministic File Output**: file paths and names are predetermined.
+- 7. **Observability**: logs/metrics/traces required for any pipe interactions.
+- 8. **Security/Compliance**: validate input, sanitize output, classify data, redact secrets.
+- # Chapters (Function Modules)
+- - **Build/Test/Deploy Commands**
+- - **Phases**:
+- - **PH-XX: <PhaseName>**
+- - **Phase Goal**
+- - Build Instructions
+- - Exact Build Prompt (to generate the file deterministically)
+- You MUST output a reusable template that the user can copy/paste for every UMP with:
+- - generate Phases
+- - stop after each Phase if output is too long
+- - wait for user instruction: PROCEED PHASE <n>
+- Your output must include ALL of the following:
+- - No UMP may require editing a sealed prior UMP.
+- - Output must remain structurally correct if truncated: if too long, stop at a clean boundary and request: **“Type: PROCEED PHASE 2”**.
+- 7. If output becomes too large:
+- - stop at the end of the last fully completed Phase or Chapter section
+- - print: **“END OF PHASE 1 OUTPUT — Type: PROCEED PHASE 2”**
+- If you reach output limits:
+- END OF PHASE 1 OUTPUT — Type: PROCEED PHASE 2
+- ## Phase 2 — Instantiate the Ultra Micro Plan (Defaults + Architecture + Canonical Repo + Enforcement + Start CH-01)
+- - TEST_LEVELS_REQUIRED: **unit + contract + integration + e2e**
+- - ORGANS_REQUIRED: **brain, spine, hands, eyes, legs, heart, lungs, kidneys**
+- # Architecture Expectations
+- - observability: required metrics/log fields
+- - Any edit to a sealed file requires:
+- - UMP skipped required tests
+- - sealing required
+- # Chapters (Function Modules)
+- - **Build/Test/Deploy:**
+- - Build: pnpm --filter @chapters/brain build
+- - **Phase Goal:** create minimal runnable service skeleton + contract surfaces
+- - Seal: required
+- - Seal: required
+- - Seal: required
+- - **Phase Goal:** publish/consume orchestration events via spine-registered pipes
+- - **UMP-0010 — Implement policy evaluator (pure function core)**
+- - TP-01 topic-command-api (Phases: Contracts & Skeleton; Implementation Minimal)
+- - TP-02 topic-side-effects (Phases: Contracts & Skeleton; Reliability Hooks)
+- # Phase 2 Scope Note (Deterministic)
+- In Phase 2, I instantiated:
+- - CH-01 full structure to the **phase/UMP list level**
+- Next, Phase 3 will expand **UMP Template (Authoritative)** and then fully detail **CH-01 TP-01 PH-01 UMP-0001..0003** with:
+- ## Phase 3 — UMP Template (Authoritative) + Fully-Specified UMP-0001..0003 (CH-01 / TP-01 / PH-01)
+- # Objective
+- - seal UMP output (hashes)
+- - if any requirement conflicts, prioritize:
+- ## Required (for execution)
+- # Requirements
+- ## Structural Output
+- - Every UMP must output:
+- - verification.md (commands + expected output)
+- # Architecture Expectations
+- This phase operates within:
+- Applies as stated in Phase 2. In this phase specifically:
+- # Chapters (Function Modules)
+- Phase 3 details only:
+- - **Sealing:** required.
+- ### UMP-0001 Build/Test Commands
+- - Build: pnpm --filter @chapters/brain-topic-orchestration build
+- - Expose a startServer({ port }): Promise<{ close(): Promise<void> }> function.
+- - Use Node 18+ built-in fetch OR http client (choose one, be consistent).
+- **Purpose:** deterministic build/test.
+- - build: tsc -p tsconfig.json
+- - Output dirs:
+- - pnpm --filter @chapters/brain-topic-orchestration build
+- ### Schema Requirements (Both)
+- - event_id (uuid)
+- - Must set "type": "object" and "required" lists explicitly.
+- data required:
+- data required:
+- - outputs (object; may be empty; additionalProperties true allowed only inside outputs)
+- ### Contract Runner Requirements
+- - Deterministic output:
+- Phase 3 delivers:
+- - exact file build prompts
+- - sealing requirements
+- - Do not define UMP-0004+ in Phase 3.
+- - Do not remove or compress required fields for brevity.
+- - If output becomes too long, stop cleanly and request:
+- **END OF PHASE 3 OUTPUT — Type: PROCEED PHASE 4**
+- - exact file causing ambiguity
+- ### END OF PHASE 3 OUTPUT
+- If certainty is not provably 100%, the system must output:
+- Automation/LLM Layer: executes deterministic rule engine + UI actions; cannot authorize exceptions.
+- The following decisions require explicit human resolution (with recorded approval):
+- If output would exceed one screen, stop cleanly and ask exactly:
+- END OF PHASE 3 OUTPUT — Type: PROCEED PHASE 3B
+- END OF PHASE 3 OUTPUT — Type: PROCEED PHASE 3B
+- This phase explicitly confirms:
+- Eliminates ambiguity by specifying:
+- If you want, the next phase will deliver:
+- Fail-closed: ambiguity → HOLD/STOP + escalation packet (tenant-data-minimized).
+- UI Automation Layer: anti-brittleness mechanisms (selectors, screenshots, human verification).
+- Gap Register (Phase 4A): top critical gaps with closure actions + tests.
+- Closure Backlog Map: each gap → required module + UMP target.
+- Failure Mode: UI search lands on wrong tenant record; automation proceeds; outreach sent to wrong person.
+- Implement Deterministic Identity Match Gate requiring:
+- Require “2-source confirmation” when available:
+- Add UI evidence capture:
+- Require channel gating:
+- CHECK-LEDGER-02: mapping changes require new policy version + approval.
+- CHECK-REL-02: idempotency test suite passes.
+- Failure Mode: AppFolio UI changes; selectors break; agent “guesses” and clicks wrong area.
+- Require UI Step Confirmation for sensitive actions:
+- Implement “UI uncertainty detector”:
+- CHECK-UI-01: DOM change simulation triggers HOLD not proceed.
+- CHECK-UI-02: screenshot-hash evidence attached to escalation packet.
+- Failure Mode: UI scope unclear (dashboard vs report); inconsistent design language; authority unclear.
+- Define UI surfaces explicitly:
+- CHECK-UX-01: each UI surface mapped to a role and an action set.
+- If you want the remainder, the next output (Phase 4B) will add:
+- Deliver PHASE 4B:
+- Convert Phase 4A + 4B into a UMP-level closure plan:
+- Failure Mode: UI design accidentally enables users to bypass STOP/HOLD protections.
+- CHECK-UI-OVR-01: non-authorized roles cannot see override controls.
+- CHECK-FIX-01: test suite runs without external connectivity.
+- Next phase (Phase 5) will produce the full file-level UMP specs (the way Phase 3 specified UMP-0001..0003), for UMP-0100 through UMP-0114, including:
+- This output covers only:
+- Every UMP outputs, at minimum:
+- No new “optional” fields in enforcement specs: explicit defaults required.
+- Stop cleanly and wait for: PROCEED PHASE 5B.
+- Each ump.json MUST conform to your authoritative template from Phase 3, with these additional mandatory fields (non-optional for Phase 5 UMPs):
+- policy_version_pin_required: true|false (set explicitly)
+- export function normalizeKey(key: string): string → lowercases + trims.
+- export function isRestrictedKey(key: string): boolean → normalized membership check.
+- "stable_order_required":true
+- Function:
+- export function classifyTenantEphemeral(input: unknown, opts?: { maxDepth?: number }): TenantEphemeralClassification
+- Use Node’s built-in test runner (node:test) and assert.
+- Tests required:
+- "assertions_required":[
+- export function redactObject(input: unknown, policy: RedactionPolicy): unknown
+- "max_depth_required":true
+- Logging output implementation:
+- "output_format":"json_line"
+- "assertions_required":[
+- Function:
+- export function enforceStreamOnly<T extends { meta?: any }>(msg: T): MiddlewareResult<T>
+- "assertions_required":[
+- "determinism":{"fixed_now_required":true}
+- Next (Phase 5B) will fully specify:
+- Deliver Phase 5B: fully-specified, implementation-ready UMPs for:
+- Each UMP outputs:
+- Stop cleanly and wait for: PROCEED PHASE 5C
+- uuid: standard v4 pattern allowed
+- "required_top_level":["meta","decision","evidence","routing"]
+- code 0 on pass with output: ESCALATION_OK <packet_id>
+- code 1 on fail with output: ESCALATION_INVALID <reason>
+- "output":"stdout"
+- "fixtures_required":["valid_packet","pii_key_packet","extra_key_packet","bad_hash_packet"],
+- Approach: pure functions + tests; no I/O.
+- Require exact normalized equality on all three:
+- export type IdentityMatchDecision = { match: boolean; decision: "PROCEED"|"STOP"; code?: "IDENTITY_VALIDATION_REQUIRED"; reasons: string[]; };
+- export function normalizeName(s: string): string
+- export function normalizeAddress(s: string): string
+- export function normalizeUnit(s: string): string
+- export function normalizeIdentity(i: IdentityInput): IdentityInput
+- export function matchIdentity(sheet: IdentityInput, pms: IdentityInput): IdentityMatchDecision
+- "code_on_fail":"IDENTITY_VALIDATION_REQUIRED"
+- Tests required:
+- "assertions_required":["normalization_pass_cases","near_duplicate_fail","missing_fields_fail"],
+- Approach: pure functions; inputs are ephemeral records from external systems.
+- Outputs:
+- Outputs:
+- code?: "COMPLIANCE_DNC"|"COMPLIANCE_DNC_DISAGREEMENT"|"LEGAL_REVIEW_REQUIRED"|"CONSENT_UNKNOWN"
+- required_role?: "COMPLIANCE_OWNER"|"LEGAL_OWNER"
+- export type ComplianceDecision = { decision: "PROCEED"|"STOP"; code?: string; required_role?: string; reasons: string[]; };
+- export function resolveConsentState(input: { opted_out?: boolean; do_not_contact?: boolean; known_ok?: boolean }): ConsentState
+- export function resolveDncDecision(input: { sheet_dnc: boolean|"unknown"; pms_dnc: boolean|"unknown" }): ComplianceDecision
+- export function detectLegalHold(input: { notes_text?: string; flags?: string[] }): ComplianceDecision
+- "keywords_required":["attorney","lawyer","represented","cease contact"],
+- "code_on_stop":"LEGAL_REVIEW_REQUIRED"
+- "assertions_required":["dnc_stop","disagreement_stop","unknown_fail_closed","legal_stop","consent_priority"],
+- Next (Phase 5C) will fully specify:
+- Deliver Phase 5C: fully-specified, implementation-ready UMPs for:
+- Each UMP outputs:
+- Determinism requirements:
+- UMP-0107: canonical serialization + audit hash builder + salt version reference rules
+- Scope: Heart module only; no external I/O required for unit tests.
+- Pipes: none required (library capability).
+- "constraints":{"requires_canonical_serialize":true,"requires_sha256":true}
+- export function createInMemoryIdempotencyStore(): IdempotencyStore
+- "assertions_required":["hash_deterministic","hash_changes_on_bucket","store_dedupe","no_forbidden_keys"]
+- export function sha256Hex(input: string): string
+- export function canonicalSerialize(input: unknown): string
+- export function assertSaltVersionRef(v: string): void enforcing pattern ^salt-\\d{4}-\\d{2}-\\d{2}$
+- "assertions_required":["salt_version_pattern_enforced","keys_exact_enforced","hash_changes_on_salt","hash_deterministic"]
+- Message meta required:
+- export function isExpired(meta: BufferMeta, now: Date): boolean
+- export function toDlqRecord(input: { meta: BufferMeta; reason_code: string; payload_hash: string; timestamp_utc: string }): DlqRecord
+- "constraints":{"sha256_hex_required":true,"no_payload":true}
+- "assertions_required":["ttl_fail_closed","expired_true","nonexpired_false","dlq_hash_validation","no_forbidden_keys"]
+- Next (Phase 5D) will fully specify:
+- Deliver Phase 5D: fully-specified, implementation-ready UMPs for:
+- Each UMP outputs:
+- Determinism requirements:
+- export function isBusinessTime(now: Date, rules: BusinessTimeRules): boolean
+- export function nextAllowedTime(now: Date, rules: BusinessTimeRules): Date
+- "assertions_required":["weekday_allowed","after_hours_blocked","weekend_blocked","next_allowed_time"]
+- export function evaluateSendGate(now: Date, rules: BusinessTimeRules): SendGateResult
+- export function createTokenBucket(config: RateLimitConfig): { tryConsume(nowMs: number, tokens: number): ConsumeResult }
+- export function computeBackoffMs(input: { attempt: number; base_ms: number; max_ms: number; jitter_seed: number }): number
+- "assertions_required":["consume_ok","consume_retry","refill_works","backoff_bounded","backoff_deterministic"]
+- Output:
+- "required_fields":["version","templates"]
+- "assertions_required":["render_ok","unknown_template_fail","missing_var_fail","extra_var_fail","missing_token_value_fail"]
+- Next (Phase 5E) will fully specify:
+- Deliver Phase 5E: fully-specified, implementation-ready UMPs for:
+- Each UMP outputs:
+- "exports":["buildDecisionExplanation"],
+- "assertions_required":["hold_requires_reason","proceed_reason_empty","evidence_sorted","deps_deterministic"]
+- "required":["pin_id","work_item_hash","policy_version","created_utc","correlation_id"],
+- "assertions_required":["existing_pin_wins","creates_pin_when_missing","deps_deterministic","invalid_inputs_throw"]
+- Input: hold_reason_code, required_role, ruling_id, nowUtc
+- Output:
+- "required_top_level":["version","rulings"]
+- File: chapters/brain/topic-orchestration/src/holds/require-ruling.ts
+- export type HoldClearRequest = { hold_reason_code: string; required_role: string; ruling_id?: string; now_utc: string; };
+- Function:
+- export function requireRuling(input: HoldClearRequest, deps: { loadRulings: ()=>{ version: string; rulings: any[] } }): HoldClearResult
+- "file":"chapters/brain/topic-orchestration/src/holds/require-ruling.ts",
+- "exports":["HoldClearRequest","HoldClearResult","requireRuling"],
+- "error_codes":["RULING_REQUIRED","RULING_NOT_FOUND","RULING_EXPIRED","RULING_ROLE_MISMATCH","RULING_REASON_MISMATCH"],
+- chapters/brain/topic-orchestration/test/rulings-required.test.ts: all codes exercised deterministically
+- "file":"chapters/brain/topic-orchestration/test/rulings-required.test.ts",
+- "assertions_required":["required_when_missing","not_found","expired","role_mismatch","reason_mismatch","valid_pass"]
+- Next (Phase 6) will provide:
+- This phase provides:
+- If you want the final layer, the next phase can generate:
+- Deliver Phase 7 — Full System Assembly Blueprint:
+- UI surfaces: Operator Dashboard, Team Lead Review, Audit Report
+- TTL: required (<=3600)
+- Payload: gate outputs only:
+- Payload: minimized audit payload + salt_version ref + output audit_hash
+- Consumer: Team Lead Review UI / Ticket adapter
+- Producer: Team Lead Review UI
+- Validation: Brain requires rulings schema
+- UI Surface A: Operator Dashboard
+- UI Surface B: Team Lead Review
+- requireRuling() checks:
+- UI Surface C: Audit Report
+- Deliver Phase 8: produce the exact canonical contract artifacts for the Phase 7 pipe catalog:
+- uuid: ^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
+- meta object with required fields:
+- "requires_stream_only_meta":true,
+- "retention_policy_required": "memory_only",
+- "assertions_required":["valid_passes","missing_meta_field_fails","forbidden_key_fails"]
+- Purpose: carry gate outputs only (codes, hashes, next required role). No tenant payload.
+- data required fields:
+- identity_code (string enum: "OK"|"IDENTITY_VALIDATION_REQUIRED")
+- required_role (string enum: "NONE"|"TEAM_LEAD"|"COMPLIANCE_OWNER"|"LEGAL_OWNER")
+- "retention_policy_required": "memory_only",
+- "assertions_required":["valid_passes_non_tenant","tenant_classification_rejected","forbidden_key_rejected"]
+- data required fields:
+- "data_fields_required":["pin_id","work_item_hash","policy_version","created_utc","correlation_id"],
+- "classification_required":"non_tenant"
+- "retention_policy_required": "memory_only",
+- "assertions_required":["valid_passes","missing_required_fails","denylist_fails"]
+- This Phase 8 output completed PIPE-01 → PIPE-03 with:
+- Next (Phase 8B) will generate the same artifacts for:
+- Deliver Phase 8B: produce the exact canonical contract artifacts for PIPE-04 → PIPE-07:
+- uuid: standard v4-ish (same as prior phase)
+- meta (required): event_id, timestamp_utc, correlation_id, producer, schema_version, data_classification, retention_policy, ttl_seconds
+- data (required): pipe-specific
+- Required data fields:
+- "classification_required":"non_tenant",
+- "retention_policy_required": "memory_only",
+- "assertions_required":["proceed_valid_passes","hold_requires_evidence_fails","denylist_key_fails"]
+- data required fields:
+- "classification_required":"non_tenant",
+- "retention_policy_required": "memory_only",
+- "assertions_required":["valid_passes","template_id_pattern_fails","vars_denylist_fails"]
+- data required:
+- "classification_required":"non_tenant",
+- "data_fields_required":["action_hash","correlation_id","action_type","policy_version","timestamp_bucket","action_target_hash"]
+- "retention_policy_required": "memory_only",
+- "assertions_required":["valid_passes","hash_pattern_fails","denylist_key_fails"]
+- data required:
+- "classification_required":"non_tenant",
+- "retention_policy_required": "memory_only",
+- "assertions_required":["valid_passes","missing_required_fails","denylist_key_fails"]
+- This Phase 8B output completed PIPE-04 → PIPE-07 with:
+- Next (Phase 8C) will generate the same artifacts for:
+- Deliver Phase 8C: produce the exact canonical contract artifacts for PIPE-08 → PIPE-11:
+- uuid: standard UUID regex (as prior)
+- meta required fields:
+- data required:
+- "classification_required":"non_tenant",
+- "data_fields_required":["execution_id","correlation_id","action_hash","status","error_code","error_message","completed_utc"]
+- "retention_policy_required": "memory_only",
+- "assertions_required":["valid_success_passes","missing_required_fails","denylist_key_fails"]
+- data required:
+- "classification_required":"non_tenant",
+- "retention_policy_required": "memory_only",
+- "assertions_required":["valid_passes","salt_version_pattern_fails","denylist_key_fails"]
+- Consumer: Team Lead Review UI / ticket adapter
+- data required fields:
+- "classification_required":"non_tenant",
+- "consumer": ["ui/team-lead-review|adapter/ticketing"],
+- "retention_policy_required": "memory_only",
+- "assertions_required":["valid_passes","screenshot_bytes_rejected","denylist_key_fails"]
+- Producer: Team Lead Review UI
+- data required:
+- "classification_required":"non_tenant",
+- "data_fields_required":["ruling_id","hold_reason_code","approved_by_role","policy_version","effective_from_utc","effective_to_utc","created_utc"]
+- "producer": "ui/team-lead-review",
+- "retention_policy_required": "memory_only",
+- "assertions_required":["valid_passes","missing_required_fails","denylist_key_fails"]
+- If you want the next deliverable, Phase 9 will generate:
+- Deliver Phase 9:
+- Output path: docs/architecture/contract-report.json
+- Output format:
+- Output path: docs/architecture/route-map.json
+- Output path: docs/ui-contracts/
+- "required": ["generated_utc", "passed", "pipes"],
+- "required": ["pipe_id", "schema_path", "tests_run", "passed", "failures"],
+- Outputs:
+- Required steps (order):
+- This Phase 9 output delivered:
+- If you want the next deliverable, Phase 10 will provide:
+- Deliver Phase 10:
+- UI surfaces:
+- Every privileged action requires:
+- prefilled: hold_reason_code, policy_version, required_role
+- This completes Phase 10:
+- If you want the next deliverable, Phase 11 will produce implementation-grade UI + API interface contracts:
+- Deliver Phase 11:
+- Phase 9 UI contract pack schemas:
+- Phase 8 pipe schemas:
+- Assumed UI runtime:
+- UI Gateway is an organ-adjacent read/write facade:
+- Pipe emitted: pipe.scheduler.tick.requested.v1 (UI command pipe, introduced here as UI-control pipe)
+- Note: pipe.scheduler.tick.requested.v1 is a UI control pipe, non-tenant, with only:
+- RBAC: must match required_human_role for the hold
+- Pipe emitted: pipe.ruling.created.v1 (already defined in Phase 8C)
+- Output: non-tenant CSV only
+- "request_id":"uuid",
+- "packet_id":"uuid",
+- "hold_reason_code":"LEGAL_REVIEW_REQUIRED",
+- "required_human_role":"LEGAL_OWNER",
+- "packet_id":"uuid",
+- "hold_reason_code":"LEGAL_REVIEW_REQUIRED",
+- "ruling_id":"uuid",
+- No ambiguity: avoid “maybe”, “likely”, “should”.
+- On hold: <hold_reason_code>. Requires <required_role> ruling.
+- Stopped: <hold_reason_code>. Requires <required_role> ruling to proceed.
+- Phase 11 delivered:
+- If you want the next deliverable, Phase 12 will close remaining “gaps” by producing:
+- Formal registration + schemas for UI control pipes introduced here:
+- Deliver Phase 12 to close remaining gaps introduced in Phase 11:
+- Formal registration + schemas for UI control pipes:
+- This phase preserves: no tenant data storage; stream-only.
+- Producer: ui/operator-dashboard
+- data required:
+- "classification_required":"non_tenant",
+- "data_fields_required":["request_id","requested_utc","requested_by_role","correlation_id","dry_run"]
+- "producer": "ui/operator-dashboard",
+- "retention_policy_required": "memory_only",
+- Producer: ui/system-health
+- data required:
+- "producer": "ui/system-health",
+- "retention_policy_required": "memory_only",
+- Producer: ui/system-health
+- data required:
+- "producer": "ui/system-health",
+- "retention_policy_required": "memory_only",
+- Minimum viable set: 1 Chapter + 2 Topics + 2 Phases each + ≥3 UMPs per phase.
+- CH-08: UI-Gateway (Read Facade + Command Emitter)
+- Purpose: serve non-tenant view models to UI and emit command pipes
+- Module Folder: chapters/eyes/topic-query-api is not appropriate for UI auth; create a dedicated UI Gateway module:
+- Build/Test/Deploy:
+- Build: pnpm --filter @chapters/eyes-topic-ui-gateway build
+- Test: pnpm --filter @chapters/eyes-topic-ui-gateway test
+- TP-01: topic-ui-gateway-read
+- Allowed Paths: chapters/eyes/topic-ui-gateway/**
+- Allowed Paths: chapters/eyes/topic-ui-gateway/src/projection/**
+- TP-02: topic-ui-gateway-commands
+- Phase 12 delivered:
+- If you want the next output, Phase 13 will fully expand UMP-0115 → UMP-0126 with:
+- Deliver Phase 13: fully expand UMP-0115 → UMP-0126 (UI Gateway implementation plan) with:
+- This phase is large; to keep it structurally correct on-screen, Phase 13 covers:
+- Each UMP must output:
+- UMP-0115: UI Gateway skeleton (health/ready + smoke)
+- UMP-0116: API response schemas (docs/ui-contracts/api/v1)
+- Purpose: create minimal runnable UI Gateway service with /healthz and /readyz.
+- Sealing: required.
+- Mitigation: centralize readiness gate in server and require in every route.
+- export function healthRoutes(state: ReadinessState): (req, res) => boolean
+- "file":"chapters/eyes/topic-ui-gateway/src/routes/health.ts",
+- "file":"chapters/eyes/topic-ui-gateway/src/server.ts",
+- log: ui-gateway listening on <port>
+- "file":"chapters/eyes/topic-ui-gateway/src/index.ts",
+- "file":"chapters/eyes/topic-ui-gateway/test/smoke.test.ts",
+- "assertions_required":["healthz_ok","readyz_not_ready_then_ready","server_close_required"]
+- name: @chapters/eyes-topic-ui-gateway
+- build: tsc -p tsconfig.json
+- "file":"chapters/eyes/topic-ui-gateway/package.json",
+- "name":"@chapters/eyes-topic-ui-gateway",
+- "scripts_required":["build","test"]
+- "file":"chapters/eyes/topic-ui-gateway/tsconfig.json",
+- Purpose: define versioned API response schemas for Phase 11 endpoints.
+- Sealing: required.
+- Each items must reference viewmodel schemas (Phase 9):
+- "file":"docs/ui-contracts/api/v1/common.pagination.schema.json",
+- "file":"docs/ui-contracts/api/v1/queue.response.v1.schema.json",
+- Purpose: define a projection client interface and a deterministic in-memory adapter to support UI Gateway reads + tests.
+- Sealing: required.
+- Define TypeScript types aligned to Phase 9 viewmodels:
+- "file":"chapters/eyes/topic-ui-gateway/src/projection/types.ts",
+- "file":"chapters/eyes/topic-ui-gateway/src/projection/client.ts",
+- "file":"chapters/eyes/topic-ui-gateway/src/projection/memory-adapter.ts",
+- "file":"chapters/eyes/topic-ui-gateway/test/projection.pagination.test.ts",
+- "assertions_required":["stable_sort","cursor_pagination","no_duplicates","limit_clamp"]
+- Phase 13 delivered fully-specified UMPs:
+- Next Phase 13B will cover:
+- Deliver Phase 13B:
+- Fully expand remaining UI-Gateway UMPs:
+- export function overviewRoute(client: ProjectionClient)
+- export function queueRoute(client: ProjectionClient)
+- "pagination_required":true,
+- request_id: uuid,
+- Validate request against Phase-11 contract:
+- "denylist_required":true,
+- "rbac_required":true
+- Phase 13B delivered fully-expanded UMPs:
+- Next Phase 13C will complete:
+- Deliver Phase 13C: fully expand:
+- UI Gateway emits:
+- export function isRole(x: string): x is Role
+- "file":"chapters/eyes/topic-ui-gateway/src/auth/roles.ts",
+- "file":"chapters/eyes/topic-ui-gateway/src/auth/claims.ts",
+- requireCapability(auth, capability): { ok:true } | { ok:false; status:401|403; code:string }
+- "file":"chapters/eyes/topic-ui-gateway/src/auth/rbac.ts",
+- "exports":["Capability","hasCapability","requireCapability"],
+- "file":"chapters/eyes/topic-ui-gateway/src/server.ts",
+- "file":"chapters/eyes/topic-ui-gateway/test/auth.rbac.test.ts",
+- "assertions_required":["health_unauthed_ok","unauthed_rejected","role_capabilities_enforced"]
+- "file":"chapters/eyes/topic-ui-gateway/src/audit/hash.ts",
+- export function makeAuditEmitter(emit: EmitPipe, saltVersion: string)
+- auditEmitter.emitUiAction({ correlation_id, actor_subject, actor_role, action }): Promise<{audit_hash:string}>
+- builds pipe.audit.record.v1 payload:
+- "file":"chapters/eyes/topic-ui-gateway/src/audit/emitter.ts",
+- "file":"chapters/eyes/topic-ui-gateway/src/routes/scheduler.ts",
+- "audit_required":true,
+- "file":"chapters/eyes/topic-ui-gateway/test/audit.hooks.test.ts",
+- "assertions_required":["audit_emitted_for_commands","audit_failure_blocks_command"]
+- "file":"chapters/eyes/topic-ui-gateway/test/integration/test-harness.ts",
+- Phase 13C delivered fully-specified UMPs:
+- If you want the next deliverable, Phase 14 will provide the final Deliverables Index across all phases:
+- Deliver Phase 14: produce the Final Deliverables Index (deterministic mapping) across the work we defined:
+- DOC-06	docs/ui-contracts/README.md	Usage rules: UI consumes viewmodels only.
+- harness output: docs/architecture/contract-report.json must pass
+- C-05: UI Gateway safety
+- If you want the next step, Phase 15 is the Gap Report you asked for originally (“There are many gaps”) written as:
+- Derived from Phases 1–14:
+- Add in-memory retry buffer inside UI Gateway:
+- If you want, Phase 16 can convert this gap report into a Fully Ordered Execution Roadmap:
+- Build order must follow information flow:
+- UI consumes:
+- If you want, Phase 17 can now produce the Ultra-Explicit “Day-1 Implementation Blueprint”:
+- This is the exact, linear, start-to-finish checklist for the first build day:
+- Stand up the repo enforcement baseline required before building business logic:
+- Output format (deterministic):
+- Output:
+- Requirements:
+- export function makeInMemoryEmitter(): { emit: EmitPipe; getEmitted(): Array<{pipeId:string; payload:unknown}> };
+- Requirements:
+- when sealed file edit is required:
+- deterministic outputs exist:
+- If you want, Phase 18 will be the Day-2 blueprint that begins “real system” work:
+- Outputs must contain:
+- If you want, Phase 19 will be Day-3 blueprint:
+- From Day-2 (Phase 18):
+- Projection updater sits between stream and UI Gateway:
+- Define TypeScript row types aligned to UI view models:
+- If you want, Phase 20 will be Day-4 blueprint:
+- End-to-end: Scheduler tick → decisions → projections → UI reads
+- From Day-3 (Phase 19):
+- From Day-1 (Phase 17):
+- Step 3 — UMP-0204D: Align UI Gateway Projection Types to Foundation
+- Requirements:
+- Step 6 — UMP-0204G: Wire UI Gateway to File Store
+- Requirements:
+- Must output:
+- If you want, Phase 21 will be Day-5 blueprint:
+- Demo script: tick → decision → projections → UI reads; hold → ruling → cleared
+- Step 5 — UMP-0222: Projections consumes the new loop outputs
+- If you want, Phase 22 is Day-6 blueprint:
+- Add ops endpoints: run contract harness + route-map from UI (ADMIN)
+- Implement Ops control endpoints in UI Gateway (ADMIN):
+- UI triggers ops action by emitting control pipes:
+- Step 6 — UMP-0229: UI Gateway Ops Endpoints (ADMIN) → Emit Control Pipes
+- UI Gateway tests assert:
+- Phase 22 delivered a real pipeline:
+- If you want, Phase 23 will be Day-7 blueprint:
+- From Day-6 (Phase 22):
+- Phase 23 delivered:
+- If you want, Phase 24 is Day-8 blueprint:
+- Must fail build if:
+- UI gateway:
+- Output:
+- Phase 24 delivered:
+- If you want, Phase 25 will be Day-9 blueprint:
+- Option A (recommended): NetworkPolicy + Broker ACLs (no mesh required)
+- Define required secrets:
+- UI Gateway must reject if:
+- Outputs:
+- Phase 25 delivered:
+- If you want, Phase 26 is the final consolidation:
+- Derived from completed phases:
+- Eyes: ingestion + UI
+- If you want the final layer, Phase 27 can produce the Ultra-Explicit “How This Actually Runs in Real Life” Walkthrough:
+- Output:
+- UI calls:
+- UI displays:
+- 00:03  UI shows ruling
+- This phase identifies the non-obvious, high-leverage risks that typically break automation systems in production—especially under:
+- From Phases 1–27:
+- Require policy evaluation pure core:
+- UMP-0313: alert rules spec + dashboards config
+- UMP-0320: UI contract includes “ops_action_available=false” when locked
+- This phase has delivered:
+- If you want, Phase 29 will produce the Enterprise Hardening Plan as a full UMP pack:
+- From previous phases:
+- Outputs:
+- Require:
+- Phase 29 delivers a complete enterprise hardening roadmap with:
+- If you want, Phase 30 can generate the Final Master Blueprint — a single ultra-explicit document that merges:
+- This document is intended to function as:
+- The output below is deterministic, implementation-ready, and explicitly confirms:
+- Implemented via Phase-29 UMP blocks:
+- At Phase 30 you now possess:
+- This phase converts the master blueprint into an execution-grade map:
+- This output is the implementation index: engineers should not need to “interpret” anything.
+- From Phases 1–30:
+- Phase 31 must include only these sections, in this strict order:
+- UI Gateway: chapters/eyes/topic-ui-gateway
+- This phase outputs two authoritative JSON artifacts ready to paste directly into:
+- "redaction_required": false,
+- "producer": "chapters/eyes/topic-ui-gateway",
+- "redaction_required": false,
+- "notes": "Decision output: PROCEED/HOLD with explanation pointers only."
+- "redaction_required": false,
+- "redaction_required": false,
+- "redaction_required": false,
+- "redaction_required": false,
+- "notes": "Starts a decision cycle; correlation_id is required."
+- "redaction_required": false,
+- "redaction_required": true,
+- "redaction_required": false,
+- "redaction_required": false,
+- "producer": "chapters/eyes/topic-ui-gateway",
+- "redaction_required": false,
+- "producer": "chapters/eyes/topic-ui-gateway",
+- "redaction_required": false,
+- "redaction_required": false,
+- "producer": "chapters/eyes/topic-ui-gateway",
+- "redaction_required": false,
+- "redaction_required": false,
+- "producer": "chapters/eyes/topic-ui-gateway",
+- "redaction_required": false,
+- "producer": "chapters/eyes/topic-ui-gateway",
+- "producer": "chapters/eyes/topic-ui-gateway",
+- "producer": "chapters/eyes/topic-ui-gateway",
+- "producer": "chapters/eyes/topic-ui-gateway",
+- "producer": "chapters/eyes/topic-ui-gateway",
+- "producer": "chapters/eyes/topic-ui-gateway",
+- "producer": "chapters/eyes/topic-ui-gateway",
+- Adding a new pipe requires:
+- - minimal ambiguity
+- - Objective
+- - Requirements
+- - Architecture Expectations
+- ## Phase 1 — Canonical Meta-Prompt (Ultra Micro Plan – E2E)
+- # Objective
+- Design and output an **Ultra Micro Plan – E2E** for a software system using a **strict, deterministic, agent-oriented structure**:
+- - **Chapters** = deployable **modules** (independently build/test/deploy).
+- - **Phases** = sequential build blocks for a Topic.
+- - **Ultra Micro Phases (UMPs)** = atomic, testable, executable “bricks” that are **immutable once created**.
+- The output must be:
+- - **Minimal ambiguity**
+- 3. For every UMP, output:
+- - Build/test commands
+- - DEPLOYMENT_MODEL (mono-repo, multi-repo; but you MUST output a canonical mono-repo tree unless explicitly forbidden)
+- - NON_FUNCTIONAL_REQUIREMENTS (security, latency, cost, compliance)
+- - INTERFACE_SURFACES (APIs, UI, CLI, events, pipelines)
+- - ORGANS_REQUIRED (default: brain, spine, hands, eyes, legs, heart, lungs, kidneys)
+- - TEST_LEVELS_REQUIRED (default: unit + contract + integration + e2e)
+- # Requirements
+- ## Output Format Requirements (Non-negotiable)
+- Your output must be in the following strict order and section headings:
+- - Each Topic includes Phases
+- - Each Phase includes UMPs
+- # Architecture Expectations
+- You MUST output a full-scale, canonical mono-repo tree that includes:
+- - build scripts per module
+- - build command
+- - Any change requires a new UMP ID and a migration plan.
+- 1. **Atomicity**: one UMP = one narrowly defined objective + test.
+- 3. **Deterministic File Output**: file paths and names are predetermined.
+- 7. **Observability**: logs/metrics/traces required for any pipe interactions.
+- 8. **Security/Compliance**: validate input, sanitize output, classify data, redact secrets.
+- # Chapters (Function Modules)
+- - **Build/Test/Deploy Commands**
+- - **Phases**:
+- - **PH-XX: <PhaseName>**
+- - **Phase Goal**
+- - Build Instructions
+- - Exact Build Prompt (to generate the file deterministically)
+- You MUST output a reusable template that the user can copy/paste for every UMP with:
+- - generate Phases
+- - stop after each Phase if output is too long
+- - wait for user instruction: PROCEED PHASE <n>
+- Your output must include ALL of the following:
+- - No UMP may require editing a sealed prior UMP.
+- - Output must remain structurally correct if truncated: if too long, stop at a clean boundary and request: **“Type: PROCEED PHASE 2”**.
+- 7. If output becomes too large:
+- - stop at the end of the last fully completed Phase or Chapter section
+- - print: **“END OF PHASE 1 OUTPUT — Type: PROCEED PHASE 2”**
+- If you reach output limits:
+- END OF PHASE 1 OUTPUT — Type: PROCEED PHASE 2
+- ## Phase 2 — Instantiate the Ultra Micro Plan (Defaults + Architecture + Canonical Repo + Enforcement + Start CH-01)
+- - TEST_LEVELS_REQUIRED: **unit + contract + integration + e2e**
+- - ORGANS_REQUIRED: **brain, spine, hands, eyes, legs, heart, lungs, kidneys**
+- # Architecture Expectations
+- - observability: required metrics/log fields
+- - Any edit to a sealed file requires:
+- - UMP skipped required tests
+- - sealing required
+- # Chapters (Function Modules)
+- - **Build/Test/Deploy:**
+- - Build: pnpm --filter @chapters/brain build
+- - **Phase Goal:** create minimal runnable service skeleton + contract surfaces
+- - Seal: required
+- - Seal: required
+- - Seal: required
+- - **Phase Goal:** publish/consume orchestration events via spine-registered pipes
+- - **UMP-0010 — Implement policy evaluator (pure function core)**
+- - TP-01 topic-command-api (Phases: Contracts & Skeleton; Implementation Minimal)
+- - TP-02 topic-side-effects (Phases: Contracts & Skeleton; Reliability Hooks)
+- # Phase 2 Scope Note (Deterministic)
+- In Phase 2, I instantiated:
+- - CH-01 full structure to the **phase/UMP list level**
+- Next, Phase 3 will expand **UMP Template (Authoritative)** and then fully detail **CH-01 TP-01 PH-01 UMP-0001..0003** with:
+- ## Phase 3 — UMP Template (Authoritative) + Fully-Specified UMP-0001..0003 (CH-01 / TP-01 / PH-01)
+- # Objective
+- - seal UMP output (hashes)
+- - if any requirement conflicts, prioritize:
+- ## Required (for execution)
+- # Requirements
+- ## Structural Output
+- - Every UMP must output:
+- - verification.md (commands + expected output)
+- # Architecture Expectations
+- This phase operates within:
+- Applies as stated in Phase 2. In this phase specifically:
+- # Chapters (Function Modules)
+- Phase 3 details only:
+- - **Sealing:** required.
+- ### UMP-0001 Build/Test Commands
+- - Build: pnpm --filter @chapters/brain-topic-orchestration build
+- - Expose a startServer({ port }): Promise<{ close(): Promise<void> }> function.
+- - Use Node 18+ built-in fetch OR http client (choose one, be consistent).
+- **Purpose:** deterministic build/test.
+- - build: tsc -p tsconfig.json
+- - Output dirs:
+- - pnpm --filter @chapters/brain-topic-orchestration build
+- ### Schema Requirements (Both)
+- - event_id (uuid)
+- - Must set "type": "object" and "required" lists explicitly.
+- data required:
+- data required:
+- - outputs (object; may be empty; additionalProperties true allowed only inside outputs)
+- ### Contract Runner Requirements
+- - Deterministic output:
+- Phase 3 delivers:
+- - exact file build prompts
+- - sealing requirements
+- - Do not define UMP-0004+ in Phase 3.
+- - Do not remove or compress required fields for brevity.
+- - If output becomes too long, stop cleanly and request:
+- **END OF PHASE 3 OUTPUT — Type: PROCEED PHASE 4**
+- - exact file causing ambiguity
+- ### END OF PHASE 3 OUTPUT
+- PROJECT_DOMAIN: “LLM-guided + RPA-assisted delinquency outreach automation”
+- TEST_LEVELS_REQUIRED: unit + contract + integration + e2e
+- ORGANS_REQUIRED: brain, spine, hands, eyes, legs, heart, lungs, kidneys
+- Fail-closed: ambiguity → HOLD → escalation routing (not guessing)
+- INDEX-00 (Authoritative): the whole project decomposes into these functional modules:
+- INDEX-07: Automation Safety (fail-closed, human-only boundaries, UI drift handling)
+- Import boundary linter: fails build if any chapters/** imports another chapters/**
+- UI drift tolerance: selectors/config must be versioned; drift triggers HOLD
+- PH-02: Executable Rule Engine (pure function core)
+- PH-02: Phase controller (CALL→TEXT→EMAIL sequencing + stop rules)
+- "phase_id": "PH-##",
+- "successor_policy": "new_ump_required_for_changes"
+- "build_prompt": "deterministic file construction instructions",
+- "build": { "commands": ["..."] },
+- END OF PHASE 1 OUTPUT — Type: PROCEED PHASE 2
+- Scope in this phase (hard-bounded):
+- UMP immutability: once sealed, it is immutable; changes require successor UMP.
+- TEST_LEVELS_REQUIRED: unit + contract + integration + e2e
+- ORGANS_REQUIRED: brain, spine, hands, eyes, legs, heart, lungs, kidneys
+- Each UMP must output:
+- Applies to every UMP in this phase:
+- This Phase Covers: TP-01 topic-decision-engine / PH-01 Decision Table Canonicalization
+- Phase Goal: turn SOP logic into a deterministic, versioned, executable decision taxonomy + contracts + contract tests, before any orchestration.
+- UMPs in this Phase (fully specified here):
+- Objective: create the minimal canonical pipe schemas and register them deterministically.
+- Sealing: required.
+- meta (required; additionalProperties: false)
+- data required:
+- data required:
+- data required:
+- required_role (enum: team_lead|manager|legal)
+- "required_fields":["pipe_id","schema_path","version","compatibility","producer","consumer","direction"]
+- Objective: define the canonical decision code taxonomy and a deterministic mapping matrix from “facts” → decision_type/next_step/escalation.
+- Sealing: required.
+- Context: deterministic mapping from evaluated facts → decision outputs.
+- Define a pure function:
+- Build (topic-local once package exists): pnpm --filter @chapters/brain-topic-decision-engine build
+- Objective: ensure pipes validate and decision taxonomy behaves fail-closed.
+- Sealing: required.
+- "cases":["valid_passes","missing_required_fails"],
+- Use the Phase 1 template exactly, plus these additional mandatory fields for this project:
+- END OF PHASE 2 OUTPUT — Type: PROCEED PHASE 3
+- This phase produces:
+- TEST_LEVELS_REQUIRED: unit + contract + integration + e2e
+- For Phase 3, we implement the minimal executable subset that drives early gating and safe channel allowance:
+- Any disagreement between sources (when the mapper is later added) → HOLD + ESCALATE (future phase), but in Phase 3: HOLD_UNKNOWN_POLICY_EXCEPTION.
+- Core: pure functions
+- No I/O: no AppFolio calls, no Sheets calls, no DB reads/writes in this phase.
+- Phase 3 delivers CH-01 / TP-01 / PH-02 with fully-specified UMPs:
+- If output gets too long: stop cleanly after the last sealed UMP specification and request:
+- END OF PHASE 3 OUTPUT — Type: PROCEED PHASE 4
+- Scope: Make the topic independently buildable/testable with strict boundaries.
+- Sealing: required
+- Build: pnpm --filter @chapters/brain-topic-decision-engine build
+- "startup_log_required":true
+- Use Node built-in test runner (node:test) and built-in fetch if available (Node 18+).
+- "teardown":"server_close_required"
+- build: tsc -p tsconfig.json
+- "scripts_required":["build","test"],
+- "outputs":["dist/","dist-test/"]
+- Pipes: none modified in this UMP (uses schemas from Phase 2)
+- Sealing: required
+- Output always includes:
+- "required_facts":["af_current_balance"],
+- Predicates supported in Phase 3:
+- If all PROCEED, compute next_step using DT-CHANNEL-ALLOW-001 output (CALL/TEXT/EMAIL) with a deterministic preference:
+- Build: pnpm --filter @chapters/brain-topic-decision-engine build
+- Sealing: required
+- END OF PHASE 3 OUTPUT — Type: PROCEED PHASE 4
+- This phase introduces:
+- Decision Engine outputs:
+- OUTPUT :
+- Phase 4 produces:
+- "exports":["buildEscalationPayload"],
+- "observability_required":true
+- Same template as Phase 1–3, with mandatory additions:
+- END OF PHASE 4 OUTPUT — Type: PROCEED PHASE 5
+- Deliver Phase 5 of the Ultra Micro Plan (UMP) E2E by building CH-02 (Eyes): streaming-only ingestion/adapters that read from:
+- UI drift = HOLD: selector mismatch or page shape change triggers an observation error pipe and stops the pipeline from proceeding.
+- New pipes (Phase 5 introduces schemas; Phase 4 restriction does not apply now):
+- Phase 5 delivers CH-02 (Eyes) with two Topics, each with a single fully specified Phase (sufficient to begin streaming into Brain):
+- meta required:
+- Required:
+- phone_in_transit (string) (preferred: omit in Phase 5)
+- Required:
+- Required:
+- Output:
+- "live_api_disabled_in_phase5":true
+- "exports":["buildSheetRowObservation"],
+- "cases":["valid_passes","missing_required_fails"]
+- "assertions":["same_input_same_fingerprint","changed_cell_changes_fingerprint","no_pii_columns_required"]
+- Required:
+- Allowed: topic tests + UMP + foundation contract runner if required
+- END OF PHASE 5 OUTPUT — Type: PROCEED PHASE 6
+- Pipe schemas created in Phase 5:
+- Decision engine expects (from Phase 3/4):
+- Phase 6 minimal approach (fixture-driven):
+- Phase 6 minimal logic:
+- Phase 6 delivers:
+- Build: pnpm --filter @chapters/eyes-topic-facts-normalizer build
+- build ObservationError:
+- Build FactsSnapshot:
+- "outputs":["pipe.facts.snapshot.v1","pipe.observation.error.v1"],
+- END OF PHASE 6 OUTPUT — Type: PROCEED PHASE 7
+- Deliver Phase 7 of the Ultra Micro Plan (UMP) E2E by building CH-03 (Hands): actuators that execute write-backs into the user’s systems-of-record:
+- Output: OutreachCommand (pipe) → executed → OutreachResult (pipe)
+- Documentation Builder:
+- Phase 7 delivers CH-03 (Hands) with 2 Topics:
+- TP-01: topic-command-builder
+- PH-01: Contracts + Command Builder
+- meta required:
+- Required:
+- Required:
+- Command builder must:
+- Always build documentation payloads:
+- "file":"chapters/hands/topic-command-builder/src/idempotency/idempotency-key.ts",
+- "stable_order_required":true
+- Export buildOutreachCommand(meta, decision, factsSnapshot):
+- "file":"chapters/hands/topic-command-builder/src/builder/build-command.ts",
+- "exports":["buildOutreachCommand"],
+- PH-01: Executor Skeleton + Documentation Builders + Integration Tests
+- Must generate a structured note payload (not actual UI action yet) with fields:
+- idempotency.required: true
+- END OF PHASE 7 OUTPUT — Type: PROCEED PHASE 8
+- Phase 8 introduces a non-tenant persistent idempotency store:
+- Phase 8 produces:
+- Same as prior phases, plus:
+- END OF PHASE 8 OUTPUT — Type: PROCEED PHASE 9
+- Phase 9 introduces:
+- pulls a job from a queue (Phase 9 minimal: local in-memory queue)
+- route to escalation/reporting channel (Phase 9: emit to pipes only; UI later)
+- Phase 9 delivers CH-06 Legs with 4 Topics, each with 1 Phase fully specified:
+- Output:
+- END OF PHASE 9 OUTPUT — Type: PROCEED PHASE 10
+- No silent failures: must ship dashboards + alerts + runbooks.
+- Phase 10 produces:
+- Require:
+- "required":["namespace","image.tag","no_tenant_persistence","streaming_only"],
+- Build images for:
+- "successor_required":true
+- "file":"ci/github/workflows/docker-build.yml",
+- "env_required":["NO_TENANT_PERSISTENCE","STREAMING_ONLY","ENV_NAME"],
+- ops.environment_matrix: required
+- ops.deploy.probes_required: true
+- END OF PHASE 10 OUTPUT — Type: PROCEED PHASE 11
+- This phase introduces the operational visibility and authority surface that was explicitly missing earlier:
+- UI DB allowed only for:
+- UI must:
+- Phase 11 produces:
+- "ui_read_only_for_automation_state": true,
+- "hitl_pipe_required": true,
+- END OF PHASE 11 OUTPUT — Type: PROCEED PHASE 12
+- This phase closes the architecture by providing:
+- Derived from previous phases:
+- ui_surface: true|false
+- "phases":[
+- Generator must output:
+- # Objective
+- - **Chapters** = deployable **modules** (independently build/test/deploy).
+- - **Phases** = sequential build blocks for a Topic.
+- - **Ultra Micro Phases (UMPs)** = atomic, testable, executable “bricks” that are **immutable once created**.
+- The output must be:
+- - **Minimal ambiguity**
+- - For UI We need to know everything screen by screen
+- 3. For every UMP, output:
+- - Build/test commands
+- - DEPLOYMENT_MODEL (mono-repo, multi-repo; but you MUST output a canonical mono-repo tree unless explicitly forbidden)
+- - NON_FUNCTIONAL_REQUIREMENTS (security, latency, cost, compliance)
+- - INTERFACE_SURFACES (APIs, UI, CLI, events, pipelines)
+- - ORGANS_REQUIRED (default: brain, spine, hands, eyes, legs, heart, lungs, kidneys)
+- - TEST_LEVELS_REQUIRED (default: unit + contract + integration + e2e)
+- # Requirements
+- ## Output Format Requirements (Non-negotiable)
+- Your output must be in the following strict order and section headings:
+- - Each Topic includes Phases
+- - Each Phase includes UMPs
+- # Architecture Expectations
+- You MUST output a full-scale, canonical mono-repo tree that includes:
+- - build scripts per module
+- - build command
+- - Any change requires a new UMP ID and a migration plan.
+- 1. **Atomicity**: one UMP = one narrowly defined objective + test.
+- 3. **Deterministic File Output**: file paths and names are predetermined.
+- 7. **Observability**: logs/metrics/traces required for any pipe interactions.
+- 8. **Security/Compliance**: validate input, sanitize output, classify data, redact secrets.
+- # Chapters (Function Modules)
+- - **Build/Test/Deploy Commands**
+- - **Phases**:
+- - **PH-XX: <PhaseName>**
+- - **Phase Goal**
+- - Build Instructions
+- - Exact Build Prompt (to generate the file deterministically)
+- You MUST output a reusable template that the user can copy/paste for every UMP with:
+- - generate Phases
+- - stop after each Phase if output is too long
+- - wait for user instruction: PROCEED PHASE <n>
+- Your output must include ALL of the following:
+- - No UMP may require editing a sealed prior UMP.
+- - Output must remain structurally correct if truncated: if too long, stop at a clean boundary and request: **“Type: PROCEED PHASE 2”**.
+- 7. If output becomes too large:
+- - stop at the end of the last fully completed Phase or Chapter section
+- - print: **“END OF PHASE 1 OUTPUT — Type: PROCEED PHASE 2”**
+- If you reach output limits:
+- END OF PHASE 1 OUTPUT — Type: PROCEED PHASE 2
+- ## Phase 2 — Instantiate the Ultra Micro Plan (Defaults + Architecture + Canonical Repo + Enforcement + Start CH-01)
+- - TEST_LEVELS_REQUIRED: **unit + contract + integration + e2e**
+- - ORGANS_REQUIRED: **brain, spine, hands, eyes, legs, heart, lungs, kidneys**
+- # Architecture Expectations
+- - observability: required metrics/log fields
+- - Any edit to a sealed file requires:
+- - UMP skipped required tests
+- - sealing required
+- # Chapters (Function Modules)
+- - **Build/Test/Deploy:**
+- - Build: pnpm --filter @chapters/brain build
+- - **Phase Goal:** create minimal runnable service skeleton + contract surfaces
+- - Seal: required
+- - Seal: required
+- - Seal: required
+- - **Phase Goal:** publish/consume orchestration events via spine-registered pipes
+- - **UMP-0010 — Implement policy evaluator (pure function core)**
+- - TP-01 topic-command-api (Phases: Contracts & Skeleton; Implementation Minimal)
+- - TP-02 topic-side-effects (Phases: Contracts & Skeleton; Reliability Hooks)
+- # Phase 2 Scope Note (Deterministic)
+- In Phase 2, I instantiated:
+- - CH-01 full structure to the **phase/UMP list level**
+- Next, Phase 3 will expand **UMP Template (Authoritative)** and then fully detail **CH-01 TP-01 PH-01 UMP-0001..0003** with:
+- ## Phase 3 — UMP Template (Authoritative) + Fully-Specified UMP-0001..0003 (CH-01 / TP-01 / PH-01)
+- # Objective
+- - seal UMP output (hashes)
+- - if any requirement conflicts, prioritize:
+- ## Required (for execution)
+- # Requirements
+- ## Structural Output
+- - Every UMP must output:
+- - verification.md (commands + expected output)
+- # Architecture Expectations
+- This phase operates within:
+- Applies as stated in Phase 2. In this phase specifically:
+- # Chapters (Function Modules)
+- Phase 3 details only:
+- - **Sealing:** required.
+- ### UMP-0001 Build/Test Commands
+- - Build: pnpm --filter @chapters/brain-topic-orchestration build
+- - Expose a startServer({ port }): Promise<{ close(): Promise<void> }> function.
+- - Use Node 18+ built-in fetch OR http client (choose one, be consistent).
+- **Purpose:** deterministic build/test.
+- - build: tsc -p tsconfig.json
+- - Output dirs:
+- - pnpm --filter @chapters/brain-topic-orchestration build
+- ### Schema Requirements (Both)
+- - event_id (uuid)
+- - Must set "type": "object" and "required" lists explicitly.
+- data required:
+- data required:
+- - outputs (object; may be empty; additionalProperties true allowed only inside outputs)
+- ### Contract Runner Requirements
+- - Deterministic output:
+- Phase 3 delivers:
+- - exact file build prompts
+- - sealing requirements
+- - Do not define UMP-0004+ in Phase 3.
+- - Do not remove or compress required fields for brevity.
+- - If output becomes too long, stop cleanly and request:
+- **END OF PHASE 3 OUTPUT — Type: PROCEED PHASE 4**
+- - exact file causing ambiguity
+- Identify all missing layers and structural gaps required to make the architecture:
+- Output is a deterministic gap register: each gap includes what is missing, why it matters, and what must exist (artifacts + enforcement).
+- Non-negotiable expectations for “mature product”:
+- Every API route must declare: auth required? role required? data classification?
+- CH-Ops topic: topic-observability-dashboards
+- UI route map: every screen path, nested layout, menu nav
+- Pipe route map: already partially covered, but not bound to UI/API
+- CH-UI1 UI Shell:
+- CH-UI2 Product Screens:
+- TP: topic-operations-dashboard
+- UI screens:
+- If you want this continued in your required UMP format, the next output should be:
+- Type: PROCEED PHASE 13
+- Start Phase 13 by adding the missing Security Layer as a first-class, enforceable subsystem with:
+- UI: Governance Console uses session-based auth; services use service-to-service auth
+- Anything crossing UI/API ingress must be validated:
+- require:
+- Build/Test/Deploy:
+- Build: pnpm --filter @chapters/security-topic-identity-authn build
+- PH-01: Contracts & Skeleton (Fully specified in this output)
+- Required fields:
+- Required:
+- Required:
+- Output a strongly typed ActorIdentity:
+- Provide a single function:
+- "outputs_filtered_identity_only":true
+- Mitigation: later CI gate requires middleware usage for every server entrypoint.
+- GET /whoami → requires auth, returns:
+- END OF PHASE 13 OUTPUT — Type: PROCEED PHASE 13.2
+- Deliver Phase 13.2 by completing the Security layer beyond AuthN:
+- ui:<screen_id>
+- No Privilege Drift: RBAC contract is authoritative; UI & API must share it.
+- allowed prefixes: api:, pipe:, ui:
+- Must output a non-PII event:
+- Phase 13.2 adds mandatory fields:
+- END OF PHASE 13.2 OUTPUT — Type: PROCEED PHASE 14
+- Deliver Phase 14 by building the UI/UX system as a first-class, screen-by-screen product layer:
+- All UI routes must be declared in:
+- UI must use:
+- UI stack: React + TypeScript + Tailwind
+- UI route must exist in:
+- UI-specific additions:
+- CH-UI1: UI (Governance Console + Ops Surface)
+- UMP-0072 — UI contracts: routes, screen registry, design tokens (authoritative)
+- The client must expose functions only for declared endpoints:
+- Each function returns a normalized result:
+- UI-specific mandatory fields:
+- Still missing UI screens to implement:
+- END OF PHASE 14 OUTPUT — Type: PROCEED PHASE 14.2
+- Deliver Phase 14.2 by completing the remaining UI/UX layers:
+- CH-UI1: UI
+- UI shows version history metadata only:
+- Add Phase 14.2 mandatory UI quality fields:
+- then the correct next step is a Phase 15 — Route Completion phase that adds these endpoints to:
+- END OF PHASE 14.2 OUTPUT — Type: PROCEED PHASE 15
+- Deliver Phase 15 — Route Completion (Full-Scale Routes) by making the system route-complete across:
+- This phase eliminates the exact gap you called out: “full scale routes.”
+- UI screens depend on endpoints:
+- Phase 15 adds route guardrails:
+- Add functions:
+- Phase 16: Stability/SLOs + load shedding + chaos drills
+- Phase 17: Advanced Security (key rotation, external secrets, attestation enforcement)
+- Phase 18: Full UX polish (microinteractions, performance budgets, i18n, offline handling)
+- END OF PHASE 15 OUTPUT — Type: PROCEED PHASE 16
+- This phase closes the stability gap by introducing:
+- Additional rules introduced in Phase 16:
+- circuit.ts:
+- Phase 16 adds required fields:
+- "circuit_breaker": true,
+- Phase 17: Advanced Security Hardening
+- Phase 18: Apple-grade UX Motion + Interaction Physics
+- Phase 19: Observability Intelligence + Self-Diagnosis
+- END OF PHASE 16 OUTPUT — Type: PROCEED PHASE 17
+- This phase closes remaining “mature product” security gaps by implementing:
+- Phase 17 adds:
+- Requirements:
+- Requirements:
+- Phase 17 adds mandatory fields:
+- Phase 18: UX motion + interaction polish + performance budgets
+- Phase 19: Observability “self-diagnosis” + anomaly detection loops
+- Phase 20: Multi-environment release governance (canary, progressive delivery)
+- END OF PHASE 17 OUTPUT — Type: PROCEED PHASE 18
+- This phase closes the UX/UI maturity gap by enforcing:
+- Hard requirements:
+- UI Stack: React + TypeScript (existing chapters/ui)
+- UI routes must map 1:1 with OpenAPI endpoints declared earlier.
+- Phase 18 introduces:
+- CH-UI1: UI Navigation System
+- CH-UI2: Motion System
+- CH-UI3: Performance Discipline
+- Phase 18 adds mandatory UX block:
+- Phase 19: Observability Intelligence + Self-Diagnosis (system understands when it is unhealthy)
+- Phase 20: Release Governance (canary deployments, staged rollouts, environment promotion)
+- END OF PHASE 18 OUTPUT — Type: PROCEED PHASE 19
+- This phase closes the “mature product” gap where the system must not only emit telemetry, but also:
+- UI must display:
+- Phase 19 adds:
+- Requirements:
+- permission: perm.dashboard.view
+- permission: perm.audit.view or perm.dashboard.view (choose one; default: compliance/admin only → perm.audit.view)
+- For Phase 19:
+- CH-UI1: UI
+- objective: “show system health and regressions”
+- permission: perm.dashboard.view
+- UI Panels:
+- Phase 19 adds mandatory observability block:
+- "correlation_id_required": true,
+- Phase 20: Release Governance (canary, staged rollout, promotion)
+- Phase 21: “Autonomous remediation” boundaries (optional; HITL only, no auto-mutations unless explicitly allowed)
+- END OF PHASE 19 OUTPUT — Type: PROCEED PHASE 20
+- This phase closes the final “mature product” operational gap by enforcing:
+- Promotion requires:
+- Phase 20 adds:
+- Requirements:
+- Phase 20 adds required release block:
+- "requires_approval": true,
+- "health_gate_required": true,
+- "supply_chain_gate_required": true,
+- Remaining optional maturity phases:
+- Phase 21: Controlled remediation automation (HITL-first)
+- Phase 22: Multi-region resilience (if required)
+- END OF PHASE 20 OUTPUT — Type: PROCEED PHASE 21
+- This phase adds automation that can recommend and execute remediations, but only within hard governance boundaries:
+- Execution requires:
+- Spine: pipe contracts, versioning, and observability requirements
+- UI contracts: new screens for remediation queue + detail
+- Phase 21 adds:
+- RM-0002: “Open circuit for failing dependency” (ANOM-0002 latency regression)
+- Output:
+- approve: team_lead/admin (prod requires admin via release matrix concept)
+- Phase 21 adds:
+- "idempotency_key_required": true,
+- "approval_required": true,
+- "audit_event_required": true
+- END OF PHASE 21 OUTPUT — Type: PROCEED PHASE 22
+- This phase adds geographic resilience without violating the core rule:
+- Phase 22 introduces:
+- Traffic model: Active/Active for stateless services, Active/Passive for metadata stores if strong consistency is required
+- Phase 22 adds:
+- Schema requirements:
+- Phase 22 adds mandatory resilience block:
+- "region_id_required": true,
+- "failover_epoch_required": true,
+- docs/INDEX.md (authoritative): Chapters → Topics → Phases → UMPs → Files (IDs + paths)
+- docs/ui/screens/SC-xxxx.md for every screen, including:
+- Phase 16 covers stability primitives, but a mature system also needs:
+- Even after Phase 17-style hardening, two critical missing layers are:
+- abuse-case test suite:
+- UI:
+- Phase 23 adds:
+- After this phase, the system has:
+- You enforce builds and sealing, but missing:
+- You defined dashboards and authority reporting — but not:
+- This phase closes the remaining second-order maturity gaps by installing a deterministic “governor layer” that controls:
+- UI state model: idle/loading/ready/degraded/denied/error
+- Phase 24 adds these mandatory rules:
+- Authority determinism: every mutation requires authority edge (actor → capability).
+- UI determinism: every screen uses a screen state machine contract.
+- CH-UI4: UI Runtime Architecture
+- inputs: required API calls (OpenAPI route ids)
+- permissions: required capability/perm id
+- ui-runtime-check ensures:
+- Output:
+- required rollout:
+- Phase 24 adds mandatory OIP block:
+- "ui_runtime_model_bound": true,
+- With Phase 24, you now have:
+- This phase converts your architecture into a provable system by creating:
+- Output artifact:
+- Phase 25 adds:
+- Generator output:
+- Phase 25 adds:
+- "certifier_required": true,
+- At this stage, the remaining gaps are not about software features — they are about:
+- If your goal is a mature, evolved, stable product — not an MVP — then the last structural phases would be:
+- From Phase 23:
+- From Phase 24:
+- From Phase 25:
+- These are not “gaps,” they’re feature scope:
+- This phase installs a canonical time system so the platform becomes deterministic across:
+- UI must never assume global ordering; UI sorts by:
+- Phase 26 adds:
+- Ordering honesty: no cross-entity ordering assumptions in UI or decision engine.
+- Phase 26 adds:
+- "temporal_block_required": true,
+- You have UI runtime and approvals, but not:
+- This phase closes Foundational Gap F-02 by installing a deterministic system that governs how:
+- Phase 27 adds:
+- Phase 27 adds:
+- "migration_playbook_required": true,
+- This phase closes Foundational Gap F-03 by creating one authoritative, machine-readable manifest that binds the entire system together:
+- Phase 28 adds:
+- screens from: foundation/contracts/oip/ui-runtime-model.v1.json
+- Phase 28 adds:
+- This phase is maturity proof (M-01): it extends beyond Golden Path correctness into resilience proof by simulating:
+- Phase 29 adds:
+- Requirements:
+- Requirements:
+- Requirements:
+- Outputs:
+- Phase 29 adds:
+- This phase closes remaining maturity gaps:
+- Phase 30 adds:
+- Requirements:
+- Requirements:
+- Requirements:
+- Requirements:
+- Phase 30 adds:
+- "lineage_required": true,
+- To remove ambiguity, here is the only valid next step after Phase 30:
+- This phase cannot be “assumed defaults” because it’s domain definition:
+- And I will output:
+- This phase is not architecture. It is domain instantiation at full scale:
+- UI modality:
+- This phase instantiates the domain into the existing planes:
+- Note: chapters/ui/ is added as a first-class Chapter module. UI runtime was in foundation/OIP; this is the deployable UI surface.
+- UI is a Chapter module with topics:
+- Phase 31 adds:
+- This phase instantiates 7 domain Chapters (some already exist; these are domain expansions):
+- CH-UI1: UI Product Surface
+- CH-REP1: Reporting & Dashboards
+- This phase is too large to fully detail in one response without breaking structural correctness. So the correct output is:
+- Next required step: Phase 31-B (UMP plan generation)
+- …and I will output Phase 31-B as:
+- This phase turns the Phase 31-A indexes (Screens, Routes, Workflows, Adapters, Reports) into a deterministic build program:
+- No tenant data persistence: this phase only instantiates UI surfaces + registries + route scaffolds + workflow scaffolds + adapter skeletons.
+- UI: TypeScript + React (module-local)
+- UI must not invent data: UI reads from routes and pipes only.
+- Workflows operate on metadata: decisions never require tenant records locally stored.
+- Phase 31-B binds to earlier canonical tree and adds the domain folders introduced in Phase 31-A:
+- chapters/ui/** may import only:
+- UI communicates with backend strictly via:
+- Phase 31-B adds:
+- Route Contract Binding: each RT-#### must exist in a route registry + OpenAPI output.
+- CH-UI1: UI Product Surface (Deployable Module)
+- Build: pnpm --filter @chapters/ui build
+- Test: pnpm --filter @chapters/ui test
+- Deploy: kubectl apply -f chapters/ui/k8s/
+- UI runtime foundation:
+- PH-01: UI Shell Contracts & Skeleton
+- Risk: UI stack ambiguity.
+- File: chapters/ui/package.json
+- Context: UI chapter module manifest.
+- Purpose: deterministic build/test.
+- build: tsc -p tsconfig.json
+- File JSON Spec: chapters/ui/ump/UMP-0187/spec.package.json.json
+- "file": "chapters/ui/package.json",
+- "name": "@chapters/ui",
+- "scripts_required": ["build", "test"],
+- File: chapters/ui/topic-shell/src/AppShell.tsx
+- File JSON Spec: chapters/ui/ump/UMP-0187/spec.AppShell.tsx.json
+- "file": "chapters/ui/topic-shell/src/AppShell.tsx",
+- "dependencies": ["chapters/ui/topic-shell/src/layout/ResponsiveFrame.tsx"]
+- File: chapters/ui/topic-shell/src/layout/ResponsiveFrame.tsx
+- Use CSS classes or inline styles (no frameworks required) to enforce:
+- File JSON Spec: chapters/ui/ump/UMP-0187/spec.ResponsiveFrame.tsx.json
+- "file": "chapters/ui/topic-shell/src/layout/ResponsiveFrame.tsx",
+- File JSON Spec: chapters/ui/ump/UMP-0187/spec.Inventory.md.json
+- "append_required": true,
+- File: foundation/contracts/domain/ui-screen-registry.v1.json
+- Context: machine-readable UI registry.
+- Purpose: binds UI screens to backend contracts and permissions.
+- Connectivity: consumed by UI shell, certifier, matrix runner.
+- File JSON Spec: chapters/ui/ump/UMP-0188/spec.ui-screen-registry.v1.json
+- "file": "foundation/contracts/domain/ui-screen-registry.v1.json",
+- "required_fields": [
+- File: chapters/ui/topic-shell/src/registry/ScreenRegistry.ts
+- File JSON Spec: chapters/ui/ump/UMP-0188/spec.ScreenRegistry.ts.json
+- "file": "chapters/ui/topic-shell/src/registry/ScreenRegistry.ts",
+- "invariants": ["unique_screen_ids", "sorted_output", "throw_on_unknown"]
+- CH-REP1: Reporting & Dashboards
+- To continue with the next phase slice (CH-UI1/TP-02 screen scaffolds for SC-0001..SC-0023 and then CH-API2 route registry), type exactly:
+- This phase converts the screen index (SC-0001…SC-0023) into real, buildable, testable UI artifacts:
+- Screen Registry Contract exists (from UMP-0188): foundation/contracts/domain/ui-screen-registry.v1.json
+- State Machine Contract exists (from UMP-0189): foundation/contracts/domain/ui-state-machines.v1.json
+- For each UMP in this phase, output:
+- Phase 31-C delivers:
+- CH-UI1: UI Product Surface
+- chapters/ui/topic-shell/src/AppShell.tsx (modify: mount router)
+- File: chapters/ui/topic-screens/src/router/ScreenRouter.tsx
+- File JSON Spec: chapters/ui/ump/UMP-0190/spec.ScreenRouter.tsx.json
+- "file": "chapters/ui/topic-screens/src/router/ScreenRouter.tsx",
+- "inputs": ["ui-screen-registry.v1.json"],
+- "errors": ["UI_SCREEN_COMPONENT_MISSING", "UI_UNKNOWN_SCREEN_ID"]
+- File: chapters/ui/topic-screens/src/router/RouteClient.ts
+- Context: UI-side route client (stubbed).
+- File JSON Spec: chapters/ui/ump/UMP-0190/spec.RouteClient.ts.json
+- "file": "chapters/ui/topic-screens/src/router/RouteClient.ts",
+- File: chapters/ui/topic-screens/src/auth/PermissionGate.tsx
+- "file": "chapters/ui/topic-screens/src/auth/PermissionGate.tsx",
+- File: chapters/ui/topic-screens/src/degrade/DegradeBoundary.tsx
+- "file": "chapters/ui/topic-screens/src/degrade/DegradeBoundary.tsx",
+- File: chapters/ui/topic-shell/src/AppShell.tsx (modify)
+- "file": "chapters/ui/topic-shell/src/AppShell.tsx",
+- Build: pnpm --filter @chapters/ui build
+- Test: pnpm --filter @chapters/ui test
+- File Pattern: chapters/ui/topic-screens/src/screens/SC-####.tsx
+- File JSON Spec (template): chapters/ui/ump/UMP-0191/spec.screen.component.template.json
+- "pattern": "chapters/ui/topic-screens/src/screens/SC-*.tsx",
+- File Pattern: chapters/ui/topic-screens/src/screen-contracts/SC-####.screen.contract.json
+- "pattern": "chapters/ui/topic-screens/src/screen-contracts/SC-*.screen.contract.json",
+- "required_fields": [
+- File: chapters/ui/topic-screens/src/screens/index.ts
+- "file": "chapters/ui/topic-screens/src/screens/index.ts",
+- File: chapters/ui/topic-screens/src/router/RouteClient.ts (modify)
+- "file": "chapters/ui/topic-screens/src/router/RouteClient.ts",
+- "fixture_mode_env": "UI_FIXTURE_MODE",
+- "pattern": "chapters/ui/topic-screens/src/screens/SC-000{1,2,3}.tsx",
+- This phase turns the Route Index (RT-0001…RT-0108) into authoritative contract artifacts, generates OpenAPI, and enforces:
+- Route IDs and paths (from Phase 31-A):
+- UI screen registry exists:
+- temporal_requirements:
+- idempotency_required: true
+- approval_required: true|false (default true for approvals/holds/remediation)
+- Phase 31-D adds:
+- UI-route referential integrity guardrail:
+- idempotency_required: true
+- ui-route-consistency.ts must verify:
+- Phase 31-D adds:
+- "ui_route_integrity_enforced": true,
+- This phase instantiates the runtime for the route surface created in Phase 31-D:
+- Phase 31-E adds:
+- route-map loads registry and builds:
+- Build deterministic map:
+- Phase 31-E adds:
+- This phase creates the authoritative response contracts for every route in the route registry and introduces deterministic tooling to validate:
+- Phase 31-E-2 adds:
+- RT-0007 /approvals/{id}: { "id": string, "status": "pending|approved|denied", "required_capability": string }
+- "meta_required": ["request_id", "timestamp_utc", "route_id"]
+- RT-0101 approve: result.status = executed, approval_id required
+- RT-0102 deny: result.status = executed, approval_id required
+- "meta_required": ["request_id", "timestamp_utc", "route_id", "idempotency_key"],
+- "audit_required": ["audit_event_id", "export_ref"]
+- print deterministic output:
+- Phase 31-E-2 adds:
+- To proceed to Phase 31-E-3 (handler scaffolds for all RT routes + contract tests), type exactly:
+- This phase implements runtime handlers for every RT route in chapters/api-gateway such that:
+- export async function handle(ctx: HandlerContext): Promise<unknown>
+- meta.request_id must be present (deterministic source: header X-Request-Id or generated stable UUID stub in tests)
+- Phase 31-E-3 adds:
+- "context_fields_required": ["route_id", "method", "path", "headers", "body", "request_id", "timestamp_utc"]
+- Phase 31-E-3 adds:
+- To proceed to Phase 31-E-4 (budgets throttle + degrade behaviors + RBAC deny matrix + CI workflow), type exactly:
+- Deliver Phase 31-E-4 — Stability & Security Runtime Enforcement for the API Gateway:
+- Phase 31-E-4 adds:
+- Phase 31-E-4 adds:
+- This phase introduces the missing “layers” you flagged:
+- UI Completion: all 23 screens upgraded from scaffold → “mature surface” with:
+- Phase 32 adds:
+- UI maturity:
+- Phase 32 touches:
+- PH-06 UI completion: screen-by-screen upgrades + UX system (enumerated)
+- meta required:
+- This phase builds the read side integration layer:
+- Fixture mode controls outputs:
+- Forbidden: importing API gateway, UI, other chapters.
+- Build: pnpm --filter @chapters/eyes-topic-pms-read build
+- function redact(input: string): string masks emails/phones (basic patterns)
+- Otherwise: placeholder fetch via fetch() with timeout (but not required to hit real endpoint)
+- Producer requirements:
+- buildPmsHealthEvent(ctx): PipeEvent
+- buildPmsAlertsEvent(ctx): PipeEvent
+- **Problem:** Middleware failures returned inconsistent payloads, breaking contract tests and UI assumptions.
+- ## 4) What Exists Functionally Now
+- ## 5) Immediate Next Step (Current Phase Boundary)
+- ### NEXT PHASE: **Phase 32 / PH-03 — Hands Adapters + Command Consumers**
+- NON_FUNCTIONAL_REQUIREMENTS:
+- ORGANS_REQUIRED:
+- TEST_LEVELS_REQUIRED:
+- Phases include:
+- build_prompt:
+- Build Instructions:
+- END OF PHASE 1 OUTPUT — Type: PROCEED PHASE 2
+- Required:
+- Roles required:
+- SaaS at scale requires:
+- Developers stop evolving modules because changes require:
+- Build real-time graph:
+- CH-09 must expose UI that shows:
+- Features:
+- approval_required: true/false
+- Auth: Required
+- Auth: Required
+- Hard requirements: pagination + deterministic sort
+- Purpose: Returns deterministic admission result + would-be risk tier + would-be approval requirement. Does not emit pipes.
+- Purpose: Manual circuit breaker control.
+- Add one more for UI scaling:
+- Produced by: Brain (projection builder)
+- All command routes require: tenant context + idempotency + policy hash binding.
+- - minimal ambiguity
+- - Objective
+- - Requirements
+- - Architecture Expectations
+- ## Phase 1 — Canonical Meta-Prompt (Ultra Micro Plan – E2E)
+- # Objective
+- - Produce **Chapters → Topics → Phases → Ultra Micro Phases (UMPs)** **→ files** sequentially.
+- - TEST_LEVELS_REQUIRED:
+- - ORGANS_REQUIRED:
+- - List of REQUIRED EXTERNAL SYSTEMS
+- - List of required External API Secret and Key
+- - **INDEX (Authoritative):** the whole project decomposes into which functional modules
+- - **Chapters** = deployable **modules** (independently build/test/deploy).
+- - There must be a clear path on how the future features and functions can be added without breaking what we have .
+- - Clear Instructions on What tests are required
+- - Each chapter must have a E2E **UI Screen Scaffold (topic-screens)**
+- - Each Chapter must have a Detailed **screen index (SC-0001…SC-0023)** into **real, buildable, testable UI artifacts**:
+- - route binding stubs (no backend implementation in this phase)
+- - Each Chapter must have - E2E Full screen-by-screen UI system
+- - Canonical Chapter > Topic > Phase > UMP Architect & Repo Enforcer
+- - UI Runtime Architecture (screen state machines + pipe adapters)
+- - Each Chapter requires a System Manifest
+- - Each Chapter Requires a architecture layer
+- - Each Chapter Requires a **Domain scope** (product workflows, screens, reports, integrations)
+- - Each Chapter Requires a **Implementation volume** (finishing all UMP bricks for every chapter/topic)
+- - Each Chapter Requires a **Operational hardening** (load/perf, security pen-testing, incident drills) — not architecture, but execution.
+- - Each Chapter Requires zero ambiguity
+- - Each Chapter Requires a **System Self-Description (Machine Discoverability Layer)**
+- - Each Chapter Requires a **Behavioral Simulation Engine**
+- - Each Chapter Requires a **Golden Path**
+- - Each Chapter Requires randomized adversarial simulation
+- - UI race-condition simulation
+- - Each Chapter Requires to prove **correct behavior**, and **resilient behavior**.
+- - Each Chapter Requires a **Institutional Memory Model (Knowledge Retention Logic)**
+- - Each Chapter Requires a system where “learning” becomes bounded & governance becomes consistent.
+- - Each Chapter Requires a **Operator Cognitive Load Layer (Human-System Harmony)**
+- - Must have a UI runtime and governance.
+- - Each Chapter Requires a
+- - Each Chapter Requires a Clear explanation how architecture crosses the line from **“System Design” → “Institution Design.”**
+- - UI Runtime Architecture (screen state machines + pipe adapters)
+- - **Phases** = sequential build blocks for a Topic.
+- - How does each phase sync with the backend ?
+- - UI Runtime Architecture (screen state machines + pipe adapters)
+- - **Ultra Micro Phases (UMPs)** = atomic, testable, executable “bricks” that are **immutable once created**.
+- - UI Runtime Architecture (screen state machines + pipe adapters)
+- The output must be:
+- - **Minimal ambiguity**
+- - For UI We need to know everything screen by screen
+- 3. For every UMP, output:
+- - Build/test commands
+- - DEPLOYMENT_MODEL (mono-repo, multi-repo; but you MUST output a canonical mono-repo tree unless explicitly forbidden)
+- - NON_FUNCTIONAL_REQUIREMENTS (security, latency, cost, compliance)
+- - INTERFACE_SURFACES (APIs, UI, CLI, events, pipelines)
+- - ORGANS_REQUIRED (default: brain, spine, hands, eyes, legs, heart, lungs, kidneys)
+- - TEST_LEVELS_REQUIRED (default: unit + contract + integration + e2e)
+- # Requirements
+- ## Output Format Requirements (Non-negotiable)
+- Your output must be in the following strict order and section headings:
+- - Each Topic includes Phases
+- - Each Phase includes UMPs
+- # Architecture Expectations
+- You MUST output a full-scale, canonical mono-repo tree that includes:
+- - build scripts per module
+- - build command
+- - Any change requires a new UMP ID and a migration plan.
+- 1. **Atomicity**: one UMP = one narrowly defined objective + test.
+- 3. **Deterministic File Output**: file paths and names are predetermined.
+- 7. **Observability**: logs/metrics/traces required for any pipe interactions.
+- 8. **Security/Compliance**: validate input, sanitize output, classify data, redact secrets.
+- # Chapters (Function Modules)
+- - **Build/Test/Deploy Commands**
+- - **Phases**:
+- - **PH-XX: <PhaseName>**
+- - **Phase Goal**
+- - Build Instructions
+- - Exact Build Prompt (to generate the file deterministically)
+- You MUST output a reusable template that the user can copy/paste for every UMP with:
+- - generate Phases
+- - stop after each Phase if output is too long
+- - wait for user instruction: PROCEED PHASE <n>
+- Your output must include ALL of the following:
+- - No UMP may require editing a sealed prior UMP.
+- - Output must remain structurally correct if truncated: if too long, stop at a clean boundary and request: **“Type: PROCEED PHASE 2”**.
+- 7. If output becomes too large:
+- - stop at the end of the last fully completed Phase or Chapter section
+- - print: **“END OF PHASE 1 OUTPUT — Type: PROCEED PHASE 2”**
+- If you reach output limits:
+- END OF PHASE 1 OUTPUT — Type: PROCEED PHASE 2
+- ## Phase 2 — Instantiate the Ultra Micro Plan (Defaults + Architecture + Canonical Repo + Enforcement + Start CH-01)
+- - TEST_LEVELS_REQUIRED: **unit + contract + integration + e2e**
+- - ORGANS_REQUIRED: **brain, spine, hands, eyes, legs, heart, lungs, kidneys**
+- # Architecture Expectations
+- - observability: required metrics/log fields
+- - Any edit to a sealed file requires:
+- - UMP skipped required tests
+- - sealing required
+- # Chapters (Function Modules)
+- - **Build/Test/Deploy:**
+- - Build: pnpm --filter @chapters/brain build
+- - **Phase Goal:** create minimal runnable service skeleton + contract surfaces
+- - Seal: required
+- - Seal: required
+- - Seal: required
+- - **Phase Goal:** publish/consume orchestration events via spine-registered pipes
+- - **UMP-0010 — Implement policy evaluator (pure function core)**
+- - TP-01 topic-command-api (Phases: Contracts & Skeleton; Implementation Minimal)
+- - TP-02 topic-side-effects (Phases: Contracts & Skeleton; Reliability Hooks)
+- # Phase 2 Scope Note (Deterministic)
+- In Phase 2, I instantiated:
+- - CH-01 full structure to the **phase/UMP list level**
+- Next, Phase 3 will expand **UMP Template (Authoritative)** and then fully detail **CH-01 TP-01 PH-01 UMP-0001..0003** with:
+- ## Phase 3 — UMP Template (Authoritative) + Fully-Specified UMP-0001..0003 (CH-01 / TP-01 / PH-01)
+- # Objective
+- - seal UMP output (hashes)
+- - if any requirement conflicts, prioritize:
+- ## Required (for execution)
+- # Requirements
+- ## Structural Output
+- - Every UMP must output:
+- - verification.md (commands + expected output)
+- # Architecture Expectations
+- This phase operates within:
+- Applies as stated in Phase 2. In this phase specifically:
+- # Chapters (Function Modules)
+- Phase 3 details only:
+- - **Sealing:** required.
+- ### UMP-0001 Build/Test Commands
+- - Build: pnpm --filter @chapters/brain-topic-orchestration build
+- - Expose a startServer({ port }): Promise<{ close(): Promise<void> }> function.
+- - Use Node 18+ built-in fetch OR http client (choose one, be consistent).
+- **Purpose:** deterministic build/test.
+- - build: tsc -p tsconfig.json
+- - Output dirs:
+- - pnpm --filter @chapters/brain-topic-orchestration build
+- ### Schema Requirements (Both)
+- - event_id (uuid)
+- - Must set "type": "object" and "required" lists explicitly.
+- data required:
+- data required:
+- - outputs (object; may be empty; additionalProperties true allowed only inside outputs)
+- ### Contract Runner Requirements
+- - Deterministic output:
+- Phase 3 delivers:
+- - exact file build prompts
+- - sealing requirements
+- - Do not define UMP-0004+ in Phase 3.
+- - Do not remove or compress required fields for brevity.
+- - If output becomes too long, stop cleanly and request:
+- **END OF PHASE 3 OUTPUT — Type: PROCEED PHASE 4**
+- - exact file causing ambiguity
+- Provide phase-wise execution steps (what to build, in order), with:
+- Two-plane model (required for stability):
+- This response delivers PHASE 1 only:
+- You say “no tenant storage,” but the system still needs operational state to function:
+- Mandatory: “Policy change requires approval” pipe + workflow
+- 5) Gap Class: Integration Drift & UI Automation Reality Is Under-Engineered
+- Required fields for any outreach command:
+- If you want the next screen, I will produce PHASE 2:
+- Type: PROCEED PHASE 2
+- Operationally stable: fail-closed admission, backpressure, circuit breakers.
+- Implementation-ready: exact deliverables, route families, pipe set, schema requirements, tests.
+- This Phase 2 output delivers:
+- If output becomes too long: stop cleanly and request proceed.
+- Failure mode: accidental direct execution; inconsistent status reporting; replay ambiguity.
+- Required states (contracted):
+- Fix: compliance decision pipe required before any comms action. Unknown => HOLD.
+- Fix: compliance gate must output ALLOW|DENY|HOLD with deterministic reason codes.
+- Fix: a dedicated UI Runtime chapter with screen scaffolds as immutable bricks.
+- CH-12: UI Runtime Plane (New)
+- Owns Pipes (UI adapters):
+- If you want PHASE 3, I will deliver:
+- Type: PROCEED PHASE 3
+- Outputs must be:
+- Returns: would_accept, risk_tier, approval_required, reason_code
+- Required fields:
+- Required: command_id, decision (ACCEPT|REJECT|HOLD), reason_code, risk_tier, approval_required
+- Required: command_id, authorization_id, authorized_by, authorized_at, tenant_context_hash, policy_snapshot_hash, risk_tier, constraints (rate/limits)
+- Required: command_id, state, updated_at, reason_code?, attempt_count, next_retry_at?
+- Required: command_id, requested_by, requested_at, reason_code
+- Consumers: Gateway (RT-0211), UI
+- Required: approval_id, command_id, status, risk_tier, created_at, expires_at, summary_hash, summary_redacted
+- Phase 3 continues with:
+- A delta map: what in Phase 1–3 is genuinely new vs repeated
+- My Phase outputs:
+- Phase 1: Major systemic gaps + pre-hands linear stabilization plan.
+- Phase 2: Full gap map by subsystem + missing chapters/modules + tests.
+- Phase 3: Exact new route families + exact pipe set + starting UMP sequence for Control Plane.
+- ➡️ Verdict: The bulk of Phase 1–3 is genuinely gap analysis and not duplication.
+- What I did is not a rewrite of your UMP meta-prompt; it is a delta-layer that converts “requirements” into:
+- Continue the deterministic build plan by expanding PHASE 4: fully specify the remaining Control-Plane / Safety / UI chapters (CH-09..CH-12) with:
+- You require: pre-hands critical moves as hard gates, no tenant storage, full SaaS posture.
+- This Phase 4 output delivers:
+- CH-12 UI Runtime Plane: screen scaffolds + wiring, UMP sequence, tests
+- UMP-0904: Implement projection builder (consumes approval.requested/decided, emits/updates snapshot)
+- UMP-0920: Define escalation pipes (opened/resolved) + required SLA fields
+- UMP-1012: Implement compiler (deterministic output hash)
+- UMP-1031: Define “human approval required” enforcement rule
+- UMP-1101: Define integration.signature.v1 JSON format (selectors/endpoints expectations, hash)
+- UMP-1132: Provide a “global circuit state” read for Hands/CAF gating
+- CH-12: UI Runtime Plane (Screens as Immutable Bricks)
+- Deliver the screen-by-screen scaffold system you require: deterministic router, permissions, degrade hooks, route bindings, calm-mode UI principles.
+- UMP-1201: Create docs/ui/ScreenIndex.md + SC-0001..SC-0010 definitions (IDs, purpose, permissions)
+- UMP-1220: Implement permission gating + “degrade UI states” (blocked/paused/lagging)
+- UMP-1230: UI event telemetry spec (no tenant data)
+- If you want the next screen, PHASE 5 will deliver:
+- Exact pipe schema skeleton requirements (per pipe: required fields, classification tags, additionalProperties policy)
+- Deterministic UMP file manifests (per UMP: allowed/forbidden paths, files, build/test commands, seal rules)
+- Type: PROCEED PHASE 5
+- Deliver PHASE 5: the exact, implementation-ready contract artifacts for the new Control-Plane surfaces:
+- If output becomes too large: stop at a clean boundary and request proceed.
+- "required": true,
+- "step_up_required": false
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "step_up_required": true
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "required": true,
+- "step_up_required": true
+- "required": true,
+- "step_up_required": true
+- Required:
+- Required data:
+- Required:
+- Required:
+- Response required:
+- "observability_required_fields": [
+- Required meta object:
+- If you want PHASE 6, I will output:
+- Type: PROCEED PHASE 6
+- Deliver PHASE 6: full JSON Schema bodies (implementation-ready) for the most load-bearing artifacts:
+- Pipe meta requirements: {meta, data}
+- "required": ["command_type", "command_payload"],
+- "required": ["payload_hash"]
+- "ui_surface": { "type": "string", "minLength": 1, "maxLength": 64 },
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["command_id", "status", "risk_tier", "approval_required", "links"],
+- "approval_required": { "type": "boolean" },
+- "required": ["status", "timeline"],
+- "required": ["decision", "reason_code"],
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["approval_id", "status"],
+- "required": ["command_type", "command_payload"],
+- "required": ["payload_hash"]
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["would_accept", "risk_tier", "approval_required"],
+- "approval_required": { "type": "boolean" },
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": [
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["command_id", "decision", "reason_code", "risk_tier", "approval_required"],
+- "approval_required": { "type": "boolean" },
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": [
+- "required": ["max_attempts", "timeout_seconds"],
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["command_id", "state", "updated_at_utc", "attempt_count"],
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["request_id", "workspace_id", "actor_id", "route_id", "result", "tenant_context_hash", "policy_snapshot_hash", "created_at_utc"],
+- If you want the next step (PHASE 7), I will deliver:
+- Type: PROCEED PHASE 7
+- Deliver PHASE 7: full JSON Schema bodies for the remaining RT routes and remaining pipe schemas introduced in Phases 3–5.
+- This phase completes the contract layer for:
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["command_id", "state", "risk_tier", "created_at_utc", "updated_at_utc", "attempt_count"],
+- "required": ["timeline"],
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["items", "page"],
+- "required": ["command_id", "state", "risk_tier", "created_at_utc", "updated_at_utc"],
+- "required": ["cursor", "limit", "next_cursor"],
+- "required": ["reason_code"],
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["command_id", "status"],
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["items", "page"],
+- "required": ["approval_id", "command_id", "status", "risk_tier", "created_at_utc", "expires_at_utc", "summary_hash"],
+- "required": ["cursor", "limit", "next_cursor"],
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["approval_id", "command_id", "status", "risk_tier", "created_at_utc", "expires_at_utc", "summary_hash"],
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["items", "page"],
+- "required": ["event_id", "event_time_utc", "event_type", "summary_redacted", "summary_hash"],
+- "required": ["cursor", "limit", "next_cursor"],
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["items", "page"],
+- "required": ["frame_id", "created_at_utc", "frame_hash", "frame_redacted"],
+- "required": ["cursor", "limit", "next_cursor"],
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["bundle_id", "bundle_version", "bundle_hash", "published_at_utc", "compatibility"],
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["items"],
+- "required": ["integration_id", "status", "paused", "last_probe_at_utc"],
+- "required": ["reason_code"],
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["integration_id", "status"],
+- "required": ["reason_code"],
+- "required": ["meta", "data"],
+- "required": ["request_id", "route_id", "timestamp_utc", "tenant_context_hash", "policy_snapshot_hash"],
+- "required": ["integration_id", "status"],
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["approval_id", "command_id", "status", "risk_tier", "created_at_utc", "expires_at_utc", "summary_hash"],
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["escalation_id", "approval_id", "opened_at_utc", "sla_seconds", "reason_code"],
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["escalation_id", "approval_id", "resolved_at_utc", "resolution_code"],
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["workflow_id", "event_time_utc", "event_type", "summary_hash", "summary_redacted"],
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["workflow_id", "frame_id", "created_at_utc", "frame_hash", "frame_redacted"],
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["integration_id", "status", "paused", "last_probe_at_utc"],
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["integration_id", "detected_at_utc", "reason_code", "severity"],
+- "reason_code": { "type": "string", "enum": ["SIGNATURE_MISMATCH", "AUTH_CHANGED", "UI_LAYOUT_CHANGED", "API_CONTRACT_CHANGED"] },
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["integration_id", "requested_at_utc", "reason_code"],
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["integration_id", "requested_at_utc", "reason_code"],
+- "required": ["meta", "data"],
+- "required": ["event_id", "timestamp_utc", "correlation_id", "producer", "schema_version"],
+- "event_id": { "type": "string", "format": "uuid" },
+- "required": ["command_id", "failed_at_utc", "reason_code"],
+- If you want PHASE 8, I will produce:
+- Deliver PHASE 8:
+- Contract test pack spec: valid + invalid sample payloads for every RT schema and pipe schema delivered in Phases 6–7 (minimum 2 per schema).
+- Schemas created in Phase 6/7 under:
+- Contract validation engine: AJV 2020 (or equivalent draft-2020-12 validator)
+- No “etc.”: every schema from Phase 6/7 must be enumerated in the manifest.
+- Deterministic output line per fixture:
+- This is the exact required shape:
+- "ui_surface": "SC-0003",
+- "approval_required": true,
+- "approval_required": true,
+- "approval_required": false
+- "approval_required": false
+- "reason_code": "ERR-ADM-010-COMPLIANCE_HOLD_REQUIRED",
+- "approval_required": true,
+- "reason_code": "ERR-ADM-010-COMPLIANCE_HOLD_REQUIRED",
+- "approval_required": true
+- To keep the output operationally stable, I stopped at a clean boundary after fully specifying:
+- Deliver PHASE 8B:
+- Pipe schemas from Phase 7:
+- Route schemas from Phase 6–7:
+- "summary_redacted": "High-risk approval required (redacted)."
+- "summary_redacted": "High-risk approval required (redacted)."
+- PHASE 8 (A + B) is complete:
+- Deliver PHASE 9 — Hidden Systemic Risk Test Suite (Schema-Valid / Policy-Hostile / Scale-Hostile / Time-Hostile):
+- From prior phases:
+- This phase creates a Risk Assertion Plane in foundation (static checks) that later evolves into:
+- "client_context": { "client_request_id": "cli_risk_0001", "ui_surface": "SC-0003", "timezone": "Asia/Kolkata" },
+- "client_context": { "client_request_id": "cli_risk_0002", "ui_surface": "SC-0003", "timezone": "Asia/Kolkata" },
+- Output:
+- …and I will output:
+- Deliver PHASE 9B:
+- Output lines:
+- output: RISK_SCHEMA_OK <id> <target>
+- Output:
+- Output:
+- Output:
+- Output:
+- Output:
+- Phase 9B is complete:
+- If you want the next major step, I recommend PHASE 10 — “Hidden Gaps & Full-Scale SaaS Risk Register”:
+- This phase introduces the concept of:
+- Functions:
+- New Chapter requires:
+- If you want the next phase, type:
+- That phase will:
+- Reconcile PHASE 1 → PHASE 10 into one coherent institutional architecture so the system behaves as:
+- This phase performs:
+- Derived from all prior phases:
+- Arbitration outputs:
+- These are the final deep architecture gaps revealed after merging phases:
+- Approval pipes require:
+- If you want to continue, the next phase is:
+- This next phase is not additive — it will expose:
+- All prior phases are assumed complete:
+- Functions:
+- If you want the next phase, type:
+- Phase 13 will not be technical — it will reveal:
+- This phase explains:
+- You are no longer just building:
+- After Phase 12:
+- After Phase 12:
+- Each new feature adds:
+- Require every new subsystem to include:
+- Phase 14 will identify:
+- Identify the single remaining structural gap that still makes large-scale Hands (write/actuator) expansion unsafe, even after PHASE 1–13:
+- This phase defines:
+- Derived from previous phases:
+- Hands must require:
+- If you want the next phase, type:
+- That phase will give:
+- This phase answers:
+- From PHASE 1–14:
+- Each circuit contains:
+- Required scaling primitives:
+- If you want to continue, the next phase is:
+- That phase will describe:
+- This phase moves beyond architecture into:
+- Architecture assumptions from PHASE 1–15:
+- Expect three daily execution phases:
+- Operational expectation:
+- Required mitigation:
+- Phase 11–15 architecture prevents cascade by inserting:
+- Operational expectation:
+- Phase 17 will define:
+- Derived from PHASE 1–16:
+- Phase 18 will define:
+- By Phase 17 you built:
+- Phase 18 answers the deeper question:
+- From PHASE 1–17:
+- New functionality must expand radially:
+- Learning Governance Engine requires:
+- Every new Hands adapter requires:
+- Each new feature must reduce:
+- Phase 19 will consolidate:
+- Produce the single authoritative blueprint that consolidates PHASE 1–18 into one coherent model describing:
+- From PHASE 1–18:
+- Output must include:
+- This phase answers:
+- From PHASE 1–19:
+- Build order must follow institutional dependency graph:
+- You now have a fully linear, enforcement-driven build sequence that:
+- This phase performs a structural audit of:
+- Your blueprint requires:
+- PHASE 1–20 introduced:
+- You already built:
+- Phase 22 will give you:
+- Produce an implementation-ready, repo-aligned blueprint that adds the missing institutional layers identified in Phase 21:
+- Zero ambiguity:
+- New (Phase 22 required):
+- Phase 22 adds Control Plane route families (gateway surface, authority-backed):
+- Output: command_intent_id, approval_required, commitment_state
+- Output: { state: queued|awaiting_approval|committed|aborted|executed|failed }
+- Emitted when approval is required (may be gateway or control-plane, but pick one owner and lock it; recommended: control-plane-authority owns it).
+- Required fields:
+- Required fields:
+- Required fields:
+- Required fields:
+- Phase 22 delivered:
+- Produce the deterministic, implementation-ready UMP plan to build:
+- This is a linear build plan: Chapters → Topics → Phases → UMPs → files.
+- Phases: PH-01..PH-04
+- Output:
+- Because you are likely not yet implementing Redis/ZK consensus in this phase, you must formalize an interface:
+- LockProvider.acquire(scope_key): Promise<LockHandle>
+- PROCEED PHASE 24 — UMP-0301 Fully Specified (Every file: context, purpose, exact build prompt, JSON spec, tests, seal rules)
+- Required:
+- Required:
+- Required:
+- Required:
+- Required:
+- Required:
+- Required:
+- Required:
+- Required:
+- Required:
+- Required:
+- required: ["meta","ok","data","error"]
+- meta required keys:
+- "required_fields": [
+- Required keys: ["meta","data"]
+- meta (additionalProperties: false) required:
+- "required_data_fields": [
+- "required_data_fields": [
+- Deterministic output must include:
+- Modify (only if required):
+- Error messages should be stable (e.g., "missing required property: <x>" or "schema validation failed")
+- Must include required data:
+- constraints_hint.requires_shadow_ok: true
+- File: .../invalid.missing_required.json
+- Required data:
+- requires_shadow_ok: true
+- Required data:
+- Required data:
+- "deterministic_output_required": true
+- Optional: Minimal Contract Runner Extension (Only if Required)
+- Test runner: Node’s built-in node:test (preferred to avoid new deps)
+- CAF module must export one function:
+- build: pnpm -r --filter "./topic-*" build
+- "scripts_required": ["build", "test"],
+- build: tsc -p tsconfig.json
+- "scripts_required": ["build", "test"],
+- "outputs": ["dist/", "dist-test/"]
+- reason_code: string (stable, max 64 chars expectation in later schemas)
+- Export function:
+- If risk_tier === "T3" → HOLD, reason_code: "HUMAN_REQUIRED_T3"
+- Output must match regex: ^[a-f0-9]{64}$
+- "exports_required": ["RiskTier", "CAFDecisionCode", "CAFInput", "CAFDecisionReasonCode", "CAFResult"],
+- Export function:
+- Requirements:
+- "exports_required": ["evaluateCAF"],
+- "cases_required": [
+- Output is deterministic:
+- build: tsc -p tsconfig.json
+- "scripts_required": ["build", "test"],
+- "outputs": ["dist/", "dist-test/"],
+- "output_pattern": "^[a-f0-9]{64}$"
+- if risk_tier === "T3" → ok:false, T3_REQUIRES_HUMAN
+- "cases_required": [
+- Important: we must not import schema files here; we only shape output to match.
+- Validate required hashes (lineage, policy, integration_signature_hash) sha256 regex:
+- Build commitment envelope:
+- requires_shadow_ok: boolean (from shadow.requiresShadowOk)
+- requires_shadow_ok: boolean
+- "exports_required": [
+- requiresShadowOk(input: CommitCommandInput): boolean
+- createShadowGate(args: { requires_shadow_ok: boolean; shadow_ok: boolean }): ShadowExecutionGate
+- "exports": ["buildCommitmentEnvelope"],
+- "exports_required": ["commitCommand"]
+- T3 fails: reason T3_REQUIRES_HUMAN
+- shadow required and not ok fails: SHADOW_NOT_OK
+- This output is PHASE 1 ONLY: Architecture confirmation + Gap Register + Phase Map.
+- Provide a phase-wise linear remediation with:
+- owns: workspace/RBAC, policies, workflow definitions, prompt registry, feature flags, rollout controls
+- Phase Map (PHASE-0…PHASE-6): linear remediation order with “why this phase comes first”.
+- END OF PHASE 1 OUTPUT — Type: PROCEED PHASE 2
+- Produce a start-to-end, implementation-ready plan for PHASE-0 and PHASE-1 that:
+- Converts the Gap Register into a linear, deterministic build plan with:
+- Scope: PHASE-0 + PHASE-1 only.
+- Make the system structurally safe before scaling features. Prevent:
+- P0-R1: Pipe Meta Required Fields (Envelope v1)
+- PHASE-0 is “DONE” only when:
+- Build the Control Plane that governs automation safely:
+- R1-D: Rollout/Feature Flag Agent
+- spine/registry/ entries requiring:
+- PHASE-1 is “DONE” only if:
+- END OF PHASE 2 OUTPUT — Type: PROCEED PHASE 3
+- If you type PROCEED PHASE 3, I will convert PHASE-0 into a Chapter → Topic → Phase → UMP plan with:
+- Below is the corrected response: a pure Gap & Incompleteness Analysis — no implementation sequencing, no UMP building, no delivery planning.
+- You require:
+- You require Apple-level UX, but missing:
+- If you want, the next phase can be:
+- Required but undefined:
+- What is missing is not modules or features — it is:
+- The gaps are not missing features — they are missing:
+- Resolution requires:
+- You require:
+- You require:
+- You require:
+- Define how the institution evolves — policies, pipes, organs, workflows, UI surfaces, and intelligence — while preserving:
+- Operators may see animations and dashboards but not:
+- Institutional Requirement:
+- Operator trust evolves through three phases:
+- This audit compresses everything you built into a single coherent constitutional structure and verifies:
+- Output focus:
+- To eliminate all remaining ambiguity, the next artifact should be:
+- This sequence removes ambiguity by answering:
+- Real product function:
+- The entire system builds across nine irreversible phases:
+- You are building:
+- You are not building:
+- This is the only valid build order:
+- Before adding any feature, ask:
+- Detect: forbid direct mutation endpoints; require permit token always.
+- Detect: endpoint registry requires governance-approved authority chain.
+- Why: quick prototype.
+- Detect: governance changes require shadow run artifact before activation.
+- Detect: scheduler requires logical_time binding in job payload.
+- Detect: ontology changes require semantic diff + compatibility validation.
+- Detect: UI states must map 1:1 to institutional states.
+- Detect: schema validation requires those fields.
+- Detect: signature registry requires version bump + contract test pass.
+- Detect: UI must annotate freshness + source-of-record timestamp.
+- Invariants: Real-world proof requirement
+- Example output format:
+- Hard requirements:
+- requires_shadow_sim: true (default)
+- requires_freeze_exception: false|true
+- Runs the full suite:
+- If you want the next step to be fully operational, I can output the exact minimal contents (starter implementations) for:
+- name: Ledger Lineage Continuity Gate
+- name: Shadow Simulation Requirement Gate
+- runner: tools/ci-gates/gates/gate-11-shadow-sim-required.ts
+- function repoRoot(): string {
+- function loadConfig(root: string): GatesConfig {
+- async function main(): Promise<void> {
+- function uniqSorted(xs: string[]): string[] {
+- export function formatBlockMergeReport(failures: GateFailure[]): string {
+- export async function loadGateModule(repoRoot: string, runnerRelPath: string): Promise<GateModule> {
+- function isDir(p: string): boolean {
+- function listDirRecursive(rootAbs: string, curAbs: string, out: string[]): void {
+- function allFiles(repoRoot: string): string[] {
+- function matchPattern(file: string, pattern: string): boolean {
+- export function collectInputFiles(repoRoot: string, patterns: string[]): string[] {
+- export function getGitChangedFiles(repoRoot: string): string[] {
+- required_fields: string[]; // fields required per state object
+- hold_state_ids: string[]; // list of state ids that are "HOLD-equivalent"
+- function asArray(x: any): any[] {
+- function fail(ctx: GateContext, violation: string, remediation: string, files: string[]): GateFailure {
+- export async function run(ctx: GateContext): Promise<GateRunResult> {
+- `Missing required UX truth mapping file: ${stateMapPath}`,
+- `Missing required UX truth schema file: ${schemaPath}`,
+- // Minimal schema validation: rely on presence of required keys.
+- // Minimal YAML parser fallback: require JSON for now unless you add yaml dep here.
+- `Set {"states": {"STATE_ID": {...}}} and ensure each state has required fields.`,
+- `Add "required": ["states"] to ${schemaPath}.`,
+- "required_fields": ["display_label", "requires_reason_panel", "allowed_transitions"],
+- "required": ["states"],
+- "required": ["display_label", "requires_reason_panel", "allowed_transitions"],
+- "requires_reason_panel": { "type": "boolean" },
+- "requires_reason_panel": false,
+- "requires_reason_panel": true,
+- "requires_reason_panel": false,
+- "requires_reason_panel": true,
+- "required": ["bundle_id", "bundle_version", "ontology_version", "compiled_at", "policy_sources", "hashes"],
+- "required": [
+- "required": ["replay_frame_id", "logical_time", "policy_bundle_version", "ontology_version", "topology_hash", "created_at"],
+- "required": [
+- Failure mode: Semantic fragmentation; UI language drifts; policy language collapses.
+- Missing: Formal mapping of institutional states to UI:
+- Missing: Required fields and spans for:
+- Resolution requirement: define “pre-seal proof obligations” (shadow + replay + audit pass) as mandatory before sealing.
+- Resolution requirement: define a limited animation grammar tied to state transitions, not aesthetics.
+- Pick the next output type:
+- Primary Organ: Brain-UI Boundary
+- You require:
+- You require:
+- You require:
+- You require:
+- You require:
+- Transitions require:
+- Requires:
+- It is building:
+- Ontology evolution required when:
+- You require:
+- If another team built:
+- You require:
+- You required:
+- You require:
+- You required:
+- You require:
+- I can compress everything you’ve built into one final artifact:
+- Output classification:
+- If you require:
+- Your goals require:
+- You require:
+- You require:
+- Define the steady-state institutional equilibrium across:
+- Early phase:
+- Even at equilibrium, three tensions remain permanent:
+- After equilibrium:
+- If your Pre-Hands closures are declared and equilibrium reached:
+- Requirements:
+- Even in equilibrium, risks remain:
+- Closing these reduces ambiguity across:
+- Identify the irreducible failure trajectories that could compromise institutional equilibrium even if:
+- Your institution is built on layered authority:
+- This phase introduces:
+- Key sign you reached this phase:
+- It requires:
+- You require:
+- Without canonical UI state model:
+- If you want me to continue in the same “gap-only” mode, the next most useful output is:
+- If you want, the next most useful output is:
+- Requirement: No tenant data persistence
+- Requirement: Deterministic pipes + sealed UMP immutability
+- If you want the next project-gap output (still no code), I can produce:
+- Outputs:
+- UI runtime declared but lacks rule:
+- Output must:
+- Your architecture is now structurally strong, but what remains missing are authority sentences, not features:
+- UI cognitive model exists but lacks explicit rule:
+- Authority ambiguity risk: LOW
+- You defined governance authority and UI calmness, but did not declare:
+- All previously dangerous ambiguity classes are now closed:
+- Your UX doctrine requires:
+- During build, your system will feel:
+- If you want the single most useful artifact to carry forward into real build and team onboarding, I can give you:
+- State — with zero ambiguity — the rules that define:
+- UI must:
+- During build:
+- Real integrations require:
+- UI cannot show:
+- Real world requires:
+- OIP distinguishes:
+- UI introduces:
+- Workflow step requires:
+- UI shows: EXECUTING (DEGRADED)
+- Your architecture was built correctly — it simply lacked:
+- Does the system distinguish between:
+- Does UI show:
+- Does system distinguish:
+- Real-world requirement:
+- Real workflows require lineage like:
+- Operational Intelligence must distinguish between:
+- When Brain runs in degraded mode, does UI show:
+- ❄️ Freeze Point 3 — Brain: Ambiguity Paralysis (Most Critical)
+- ❄️ Freeze Point 5 — Heart: Lineage Completeness Requirement
+- ❄️ Freeze Point 7 — UI: Operator Silence Loop
+- UI shows:
+- You built a system that knows:
+- What real-world execution requires:
+- But real-world execution requires:
+- UI shows:
+- UI displays:
+- Symptoms during this phase:
+- Because your intuition was detecting:
+- Because your intuition was no longer evaluating:
+- You did not build:
+- You built:
+- * **DELIVERY PHASE 1 (this message):**
+- * **DELIVERY PHASE 2:** E2E Infra/DevOps/Runtime doctrine + Canonical Docker/K8s/AWS plan + environments + rollout + reliability mechanics.
+- * **DELIVERY PHASE 5:** E2E CI/CD + E2E Tests + Browser visual testing loop + screenshot-read-pass/fail index + “sealed UMP” change governance.
+- At the end of this message you will see: **“END OF DELIVERY PHASE 1 — Type: PROCEED DELIVERY PHASE 2”**
+- # DELIVERY PHASE 1
+- * A **meta directive**: how outputs must be structured (objective/system role/inputs/requirements/etc).
+- * A **Gap Register (GAP-0001…GAP-0029)** and a **Phase Map (PHASE-0…PHASE-6)** for 10,000-user SaaS readiness:
+- You explicitly require “account for system reboots”, but there is no definition for:
+- Required but not present as:
+- Required but absent:
+- You require AI agent browser testing across screen sizes. Missing:
+- Your requirements exist as statements, but missing:
+- You explicitly require “Operator Cognitive Load Layer”. No UX spec exists for:
+- # 9) E2E UI Gaps
+- ### GAP-UI-0001 — Design system tokens/components are not defined (**MISSING**)
+- ### GAP-UI-0002 — “No silent pages” enforcement is not defined (**MISSING**)
+- You require:
+- You require no mocks/stubs for ship. Missing:
+- # 13) Additional Gap Domains You Explicitly Require (Not Covered Enough Yet)
+- You demanded: containers/images/volumes/builds/k8s/docker hub/models/MCP toolkit.
+- ## 13.3 Operational Reality Doctrine suite (your requested doctrine set)
+- # 14) Root Execution Gap Summary (Phase-1 Output Only, No Inference)
+- ## STOP POINT (as required)
+- **END OF DELIVERY PHASE 1 — Type: PROCEED DELIVERY PHASE 2**
+- When you type **PROCEED DELIVERY PHASE 2**, I will deliver:
+- # DELIVERY PHASE 2
+- # 4) Docker Doctrine (Required Artifacts)
+- chapter-topic-phase-ump:hash
+- Required:
+- Secrets Required:
+- # 15) Phase-2 Output State (What is Now Explicitly Solved)
+- Resolved gaps from Phase-1:
+- # END OF DELIVERY PHASE 2
+- # DELIVERY PHASE 3
+- * **UI Components:** React component library (internal)
+- ## 1.3 Testing Tooling (interfaces only in this phase)
+- ### Enforcement Mechanisms (must exist as code in Phase-4/5; specified now)
+- **Outputs:**
+- **Hard requirements:**
+- **Outputs:**
+- **Artifacts required:**
+- Hard requirements:
+- From your operational structure, minimum user types required:
+- # 8) Deterministic Screen Runtime Wiring (Required per Screen)
+- ### Example Template (binding requirements, not code)
+- * `error`: gentle shake + explicit fix guidance
+- Frozen UI is prohibited:
+- # 10) UX Gap Closure Checklist (Phase-3 Output)
+- # 11) Phase-3 Deliverables Summary (What Is Now Explicit)
+- # END OF DELIVERY PHASE 3
+- # DELIVERY PHASE 4
+- # 0) Phase-4 Output Partition (because Phase-4 is large)
+- * **Phase-4A:** Canonical monorepo tree + packaging rules + boundary enforcement + inventory rules
+- * **Phase-4B:** UMP immutability + sealing mechanics (hashing + CI + local guard)
+- * **Phase-4C:** Chapter→Topic→Phase→UMP→Files (core organs) + structural checks rubric
+- ## 4.1 Build graph tool
+- **Reason:** deterministic caching + per-app build/test pipelines.
+- **Tooling (required):**
+- # 5) UMP Immutability (Sealing) — Phase-4B
+- * `ump_id`: `UMP-<CHAPTER>-<TOPIC>-<PHASE>-<NNNN>`
+- ## 5.4 Sealing enforcement (required checks)
+- ## 7.1 Required modules (must be implemented + sealed first)
+- # 8) Chapter → Topic → Phase → UMP → Files (Phase-4C Core Expansion)
+- **Phase FND-01-P1: Schema Registry Skeleton**
+- **Phase FND-02-P1: Emit/Consume SDK**
+- **Phase SPN-01-P1: Router Skeleton**
+- * `schemas/pipes/spine.command.request.v1.json` (required fields: workspace_id, idempotency_key, replay_frame_id, risk_tier)
+- ### Topic HND-01 Hands Circuit Controller (Pre-Hands gate #4)
+- * **UMP-HANDS-CTRL-P1-0001** — circuit controller skeleton: allow/deny/hold + rate limit interface
+- ### Topic EYS-01 Sheets ingest (DOC-01 requirement)
+- ## CH-08: UI (apps/ui)
+- ### Topic UI-01 Routing skeleton + permission gating
+- ### Topic UI-02 Screen scaffolds SC-0001..SC-0023 (mandatory bricks)
+- ## CH-09: UI-KIT (packages/ui-kit)
+- 7. (later Phase-5) `pnpm e2e:browser --screen SC-XXXX`
+- # 10) “No ambiguity” enforcement rules (repo-level)
+- # 11) Phase-4 Completion Criteria (binary)
+- Phase-4 is considered complete only when:
+- # END OF DELIVERY PHASE 4A–4C (Core)
+- # PHASE 4 EXTENSION
+- > **Scope rule:** This is still Phase-4: **scaffolds + contracts + enforcement mechanics + file-level determinism.**
+- * **4EXT-2:** Chapter-by-chapter Topic→Phase→UMP→Files expansion (Brain/Spine/Identity/Hands/Eyes/Legs/UI/Foundation/UI-Kit)
+- **Rule:** Schema changes require:
+- Phase-4: these are stubs with deterministic scenario IDs.
+- ## 1.6 Mandatory “Operator Cognitive Load Layer” (UI + Brain)
+- Required files:
+- # 4EXT-2 — Chapter-by-Chapter Expansion (Topics → Phases → UMPs → Files)
+- ### Topic BRN-08 Prompt Governance Framework (required)
+- ### Topic HND-04 Idempotency + Replay Safety (Hard requirement)
+- ## CH-08 UI — Extension
+- ### Topic UI-03 Deterministic Screen State Machines (mandatory)
+- ### Topic UI-04 Calm Mode + Operator Cognitive Load Layer
+- ### Topic UI-05 Screen Contracts (Apple-copy + motion required)
+- ### Topic UI-06 Permissions & Degrade Hooks
+- ## CH-09 UI-KIT — Extension
+- ## 3.4 UI Visual Test Scaffolds (Phase-4 only)
+- UI adds:
+- # 2) “Zero ambiguity” seals for the extension
+- Phase-4 (including extension) is complete when:
+- 3. UI has:
+- # DELIVERY PHASE 5
+- This phase defines the **only valid path** to ship: build → test → browser-verify → seal → promote → deploy.
+- * PR into `dev` requires:
+- * PR into `main` requires:
+- # 3) CI Workflow Set (GitHub Actions) — Required Files
+- ## 3.1 `ci.yml` — Build/Test/Repo-Guards for PRs
+- guards_build_test:
+- - name: Build (Changed scope)
+- run: pnpm build:changed
+- **Required repo scripts** (root `package.json`):
+- * `build:changed`
+- ## 3.4 `e2e-browser.yml` — UI Browser Tests + Screenshots Artifact Upload
+- - name: Build UI
+- run: pnpm --filter apps/ui build
+- run: pnpm --filter apps/ui exec playwright install --with-deps
+- path: apps/ui/test-artifacts/screenshots/**
+- path: apps/ui/test-artifacts/screenshot-index/**
+- ## 4.1 Common requirements
+- * Images are built with tags:
+- - name: Build & Push Images
+- You required:
+- # 7) Screenshot → Read → Pass/Fail Index (Required Mechanism)
+- You required a two-step loop:
+- Phase-5 makes this deterministic by defining:
+- "screenshot_path": "apps/ui/test-artifacts/screenshots/<run_id>/SC-0004/375_success.png",
+- "trace_path": "apps/ui/test-artifacts/traces/<run_id>/trace.zip",
+- "log_path": "apps/ui/test-artifacts/logs/<run_id>/console.txt"
+- You required:
+- ## 8.1 Deterministic compromise (required)
+- **Required:** create successor UMP
+- # 11) CI/CD + E2E Output Artifacts (What must exist after Phase-5)
+- After Phase-5 completion, the repo must have:
+- * scripts: `build-all.sh`, `push-all.sh`, `deploy-all.sh`, `smoke.sh`, `e2e-browser.sh`
+- # 12) Phase-5 Completion Criteria (Binary)
+- Phase-5 is complete only when:
+- Below is the corrective output you asked for:
+- ## Phase 1 — Architecture Definition
+- **Why this blocks:** without a canonical dictionary, UI, audit, and operations drift.
+- ## Phase 2 — Institutional Formation
+- ## Phase 3 — Constitutional Finalization
+- ### GAP-N-0201 — Canonical message/call/email content library is missing (SOP requires outreach, but content is undefined)
+- ## Phase 3.5 — Pre-Hands Closures
+- You explicitly require “account for errors made by AI and passed,” but the docs do not define:
+- ## Phase 4 — Execution Expansion
+- You require screenshots + reading screenshots. The docs do not define:
+- ### GAP-N-0403 — Deterministic browser selector strategy for AppFolio UI steps is missing at SOP-level
+- DOC-01 is UI-step heavy, but there is no specification for:
+- ## Phase 5 — Institutional Operation
+- # What I need from you (ONLY because you asked for zero ambiguity)
+- You said: “When in doubt ask for clarity.” To convert the gaps above into buildable artifacts, I need these **explicit inputs**:
+- 4. **Screenshot policy**: allowed storage location + retention window + redaction requirement
+- For every processed contact target (row), the system must produce 3 outputs:
+- You require: **take screenshots**, then **read screenshots**, then **index pass/fail**, repeatedly.
+- ## 4.3 Redaction requirement (non-negotiable)
+- Implementation method (deterministic, browser-based, no OCR required):
+- * primary: `data-testid` (for your UI)
+- ## 5.3 Quiet-hours / outreach window
+- If you want, I will now output the **implementation-ready artifacts** (still “no inference”, derived from your SOP + your latest clarifications):
+- "required": [
+- ## A4) Enforcement rules (no ambiguity)
+- "required": ["workspace_id", "correlation_id", "replay_frame_id", "logical_time", "wall_clock_time", "target", "message"],
+- "required": ["type", "id"],
+- "required": ["workspace_id", "correlation_id", "replay_frame_id", "logical_time", "wall_clock_time", "operator_id", "confirmed"],
+- "required": ["workspace_id", "correlation_id", "replay_frame_id", "logical_time", "wall_clock_time", "delivery_mode", "attempt"],
+- "required": ["workspace_id", "correlation_id", "replay_frame_id", "logical_time", "wall_clock_time", "operator_id", "otp_code"],
+- "required": ["workspace_id", "correlation_id", "replay_frame_id", "logical_time", "wall_clock_time", "status", "state"],
+- ## B4) OTP security invariants (hard requirements)
+- You required: CA vs NY vs AZ differences; real-time correctness.
+- "required": ["timezone_id", "method", "confidence"],
+- ## C4) Runtime decision rule (no ambiguity)
+- "required": ["run_id", "commit", "environment", "screens", "summary"],
+- "required": ["screen_id", "viewport", "state", "result", "evidence"],
+- "required": ["screenshot_path"],
+- "required": ["pass", "fail", "blocking_fail"],
+- ## D4) Redaction contract (hard requirement)
+- ### `apps/ui/src/testing/screenshot/redaction.css` (contractual intent)
+- If you want, I will now output the **exact UMP sequence** to implement these contracts, including:
+- * **Branch name:** `feature/<ump_id>`
+- * **Seal output:** add sha256 file hashes into the owning module’s `SEAL.json`.
+- ### Build prompt (deterministic)
+- ## UMP-A3 — UI + Eyes adoption stubs (validate and block bad rows)
+- * All five schemas include required envelope fields:
+- ### Required behaviors (must be coded; no ambiguity)
+- ## UMP-B3 — UI operator prompt + secure OTP entry contract
+- ### Required behaviors
+- ### Required behaviors
+- ### Required behaviors
+- ### Required policy content (must be written explicitly)
+- ## UMP-D2 — UI screenshot capture + redaction + index writer
+- ### Required behaviors
+- ## UMP-D3 — UI screenshot index reader (creates PASS/FAIL records)
+- ### Required behaviors
+- * Output:
+- If you want the next artifact: **agent-executable build prompts per UMP** (copy/paste into your AI agent), say:
+- * Work only on branch: `feature/<UMP_ID>`
+- ## Required file manifest
+- ## Required content
+- ## Required file manifest
+- ## Required content
+- Required properties (snake_case mapping):
+- * `required`: all above fields
+- # PROMPT 3 — UMP-UI-EYES-VALIDATE-P5-0003
+- ## Required file manifest
+- ## Required content
+- ### UI contract wrapper
+- ## Required file manifest
+- ## Required content
+- ## Required file manifest
+- ## Required state machine rules (hard)
+- ## Required tests (in-scope)
+- # PROMPT 6 — UMP-UI-OTP-PROMPT-P5-0103
+- ## Required file manifest
+- ## Required behaviors
+- ## Required file manifest
+- ## Required behaviors
+- ## Required file manifest
+- ## Required behaviors
+- ## Required tests
+- ## Required file manifest
+- ## Required behaviors
+- # PROMPT 10 — UMP-UI-SCREENSHOT-POLICY-P5-0301
+- ## Required file manifest
+- ## Required policy content (must include exact decisions)
+- # PROMPT 11 — UMP-UI-SCREENSHOT-ENGINE-P5-0302
+- ## Required file manifest
+- ## Required behaviors
+- # PROMPT 12 — UMP-UI-SCREENSHOT-READER-P5-0303
+- ## Required file manifest
+- ## Required behaviors
+- ## Required file manifest
+- "phase": "P5",
+- "sealed_outputs": [
+- "phase": "P5",
+- "sealed_outputs": [
+- "ump_id": "UMP-UI-EYES-VALIDATE-P5-0003",
+- "title": "Adopt Calling List Validator in UI + Eyes",
+- "chapter": "ui+eyes",
+- "phase": "P5",
+- "seal_file": "apps/ui/SEAL.json",
+- "sealed_outputs": [
+- "sealed_outputs": [
+- "phase": "P5",
+- "sealed_outputs": [
+- "phase": "P5",
+- "sealed_outputs": [
+- "ump_id": "UMP-UI-OTP-PROMPT-P5-0103",
+- "title": "UI OTP Prompt + Confirmation + Secure Entry Contract",
+- "chapter": "ui",
+- "phase": "P5",
+- "seal_file": "apps/ui/SEAL.json",
+- "sealed_outputs": [
+- "phase": "P5",
+- "sealed_outputs": [
+- "phase": "P5",
+- "sealed_outputs": [
+- "phase": "P5",
+- "sealed_outputs": [
+- "ump_id": "UMP-UI-SCREENSHOT-POLICY-P5-0301",
+- "phase": "P5",
+- "sealed_outputs": [
+- "ump_id": "UMP-UI-SCREENSHOT-ENGINE-P5-0302",
+- "title": "UI Screenshot Capture + Redaction Injection + Index Writer",
+- "chapter": "ui",
+- "phase": "P5",
+- "seal_file": "apps/ui/SEAL.json",
+- "sealed_outputs": [
+- "ump_id": "UMP-UI-SCREENSHOT-READER-P5-0303",
+- "title": "UI Screenshot Index Reader + Markdown Summary Writer",
+- "chapter": "ui",
+- "phase": "P5",
+- "seal_file": "apps/ui/SEAL.json",
+- "sealed_outputs": [
+- "phase": "P5",
+- "contracts:domain missing required schemas",
+- "sealed_outputs": [
+- "ump_id": "UMP-UI-EYES-VALIDATE-P5-0003",
+- "ump_id": "UMP-UI-OTP-PROMPT-P5-0103",
+- "ump_id": "UMP-UI-SCREENSHOT-POLICY-P5-0301",
+- "ump_id": "UMP-UI-SCREENSHOT-ENGINE-P5-0302",
+- "ump_id": "UMP-UI-SCREENSHOT-READER-P5-0303",
+- {"from": "UMP-FND-CALLINGLIST-P5-0002", "to": "UMP-UI-EYES-VALIDATE-P5-0003", "type": "hard"},
+- {"from": "UMP-BRAIN-OTP-SCHEMAS-P5-0101", "to": "UMP-UI-OTP-PROMPT-P5-0103", "type": "hard"},
+- {"from": "UMP-UI-SCREENSHOT-POLICY-P5-0301", "to": "UMP-UI-SCREENSHOT-ENGINE-P5-0302", "type": "hard"},
+- {"from": "UMP-UI-SCREENSHOT-ENGINE-P5-0302", "to": "UMP-UI-SCREENSHOT-READER-P5-0303", "type": "hard"},
+- {"from": "UMP-UI-SCREENSHOT-POLICY-P5-0301", "to": "UMP-TOOLS-CONTRACT-RUNNERS-P5-0901", "type": "soft"}
+- "after_ump": "UMP-UI-EYES-VALIDATE-P5-0003",
+- "after_ump": "UMP-UI-SCREENSHOT-READER-P5-0303",
+- ### Required fix artifact (non-optional)
+- # 1) E2E Execution Continuity Gaps (the chain breaks mid-run)
+- ### Required artifact
+- ### Required artifact
+- ### Required artifact
+- ## GAP-EXE-0101 — No canonical “Ingestion Output” from Sheets
+- Eyes must emit a deterministic output payload:
+- ### Required artifact
+- ## GAP-EXE-0102 — No “Work Plan” object (Brain’s output)
+- ### Required artifact
+- ### Required artifact
+- ## GAP-EXE-0201 — No canonical selector strategy for AppFolio UI steps
+- ### Required artifact
+- ### Required artifact
+- ### Required artifact
+- ### Required artifact
+- ### Required artifact
+- # 6) Reboot / Crash / Resume Gaps (you explicitly require reboot handling)
+- ### Required artifact
+- 3. **Brain: Build Work Plan** → emits `work_plan`
+- "evidence_required": true,
+- "redaction_required_before_write": true,
+- "RUN-S2_PLAN": "Build work plan",
+- "outputs": ["pipes.run_start"],
+- "outputs": ["pipes.rows_extracted"],
+- "next": "ST-0003_BRAIN_BUILD_WORK_PLAN"
+- "step_id": "ST-0003_BRAIN_BUILD_WORK_PLAN",
+- "outputs": ["pipes.work_plan"],
+- "on_stop": { "action": "SHORT_CIRCUIT_TO_AUDIT", "next": "ST-9998_RUN_COMPLETE_SUCCESS_EMPTY" }
+- "checkpoint": { "write": true, "checkpoint_key": "run_id:ST-0003_BRAIN_BUILD_WORK_PLAN" },
+- "outputs": [],
+- "outputs": ["pipes.command"],
+- "outputs": ["pipes.action_result", "pipes.otp_notify", "pipes.otp_request", "pipes.otp_result"],
+- "trigger_predicate": "otp_required==true",
+- "message_template": "OTP REQUIRED. CONFIRM YOU ARE AVAILABLE TO PROVIDE OTP NOW."
+- "outputs": ["pipes.writeback_result"],
+- "outputs": [],
+- "outputs": ["pipes.run_complete"],
+- "outputs": ["pipes.run_complete"],
+- "outputs": ["pipes.run_complete"],
+- "outputs": {
+- ### GAP-PLAN-0001 — No canonical WorkPlan builder
+- **Deterministic requirement:** a WorkPlan row must explicitly specify:
+- **Hard requirement:** a sheet writeback must be:
+- **Why execution fails:** automation breaks on UI drift; there is no stable binding layer.
+- # The shortest “make it execute” sequence (what to build next)
+- ## Phase-5 Execution Expansion Pack (new UMP set)
+- ## UMP-UI-EVID-P5-1502 — Screenshot hooks bound to workflow steps
+- ## UMP-UI-CERT-P5-1503 — Certification gates
+- If you want, I will output **the exact `docs/umpts/<ump_id>.json` manifest** for each of the 27 UMPs above (same format as you used earlier), plus:
+- 2. **VPC networking:** Are services private-only (no public egress) or do Hands workers require outbound web access to AppFolio?
+- 6. **K8s runtime:** EKS only, or also local k3d/minikube support required?
+- "phase": "P5.ExecutionExpansion",
+- "Both schemas include required envelope fields: workspace_id, run_id, correlation_id, replay_frame_id, logical_time, wall_clock_time.",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "command schema includes: command_id, idempotency_key, attempt, timeout_seconds, required_evidence[].",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm repo:verify-schemas", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "Per row, output contains: idempotency_key, stop/hold codes, command intents, writeback_plan.",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/eyes build", "pnpm --filter apps/eyes test"],
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/eyes test", "pnpm --filter apps/eyes build"],
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/eyes test", "pnpm --filter apps/eyes build"],
+- "Conflict safety: detects concurrent write conflicts and retries per RP-SHEET-WRITE-5X equivalent policy.",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/eyes test", "pnpm --filter apps/eyes build"],
+- "Tests prove: expansion adds new Date/Note columns only when required.",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "Login detects: already-authenticated session, OTP required, lockout state.",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "depends_on": ["UMP-HND-AF-P5-1402", "UMP-HANDS-OTP-ENTRY-P5-0104", "UMP-UI-OTP-PROMPT-P5-0103", "UMP-BRN-OTP-SM-P5-0102"],
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "depends_on": ["UMP-UI-SCREENSHOT-POLICY-P5-0301"],
+- "verify": ["pnpm repo:verify-inventory", "pnpm repo:verify-schemas", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "sealed_outputs": [
+- "sealed_outputs": ["schemas/domain/run_certificate.v1.json", "docs/Inventory.md"]
+- ## 23) UMP-UI-EVID-P5-1502
+- "ump_id": "UMP-UI-EVID-P5-1502",
+- "title": "UI: Screenshot Hooks Bound to Workflow Step Boundaries",
+- "chapter": "ui",
+- "phase": "P5.ExecutionExpansion",
+- "depends_on": ["UMP-UI-SCREENSHOT-ENGINE-P5-0302", "UMP-BRN-WF-P5-1104"],
+- "create": ["apps/ui/src/testing/screenshot/workflow-hooks.ts"],
+- "update": ["apps/ui/docs/Inventory.md", "docs/Inventory.md", "apps/ui/SEAL.json"],
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/ui test", "pnpm --filter apps/ui build"],
+- "seal_file": "apps/ui/SEAL.json",
+- "sealed_outputs": [
+- ## 24) UMP-UI-CERT-P5-1503
+- "ump_id": "UMP-UI-CERT-P5-1503",
+- "title": "UI: Certification Gates (PII block + missing evidence block) + Final Index",
+- "chapter": "ui",
+- "phase": "P5.ExecutionExpansion",
+- "depends_on": ["UMP-UI-SCREENSHOT-READER-P5-0303", "UMP-BRN-EVID-P5-1501"],
+- "create": ["apps/ui/src/testing/screenshot/certify.ts"],
+- "update": ["apps/ui/docs/Inventory.md", "docs/Inventory.md", "apps/ui/SEAL.json"],
+- "verify": ["pnpm repo:verify-inventory", "pnpm --filter apps/ui test", "pnpm --filter apps/ui build"],
+- "seal_file": "apps/ui/SEAL.json",
+- "sealed_outputs": [
+- "title": "Ops: Docker Images for brain/eyes/hands/ui (reproducible builds)",
+- "phase": "P5.ExecutionExpansion",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "sealed_outputs": [
+- "phase": "P5.ExecutionExpansion",
+- "sealed_outputs": ["docs/ops/Observability.md", "docs/ops/Alerting.md", "docs/Inventory.md"]
+- If you want, I can also output a **combined** `docs/umpts` folder set that includes:
+- { "from": "UMP-BRN-EVID-P5-1501", "to": "UMP-UI-CERT-P5-1503", "type": "hard" },
+- "must_pass": ["pnpm --filter apps/brain test", "pnpm --filter apps/brain build"]
+- "must_pass": ["pnpm --filter apps/hands test", "pnpm --filter apps/hands build"]
+- "must_pass": ["pnpm --filter apps/eyes test", "pnpm --filter apps/eyes build"]
+- "must_pass": ["pnpm --filter apps/hands test", "pnpm --filter apps/hands build"]
+- "after": "UMP-UI-CERT-P5-1503",
+- "must_pass": ["pnpm --filter apps/ui test", "pnpm --filter apps/ui build"]
+- # docs/umpts/PHASEMAP.json (tracks + ownership + intent)
+- "phasemap_id": "PHASEMAP.ExecutionExpansion.P5",
+- "intent": "Define full E2E pipe contract surface required by WF-DELINQ-DAILY.v1."
+- "owner": "brain+ui",
+- OUTPUT A SINGLE CONSOLIDATED docs/umpts SET:
+- "after": "UMP-UI-CERT-P5-1503",
+- "phase": "P5.Contracts.A",
+- "phase": "P5.Contracts.A",
+- ## `docs/umpts/UMP-UI-EYES-VALIDATE-P5-0003.json`
+- "ump_id": "UMP-UI-EYES-VALIDATE-P5-0003",
+- "title": "UI+Eyes: Calling List Contract Wiring + Validation Adapter",
+- "phase": "P5.Contracts.A",
+- "phase": "P5.Contracts.B",
+- "phase": "P5.Contracts.B",
+- "verify": ["pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- ## `docs/umpts/UMP-UI-OTP-PROMPT-P5-0103.json`
+- "ump_id": "UMP-UI-OTP-PROMPT-P5-0103",
+- "title": "UI: OTP Prompt Modal + Pipe Client (operator confirm + OTP input)",
+- "phase": "P5.Contracts.B",
+- "update": ["docs/Inventory.md", "apps/ui/SEAL.json"]
+- "verify": ["pnpm --filter apps/ui test", "pnpm --filter apps/ui build"],
+- "phase": "P5.Contracts.B",
+- "verify": ["pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "phase": "P5.Contracts.C",
+- "verify": ["pnpm repo:verify-schemas", "pnpm --filter packages/foundation test", "pnpm --filter packages/foundation build"],
+- "phase": "P5.Contracts.C",
+- "verify": ["pnpm --filter apps/eyes test", "pnpm --filter apps/eyes build"],
+- ## `docs/umpts/UMP-UI-SCREENSHOT-POLICY-P5-0301.json`
+- "ump_id": "UMP-UI-SCREENSHOT-POLICY-P5-0301",
+- "title": "UI: Screenshot Policy (storage + retention + redaction) + Index Schema",
+- "phase": "P5.Contracts.D",
+- ## `docs/umpts/UMP-UI-SCREENSHOT-ENGINE-P5-0302.json`
+- "ump_id": "UMP-UI-SCREENSHOT-ENGINE-P5-0302",
+- "title": "UI: Screenshot Capture Engine (redaction enforced) + Index Writer",
+- "phase": "P5.Contracts.D",
+- "depends_on": ["UMP-UI-SCREENSHOT-POLICY-P5-0301"],
+- "update": ["docs/Inventory.md", "apps/ui/SEAL.json"]
+- "verify": ["pnpm --filter apps/ui test", "pnpm --filter apps/ui build"],
+- ## `docs/umpts/UMP-UI-SCREENSHOT-READER-P5-0303.json`
+- "ump_id": "UMP-UI-SCREENSHOT-READER-P5-0303",
+- "title": "UI: Screenshot Index Reader (for certification pass/fail generation)",
+- "phase": "P5.Contracts.D",
+- "depends_on": ["UMP-UI-SCREENSHOT-ENGINE-P5-0302"],
+- "create": ["apps/ui/src/testing/screenshot/index-reader.ts"],
+- "update": ["docs/Inventory.md", "apps/ui/SEAL.json"]
+- "verify": ["pnpm --filter apps/ui test", "pnpm --filter apps/ui build"],
+- "phase": "P5.Contracts.Tools",
+- "phase": "P5.ExecutionExpansion.PIPES",
+- "phase": "P5.ExecutionExpansion.PIPES",
+- "phase": "P5.ExecutionExpansion.PIPES",
+- "phase": "P5.ExecutionExpansion.RUNNER",
+- "verify": ["pnpm repo:verify-boundaries", "pnpm repo:verify-inventory", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "phase": "P5.ExecutionExpansion.RUNNER",
+- "verify": ["pnpm repo:verify-boundaries", "pnpm repo:verify-inventory", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "phase": "P5.ExecutionExpansion.RUNNER",
+- "verify": ["pnpm repo:verify-boundaries", "pnpm repo:verify-inventory", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "phase": "P5.ExecutionExpansion.RUNNER",
+- "verify": ["pnpm repo:verify-boundaries", "pnpm repo:verify-inventory", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "phase": "P5.ExecutionExpansion.RUNNER",
+- "verify": ["pnpm repo:verify-boundaries", "pnpm repo:verify-schemas", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "phase": "P5.ExecutionExpansion.QUEUE",
+- "create": ["infra/sqs/queue.tf", "infra/sqs/iam.tf", "infra/sqs/outputs.tf", "infra/sqs/README.md"],
+- "phase": "P5.ExecutionExpansion.QUEUE",
+- "verify": ["pnpm repo:verify-boundaries", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "phase": "P5.ExecutionExpansion.QUEUE",
+- "verify": ["pnpm repo:verify-boundaries", "pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "phase": "P5.ExecutionExpansion.WRITEBACK",
+- "verify": ["pnpm repo:verify-boundaries", "pnpm --filter apps/eyes test", "pnpm --filter apps/eyes build"],
+- "phase": "P5.ExecutionExpansion.WRITEBACK",
+- "verify": ["pnpm --filter apps/eyes test", "pnpm --filter apps/eyes build"],
+- "phase": "P5.ExecutionExpansion.WRITEBACK",
+- "verify": ["pnpm --filter apps/eyes test", "pnpm --filter apps/eyes build"],
+- "phase": "P5.ExecutionExpansion.WRITEBACK",
+- "verify": ["pnpm --filter apps/eyes test", "pnpm --filter apps/eyes build"],
+- "phase": "P5.ExecutionExpansion.APPFOLIO",
+- "verify": ["pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "phase": "P5.ExecutionExpansion.APPFOLIO",
+- "verify": ["pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "phase": "P5.ExecutionExpansion.APPFOLIO",
+- "verify": ["pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "phase": "P5.ExecutionExpansion.APPFOLIO",
+- "verify": ["pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "phase": "P5.ExecutionExpansion.APPFOLIO",
+- "verify": ["pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "phase": "P5.ExecutionExpansion.APPFOLIO",
+- "depends_on": ["UMP-HND-AF-P5-1402", "UMP-HANDS-OTP-ENTRY-P5-0104", "UMP-UI-OTP-PROMPT-P5-0103", "UMP-BRAIN-OTP-SM-P5-0102"],
+- "verify": ["pnpm --filter apps/hands test", "pnpm --filter apps/hands build"],
+- "phase": "P5.ExecutionExpansion.EVIDENCE",
+- "depends_on": ["UMP-UI-SCREENSHOT-POLICY-P5-0301"],
+- "verify": ["pnpm repo:verify-schemas", "pnpm --filter apps/brain test", "pnpm --filter apps/brain build"],
+- "ump_id": "UMP-UI-EVID-P5-1502",
+- "title": "UI: Workflow Step Screenshot Hooks (redaction enforced)",
+- "phase": "P5.ExecutionExpansion.EVIDENCE",
+- "depends_on": ["UMP-UI-SCREENSHOT-ENGINE-P5-0302", "UMP-BRN-WF-P5-1104"],
+- "create": ["apps/ui/src/testing/screenshot/workflow-hooks.ts"],
+- "update": ["apps/ui/docs/Inventory.md", "apps/ui/SEAL.json", "docs/Inventory.md"]
+- "verify": ["pnpm --filter apps/ui test", "pnpm --filter apps/ui build"],
+- "ump_id": "UMP-UI-CERT-P5-1503",
+- "title": "UI: Certification Gates (PII visible blocks + missing evidence blocks)",
+- "phase": "P5.ExecutionExpansion.EVIDENCE",
+- "depends_on": ["UMP-UI-SCREENSHOT-READER-P5-0303", "UMP-BRN-EVID-P5-1501"],
+- "create": ["apps/ui/src/testing/screenshot/certify.ts"],
+- "update": ["apps/ui/docs/Inventory.md", "apps/ui/SEAL.json", "docs/Inventory.md"]
+- "verify": ["pnpm --filter apps/ui test", "pnpm --filter apps/ui build"],
+- "title": "Ops: Docker Images for brain/eyes/hands/ui (reproducible)",
+- "phase": "P5.ExecutionExpansion.OPS",
+- "depends_on": ["UMP-BRN-WF-P5-1104", "UMP-EYS-WB-P5-1303", "UMP-HND-CONS-P5-1203", "UMP-UI-CERT-P5-1503"],
+- "phase": "P5.ExecutionExpansion.OPS",
+- "phase": "P5.ExecutionExpansion.OPS",
+- # A) `docs/umpts/PHASEMAP.json` (MANDATORY)
+- "phasemap_id": "PHASEMAP.P5.AtoD.plus.ExecutionExpansion",
+- "A_UI_EYES_WIRING": {
+- "owner": "apps/ui+apps/eyes",
+- "owner": "apps/brain+apps/ui+apps/hands",
+- "owner": "apps/ui",
+- "owner": "apps/brain+apps/ui",
+- # C) Clarifying questions (ONLY to remove remaining ambiguity)
+- ## Final output in your required response format
+- "title": "Environment Defaults Contract (dev/staging/prod) + Required Variables Registry",
+- "phase": "P5.ExecutionExpansion.ENV",
+- "phase": "P5.ExecutionExpansion.ENV",
+- "phase": "P5.ExecutionExpansion.ENV",
+- "phase": "P5.ExecutionExpansion.ENV",
+- "title": "Secrets Manager Contract: required secrets + IAM policies per service role",
+- "phase": "P5.ExecutionExpansion.ENV",
+- "phase": "P5.ExecutionExpansion.ENV",
+- "region": "REQUIRED",
+- "account_id": "REQUIRED"
+- ## 2.2 `docs/env/ENV.required_external_systems.json`
+- "secrets_required": ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "GOOGLE_REFRESH_TOKEN"]
+- "secrets_required": ["APPFOLIO_USERNAME", "APPFOLIO_PASSWORD"]
+- "secrets_required": []
+- "secrets_required": ["POSTGRES_DSN"]
+- ## 2.3 `docs/env/ENV.required_secrets.json`
+- "required_secrets": [
+- "consumer_services": ["ui", "eyes", "brain"],
+- "rotation_required": false
+- "consumer_services": ["ui", "eyes", "brain"],
+- "rotation_required": false
+- "rotation_required": true
+- "rotation_required": false
+- "rotation_required": true
+- "rotation_required": true
+- ## 3.5 `infra/terraform/outputs.tf`
+- SQS_COMMAND_QUEUE_URL: "REQUIRED_FROM_TERRAFORM_OUTPUT"
+- SQS_DLQ_URL: "REQUIRED_FROM_TERRAFORM_OUTPUT"
+- SQS_COMMAND_QUEUE_URL: "REQUIRED_FROM_TERRAFORM_OUTPUT"
+- SQS_DLQ_URL: "REQUIRED_FROM_TERRAFORM_OUTPUT"
+- SQS_COMMAND_QUEUE_URL: "REQUIRED_FROM_TERRAFORM_OUTPUT"
+- SQS_DLQ_URL: "REQUIRED_FROM_TERRAFORM_OUTPUT"
+- # 7) One final ambiguity that must be resolved (cannot be guessed safely)
+- ## `infra/terraform/network/outputs.tf`
+- ## `infra/terraform/queue/outputs.tf`
+- ## `infra/terraform/data/outputs.tf`
+- ## `infra/terraform/secrets/outputs.tf`
+- Sid: "ReadRequiredSecrets",
+- # - (optional) no SQS required unless you wire results via SQS later
+- Sid: "ReadRequiredSecrets",
+- # UI policy:
+- ## `infra/terraform/iam/outputs.tf`
+- # 8) Update root outputs to match reality
+- ## `infra/terraform/outputs.tf` (replace with this exact content)
+- # 9) Backend init is still REQUIRED (explicit, deterministic)
+- -backend-config="bucket=REQUIRED_DEV_STATE_BUCKET" \
+- -backend-config="dynamodb_table=REQUIRED_DEV_LOCK_TABLE" \
+- -backend-config="bucket=REQUIRED_STAGING_STATE_BUCKET" \
+- -backend-config="dynamodb_table=REQUIRED_STAGING_LOCK_TABLE" \
+- -backend-config="bucket=REQUIRED_PROD_STATE_BUCKET" \
+- -backend-config="dynamodb_table=REQUIRED_PROD_LOCK_TABLE" \
+- # 10) Next sealing step (no questions required)
+- * **Least privilege**: each service gets its own role bound to its policy (brain/eyes/hands/ui).
+- ## `docs/umpts/PHASEMAP.json` — add track:
+- "phase": "P5.ExecutionExpansion.EKS",
+- "title": "EKS OIDC Provider (IRSA prerequisite)",
+- "phase": "P5.ExecutionExpansion.EKS",
+- "update": ["infra/terraform/main.tf", "infra/terraform/outputs.tf", "docs/Inventory.md", "infra/SEAL.json"]
+- "phase": "P5.ExecutionExpansion.EKS",
+- "update": ["infra/terraform/main.tf", "infra/terraform/outputs.tf", "docs/Inventory.md", "infra/SEAL.json"]
+- "title": "IRSA Roles for brain/eyes/hands/ui (bind policies -> roles -> service accounts)",
+- "phase": "P5.ExecutionExpansion.EKS",
+- "update": ["infra/terraform/main.tf", "infra/terraform/outputs.tf", "docs/Inventory.md", "infra/SEAL.json"]
+- "title": "K8s Namespaces + ServiceAccounts (IRSA annotations) for brain/eyes/hands/ui",
+- "phase": "P5.ExecutionExpansion.EKS",
+- "phase": "P5.ExecutionExpansion.EKS",
+- "phase": "P5.ExecutionExpansion.EKS",
+- ## 2.5 `infra/terraform/eks/outputs.tf`
+- ## 2.8 `infra/terraform/eks-oidc/outputs.tf`
+- ## 2.11 `infra/terraform/eks-nodes/outputs.tf`
+- "${local.issuer_hostpath}:sub" = "system:serviceaccount:${local.namespace}:${local.sa.ui}",
+- ## 2.14 `infra/terraform/irsa/outputs.tf`
+- ## 2.16 Update `infra/terraform/outputs.tf` (append)
+- eks.amazonaws.com/role-arn: "REQUIRED_ROLE_ARN_BRAIN"
+- eks.amazonaws.com/role-arn: "REQUIRED_ROLE_ARN_EYES"
+- eks.amazonaws.com/role-arn: "REQUIRED_ROLE_ARN_HANDS"
+- name: vte-ui
+- eks.amazonaws.com/role-arn: "REQUIRED_ROLE_ARN_UI"
+- **Deterministic requirement:** your Hands Deployment must label pods as:
+- ## REQUIRED INPUTS (no inference)
+- # REQUIRED: set chart versions in install.sh
+- # REQUIRED: set these versions explicitly.
+- ### `k8s/secrets/secretproviderclass.ui.yaml`
+- name: vte-ui-secrets
+- For each of `k8s/*/deployment.yaml` (brain/eyes/hands/ui), you must add:
+- # 7) Deterministic apply procedure (no ambiguity)
+- # 8) One REQUIRED input (explicit, not inferred)
+- - AWS provider chart version: REQUIRED (single value)
+- # SINGLE REQUIRED PIN (authoritative)
+- # 3) Remove ambiguity in file names (mount path contract)
+- ## Delete this requirement entirely
+- * **Now:** every platform (AppFolio, Buildium, future) must have:
+- ## What you will need to add for Buildium / other platforms (explicit list)
+- Example for Buildium (you will create these):
+- **Required changes:**
+- **Required contract artifacts:**
+- * tenant/property has a configured platform: AppFolio vs Buildium vs others
+- * or fallback ordering: AppFolio → Buildium → manual escalation
+- If Buildium is API-based:
+- * non-443 protocols: ❌ requires explicit new UMP to open ports
+- * strict IP allow-list requirements: you will want a **static egress IP** (NAT EIP). You already have a NAT EIP; keep it per env.
+- "phase": "P5.ExecutionExpansion.EGRESS",
+- "phase": "P5.ExecutionExpansion.EGRESS",
+- "phase": "P5.ExecutionExpansion.EGRESS",
+- "mode": "proxy_required",
+- "platform_id": "buildium",
+- export function assertProxyEnv(): void {
+- This makes expansion deterministic: Buildium cannot “accidentally work” without explicit allowlist entries.
+- const buildium = allowlist.platforms.find((p: any) => p.platform_id === "buildium");
+- # 8) How this affects future Buildium and other platforms (explicit)
+- To add Buildium later, you must do **all** of these, in order:
+- ## One required question (cannot be inferred safely)
+- "consumers": ["brain", "eyes", "hands", "ui"],
+- # 2) Update Envoy allow rules (no functional change, but make intent explicit)
+- # ====== ALLOW: Google domains (Sheets/Auth/Artifacts) for brain/eyes/hands/ui ======
+- const buildium = allowlist.platforms.find((p: any) => p.platform_id === "buildium");
+- # 6) One required follow-on decision (cannot be inferred safely)
+- "consumers": ["brain", "eyes", "hands", "ui"],
+- # ====== ALLOW: Google domains (BROAD) for brain/eyes/hands/ui ======
+- # 6) One required security decision (cannot be inferred safely)
+- Do you require **egress audit logging to a retained store** (CloudWatch) for:
+- ## Required implementation change
+- # Required implementation additions (no ambiguity)
+- "phase": "P5.ExecutionExpansion.EGRESS.AUDIT",
+- "phase": "P5.ExecutionExpansion.EGRESS.ANOMALY",
+- # 2) Required log format (Envoy) — deterministic JSON
+- ## 3.3 `infra/terraform/logging-egress/outputs.tf`
+- # REQUIRED: notification destination
+- # SNS topic + email subscription (explicit operator email required)
+- ## 4.4 `infra/terraform/alerts-egress/outputs.tf`
+- Update each env tfvars to add (REQUIRED operator value):
+- # 7) One REQUIRED input (cannot be inferred safely)
+- # Phase 5 Remaining Critical Packs
+- **Decision required (one line):**
+- **Why:** Your “sealed UMP” model requires CI to enforce boundaries.
+- # Why Flyway is best suited for your system (stable + scalable + audit-grade)
+- Your system requirements force these properties:
+- Prisma is fine for app-centric CRUD, but you are building:
+- You can do it, but you’ll end up rebuilding:
+- # One required decision (I can’t safely assume)
+- As you add Buildium/other platforms, schema will evolve frequently:
+- If you confirm, I will output the **Flyway Pack** as:
+- **Tradeoff:** this can be dangerous. You can mutate schema while services are in partial failure—requires strong runbooks.
+- # The real cost: what GitHub Actions requires to be stable
+- "phase": "P5.ExecutionExpansion.DB.MIGRATIONS",
+- "phase": "P5.ExecutionExpansion.DB.MIGRATIONS",
+- "baseline_required": true
+- - GitHub Actions performs validation only (no DB access required for validate).
+- Add this block (and later annotate with IRSA role ARN output for migrator):
+- eks.amazonaws.com/role-arn: "REQUIRED_ROLE_ARN_MIGRATOR"
+- **Required secrets mounted**: POSTGRES_* (already in Secrets Manager).
+- value: "jdbc:postgresql://REQUIRED_DB_ENDPOINT:5432/vte"
+- ### Required configmaps (must be created)
+- # DB egress (CIDR required - cannot be inferred)
+- cidr: "REQUIRED_RDS_CIDR/32"
+- # G) Required infra changes for migrator IRSA
+- Update outputs `policy_arns` to include migrator:
+- # H) Two required values (cannot be inferred)
+- To complete this pack without ambiguity, you must provide:
+- Once you provide those, I will output the **final successor UMP** that:
+- # Exact replacements to remove the “REQUIRED_*” inputs
+- **Enforcement rule:** `VPC_CIDR_BLOCK` is injected from Terraform output into the rendered manifest (Kustomize or CI templating).
+- ## C) Add a required ConfigMap (per env) — generated by deploy automation
+- **Rule:** this file is not hand-edited. It is rendered/updated by the deploy pipeline using Terraform outputs.
+- "title": "DB Runtime Injection: render vte-db-runtime ConfigMap + render VPC CIDR into flyway NetworkPolicy from Terraform outputs",
+- "phase": "P5.ExecutionExpansion.DB.MIGRATIONS",
+- # What I need from Terraform (no human inputs, just outputs)
+- You already have Terraform; we add outputs:
+- required: true
+- # REQUIRED: set GitHub -> AWS OIDC role ARN as a repo secret:
+- # 3) Capture Terraform outputs (authoritative sources of truth)
+- - name: Capture Terraform outputs
+- # REQUIRED outputs (must exist):
+- # 2) Required Terraform outputs (must exist)
+- Your Terraform must output these **exact keys** (names must match):
+- # 3) Hard requirement: Migrator IRSA role wiring (no ambiguity)
+- # 4) One required security decision I will not assume
+- Even though Flyway itself runs SQL, **failure messages and debug output can expose**:
+- # 0) Pack Objective
+- "phase": "P5.ExecutionExpansion.EXECUTION.STATE",
+- "phase": "P5.ExecutionExpansion.EXECUTION.QUEUE",
+- "update": ["infra/terraform/main.tf", "infra/terraform/outputs.tf", "docs/Inventory.md"]
+- "phase": "P5.ExecutionExpansion.EXECUTION.RUNNER",
+- "phase": "P5.ExecutionExpansion.EXECUTION.PIPES",
+- "phase": "P5.ExecutionExpansion.EXECUTION.CONTROL",
+- "touch_surface": ["apps/runner/**", "apps/ui/**", "docs/execution/**", "docs/Inventory.md", "docs/umpts/**"],
+- "phase": "P5.ExecutionExpansion.EXECUTION.RESILIENCE",
+- "title": "Execution E2E Tests: deterministic runner simulation + chaos suite + queue redelivery + stop/retry/resume certification",
+- "phase": "P5.ExecutionExpansion.EXECUTION.TESTS",
+- "phase": "P5.ExecutionExpansion.EXECUTION.DEPLOY",
+- "required": ["workflow_run_id", "step_id", "attempt", "phase", "created_at_utc", "payload"],
+- "phase": {
+- "required": ["correlation_id", "env", "tenant_id", "workflow_id", "workflow_run_id", "requested_by", "time_model"],
+- "required": ["logical_time_utc", "tenant_timezone"],
+- "required": ["workflow_run_id", "step_id", "input_type", "submitted_at_utc", "value"],
+- "required": ["message_id", "workflow_run_id", "step_id", "attempt", "correlation_id", "enqueue_time_utc"],
+- "DLQ requires operator decision: replay|close|escalate"
+- 2. **Acquire lease** in DB for `(workflow_run_id, step_id, attempt)`:
+- 5. Execute step phase in order:
+- 6. After each phase:
+- 7. If step requires operator input (OTP):
+- # 5) Two required decisions I must lock (cannot be left ambiguous)
+- ### Decision 1 — Queue type is required
+- I will **decide** the remaining required runtime constant to keep the system stable:
+- ### `infra/terraform/queue-execution/outputs.tf`
+- ### Wire outputs into `infra/terraform/outputs.tf`
+- And update your policy outputs map (where you already output brain/eyes/hands/ui/migrator) to include:
+- eks.amazonaws.com/role-arn: "REQUIRED_ROLE_ARN_RUNNER"
+- # Egress proxy (required governance)
+- EXEC_QUEUE_URL: "TERRAFORM_OUTPUT_exec_queue_url"
+- EXEC_DLQ_URL: "TERRAFORM_OUTPUT_exec_dlq_url"
+- Update your existing `.github/workflows/deploy-render-runtime.yml` by adding one more render/apply step **after Terraform outputs are captured**:
+- # Final required value I will not guess (one line)
+- # 1) Decision: Which endpoints are REQUIRED now (no ambiguity)
+- "phase": "P5.ExecutionExpansion.INFRA.AWS_PRIVATE",
+- "update": ["infra/terraform/main.tf", "infra/terraform/outputs.tf", "docs/Inventory.md"]
+- cidr_blocks = ["0.0.0.0/0"] # NOTE: network is still private; tighten to VPC CIDR if you already output it.
+- ## 3.3 `infra/terraform/vpc-endpoints/outputs.tf`
+- output "vpce_interface_ids" { value = { for k, v in aws_vpc_endpoint.interface : k => v.id } }
+- # 5) Output required keys for deploy pipeline (deterministic)
+- In `infra/terraform/outputs.tf`, append:
+- "required": {
+- ## Update Runner `NO_PROXY` (required)
+- **Note:** `VPC_CIDR_BLOCK` is rendered by your deploy workflow from Terraform output `vpc_cidr_block`.
+- # 3) Runner `NO_PROXY` must include AWS domains (required)
+- # 2) Hands `NO_PROXY` must include AWS (required)
+- In `.github/workflows/deploy-render-runtime.yml`, add this step **after** Terraform outputs are captured (same location you render runner policy):
+- "phase": "P5.ExecutionExpansion.SECURITY.EGRESS",
+- "phase": "P5.ExecutionExpansion.HANDS.RUNTIME",
+- # Copy monorepo package artifacts as appropriate for your build system
+- # Build Hands
+- # 5) CI: Build + push Hands image to ECR (deterministic)
+- ## `.github/workflows/build-hands-image.yml`
+- name: build-hands-image
+- build:
+- - name: Build and push
+- # REQUIRED repo secret: ECR_REPO_HANDS (e.g. 123.dkr.ecr.us-east-1.amazonaws.com/vte-hands)
+- ## One remaining required decision (I will decide if you don’t)
+- "phase": "P5.ExecutionExpansion.HANDS.RUNTIME",
+- ## Next required decision (cannot be left ambiguous)
+- # One required confirmation (cannot be assumed)
+- "phase": "P5.ExecutionExpansion.INFRA.SPOT",
+- "phase": "P5.ExecutionExpansion.HANDS.CONTRACTS",
+- "phase": "P5.ExecutionExpansion.HANDS.CONTRACTS",
+- "phase": "P5.ExecutionExpansion.HANDS.CONTRACTS",
+- "phase": "P5.ExecutionExpansion.HANDS.TESTS",
+- "required": [
+- "required": ["allowed_domains", "allowed_actions", "max_duration_seconds"],
+- "required": ["correlation_id", "workflow_run_id", "step_id", "attempt", "lease", "task", "time_model"],
+- "required": ["logical_time_utc", "tenant_timezone"],
+- "required": ["type", "payload"],
+- "required": [
+- "required": ["artifact_type", "storage_uri", "redaction_applied", "meta"],
+- "outputs": { "type": "object" },
+- "required": true
+- # 5) One remaining required security primitive (cannot be ambiguous)
+- # 2) Required schema updates (no ambiguity)
+- **Only addition:** `kid` required.
+- "required": [
+- "required": ["allowed_domains", "allowed_actions", "max_duration_seconds"],
+- **Canonical JSON rule (required):**
+- * additionally require: `now_utc <= rotated_at_utc + rotation_overlap_seconds`
+- "phase": "P5.ExecutionExpansion.HANDS.SECURITY",
+- "phase": "P5.ExecutionExpansion.HANDS.CONTRACTS",
+- "phase": "P5.ExecutionExpansion.HANDS.SECURITY",
+- "phase": "P5.ExecutionExpansion.HANDS.SECURITY",
+- **Rotation procedure** (single path, no ambiguity):
+- # 7) One final required constraint (I will decide)
+- "required": ["active", "rotation_overlap_seconds", "rotated_at_utc"],
+- "required": ["kid", "secret"],
+- "required": ["kid", "secret"],
+- ### Required: Update your policy output map (same file)
+- In the existing `output "policy_arns"` map (where you already output `runner`, `hands`, etc.), **ADD**:
+- ### Required: allow Runner + Hands roles to read the signing keys
+- ## 4) `infra/terraform/variables.tf`  *(UPDATE — REQUIRED EXACT ADDITIONS)*
+- ## 5) `infra/terraform/outputs.tf`  *(UPDATE — REQUIRED EXACT ADDITIONS)*
+- > If you export secrets arns in outputs, **ADD**:
+- "required": [
+- "required": ["allowed_domains", "allowed_actions", "max_duration_seconds"],
+- "required": ["correlation_id", "workflow_run_id", "step_id", "attempt", "lease", "task", "time_model"],
+- "required": ["logical_time_utc", "tenant_timezone"],
+- "required": ["type", "payload"],
+- (If your registry format differs, the required invariant is: it must reference this new pipe file.)
+- export function canonicalJson(value: unknown): string {
+- function sortRecursively(input: any): any {
+- export function hmacSha256Base64(secretB64: string, message: string): string {
+- export async function loadHandsLeaseSigningKeys(params: {
+- export async function issueLease(params: {
+- export async function verifyLease(params: {
+- export async function renewLease(params: {
+- export function canonicalJson(value: unknown): string {
+- function sortRecursively(input: any): any {
+- export function hmacSha256Base64(secretB64: string, message: string): string {
+- export async function loadHandsLeaseSigningKeys(params: {
+- export async function verifyLease(params: {
+- # Required environment variables (Hands + Runner)
+- # Required: extend `vte-exec-runtime` ConfigMap render (deploy workflow)
+- # Final hard requirement (so this doesn’t drift)
+- Add a CI contract test to fail builds if lease schema changes without versioning:
+- Why: 10k users require strict workspace isolation (explicit gap)
+- Why: SOP requires “ask team lead when unsure”
+- Why: Gap register requires immutable audit
+- Why: consent, quiet hours, legal directives are existential risks (HR-001..HR-005).
+- Compliance plane: consent + quiet hours + legal directives
+- I will output a Deterministic WorkItem State Machine Spec:
+- Decision = deterministic output of decision tables: CONTACT/HOLD/STOP + reasons + allowed channels
+- Decision tables from DOC-02 become a pure function:
+- Approval MUST be required when:
+- Outputs:
+- I will output the authoritative pipe contract set (schemas + required fields) for:
+- "required": [
+- "required": [
+- "required": ["contains_streamed_tenant_data", "redaction_profile"],
+- Purpose: Eyes emits a streamed snapshot required to run decision tables (address/unit/tenant/ledger/tags/notes/activities).
+- "required": ["meta", "payload"],
+- "required": [
+- "required": ["systems"],
+- "required": ["sheet_id", "tab_name", "row_id"],
+- "required": ["lookup_method", "matched_record_confidence"],
+- "required": ["sheet_property_address", "sheet_unit", "af_property_address", "af_unit", "af_tenant_names"],
+- "required": ["af_current_balance", "ledger_entries"],
+- "required": ["posted_at_utc", "label", "amount", "direction"],
+- "required": ["af_tags", "sheet_tags"],
+- "required": ["recent_notes"],
+- "required": ["noted_at_utc", "text"],
+- "required": ["scheduled_for_utc", "description", "amount"],
+- "required": ["tenants"],
+- "required": ["name", "role", "phones", "emails"],
+- "required": ["e164", "callable", "annotations"],
+- Purpose: Output of deterministic decision tables (CONTACT/HOLD/STOP + reasons).
+- "required": ["meta", "payload"],
+- "required": [
+- "required": ["appfolio_note_text", "sheet_note_text"],
+- "required": ["decision_table_ids", "evaluated_at_utc"],
+- "required": ["hold_reason"]
+- "required": ["meta", "payload"],
+- "required": [
+- "approval_type": { "type": "string", "enum": ["CONTACT_EXECUTION", "OVERRIDE_POLICY", "AMBIGUITY_RESOLUTION"] },
+- "required_role": { "type": "string", "enum": ["SUPERVISOR", "COMPLIANCE", "ADMIN"] },
+- "required": ["channels", "message_intent_summary"],
+- "required": ["decision_trace_ref", "external_refs"],
+- "required": ["system", "ref_type", "ref_value"],
+- "required": ["meta", "payload"],
+- "required": [
+- Purpose: Single, explicit gate for all side-effects. Hands must require this.
+- "required": ["meta", "payload"],
+- "required": [
+- "required": ["type", "user_id"],
+- "required": ["phones", "emails"],
+- "required": ["template_id", "rendered_text"],
+- "required": ["idempotency_key", "intent_hash"],
+- "required": ["meta", "payload"],
+- "required": [
+- "required": ["channel", "target", "status", "evidence_ref"],
+- Purpose: Immutable event feed into CP-owned audit ledger (append-only). Required by SaaS gap register.
+- "required": ["meta", "payload"],
+- "required": ["event_type", "actor", "summary", "occurred_at_utc"],
+- "required": ["type", "id"],
+- I will output the Deterministic “HoldReason” / “ResponseCode” registry as a versioned CP artifact:
+- mapping to: operator UI labels, SLA timers, escalation targets, retry policies
+- I will output the Deterministic UI Screen Index (SC-0001 … SC-0025) mapped to:
+- UI-INV-01 — No silent pages: every screen must show loading state + last refresh + pipeline status.
+- UI-INV-02 — No free text reasons: UI must display only registry codes + human notes fields (separate).
+- UI-INV-03 — Streaming-only: UI may display streamed tenant data but must not “save” it; only references and non-PII decisions are stored.
+- UI-INV-04 — Deterministic trace: every WorkItem view shows workitem_id, workspace_id, correlation_id, policy_version, workflow_version.
+- UI-INV-05 — Role-gated actions: UI buttons exist only if RBAC permits.
+- UI-INV-06 — Fail-closed display: unknowns show “HOLD (unknown) / STOP (blocked)” not guessed explanations.
+- UI-INV-07 — Evidence-first approvals: approvers see decision trace + external refs, not raw tenant dumps.
+- UI-INV-08 — Audit always visible: every action shows audit event link.
+- Supervisor: resolves ambiguity, approves outreach, can set NextEligibleDate overrides (policy-bound).
+- Compliance: manages DNC/legal/consent/quiet-hours holds; can hard-stop.
+- Purpose: manage consent/opt-out/quiet-hours policies (policy state, non-PII)
+- Purpose: handle AppFolio UI changes that break RPA
+- Allowed: rollout percentage, feature flags, rollback
+- Purpose: embedded SOP guidance for “no inference” operators
+- . So here is the deterministic rule set the UI must follow:
+- I will output the Deterministic Frontend Information Architecture:
+- Execution Result Detail (not separately indexed but required):
+- SC-0020 SLA Dashboard:
+- Every screen must implement this UI state machine:
+- If a WorkItem contains streamed tenant data, the UI must visually mark it:
+- So the next required artifact is:
+- I will output the Authoritative API Surface Spec for:
+- API-G-01 — Auth required: all endpoints require auth token; anonymous none.
+- API-G-03 — RBAC enforced server-side: UI must not be trusted.
+- API-G-06 — Pipes for actions: UI actions do not “do work”; they emit command pipes and return accepted status.
+- API-G-09 — Version pinning: mutable CP artifacts require explicit if_match_version.
+- API-G-10 — Pagination everywhere: list endpoints require limit, cursor.
+- Headers: Idempotency-Key required
+- Headers: Idempotency-Key required
+- { "approval_type": "AMBIGUITY_RESOLUTION", "reason_code": "LEDGER_UNMAPPED_LABEL" }
+- { "close_reason": "NO_ACTION_REQUIRED", "notes": "optional" }
+- RBAC: required_role for that approval (Supervisor or Compliance)
+- RBAC: Supervisor/Compliance per approval.required_role
+- Headers: Idempotency-Key required
+- Body: { "feature_flag": "ff_x", "percent": 5 }
+- Body: { "feature_flag": "ff_x" }
+- "details": { "required_roles": ["SUPERVISOR"], "current_roles": ["OPERATOR"] }
+- I will output the Deterministic CP Data Model (tables/collections) that stores only:
+- This is the minimum CP persistence model required to support:
+- CP-INV-03 — Decision codes only: store decision outputs as codes (CONTACT/HOLD/STOP + HoldReason/StopReason/ResponseCode).
+- CP-INV-06 — Strong workspace isolation: every row keyed by workspace_id; all queries require it.
+- I will output the Deterministic Backend Service Decomposition (CP vs DP), mapping:
+- Purpose: UI API surface (WorkItems, Approvals, Audit, Registries, IAM, Budgets, Releases)
+- Consumes pipes: none required (optional: audit)
+- Purpose: consent/quiet-hours/legal directive governance (policy state, non-tenant)
+- Hard rule: no tenant state persisted; only compute outputs.
+- cp-workitem-state checks compliance/approval requirements:
+- I will output the Deterministic Queue/Stream Substrate Spec:
+- Again: the docs do not choose; they only require choosing.
+- Exactly-once: not required (you rely on idempotency), but Kafka transactions are optional.
+- Hard rule: once sealed=true, changes require a new policy version + controlled migration plan + release flag rollout.
+- Any action that could cause side-effects must have a two-phase pattern:
+- Replay requires:
+- Approval latency: p95 < 4 hours for S1/S2 holds requiring approval (process SLO)
+- I will output the Deterministic CI/CD + Test Strategy aligned to:
+- otherwise: new pipe_version required and dual-publish plan required
+- Output: a diff report of new forbidden edges.
+- Examples required:
+- I will output the Deterministic MVP Cut Plan (what to build first without lying to yourself), with:
+- This is the only credible build plan that:
+- UI: operational screens
+- If after Phase 1 you can:
+- I will produce the Phase 1 “Decision Tables Implementation Spec” (code-facing), including:
+- DT-INV-01 — Pure function:
+- function Evaluate(obs, nowUTC, policy):
+- This timeline assumes you are building the deterministic platform defined in the prior specs — not a prototype. It reflects:
+- Constraint: UI depends on CP DTO stability.
+- Automation engineer builds:
+- Your architecture cannot function without:
+- This is not theory. These are the exact shortcuts founders take when building workflow-automation SaaS with:
+- DOC-05/06: Gap registers + SaaS scale requirements
+- Meaning: SOP expects ambiguity to route to a supervisor; architecture doesn’t define a formal approval/escalation mechanism in the runtime.
+- Meaning: SOP implies authentication/session continuity; architecture doesn’t define how RPA sessions handle OTP, cookies, or re-auth.
+- Translation: your “Eyes/Hands” automation layer isn’t defined enough to survive vendor UI changes or outages.
+- Missing concepts in product UI:
+- Translation: operators cannot execute SOP in-product because the UI doesn’t exist in the technical plan.
+- Translation: messaging is central to SOP, but the product has no messaging UI primitives defined.
+- For every feature in DOC-01 SOP:
+- …and I’ll rewrite your pasted audit into an explicit 3-phase deliverable format:
+- Phase A: “Mismatch Matrix format” (SOP feature → Decision Table? → Architecture? → Missing module)
+- Phase B: “Gap register format” (Logic/Feasibility/UX with IDs, severity, and where it belongs)
+- Phase C: “Build sequence” (what gets built first to close the top structural gaps)
+- Implicitly required for:
+- Requires:
+- I am not re-arguing the audit. I am restructuring it into:
+- This will be the actual order a CTO would build to close these 600 gaps without rewriting everything:
+- So the build order must construct:
+- Build these first:
+- workspace_id REQUIRED on:
+- Common early builds:
+- Your architecture requires:
+- Building Kidneys first ensures:
+- By building:
+- Status: Overbuilt conceptually, underbuilt technically.
+- Status: Severely underbuilt.
+- Status: Underbuilt.
+- Your SOP requires:
+- ## Section A — Identity, Navigation, and Data Acquisition
+- Where: Brain → UI mapping (CP DTO + frontend).
+- Where: Kidneys + UI (Kidneys sets “uncertain” flags; UI renders warnings).
+- Phase 1: Legal risk mismatches (which MM rows can cause illegal outreach)
+- Phase 2: Data leakage risk mismatches (workspace/session boundaries)
+- Phase 3: Silent automation failure mismatches (drift, retries, DLQ)
+- Phase 4: 10k scale breakers (queues, sharding, rate limits)
+- For each phase:
+- Without WorkItem lifecycle + UI binding:
+- Contrary to intuition:
+- PHASE 2 — The Missing Organ: DWR (Deterministic Workflow Runtime)
+- What they actually require is a specific organ:
+- output: list of candidate delinquency rows (workspace_id scoped)
+- output includes:
+- output includes only canonical fields:
+- output:
+- output:
+- output:
+- output:
+- output:
+- primary missing: work item lifecycle UI + trace binding
+- Your true system requires these to be separate components:
+- And then the UI sits on top of CP:
+- But the true system requires two explicit missing boxes:
+- I can output a complete MM-001 → MM-045 implementation plan in the same ultra-explicit format:
+- Required fields (P1 payload):
+- Required fields:
+- Required fields (P2 payload):
+- search_results[] with: candidate_id, display_text, match_score_raw?, requires_disambiguation=true/false
+- Required fields (P3 output):
+- Required fields:
+- Required fields:
+- Required fields (P2 meta):
+- Required fields (session metadata):
+- Required fields:
+- Required fields (P3):
+- Required fields (P4):
+- Required fields (P3 timing inputs):
+- Required fields:
+- Required fields (P3):
+- Required fields:
+- Required fields:
+- Required fields:
+- Required fields (P3):
+- Required fields:
+- Required fields:
+- Required fields:
+- Required fields:
+- Required fields:
+- Owner: Policy Registry + Kidneys + DWR + CP approvals if required
+- Required fields:
+- Required fields:
+- Required fields (P9):
+- Required fields:
+- Required fields:
+- Pipes: P4 (decision outputs template constraints) → P7 (authorization includes template_id)
+- Required fields:
+- Required fields:
+- Required fields:
+- Required fields:
+- Required fields:
+- Required fields:
+- Required fields:
+- Required fields:
+- Pipes: P4 (decision HOLD requiring escalation) → P6 approval request
+- Required fields (P6 req):
+- Required fields (policy artifact):
+- Required fields:
+- Required fields:
+- Pipes: none; UI reads CP state + decision trace
+- Required fields (CP API DTO):
+- Required fields (metrics):
+- Owner: CP metrics service + UI
+- Required fields:
+- Owner: CP Policy Registry + UI binding
+- Required fields:
+- Owner: Kidneys + UI
+- Pipes: none; UI foundation requirement
+- Required artifacts:
+- If you want the same plan in execution order (a build checklist that walks MM rows in dependency order with milestones), say Proceed and I’ll output:
+- Milestone 1: MM rows required to create WorkItems
+- Milestone 2: MM rows required to produce deterministic decisions
+- Milestone 3: MM rows required for approvals + safe execution
+- Milestone 4: MM rows required for UX completeness
+- UI: Work Queue shows total + created + pending + error
+- UI: WorkItem Detail shows “Raw Observation Available” + completeness status (not content)
+- UI shows:
+- UI:
+- UI route renders without explicit:
+- UI must show:
+- Hands must require:
+- UI must expose:
+- This shows the exact execution pipeline your documents require (SOP → DT → UMP enforced):
+- UI->>CP: Start Batch (month tab)
+- UI->>AP: Approve/Deny/Override
+- Tell me which format you want, and I’ll output it accordingly in one consolidated view:
+- Interpretation: Your matrix is not a “Eyes/Hands” project. It is primarily a Kidneys + DWR + CP binding + UI visibility project.
+- MM IDs: MM-041, MM-042, MM-043, MM-044, MM-045, plus bindings required to make MM-036 visible
+- Your mismatch distribution proves the real build center is:
+- The three missing layers you listed are correct and map to these phases:
+- I can output it phase-wise, showing:
+- Below is the Architecture Alignment Map for your project, delivered linearly, sequentially, phase-wise, and explicitly tied to:
+- If you build more Hands adapters before CP+Kidneys+DWR:
+- Here’s the explicit closure effect by phase:
+- Phase 1 (CP Foundation): MM-002, MM-041–043 become implementable/closeable
+- Phase 2 (Registry Plane): MM-029, MM-030, MM-035 become implementable; consent/quiet-hours becomes enforceable
+- Phase 3 (Eyes Runtime): MM-003, MM-007–009, MM-014–015, MM-028 become closeable
+- Phase 4 (Kidneys): MM-004–006, MM-010, MM-017–018, MM-024–025, MM-034, MM-044 become FULL
+- Phase 5 (DWR): MM-011–013, MM-016, MM-019–021, MM-032, MM-043 become FULL
+- Phase 6 (Governance Binding): MM-037, MM-040 become FULL; execution becomes safe
+- Phase 7 (Orchestration): MM-026, MM-031 become FULL
+- Phase 8 (Hands refinement): MM-027, MM-033, MM-035, MM-036 become FULL
+- Phase 9 (UX governance): MM-041–045 fully satisfied in product
+- Required fields:
+- Required:
+- Required:
+- Required:
+- Required:
+- Required:
+- You do not have a buildable SaaS until Chapters 1–6 are implemented, because those chapters create:
+- Chapter 9 (Operator UX Governance): UI sits on CPAPI + CACHE (not shown as a box here; CPAPI is its boundary)
+- If you want the final build artifact that matches this blueprint, I can generate a “Component Interface Spec Pack”:
+- Canonical mappings: ledger labels, reason codes, UI display keys.
+- Determinism suite: same P2 → same P3
+- "required": [
+- "required": ["ref_type", "ref_id"],
+- "required": ["rule_ids", "policy_version"],
+- "required": [
+- "required": ["sheet_id", "tab_name"],
+- "required": ["source_row_id"],
+- "required": [
+- "required": ["session_id", "auth_state"],
+- "enum": ["OK", "OTP_REQUIRED", "FAILED"]
+- "required": ["query", "search_results"],
+- "required": ["candidate_id"],
+- "required": ["completeness", "evidence_refs"],
+- "required": ["completeness", "evidence_refs"],
+- "required": [
+- "required": ["match", "candidates_count"],
+- "required": ["completeness", "labels", "unmapped_labels"],
+- "required": ["flags", "evidence_refs"],
+- "required": ["candidates", "exclusions"],
+- "required": ["phone", "reason"],
+- "required": [
+- "requires_approval": { "type": "boolean" },
+- "$comment": "CONTACT requires allowed_channels and non-empty trace.rule_ids.",
+- "required": ["allowed_channels"],
+- "then": { "required": ["reason_code"] }
+- "required": [
+- "required": [
+- "then": { "required": ["request"] }
+- "then": { "required": ["response"] }
+- "required": [
+- "required": ["start_utc", "end_utc"],
+- "required": [
+- "required": [
+- "required": ["sheet_id", "tab_name"],
+- "required": ["op_type"],
+- "required": [
+- "required": ["template_id", "params"],
+- "required": ["workspace_id", "workitem_id", "state", "history"],
+- "required": ["timestamp_utc", "to_state"],
+- "required": ["workspace_id", "approval_request_id", "workitem_id", "created_at_utc"],
+- Hard required for every event:
+- Conditionally required:
+- Code: SR_DET_CONTACT_TRACE_REQUIRED
+- CONTACT requires:
+- Below is the fully mature Consumer Conformance Test Suite Spec for your architecture—topic-by-topic with:
+- Validate cross-field invariants (the rules you defined: trace required, identity conflicts, etc.)
+- P2-CONS-002 On P2 with auth_state=OTP_REQUIRED:
+- P3-PROD-002 Notes flags require evidence refs:
+- P4-CONS-002 (APR) requires_approval=true:
+- P4-CONS-003 (AUTH) CONTACT but requires_approval=true:
+- Audit requirement: every promotion step writes an audit entry with release_id.
+- Runs semantic validator suite:
+- Audit log required: AUD_EVENT: SCHEMA_PUBLISHED_STAGED
+- Job: e2e_invariants_suite
+- E2E-003: P7 window respects quiet hours
+- Audit log required: AUD_EVENT: RELEASE_DEPLOYED_STAGE
+- Audit log required: AUD_EVENT: RELEASE_PROMOTED_TO_PROD
+- Mature requirement: A release is not “real” unless the governance plane records it.
+- RELEASE_ID: "${BUILDKITE_BUILD_ID}" # or CI pipeline run id
+- # GATE 5: E2E INVARIANTS SUITE (hard blockers)
+- - label: "G5 :: E2E Invariants Suite"
+- - "scripts/ci/e2e_invariants_suite.sh --env STAGE --bus ${BUS_STAGE_URL} --cpapi ${CPAPI_STAGE_URL}"
+- - "scripts/ci/set_feature_flags.sh --env STAGE --hands_mode DENY_ALL"
+- - "scripts/ci/set_feature_flags.sh --env PROD --shard ${CANARY_WORKSPACE_SHARD} --auth_mode DISABLED --hands_mode DENY_ALL"
+- - "scripts/ci/set_feature_flags.sh --env PROD --shard ${CANARY_WORKSPACE_SHARD} --auth_mode SHADOW --hands_mode DENY_ALL"
+- - "scripts/ci/set_feature_flags.sh --env PROD --shard ${CANARY_WORKSPACE_SHARD} --auth_mode ENABLED --hands_mode LIVE"
+- if: "build.env('TRIGGER_ROLLBACK') == 'true'"
+- Your repo must contain these exact pipeline entrypoints (or equivalent):
+- Now: ambiguity becomes first-class and forces HOLD/approval:
+- Previously: SOP required it; architecture had no place to implement it.
+- UX: approval inbox + HOLD dashboard
+- CI invariant: “requires_approval blocks P7” in integration chain tests
+- So: yes, the gaps are addressed in the architecture design and enforcement framework we built here.
+- Add to P2/P3 a required structure:
+- Output: rule_inventory.csv (or JSON) with strict fields.
+- Gate: no rule enters DT design without declaring required inputs + evidence requirements.
+- Output artifacts:
+- Output artifacts:
+- Output artifacts (per DT):
+- Gate: Every DT must produce deterministic output for every input combination OR explicitly HOLD-by-default.
+- Output artifacts:
+- If DWR outputs CONTACT:
+- For text CONTACT authorization: require comms.last_message_ref existed upstream (enforced via trace/evidence rules)
+- For STOP/HOLD: require reason_code always (already)
+- For CONTACT: require trace always (already)
+- "ui_display_key": "STOP: Legal representation",
+- "operator_guidance_key": "Escalate to legal. Do not contact tenant.",
+- "ui_display_key": "STOP: Do Not Contact",
+- "operator_guidance_key": "Do not contact. Record directive source.",
+- "ui_display_key": "HOLD: Missing comms context",
+- "operator_guidance_key": "Must read last tenant message before sending.",
+- "audit_description": "Required comms context missing for outbound action."
+- "ui_display_key": "HOLD: Sensitive case (bereavement/illness)",
+- "operator_guidance_key": "Human review required. Use sympathy template if approved.",
+- "audit_description": "Tenant indicated death/illness; requires sympathetic handling and human gating."
+- "ui_display_key": "HOLD: Maintenance withholding claim",
+- "operator_guidance_key": "Collect work order details; route to maintenance workflow; human review.",
+- "ui_display_key": "HOLD: Dispute (amount/ledger error)",
+- "operator_guidance_key": "Validate ledger/source-of-truth; do not proceed until resolved.",
+- "audit_description": "Tenant disputes balance or indicates ledger error; requires verification."
+- These are the deterministic facts Kidneys (P3) must emit. No inference: flags require evidence.
+- "requires_evidence_ref": true,
+- "requires_evidence_ref": true,
+- "requires_evidence_ref": true,
+- "flag_id": "COMMS_LAST_MESSAGE_REQUIRED",
+- "requires_evidence_ref": true,
+- "requires_evidence_ref": true,
+- "requires_evidence_ref": true,
+- "requires_evidence_ref": true,
+- "required_variables": [
+- "required_variables": [
+- "required_variables": [
+- "requires_approval": false,
+- "requires_approval": false,
+- "requires_approval": false,
+- "requires_approval": true,
+- "requires_approval": true,
+- "requires_approval": false,
+- If you want, I will output:
+- "required": [
+- "required": ["match", "candidates_count"],
+- "required": ["completeness", "labels", "unmapped_labels"],
+- "required": ["flags", "evidence_refs"],
+- "required": ["candidates", "exclusions"],
+- "required": ["phone", "reason"],
+- "required": ["last_message_ref_present", "context_flags"],
+- "comms": { "required": ["last_message_ref", "last_message_timestamp_utc"] }
+- 2.1 New rule: DET-005 — Text outreach requires comms last-message evidence
+- then require upstream P3 (normalized) for same workitem_id contains:
+- 2.2 New rule: EXEC-004 — Authorization for TEXT requires template_ref
+- If P7 has allowed_channels including TEXT (or if execution intent is TEXT), require:
+- "p3_invalid_last_message_present_but_missing_ref.json": ["SR_P3_COMMS_REF_REQUIRED_WHEN_PRESENT_TRUE"],
+- File: contracts/DWR_DT/golden_valid/p3_sympathy_trigger_requires_hold_approval.json
+- File: contracts/DWR_DT/expected_outputs/p4_for_wi_010.json
+- Expected: HOLD + approval required + correct reason_code + trace.
+- "requires_approval": true,
+- Case A: DWR tries to output CONTACT/TEXT without comms evidence → must fail (registry REJECT)
+- "requires_approval": false,
+- Add these new suites to your pipeline:
+
+## Source: VTE - Learn 7 - Gaps Infra CTO.txt
+- (No explicit dense objective headers found, requires deep manual reading if needed.)
+
+## Source: VTE - Learn 7 - UI UX - 1.txt
+- ## System surface map (what you are actually building)
+- # E2E feature list (authoritative) — by subsystem
+- * outputs: ContactDecision + HoldReason + AllowedChannels + DocumentationPayload + ResponseCode
+- * Gmail: fetch threads/messages required for context (read-only)
+- # Deterministic SOP feature coverage (what your product must do end-to-end)
+- # Web App (UI) — what must exist for a production operator experience
+- ## UI-01 Core product areas (screens)
+- * filterable list: CONTACT / HOLD / STOP / APPROVAL_REQUIRED
+- ## UI-02 Apple-aligned design language (implementable rules)
+- You asked for “Apple calm/confident/comfortable” UI. Implement this as **deterministic design tokens + layout rules** (not vibes):
+- # Role-based build requirements (so your AI agent builds the right thing)
+- ## UX/UI Designer (Apple-like + operational clarity)
+- Decision tables / deterministic rules that compile to an evaluation graph and output:
+- ## 9) Observability designed into the product, not bolted on (Run Dashboard + Trace views)
+- ## 10) UI that behaves like Apple: clarity, hierarchy, and calm statefulness (not decoration)
+- That’s the definition of “seamless” for this system: **predictable execution, controlled risk, zero ambiguity, and immediate explainability.**
+- # PHASE 0 — Non-Negotiable System Truths (the seam you cannot break)
+- # PHASE 1 — The Spine (the single highway every part must use)
+- ### Deliverables for Phase 1
+- # PHASE 2 — Work Item Definition + Intake (turn messy reality into a deterministic unit)
+- ### Deliverables for Phase 2
+- # PHASE 3 — Identity Resolution (prevent “wrong tenant” before anything else)
+- IdentityMatch requires strict normalization:
+- ### Deliverables for Phase 3
+- # PHASE 4 — Ledger + Balance Parsing (turn raw ledger into categorized facts)
+- ## 4.3 BalanceState is a controlled output
+- Your decision engine must output:
+- ### Deliverables for Phase 4
+- # PHASE 5 — Decision Tables (the deterministic brain that makes VTE trustworthy)
+- This is the core. “Seamless” means: the same inputs always yield the same outcome, and the UI can explain it instantly.
+- ## 5.2 Mandatory outputs per WorkItem (always present)
+- ### Deliverables for Phase 5
+- # PHASE 6 — Compliance Gate (Kidneys) (block unsafe contact *before* execution)
+- ### Deliverables for Phase 6
+- # PHASE 7 — Approval Gate (human throttle that creates trust)
+- Rules decide whether approval is required:
+- For a WorkItem pending approval, UI must show:
+- ### Deliverables for Phase 7
+- # PHASE 8 — Hands Execution (exactly-once intent execution)
+- ### Deliverables for Phase 8
+- # PHASE 9 — Documentation + Evidence (close the loop deterministically)
+- If this is a requirement, enforce it structurally:
+- ### Deliverables for Phase 9
+- # PHASE 10 — Operator UX (Apple-like calm + operational clarity)
+- ## 10.1 UI must be state-first, not feature-first
+- The UI must always answer, instantly:
+- ## 10.2 Required product surfaces (minimum)
+- ### Deliverables for Phase 10
+- # PHASE 11 — Observability + Audit (the system must explain itself)
+- ### Deliverables for Phase 11
+- # PHASE 12 — Release, CI, and “cannot ship unless” gates
+- ### Deliverables for Phase 12
+- ### A “Phase Checklist” with:
+- # PHASE CHECKLIST — Fully Mature VTE
+- ## Phase 0 — Product Constitution (System Laws, Scope, and “No-Compromise” Constraints)
+- ### Outputs
+- ## Phase 1 — Platform Architecture (Control Plane vs Data Plane) + Environment Maturity
+- ### Outputs
+- ## Phase 2 — Spine (Pipes, Routing, Schema Registry, Compatibility Gates)
+- Required fields:
+- ### Outputs
+- ## Phase 3 — WorkItem Model + Evidence Model (Non-PII, Deterministic, Explainable)
+- ### Outputs
+- ## Phase 4 — Eyes: Mature Ingestion & Read Connectors (Sheets + AppFolio + Messaging)
+- ### Outputs
+- ## Phase 5 — Identity Resolution Gate (Wrong-Tenant Prevention System)
+- ### Outputs
+- ## Phase 6 — Ledger & Balance Fact System (Classification + Timing Windows + Unmapped Holds)
+- ### Outputs
+- ## Phase 7 — Deterministic Decision Engine (Rules Compiler + Version Pinning + Explainability)
+- ### Outputs
+- ## Phase 8 — Compliance Engine (Hard Gate, Configurable, Auditable)
+- ### Outputs
+- ## Phase 9 — Approval System (Governance, Review Surfaces, Permit Tokens)
+- * Approval required if:
+- ### Outputs
+- ## Phase 10 — Hands (Execution) with Idempotency, Receipts, Retries, and DLQ
+- ### Outputs
+- ## Phase 11 — Documentation, Close-the-Loop, and Operator Outcomes
+- ### Outputs
+- ## Phase 12 — Full Product UI (Apple-like Calm + Industrial-Grade Operations)
+- ### Deliverables (Required Screens)
+- ## Phase 13 — Observability, Audit, Governance (Enterprise Maturity)
+- ## Phase 14 — QA, Verification, and “Never Regress” Engineering
+- # Cross-Phase “Seamless Maturity” Requirements (Always On)
+- These are not phases; they are continuous constraints:
+- # Final Sequential Dependency Summary (One-Liner per Phase)
+- If you want the next artifact (still not JSON): I can generate a **Phase-by-Phase I/O Contract Sheet** that lists, for each phase:
+- Below is a **Phase-by-Phase I/O Contract Sheet** for a **fully mature VTE**. It is **implementation-grade**: for each phase you get:
+- ## A2) Required Envelope Fields (always present)
+- # B. Phase-by-Phase I/O Contract Sheet
+- ## Phase 2 — Spine: Intake → WorkItem Created
+- ### Payload Required Fields
+- ## Phase 5 — Identity Resolution Gate (AppFolio Match)
+- ### Payload Required Fields
+- "human_action_required": true,
+- ## Phase 6 — Ledger & Balance Facts (Classification + Unmapped Holds)
+- ### Payload Required Fields
+- ## Phase 7 — Deterministic Decision Engine Output (Explainable, Pinned)
+- ### Payload Required Fields
+- "human_action_required": false,
+- "outputs_hash": "sha256:****"
+- ## Phase 8 — Compliance Permit (Hard Gate)
+- ### Payload Required Fields
+- * `reason_code` (enum: `QUIET_HOURS`, `CONSENT_UNKNOWN`, `COMPLIANCE_UNAVAILABLE`)
+- "quiet_hours_window": { "local_tz": "America/Los_Angeles", "start": "21:00", "end": "08:00" },
+- "rules_applied": ["C_QUIET_HOURS", "C_OPT_OUT_CHECK", "C_FREQ_CAP"],
+- "outputs_hash": "sha256:****"
+- ## Phase 9 — Approvals (Permit Tokens)
+- * **Event:** `vte.approval.required.v1`
+- ### Payload Required Fields
+- #### `vte.approval.required.v1`
+- ## Phase 10 — Hands Execution Commands + Receipts (Exactly-Once Intent)
+- ### Payload Required Fields
+- ## Phase 11 — Documentation + Close Loop (Deterministic Outcomes)
+- ### Payload Required Fields
+- # C. “Mature Product” Addendum Pipes (Required for Production Excellence)
+- **Reason-specific resolution UI examples:**
+- **Why it matters:** Enterprise trust requires visibility.
+- * **Immutable STOP**: no UI affordance that implies STOP can be “fixed” without new workflow
+- # 3) Missing Information Architecture (how the UI should be organized)
+- Current common mistake: separate “Dashboards” and “Inbox” without a lifecycle model.
+- # 4) Missing Design System Assets (Apple-like requires systemization)
+- ## 6.1 Graceful degradation UI patterns
+- When connectors degrade, UI must shift into a different mode:
+- # 7) Missing Onboarding + Training UX (mature product requirement)
+- # 8) Missing Accessibility + Quality UX (Apple-grade expectation)
+- **Missing requirements:**
+- * **Saved views** (filters as named views: “Unmapped ledger labels”, “Quiet-hours holds”)
+- ## The highest-impact missing UI/UX additions (priority order)
+- If you want the next step, I can produce a **UI/UX Contract Sheet** matching your pipe contracts, i.e.:
+- * For each screen: required data (pipe IDs), state rendering rules, empty/error states, primary CTA rules, and “Apple-like” interaction constraints.
+- # GLOBAL UI CONTRACT (Applies to Every Screen)
+- ## G-02 Universal State Model (UI rendering)
+- ## Required Data Pipes
+- ## Required Panels
+- ## Required Columns
+- UI must clearly state:
+- ## Required Panels
+- ## Required Sections
+- ## Required Features
+- UI must display:
+- Required View:
+- # 13. EMPTY / LOADING / DEGRADED STATES (Required)
+- ## Text Guidelines
+- # What this UI Contract Enables
+- ## 0.1 Two kinds of UI state
+- ### B) **Ephemeral UI state** (local)
+- **Rule:** UI may *predict* transient feedback (“Submitting approval…”) but must not present predicted state as canonical until backed by an event.
+- # 1) Canonical UI States (Global)
+- ### UI behavior by AppState
+- * **DEGRADED:** persistent banner + affected stage guidance + automatic grouping shortcuts
+- * **PAUSED:** persistent banner + “in-flight will finish” indicator + no new executions will be initiated from UI
+- * **DEGRADED_AND_PAUSED:** both behaviors, with priority to safety guidance
+- # 2) Canonical WorkItem UI State Machine (Core)
+- ## 2.1 Canonical WorkItem State Enum: `WorkItemUiState`
+- * When UI receives a Hands command acknowledgement pattern (optional), the canonical state is still derived from events:
+- ## 2.3 Terminality Rules (must be enforced in UI)
+- UI must process events using a stable ordering key:
+- ## 3.3 Causation chain validation (UI-level sanity)
+- ## 3.4 Out-of-order scenarios & required UI behavior
+- ### Scenario A: Approval Required arrives before Decision Made
+- # 4) UI Transition Animations & Motion Rules (Apple-grade “calm”)
+- Then UI state transitions:
+- ## 5.1 Run Center State Machine: `RunUiState`
+- ### Required behaviors
+- ## 5.2 Work Inbox State Machine: `InboxUiState`
+- ## 5.3 Work Item Detail State Machine: `DetailUiState`
+- ### Backfill mode (required)
+- Whenever UI detects missing chain nodes (parent missing, decision trace absent, receipts absent):
+- ### Required panels state rules
+- ## 5.4 Holds Center State Machine: `HoldsUiState`
+- ### Required behavior
+- ## 5.5 Approval Console State Machine: `ApprovalUiState`
+- ### Critical validation gating (must be in UI)
+- ## 5.6 DLQ & Remediation Studio State Machine: `DlqUiState`
+- # 6) UI Actions → Pipe Commands (Command Contract)
+- ## 6.1 Commands UI may initiate
+- ## 6.2 UI action acknowledgement patterns
+- For every command, UI must track:
+- ## 7.1 Role gates in UI
+- ### Required roles
+- ## 7.2 “Policy-gated UI”
+- A mature UI should support:
+- # 9) Required UI Rendering Contracts (Determinism in presentation)
+- # 10) Backfill API Requirements (UI dependency)
+- ## 10.1 Required queries
+- # 12) “Seamless” Acceptance Criteria for UI State Machine
+- A mature product must pass these UI-level invariants:
+- ### **“UI → Domain Event Matrix” (single table)**
+- * **Derived UI State**: the canonical `WorkItemUiState` or screen state derived from events
+- ## 0.1 WorkItemUiState precedence (sorting + chip)
+- **Disable rules (must be explicit in UI):**
+- * If approval required but missing: “Approval required before execution.”
+- # 14) UI COPY TEMPLATE LIBRARY (Required “Calm & Explicit” Strings)
+- * “Required action: {human_action_summary}.” *(if required)*
+- # 15) “Must Add” Domain Pipes for a Fully Mature UI (Gaps to close)
+- ## Next (most actionable build artifact)
+- Implement these as deterministic pure functions:
+- Outputs:
+- * quiet hours: next eligible schedule view
+- # 2) UI TEST MATRIX (Seamless + Mature Product Guarantees)
+- ### S-04 CONTACT_READY requires permits
+- ### A-03 Reject requires reason
+- * after reject event: WorkItem becomes HELD with reason APPROVAL_REJECTED (or policy equivalent)
+- * if already executed: UI informs and does not re-send
+- ## 2.8 Performance & UX Calm Tests (non-functional)
+- * `WorkItemUiState`: `STOPPED | HELD | APPROVAL_REQUIRED | EXECUTING | CONTACT_READY | COMPLETE | CREATED | FACTS_READY`
+- status: "REQUIRED" | "ISSUED" | "REJECTED";
+- required_types?: string[];
+- state: WorkItemUiState;
+- decision_trace?: { inputs_hash: string; fired_rules: string[]; outputs_hash: string };
+- requiresReason?: boolean;
+- * Destructive actions require:
+- ## Next artifact (to enable building without invention)
+- If you want, I can now output a **Front-end Domain Model + Selector Spec** (TypeScript-style) that defines:
+- outputs_hash: string;
+- outputs_hash: string;
+- required_types?: string[];
+- ui_state: WorkItemUiState;
+- ui_state_rank: number;       // derived from precedence
+- requires_human_action: boolean;
+- approvals_required: boolean;
+- compliance_required: boolean;
+- ui: UiEphemeral;
+- function reduceEvent(store: VteStore, env: PipeEnvelope): ReduceResult {
+- function upsertTimelineNode(store: VteStore, env: PipeEnvelope, node: TimelineEventNode): void {
+- function ensureWorkItem(store: VteStore, env: PipeEnvelope): WorkItemRecord {
+- ui_state: "CREATED",
+- ui_state_rank: 999,
+- requires_human_action: false,
+- approvals_required: false,
+- compliance_required: false,
+- function reduceIntakeWorkItemCreated(store: VteStore, env: PipeEnvelope<any>): ReduceResult {
+- function reduceIdentityEvent(store: VteStore, env: PipeEnvelope<any>): ReduceResult {
+- function reduceLedgerEvent(store: VteStore, env: PipeEnvelope<any>): ReduceResult {
+- function reduceDecisionEvent(store: VteStore, env: PipeEnvelope<any>): ReduceResult {
+- function reduceComplianceEvent(store: VteStore, env: PipeEnvelope<any>): ReduceResult {
+- ### F) Approvals: required / approved / rejected / permit issued
+- function reduceApprovalEvent(store: VteStore, env: PipeEnvelope<any>): ReduceResult {
+- status: "REQUIRED",
+- required_types: p.approval_types ?? p.required_types ?? [],
+- required_types: wi.approval?.required_types,
+- summary: env.pipe_id.includes("required") ? "Approval required." :
+- function reduceHandsExecutionEvent(store: VteStore, env: PipeEnvelope<any>): ReduceResult {
+- function reduceWorkItemCompleted(store: VteStore, env: PipeEnvelope<any>): ReduceResult {
+- function reduceOpsEvent(store: VteStore, env: PipeEnvelope<any>): ReduceResult {
+- const STATE_RANK: Record<WorkItemUiState, number> = {
+- APPROVAL_REQUIRED: 2,
+- ## 3.2 Core derived recompute function (single source of truth)
+- function recomputeWorkItemDerived(store: VteStore, workItemId: WorkItemId): void {
+- let state: WorkItemUiState = "CREATED";
+- function isCompliancePermitValid(c?: ComplianceSummary): boolean {
+- function isApprovalPermitValid(a?: ApprovalSummary): boolean {
+- function hasSuccessfulReceipt(receipts: ReceiptSummary[]): boolean {
+- function findLatestEvent(list: TimelineEventNode[], pred: (n: TimelineEventNode) => boolean): TimelineEventNode | undefined {
+- function maxTs(a: string, b: string): string {
+- function computeBackfillSideEffects(store: VteStore, workItemId: WorkItemId): SideEffect[] {
+- function selectWorkItemsForInbox(store: VteStore, view: InboxView): WorkItemRecord[] {
+- function selectHoldsGroupedByReason(store: VteStore): Record<string, WorkItemRecord[]> {
+- function selectApprovalQueue(store: VteStore): WorkItemRecord[] {
+- function selectWorkItemDetail(store: VteStore, id: WorkItemId) {
+- function selectDlqGroups(store: VteStore): Record<string, DlqItem[]> {
+- function recomputeRunCounts(store: VteStore): void {
+- actionable: all.filter(w => w.ui_state === "CONTACT_READY").length,
+- holds: all.filter(w => w.ui_state === "HELD").length,
+- approvals: all.filter(w => w.ui_state === "APPROVAL_REQUIRED").length,
+- stops: all.filter(w => w.ui_state === "STOPPED").length,
+- executing: all.filter(w => w.ui_state === "EXECUTING").length,
+- complete: all.filter(w => w.ui_state === "COMPLETE").length,
+- function deriveAppState(run: RunState): AppState {
+- function assertSafeToRender(text: string): string {
+- # 8) Contractual “Do Not Implement” Rules (prevents UI drift)
+- > Naming convention: `H::<pipe_id>` = handler function name.
+- * **UI surfaces:** Run Center header, metrics, banners
+- * **UI surfaces:** Global banner, Run Center “Drift” panel, Holds deep link
+- * **UI surfaces:** Inbox, Work detail
+- * **Handler:** *UI does not treat commands as canonical state changes*
+- * **UI rule:** show ephemeral toast “Re-ingest requested. Awaiting confirmation.”
+- * **UI:** ephemeral state `DETAIL_SYNCING`
+- * **UI surfaces:** Work detail, Why/Evidence
+- * **UI surfaces:** Holds Center (identity group), Work detail
+- * **UI surfaces:** STOP Center, Work detail
+- * **UI:** “Re-extract requested. Awaiting confirmation.”
+- * **UI surfaces:** Why panel (inputs readiness), Work detail
+- * **UI surfaces:** Holds Center → mapping editor path, Work detail
+- * **UI surfaces:** Holds Center, Work detail
+- * **UI:** ephemeral “Evaluating…” only (never changes state)
+- * If decision CONTACT: state does **not** become CONTACT_READY until permits are satisfied (compliance + approval if required)
+- * **UI surfaces:** Why panel, Inbox columns, Approval console gating
+- * **UI surfaces:** Holds Center, Work detail
+- * **UI surfaces:** STOP Center, Work detail
+- * **UI:** ephemeral “Evaluating compliance…”
+- * **UI surfaces:** Permit cards, Execution panel gating
+- * **UI surfaces:** Holds Center (quiet hours/consent), Work detail
+- * **UI surfaces:** STOP Center, Work detail
+- ### `vte.approval.required.v1`
+- * **Handler:** `H::approval_required`
+- * **Timeline summary:** “Approval required.”
+- * **Derived state:** APPROVAL_REQUIRED (unless HELD/STOPPED/COMPLETE precedence)
+- * **UI surfaces:** Approval queue, Inbox, Work detail
+- * **UI:** ephemeral “Submitting approval…”
+- * **UI surfaces:** Approval detail (syncing)
+- * **UI surfaces:** Holds Center, Work detail
+- * **UI surfaces:** Execution panel gating
+- * **UI:** ephemeral SUBMITTING, not state change
+- * **UI surfaces:** Receipts panel, Execution panel (disable execute)
+- * **UI surfaces:** Holds Center (execution failures), DLQ if created
+- * **UI surfaces:** STOP Center, DLQ remediation link (optional)
+- * **UI surfaces:** Documentation panel
+- * **UI surfaces:** Inbox (completed), Work detail
+- * **UI:** global banner + Integrations console
+- * **UI:** Notifications + DLQ Studio
+- * **UI:** Governance + Run Center diff panel
+- # 3) UI Surfaces → Pipe Dependencies (Cross-check)
+- These are UI-side validations that prevent corrupted displays:
+- # 5) Backfill Triggers Registry (When UI must backfill)
+- Backfill is required when:
+- # 6) What remains (to complete build with zero ambiguity)
+- action_id: string;        // UI action identifier
+- required_role?: string[]; // RBAC gates
+- required_role?: string[];
+- ui_copy: {
+- chip: string;               // e.g. "HOLD • Quiet Hours"
+- * The UI must **never invent copy** for a reason code. If code is unknown:
+- * explanation: “A new reason code was received. Update the registry to display guidance.”
+- * **Explanation:** “One or more required fields could not be parsed safely.”
+- * **Metrics bucket:** `identity_ambiguity`
+- * **Next step:** Wait for connector recovery or pause the run to prevent queue buildup.
+- * **Next step:** No action required. The item will re-enter evaluation based on policy schedule.
+- * **Next step:** No action required unless you intend to change policy.
+- * **Explanation:** “Required facts were not available to make a deterministic decision.”
+- ### `COMPLIANCE_QUIET_HOURS`
+- * **Label:** “Quiet Hours”
+- * **Explanation:** “The current time falls within quiet hours for the contact’s local timezone.”
+- * **Chip:** `HOLD • Quiet Hours`
+- ### `APPROVAL_REQUIRED`
+- * **Category:** APPROVAL | **State:** APPROVAL_REQUIRED | **Severity:** BLOCKING
+- * **Label:** “Approval Required”
+- * **Explanation:** “This action requires human approval before execution.”
+- * **Chip:** `APPROVAL • Required`
+- * **Category:** APPROVAL | **State:** APPROVAL_REQUIRED | **Severity:** BLOCKING
+- * **Explanation:** “The approval request was rejected and requires revision.”
+- * **Next step:** No action required. Review receipt details if needed.
+- * **Explanation:** “Execution is blocked because required permits are not present or are invalid.”
+- * **Label:** “Authentication Required”
+- * **Chip:** `HOLD • Authentication Required`
+- * APPROVAL: `APPROVAL • Required`
+- * Disabled: `Unavailable — Requires Admin role.`
+- # 5) UI Action IDs (must match registry CTAs)
+- # 6) Implementation Requirements (so this registry actually governs UX)
+- ## 6.1 Single lookup function
+- UI must implement:
+- function getReasonRecord(reason_code: string): ReasonRecord
+- To make the product fully buildable end-to-end with zero invention, the remaining packs are:
+- This governs **what the UI can show and allow**, by:
+- allow_manual_execute: boolean;            // UI shows Execute button at all
+- require_approval_for_execution: boolean;  // approval required for any execution
+- require_compliance_for_execution: boolean;// compliance permit required for any execution
+- idempotency_required: boolean;            // block execution if idempotency context missing
+- require_reason_on_reject: boolean;
+- require_version_pin_match: boolean;       // force re-approval on version changes
+- require_compliance_officer_for_dnc: boolean;
+- require_reason_on_exception: boolean;
+- require_permit_recheck_before_replay: boolean;
+- publish_requires_approval: boolean;
+- redaction_profile: "STRICT" | "STANDARD"; // UI behavior contract
+- # 3) Feature Gate Engine (UI Implementation Contract)
+- Every time UI evaluates an action, it must produce:
+- * **Role block:** “Unavailable — requires {Role} role.”
+- * **Approval block:** “Unavailable — approval permit required.”
+- # 4) UI Feature Matrix (Screen → Feature Flags)
+- ## 4.1 Global Shell Features
+- ### Feature: Command Palette
+- ### Feature: Diagnostics Drawer
+- ### Feature: Audit Export Button
+- ## 4.2 Run Center Features
+- ### Feature: Pause Run
+- ### Feature: Throttle Connector
+- * **Degraded requirement:** always visible when degraded (if permitted)
+- ## 4.3 Work Inbox Features
+- ### Feature: Bulk Actions (generic)
+- ### Feature: Bulk Approve
+- ## 4.4 HOLD Center Features (Resolution workflows)
+- ### Feature: Manual Requeue
+- ### Feature: Manual Override HOLD (generally discouraged)
+- * **UI requirement:** always uses ModalConfirm with reason textarea
+- ### Feature: Publish Mapping (Ledger)
+- ## 4.5 Approval Console Features
+- ### Feature: Approvals enabled
+- ### Feature: Approve
+- ### Feature: Reject
+- ## 4.6 STOP Center Features
+- ### Feature: Exception Request
+- ### STOP UI invariant
+- ## 4.7 Work Item Detail Features (Execution gating)
+- ### Feature: Execute Button visible
+- ### Feature: Inline Message Preview
+- ## 4.8 DLQ & Remediation Features
+- ### Feature: DLQ route visible
+- ### Feature: Safe Replay
+- ## 4.9 Governance Features (Templates/Rules/Mappings/Policies)
+- ### Feature: Templates Studio
+- * **Roles:** Admin (edit), Compliance (approve if required), Auditor (read only)
+- ### Feature: Rules Studio
+- ### Feature: Mappings Studio
+- ### Feature: Policy Studio
+- If `governance.publish_requires_approval`:
+- * **UI:** ModalConfirm requires reason; shows diff of rollback
+- * if publish requires approval: user can only “submit”, not publish
+- * `ROLE_REQUIRED`: “Unavailable — requires {role} role.”
+- * `APPROVAL_PERMIT_REQUIRED`: “Unavailable — approval permit required.”
+- * `GOVERNANCE_APPROVAL_REQUIRED`: “Unavailable — publish requires approval.”
+- To avoid ambiguity and future rework, add:
+- # 8) Next pack (required for template preview + zero PII)
+- * Required: none
+- * Preview: `"Quiet Hours"`
+- * Preview: `"COMPLIANCE_QUIET_HOURS"`
+- # 5) Helper Function Whitelist (Template Engine)
+- ## 9.3 Preview output contract
+- # 10) Template Quality Gates (Mature Product Requirements)
+- # 11) Required Template Artifacts (Fully Mature)
+- The final missing piece to make everything fully buildable is:
+- This is the final dependency that makes the UI **fully deterministic**:
+- * If strict tenant: additional removal in the API layer, not only UI
+- "organ_target": "ui",
+- ## 3.1 Get Workspace Bootstrap (UI entry)
+- "sse_url": "/v1/ui/events/stream",
+- ### UI requirements
+- "ui_state": "HELD",
+- "ui_state_rank": 1,
+- "approval": { "status": "REQUIRED", "required_types": ["SUPERVISOR"] }
+- "requires_human_action": true,
+- "approvals_required": true,
+- ### UI behavior
+- { "work_item_id": "wi_123", "ui_state": "APPROVAL_REQUIRED", "reason_code": "APPROVAL_REQUIRED", "updated_at": "..." }
+- * if publish requires approval: emits `submitted_for_review`
+- # 8) Action Command APIs (UI emits commands; events confirm)
+- "code": "AUTH_REQUIRED|FORBIDDEN|NOT_FOUND|VALIDATION_FAILED|RATE_LIMITED|CONFLICT|INTERNAL",
+- UI mapping:
+- # 11) Phase Alignment (Build Order for Implementation)
+- ## Phase 1 — Foundations
+- ## Phase 2 — Operational UX
+- ## Phase 3 — Governance
+- ## Phase 4 — Hardening
+- If you want the last mile for your AI agent, the next deliverable is a **single consolidated “UI Build Spec”** that merges:
+- It is structured in **phases**, with **hard acceptance gates** per phase, and includes:
+- # PHASE 0 — Non-Negotiable Product Constraints (Read Once, Enforce Everywhere)
+- * UI must never infer:
+- * UI may only display canonical state based on:
+- * UI renders only:
+- # PHASE 1 — Foundations (Store + Snapshot + Stream + Backfill)
+- ## 1.2 APIs required in Phase 1
+- * Update `ui.stream.status`:
+- ## 1.5 Acceptance gates (Phase 1)
+- # PHASE 2 — Canonical UI Surfaces (Inbox + Work Detail + Holds + Approvals + Stops)
+- ## 2.3 Screen requirements (hard)
+- ## 2.4 Acceptance gates (Phase 2)
+- # PHASE 3 — Policy / RBAC / Feature Flags (Gating Engine)
+- UI must treat policy flags as authoritative:
+- ## 3.3 Acceptance gates (Phase 3)
+- # PHASE 4 — Template Studio + Preview System (No PII, Deterministic)
+- * UI shows:
+- ## 4.3 Strict quality gate (publish-blocking in UI)
+- ## 4.4 Acceptance gates (Phase 4)
+- # PHASE 5 — Governance: Rules / Mappings / Policies / Diffs
+- ## 5.1 Required endpoints
+- ## 5.2 UI requirements
+- ## 5.3 Acceptance gates (Phase 5)
+- # PHASE 6 — Ops + DLQ Studio (Recovery + Replay + Diagnostics)
+- ## 6.1 DLQ requirements
+- ## 6.3 Acceptance gates (Phase 6)
+- # PHASE 7 — Audit Explorer + Export (Mature Compliance)
+- ## 7.3 Acceptance gates (Phase 7)
+- # PHASE 8 — Hardening (Chaos + Security + Perf)
+- ## 8.1 Chaos event ordering suite
+- ## 8.2 Security suite
+- ## 8.3 Performance suite
+- If you want the **final step before JSON**, I can output a **single machine-friendly “Spec Manifest”** that enumerates:
+- * `spec_name`: `VTE_UI_SPEC_MANIFEST`
+- * `spec_version`: `ui_spec_2026_02_16`
+- * `build_target`: `Fully Mature Product (non-MVP)`
+- # 7) API Contract Manifest (Endpoints Required)
+- ## 7.1 UI bootstrap + state
+- # 8) Error Taxonomy Manifest (UI Mapping)
+- ## 9.2 Chaos ordering suite
+- # 10) File-Level Implementation Index (How your agent should output code)
+- ## If you want the immediate next output
+- "spec_name": "VTE_UI_SPEC",
+- "spec_version": "ui_spec_2026_02_16",
+- "build_target": "Fully Mature Product (non-MVP)",
+- "rule": "Commands only yield ephemeral UI feedback; canonical state changes only via events."
+- "WorkItemUiState": [
+- "ApprovalStatus": ["REQUIRED", "ISSUED", "REJECTED"],
+- "outputs_hash": "string"
+- "outputs_hash": "string"
+- "required_types": "string[]?",
+- "ui_state": "WorkItemUiState",
+- "ui_state_rank": "number",
+- "requires_human_action": "boolean",
+- "approvals_required": "boolean",
+- "compliance_required": "boolean",
+- "UiEphemeral": {
+- "ui": "UiEphemeral"
+- "APPROVAL_REQUIRED": 2,
+- "ACTIONABLE": "ui_state == CONTACT_READY",
+- "HOLDS": "ui_state == HELD",
+- "APPROVALS": "ui_state == APPROVAL_REQUIRED",
+- "STOPS": "ui_state == STOPPED",
+- "COMPLETED": "ui_state == COMPLETE",
+- "sort": ["ui_state_rank ASC", "updated_at DESC"]
+- "filters": "ui_state == HELD",
+- { "name": "selectApprovalQueue", "filters": "ui_state == APPROVAL_REQUIRED", "sort": "updated_at DESC" },
+- { "name": "selectStopsList", "filters": "ui_state == STOPPED", "sort": "updated_at DESC" },
+- "updates": ["reason_code", "flags.requires_human_action (optional)", "evidence append"],
+- "updates": ["reason_code=LEDGER_UNMAPPED_LABEL", "flags.requires_human_action=true", "evidence append"],
+- "updates": ["workitem.decision", "message_template_id (cache)", "flags.approvals_required (hint)", "evidence append"],
+- "updates": ["reason_code", "next_eligible_at (optional)", "flags.requires_human_action (optional)", "evidence append"],
+- "pipe_id": "vte.approval.required.v1",
+- "handler": "H::approval_required",
+- "updates": ["workitem.approval.status=REQUIRED", "flags.approvals_required=true", "evidence append"],
+- "timeline_summary": "Approval required.",
+- "derived_impact": ["APPROVAL_REQUIRED (unless STOP/COMPLETE/HOLD)"],
+- "updates": ["workitem.approval.status=REJECTED", "reason_code=APPROVAL_REJECTED", "flags.requires_human_action=true", "evidence append"],
+- "explanation": "A new reason code was received. Update the registry to display guidance.",
+- "primary_cta": { "label": "Review Intake Schema", "action_id": "review_intake_schema", "required_role": ["ADMIN"] },
+- "secondary_cta": [{ "label": "Re-ingest Batch", "action_id": "reingest_batch", "required_role": ["SUPERVISOR", "ADMIN"] }],
+- "ui_copy": { "chip": "HOLD • Input Format Changed" },
+- "primary_cta": { "label": "Open Mapping Editor", "action_id": "open_mapping_editor", "required_role": ["ADMIN"] },
+- "secondary_cta": [{ "label": "Publish Mapping", "action_id": "publish_mapping", "required_role": ["ADMIN"] }],
+- "ui_copy": { "chip": "HOLD • Unmapped Ledger" },
+- "primary_cta": { "label": "Refresh Ledger Facts", "action_id": "refresh_ledger_facts", "required_role": ["SUPERVISOR", "ADMIN"] },
+- "secondary_cta": [{ "label": "View Connector Status", "action_id": "view_connector_status", "required_role": ["OPERATOR", "SUPERVISOR", "ADMIN"] }],
+- "ui_copy": { "chip": "HOLD • Balance Unknown" },
+- "code": "COMPLIANCE_QUIET_HOURS",
+- "label": "Quiet Hours",
+- "explanation": "The current time falls within quiet hours for the contact’s local timezone.",
+- "ui_copy": { "chip": "HOLD • Quiet Hours" },
+- "primary_cta": { "label": "Create Exception Request", "action_id": "create_exception_request", "required_role": ["COMPLIANCE", "ADMIN"] }
+- "ui_copy": { "chip": "STOP • Do Not Contact" },
+- "code": "APPROVAL_REQUIRED",
+- "state": "APPROVAL_REQUIRED",
+- "label": "Approval Required",
+- "explanation": "This action requires human approval before execution.",
+- "primary_cta": { "label": "Open Approval", "action_id": "open_approval", "required_role": ["SUPERVISOR", "ADMIN", "COMPLIANCE"] }
+- "ui_copy": { "chip": "APPROVAL • Required" },
+- "state": "APPROVAL_REQUIRED",
+- "primary_cta": { "label": "View Diff", "action_id": "view_diff", "required_role": ["SUPERVISOR", "ADMIN"] },
+- "secondary_cta": [{ "label": "Re-request Approval", "action_id": "rerequest_approval", "required_role": ["SUPERVISOR", "ADMIN"] }],
+- "ui_copy": { "chip": "APPROVAL • Version Changed" },
+- "primary_cta": { "label": "View DLQ", "action_id": "view_dlq", "required_role": ["SUPERVISOR", "ADMIN"] },
+- "secondary_cta": [{ "label": "Safe Replay", "action_id": "safe_replay", "required_role": ["ADMIN"] }],
+- "ui_copy": { "chip": "HOLD • Execution Failed" },
+- "primary_cta": { "label": "Escalate", "action_id": "escalate_engineering", "required_role": ["SUPERVISOR", "ADMIN"] },
+- "secondary_cta": [{ "label": "Create Exception Request", "action_id": "create_exception_request", "required_role": ["ADMIN"] }]
+- "ui_copy": { "chip": "STOP • Execution Failed" },
+- "require_approval_for_execution": "boolean",
+- "require_compliance_for_execution": "boolean",
+- "idempotency_required": "boolean",
+- "require_reason_on_reject": "boolean",
+- "require_version_pin_match": "boolean",
+- "require_two_person_rule": "boolean? (recommended)"
+- "require_compliance_officer_for_dnc": "boolean",
+- "require_reason_on_exception": "boolean",
+- "require_attachment_evidence": "boolean? (recommended)"
+- "require_permit_recheck_before_replay": "boolean"
+- "publish_requires_approval": "boolean",
+- "ROLE_REQUIRED": "Unavailable — requires {role} role.",
+- "APPROVAL_PERMIT_REQUIRED": "Unavailable — approval permit required.",
+- "GOVERNANCE_APPROVAL_REQUIRED": "Unavailable — publish requires approval.",
+- "fail_reasons": ["ROLE_REQUIRED", "COMPLIANCE_PERMIT_INVALID", "APPROVAL_VERSION_MISMATCH"]
+- "fail_reasons": ["ROLE_REQUIRED"]
+- "fail_reasons": ["ROLE_REQUIRED", "GOVERNANCE_APPROVAL_REQUIRED", "MAPPING_VALIDATION_FAILED"]
+- "fail_reasons": ["ROLE_REQUIRED", "EXECUTION_ALREADY_CONFIRMED", "COMPLIANCE_PERMIT_INVALID", "APPROVAL_PERMIT_REQUIRED"]
+- "fail_reasons": ["ROLE_REQUIRED", "RUN_ALREADY_PAUSED"]
+- { "name": "compliance.reason_label", "type": "string_safe", "preview": "Quiet Hours" },
+- { "name": "compliance.reason_code", "type": "enum", "preview": "COMPLIANCE_QUIET_HOURS" },
+- "url_allowlist_required": true,
+- "required_variables_typical": ["ledger.balance_due_formatted"],
+- "url_allowlist_required": true,
+- "required_variables_typical": ["property.display_name", "ledger.balance_due_formatted"]
+- "sections_required": ["Greeting", "Verification (non-PII)", "Reason", "Options", "Close"]
+- "preview_api_output_contract": {
+- "headers_required": ["Authorization: Bearer <token>", "X-Workspace-Id: <workspace_id>", "X-Redaction-Profile: STRICT|STANDARD"],
+- "path": "/v1/ui/bootstrap",
+- "stream": { "sse_url": "/v1/ui/events/stream", "cursor": { "cursor_ts": "RFC3339", "cursor_event_id": "evt_***" } }
+- "ui_state": "HELD",
+- "ui_state_rank": 1,
+- "approval": { "status": "REQUIRED", "required_types": ["SUPERVISOR"] }
+- "requires_human_action": true,
+- "approvals_required": true,
+- "path": "/v1/ui/events/stream",
+- "organ_target": "ui",
+- "request_skeleton": { "work_item_id": "wi_***", "reject_reason": "Requires revision." },
+- "code": "AUTH_REQUIRED|FORBIDDEN|NOT_FOUND|VALIDATION_FAILED|RATE_LIMITED|CONFLICT|INTERNAL",
+- "ui_mapping": {
+- "AUTH_REQUIRED": "Route to login",
+- "FORBIDDEN": "Show ROLE_REQUIRED fixed message",
+- "apis": ["GET /v1/ui/bootstrap", "GET /v1/ui/events/stream"],
+- "apis": ["GET /v1/workitems", "GET /v1/ui/events/stream"],
+- "apis": ["GET /v1/workitems?view=HOLDS", "GET /v1/ui/events/stream", "POST /v1/commands/publish_mapping"],
+- "apis": ["GET /v1/workitems?view=STOPS", "POST /v1/commands/create_exception_request", "GET /v1/ui/events/stream"],
+- "apis": ["GET /v1/ops/dlq", "POST /v1/commands/dlq/safe_replay", "GET /v1/ui/events/stream"],
+- "tests": ["Safe replay blocked if already executed", "Permit recheck enforced when required"]
+- "Approval flow: required -> approved -> permit_issued -> CONTACT_READY -> execute -> receipt -> complete",
+- Example requirement:
+- Hard requirements:
+- # 8) Content System: Tone, Language, and Microcopy Guide
+- To stay Apple-like, you need a microcopy guide that governs:
+- # 10) Final “Missing” List as Concrete Build Artifacts
+- If you want this to be fully buildable without taste decisions, you still need to output these artifacts explicitly:
+- Primary: -apple-system, SF Pro Text, Inter, system-ui
+- Monospace: SF Mono, ui-monospace, Menlo, monospace
+- # 6) Diagnostics Drawer UI Contract
+- # 10) Build Artifacts Your Agent Must Generate Next
+- "primary": "-apple-system, SF Pro Text, Inter, system-ui",
+- "mono": "SF Mono, ui-monospace, Menlo, monospace"
+- "APPROVAL_REQUIRED": "state.approval",
+- { "surface": "holds", "title": "No holds require attention.", "explanation": "Items will appear here when action is needed.", "cta": null },
+- { "action_id": "execute_contact", "disabled_if": "policy_or_connector_policy_requires" },
+- { "action_id": "approve_workitem", "disabled_if": "policy_or_connector_policy_requires" }
+- { "action_id": "approve_workitem", "disabled_if": "policy_or_ops_policy_requires" }
+- "governance_and_audit_ui_registries": {
+- "version": "gov_audit_ui_2026_02_16",
+- "what_a_mature_ui_still_needs": {
+- "requirements": [
+- "Activity feed (audit-light) in UI: last actions taken (safe only)",
+- "ui_requirements": [
+- "ui_enforcement": [
+- "backfill_ui": [
+- "unknown_event_ui": [
+- "Show message: 'Update required to display details'",
+- "goal": "Eliminate remaining ambiguity for a fully mature, Apple-like, deterministic UI build.",
+- "no_action_required": "No action required.",
+- "ROLE_REQUIRED": "Unavailable — requires {role} role.",
+- "APPROVAL_PERMIT_REQUIRED": "Unavailable — approval permit required.",
+- "GOVERNANCE_APPROVAL_REQUIRED": "Unavailable — publish requires approval.",
+- "APPROVAL_REQUIRED": "Approval required before execution.",
+- "holds": "No holds require attention.",
+- "global_requirements": [
+- "lint_and_build_guards": {
+- "rule": "Disallow hex/rgb/hsl literals in components; require semantic tokens.",
+- "rule": "Disallow raw px spacing values except typography sizes inside tokens; require spacing tokens.",
+- "rule": "Once STOPPED or COMPLETE, prevent any reducer from setting non-terminal ui_state.",
+- "pass_condition": "Derived ui_state and flags identical."
+- "description": "Omit parent events; verify backfill restores continuity and clears gaps flag.",
+- "description": "approval.required -> approval.permit_issued -> compliance.permit_issued -> CONTACT_READY -> execute -> receipt -> completed",
+- "pass_condition": "UI shows correct gates at each step and never claims success before receipts."
+- "bundle_name": "VTE_MASTER_UI_SPEC_BUNDLE",
+- "build_target": "Fully Mature Product (non-MVP)",
+- "id": "VTE_UI_SPEC",
+- "ref": "ui_spec_2026_02_16",
+- "id": "GOVERNANCE_AND_AUDIT_UI_REGISTRIES",
+- "ref": "gov_audit_ui_2026_02_16",
+- "dom_pii_scan_required": true,
+- "phase": "P1_FOUNDATIONS",
+- "phase": "P2_CORE_SURFACES",
+- "phase": "P3_GOV_OPS_AUDIT",
+- "phase": "P4_HARDENING",
+- "purpose": "The remaining systems that must exist for a mature, Apple-like, seamless product (beyond UI layout/spec).",
+- "requirements": [
+- "requirements": [
+- "ui_event": {
+- "requirements": [
+- "4_permission_and_role_model_ui": {
+- "requirements": [
+- "ui_elements": [
+- "requirements": [
+- "function": "isAllowedUrl(url, workspace_policy) -> boolean",
+- "requirements": [
+- "requirements": [
+- "ui_states": ["LIVE", "CATCHING_UP", "STALE", "RECONNECTING"]
+- "8_data_migrations_and_versioning_ui": {
+- "requirements": [
+- "requirements": [
+- "requirements": [
+- "final_build_artifacts_to_generate": [
+- "requirements": [
+- "type": "UiTelemetryEvent",
+- "required_fields": [
+- "transport": "POST /v1/ui/telemetry",
+- "event_name": "ui.route.viewed",
+- "event_name": "ui.command.denied",
+- "error_code": "ROLE_REQUIRED",
+- "meta": { "gate_reason_code": "ROLE_REQUIRED" }
+- "requirements": [
+- "type": "UiNotification",
+- "required_fields": [
+- "required_fields": [
+- "requirements": [
+- "function": "isAllowedUrl(url, policy) -> {allowed:boolean, reason_code?:string}",
+- "requirements": [
+- "function": "assertRedactionSafe(text, context) -> void | throws",
+- "function": "scanDomForPii(document) -> {matches: Array<{pattern_class, snippet, node_path}>}",
+- "requirements": [
+- "function": "enqueueEvent(eventEnvelope) -> void",
+- "If backlog remains high: stay in CATCHING_UP and emit telemetry ui.stream.catchup.entered (once).",
+- "When backlog normal: exit CATCHING_UP and emit ui.stream.catchup.exited."
+- "event_name": "ui.stream.catchup.entered",
+- "requirements": [
+- "pass_condition": "Under burst, UI enters catch-up mode and remains responsive.",
+- "final_ui_surface_completion": {
+- "version": "ui_surface_completion_2026_02_16",
+- "purpose": "Enumerate remaining UI surfaces and UX flows that a mature product must include (beyond core routes).",
+- "why_needed": "Mature operations often require exporting a safe support bundle.",
+
+## Source: VTE - Learn 7 - UI UX - 2 and Security 1.txt
+- ## Canonical output format for every gap (used below)
+- * **Phase:** PHASE-x
+- * **Implementation requirements (ultra explicit):**
+- # DELIVERY PHASE A — PHASE-0/1 (Launch-blocker foundations)
+- * **Phase:** PHASE-0/1
+- * **Implementation requirements (ultra explicit):**
+- * **Dependencies:** Pipe envelope contract, decision engine outputs, idempotency keys.
+- * **Phase:** PHASE-0/1
+- * **Implementation requirements:**
+- * **Acceptance criteria:** Given a fixed input fixture, DecisionOutput is bit-for-bit stable across runs.
+- * **Phase:** PHASE-0/1
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/1
+- * **Implementation requirements:**
+- 1. CP owns: workspaces, RBAC/ABAC, policies, approvals, workflow templates, prompt registry, feature flags.
+- * **Phase:** PHASE-0/1
+- * **Where:** CP (workflow governance) + Admin UI + Brain runtime reason taxonomy.
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/1
+- * **Where:** PolicyEngine + Approval Console UI + Brain gating.
+- * **Implementation requirements:**
+- 1. Approval objects: approval_id, required_by_policy, approver_role, status, decision timestamp, reason.
+- * **Fail-closed:** Missing approval metadata ⇒ HOLD `APPROVAL_REQUIRED`.
+- * **Phase:** PHASE-0/1
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/1
+- * **Where:** Policy schema + decision outputs + controlled exception registry (non-PII references only).
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/1
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/1
+- * **What is missing:** Structured states for human validation (e.g., identity ambiguity, ledger ambiguity, legal indicators).
+- * **Fail-closed:** If human step required and console unavailable ⇒ HOLD.
+- * **Phase:** PHASE-0/1
+- * **Implementation requirements:** Strict validators for address/unit/name/amount/date columns; normalization rules become code, not prose.
+- * **Phase:** PHASE-0/1
+- * **Where:** Policy engine + approval rules + UI.
+- * **Implementation requirements:** Define an “Automation Eligibility Matrix” keyed by decision reason codes, channel, jurisdiction, and confidence.
+- * **Phase:** PHASE-0/1
+- * **What is missing:** Rate limits, circuit breakers, quotas, and kill-switches per workspace/integration.
+- * **Where:** Lungs (stream controls) + CP feature flags + Hands guardrails.
+- * **Phase:** PHASE-0/1
+- * **Where:** Foundation observability SDK + spine telemetry + dashboards/alerts.
+- * **Phase:** PHASE-0/1
+- * **Implementation requirements:**
+- * **Acceptance criteria:** Rotation does not require code changes; access is least-privilege; all reads audited.
+- * **Phase:** PHASE-0/1
+- * **Phase:** PHASE-0/1
+- * **What is missing:** Service-to-service identity: mTLS or equivalent, least-privilege authZ between organs.
+- * **Phase:** PHASE-0/1
+- ### GAP-0047 — Jurisdictional compliance engine missing (quiet hours + channel legality not enforceable)
+- * **Phase:** PHASE-0/1
+- * **What is missing:** Rule engine that applies jurisdiction/timezone/quiet-hours/contact-frequency and yields deterministic STOP/HOLD reasons.
+- * **Where:** Kidneys compliance module + policy configuration UI.
+- * **Phase:** PHASE-0/1
+- * **Acceptance criteria:** A test suite attempts cross-tenant injection and is blocked at ingestion.
+- * **Phase:** PHASE-0/1
+- ## Phase A exit criteria (you do not proceed without these)
+- To be “Phase-A complete”, the platform must prove:
+- Type exactly: **PROCEED — DELIVERY PHASE B (PHASE-1/2 + PHASE-2)**
+- # DELIVERY PHASE B — PHASE-1/2 → PHASE-2
+- * **Phase:** PHASE-1/2
+- * **Implementation requirements:**
+- * **Dependencies:** Phase-A decision tables, CP/DP separation.
+- * **Phase:** PHASE-1/2
+- * **Implementation requirements:**
+- * **Phase:** PHASE-1/2
+- * **What is missing:** Operators cannot see *why* approval is required or what will execute after approval.
+- * **Implementation requirements:**
+- * **Dependencies:** DecisionOutput schema.
+- * **Fail-closed:** Approval UI cannot fetch decision proof ⇒ disable approve button.
+- * **Phase:** PHASE-2
+- * **Implementation requirements:**
+- * **Phase:** PHASE-2
+- * **Implementation requirements:**
+- * **Acceptance criteria:** Unsafe outputs never reach Hands execution path.
+- * **Phase:** PHASE-1/2
+- * **Implementation requirements:**
+- * **Phase:** PHASE-1/2
+- * **Implementation requirements:**
+- * **Phase:** PHASE-2
+- * **Implementation requirements:**
+- * **Phase:** PHASE-2
+- * **Implementation requirements:**
+- * **Phase:** PHASE-2
+- * **Implementation requirements:**
+- * **Phase:** PHASE-2
+- * **Where:** Admin UI → Work Item Detail.
+- * **Implementation requirements:**
+- * **Phase:** PHASE-2
+- * **Where:** HOLD Queue UI + Approval UX.
+- * **Implementation requirements:**
+- * **Acceptance criteria:** Operator cannot move item to EXECUTION without completing required tasks.
+- * **Phase:** PHASE-2
+- * **Implementation requirements:**
+- * **Phase:** PHASE-2
+- * **Implementation requirements:** Store parent_event_id links between actions.
+- ### GAP-0168 — Feature flags not bound to workspace isolation
+- * **Phase:** PHASE-2
+- * **What is missing:** Scoped feature flags; current design risks enabling features globally.
+- * **Where:** Feature Flag Service.
+- * **Implementation requirements:** Flags require workspace_id + workflow_template scope.
+- * **Acceptance criteria:** Enabling feature for one workspace does not affect others.
+- * **Fail-closed:** Unknown scope ⇒ feature disabled.
+- # PHASE-B EXIT CRITERIA
+- **PROCEED — DELIVERY PHASE C (PHASE-2 → PHASE-3: UX SYSTEMIC GAPS + ADMIN/SUPPORT JOURNEYS + SaaS CONTROL PLANE HARDENING)**
+- # DELIVERY PHASE C — PHASE-2 → PHASE-3
+- * **Phase:** PHASE-2
+- * **Where:** Control Plane journey definitions + UI orchestration layer.
+- * **Implementation requirements:**
+- * **Acceptance criteria:** Changing a journey definition updates UI behavior without code changes.
+- * **Fail-closed:** Unknown journey state ⇒ read-only UI.
+- * **Phase:** PHASE-2
+- * **Implementation requirements:**
+- * **Phase:** PHASE-2
+- * **What is missing:** UI does not guide action sequence; operators must interpret logs.
+- * **Where:** Journey engine + Admin UI.
+- * **Implementation requirements:**
+- * **Phase:** PHASE-2
+- * **Implementation requirements:**
+- * **Phase:** PHASE-2
+- * **Where:** Approval UI + Policy Engine.
+- * **Implementation requirements:**
+- * **Phase:** PHASE-3
+- * **Implementation requirements:**
+- * **Acceptance criteria:** Operator workload dashboard shows actionable prioritization.
+- * **Phase:** PHASE-3
+- * **Implementation requirements:**
+- * **Phase:** PHASE-3
+- * **Layer Owner:** CP Policy UI
+- * **Where:** Policy Editor UI.
+- * **Implementation requirements:**
+- * **Phase:** PHASE-3
+- * **Where:** Policy deployment UI.
+- * **Implementation requirements:**
+- * **Phase:** PHASE-3
+- * **Implementation requirements:**
+- * **Phase:** PHASE-3
+- * **Implementation requirements:**
+- * **Phase:** PHASE-3
+- * **Implementation requirements:**
+- * **Phase:** PHASE-3
+- * **Implementation requirements:**
+- * **Phase:** PHASE-3
+- * **Implementation requirements:**
+- ### GAP-0262 — Feature entitlements not enforced at runtime
+- * **Phase:** PHASE-3
+- * **Implementation requirements:** Feature checks embedded in policy_proof.
+- * **Phase:** PHASE-3
+- * **Implementation requirements:** Workspace has region attribute enforced at pipe ingress.
+- # PHASE-C EXIT CRITERIA
+- # DELIVERY PHASE D — PHASE-3 → PHASE-4
+- **Scope:** System-level collapse of the remaining **~1500 UI + ~700 UX structural gaps** into an executable SaaS interface architecture.
+- ### GAP-0301 — No canonical Navigation Graph (UI routes are feature-driven instead of lifecycle-driven)
+- * **Phase:** PHASE-3
+- * **Implementation requirements:**
+- * **Acceptance criteria:** Attempting to access execution screens without required state returns redirect.
+- * **Phase:** PHASE-3
+- * **Implementation requirements:**
+- * **Phase:** PHASE-3
+- * **What is missing:** Hard UI boundary when changing workspace.
+- * **Implementation requirements:**
+- * **Phase:** PHASE-3
+- * **Where:** Work Item UI schema.
+- * **Implementation requirements:**
+- * **Phase:** PHASE-3
+- * **Implementation requirements:** State badge enum driven from backend state machine.
+- * **Acceptance criteria:** UI cannot render undefined state.
+- * **Phase:** PHASE-3
+- * **Implementation requirements:** Disable multi-path actions; require reason preview.
+- * **Phase:** PHASE-3
+- * **Where:** Queue UI.
+- * **Implementation requirements:** Cluster by policy_blocked / compliance_wait / human_verify.
+- ### GAP-0328 — HOLD items do not display “required artifact”
+- * **Phase:** PHASE-3
+- * **What is missing:** Explicit UI requirement (e.g., verify identity screenshot).
+- * **Acceptance criteria:** Operator always sees next required artifact.
+- * **Phase:** PHASE-3
+- * **Implementation requirements:** Visual risk score indicator derived from compliance + SLA.
+- * **Phase:** PHASE-4
+- * **Phase:** PHASE-4
+- ### GAP-0348 — Secret management UI exposes operational metadata
+- * **Phase:** PHASE-4
+- * **Acceptance criteria:** No secret value or pattern leaks through UI.
+- * **Phase:** PHASE-4
+- * **Phase:** PHASE-4
+- * **Implementation requirements:** Replay sandbox with masked payloads.
+- ### GAP-0372 — Actor identity model absent from UI layer
+- * **Phase:** PHASE-4
+- * **What is missing:** UI must understand actor type:
+- * **Phase:** PHASE-4
+- * **Implementation requirements:** Global terminology registry synced with backend enums.
+- * **Acceptance criteria:** UI labels auto-update when enum changes.
+- * **Phase:** PHASE-4
+- * **What is missing:** Typed UI components linked to state machine schema.
+- * **Acceptance criteria:** Compile error if backend adds new state without UI mapping.
+- * **Phase:** PHASE-4
+- * **Implementation requirements:** Notifications triggered only by lifecycle transitions, not background events.
+- * **Phase:** PHASE-4
+- # PHASE-D EXIT CRITERIA
+- Next phase will be the **most ruthless** one — translating your infra/security gap files into a CTO-grade execution blueprint covering:
+- # DELIVERY PHASE E — FINAL PHASE
+- ## PHASE-4 → PHASE-5
+- * **Phase:** PHASE-4
+- * **Implementation requirements:**
+- * **Phase:** PHASE-4
+- * **Implementation requirements:**
+- * **Phase:** PHASE-4
+- * **Implementation requirements:** Action-scoped policies (`Hands.send_message`, `Eyes.read_ledger`).
+- * **Phase:** PHASE-4
+- * **Implementation requirements:**
+- * **Phase:** PHASE-4
+- * **Implementation requirements:**
+- * **Phase:** PHASE-4
+- * **Implementation requirements:** Dynamic retry windows.
+- * **Phase:** PHASE-4
+- * **Implementation requirements:** Each organ publishes load metrics → Brain adjusts intake rate.
+- * **Phase:** PHASE-4
+- * **Implementation requirements:**
+- * **Phase:** PHASE-4
+- * **Implementation requirements:** Hash salted per workspace boundary.
+- * **Fail-closed:** Hash failure ⇒ remove entity from UI.
+- * **Phase:** PHASE-4
+- * **Implementation requirements:**
+- * **Phase:** PHASE-4
+- * **Implementation requirements:** One workspace = isolated execution sandbox.
+- * **Phase:** PHASE-4
+- * **Phase:** PHASE-5
+- * **Implementation requirements:**
+- * **Phase:** PHASE-5
+- * **Implementation requirements:** Failover allowed only within allowed residency regions.
+- * **Phase:** PHASE-5
+- * **Implementation requirements:** Kill-switch state cached locally per organ.
+- * **Phase:** PHASE-5
+- * **Implementation requirements:** Certain actions (policy publish, prompt change) blocked in PROD without approvals.
+- * **Phase:** PHASE-5
+- * **Phase:** PHASE-5
+- * **What is missing:** Dashboards showing:
+- That would convert all phases into:
+- These are the *categories* that were under-covered or missing in my prior output and that typically account for “thousands” of real SaaS gaps:
+- ### F) UX/system design gaps that are “security gaps in disguise”
+- * **Phase:** PHASE-0/1
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/1
+- * **Acceptance criteria:** Any outbound action requires `policy_proof` attached and verified.
+- * **Phase:** PHASE-0/1
+- * **Phase:** PHASE-0/1
+- * **Phase:** PHASE-0/1
+- * **What is missing:** A single deterministic “contact decision” output object that all UX and execution layers use.
+- * **Where:** Brain decision output contract
+- * **Phase:** PHASE-0/1
+- * **Phase:** PHASE-0/1
+- * **Phase:** PHASE-0/1
+- ## 3) The big missing block: PHASE-0/6 Cross-tenant Isolation (existential)
+- * **Phase:** PHASE-0/6
+- * **Phase:** PHASE-0/6
+- * **Phase:** PHASE-0/6
+- ### GAP-0459 — No per-workspace feature flag isolation
+- * **Phase:** PHASE-0/6
+- * **What is missing:** Feature flags may apply globally.
+- * **Where:** feature flag service
+- * **Acceptance criteria:** Flags require workspace scope + evaluation proof logged.
+- * **Fail-closed:** Missing scope ⇒ feature OFF.
+- * **Phase:** PHASE-0/6
+- * **Phase:** PHASE-0/6
+- ### GAP-0470 — Missing enforcement for workspace ownership in UI components
+- * **Phase:** PHASE-0/6
+- * **What is missing:** UI may render components with wrong tenant scope (data exposure).
+- * **Acceptance criteria:** UI cannot request objects outside active workspace; backend enforces again.
+- * **Phase:** PHASE-0/6
+- * **Phase:** PHASE-2
+- * **Phase:** PHASE-2
+- * **Acceptance criteria:** Poison messages are isolated, never retried indefinitely, and require operator resolution.
+- * **Phase:** PHASE-2
+- Reply with one of these (no ambiguity):
+- # EXPANSION — PHASE-0/6
+- * **Phase:** PHASE-0/6
+- * **Implementation requirements:**
+- * **What is missing:** Metrics tags expose tenant context in shared dashboards.
+- # C. UI / API BOUNDARY ISOLATION
+- ### GAP-0459 — Feature flags evaluated globally instead of per workspace
+- * **Implementation:** FeatureFlagService requires workspace_id parameter.
+- * **Acceptance:** Enabling feature for one workspace does not alter another.
+- * **Fail-closed:** Feature OFF.
+- ### GAP-0462 — UI state persistence (local storage) leaks cross-workspace data
+- * Already described earlier; extended requirement:
+- * **Acceptance:** Analytics queries require workspace scope.
+- * **Implementation:** Workspace-segmented feature stores.
+- ### GAP-0470 — UI components render entities outside workspace ownership
+- * **Acceptance:** Policy query requires explicit workspace.
+- * **Implementation:** Synthetic attack suite attempts scope bypass.
+- # PHASE-0/6 EXIT CONDITIONS (NON-NEGOTIABLE)
+- * **Phase:** PHASE-2/4
+- * **Implementation requirements:**
+- * **Implementation requirements:**
+- * **Acceptance:** UI mutation causes automation to HOLD.
+- ### GAP-S1030 — Quiet-hour logic vulnerable to timezone spoofing
+- * **Implementation:** High-entropy UUIDv7 or equivalent.
+- * **Acceptance:** Tenant-specific metrics require scoped auth token.
+- * **Implementation:** Prompt usage requires policy version compatibility check.
+- ### GAP-S1052 — Model outputs not classified before entering decision flow
+- * **Implementation:** Output classification layer (risk tags).
+- * **Acceptance:** Unsafe outputs blocked before decision engine.
+- After PHASE-0/6 + SECURITY CRITICALS expansion, your gap model now includes:
+- * **Phase:** PHASE-2
+- * **What is missing:** Handlers can mutate Work Item context outside declared outputs.
+- * **Implementation requirements:**
+- * **Acceptance:** Retried loop produces identical output hash.
+- ### GAP-M2019 — Stream compaction removes required audit lineage
+- * **Risk:** UI displays stale decision state.
+- * **Acceptance:** Replay produces audit-only output.
+- * **Implementation:** Contract verification suite runs on every build.
+- * **Fail-closed:** Reject build.
+- # Now proceeding correctly: PHASE-0/6 (Cross-tenant Isolation) — GAP-0451 → GAP-0465
+- * **Phase:** PHASE-0/6
+- * **Implementation requirements (ultra explicit):**
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:**
+- * **Acceptance criteria:** A tenant-scoped viewer cannot infer other tenants via dashboards or logs.
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:**
+- ### GAP-0459 — Missing RBAC scoping in UI components
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **What is missing:** UI components can render or request data without enforcing role+workspace scope.
+- * **Implementation requirements:**
+- * **Acceptance criteria:** Forged UI request cannot access cross-workspace entities.
+- ### GAP-0460 — No per-workspace feature flag isolation
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Where:** feature flag service + evaluation middleware
+- * **Implementation requirements:** evaluation signature requires workspace_id; flag results are logged with scope proof.
+- * **Acceptance criteria:** Enabling feature for one workspace cannot affect another.
+- * **Fail-closed:** Feature OFF if scope missing.
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:** prompt lint checks enforce “workspace lineage” for every referenced artifact.
+- ### GAP-0463 — No workspace-level circuit breaker
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:**
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:** cache keys must include workspace partition hash; cache invalidation on workspace policy updates.
+- * **Phase:** PHASE-0/6 | **Severity:** CRITICAL
+- * **Implementation requirements:** retry budgets keyed by workspace_id + risk class; auto-quarantine on repeated failures.
+- * **Fail-closed:** Quarantine + trip workspace circuit breaker.
+- ## Next: continue PHASE-0/6 or switch to the other big middle-layer blocks
+- # CONTINUE PHASE-0/6 — GAP-0466 → GAP-0499
+- * **Implementation requirements:**
+- * **Implementation:** Continuous fuzz suite targeting envelope scope bypass.
+- ### GAP-0493 — Feature entitlement evaluation not lineage-aware
+- ### GAP-0499 — ML feature store allows cross-workspace joins
+- # PHASE-0/6 EXIT STATE (AFTER GAP-0499)
+- # EXPAND PHASE-6 (150 GAP DOMAIN)
+- ### GAP-A7004 — Model output confidence not persisted
+- ### GAP-C7105 — Quiet-hour enforcement lacks DST logic
+- # WHERE YOU NOW STAND (OBJECTIVE STATUS)
+- A usable system requires this chain:
+- - Required Human Action
+- But a usable product requires this instead:
+- Outputs:
+- while usability requires:
+- You can fix 1000 UI gaps and still fail if:
+- but usability requires optimization around:
+- Output today:
+- Builds against:
+- ### ❌ UI reads Work Item state directly instead of OperationalTask.
+- * **Consumes:** DecisionTrace + policy version + compliance outputs
+- * **Outputs (non-negotiable):**
+- * **Why this is a “middle layer” not UI:** UI should render these objects; it should not invent explanations.
+- * **Outputs:**
+- * **Outputs:** `owner(actor_role/team/queue)` for each `task_type` and/or `state`
+- * **What’s missing in most systems:** UI buttons trigger actions directly; you need a single boundary that all actions go through.
+- * **Outputs:** A timeline that answers:
+- * **Outputs:** projected deltas:
+- **Operational role:** supplies **evidence inputs** required by tasks.
+- * Example: “Verify Ledger” task requires Eyes extraction artifact.
+- **Missing linkage often:** Eyes produces data, but no task specifies what evidence is required.
+- If you build only **six** things, you will feel the product “snap into usability”:
+- ### Required artifacts
+- ### Required artifacts
+- ### Required artifacts
+- ### Required artifacts
+- ### Required artifacts
+- ### Required artifacts
+- ### Required artifacts
+- ### Required artifacts
+- ### Required artifacts
+- ### Required artifacts
+- ### Required artifacts
+- ### Required artifacts
+- 2. For each handler: **inputs → decisions → emitted task(s) → required artifacts → ownership → valid transitions**
+- ### Required artifacts
+- ### Required artifacts
+- **Anti-pattern:** identity is “HOLD” but operator doesn’t know what evidence is required.
+- ### Required artifacts
+- ### Required artifacts
+- ### Required artifacts
+- **Anti-pattern:** eligibility outputs “HOLD” without producing a task. That is unusable.
+- **Goal:** enforce consent, quiet hours, frequency caps, jurisdiction.
+- ### Required artifacts
+- **Goal:** ensure required approvals exist and are valid.
+- ### Required artifacts
+- ### Required artifacts
+- **Goal:** create signed authorization object that Hands requires.
+- ### Required artifacts
+- ### Required artifacts
+- For every handler output:
+- "required": [
+- "required": ["owner_type"],
+- "required_artifacts": {
+- "required": ["artifact_type", "required"],
+- "required": { "type": "boolean" },
+- "required": ["action", "resulting_state"],
+- "requires_approval": { "type": "boolean" },
+- "requires_artifacts": { "type": "array", "items": { "type": "string" } }
+- "required": [
+- "required": ["outcome", "plain_language"],
+- "required": ["risk_level", "risk_factors"],
+- "required_artifacts": {
+- ### A) Transition Request (from UI / operator action)
+- "required": [
+- "required": ["actor_id", "role"],
+- "required": ["artifact_type", "artifact_ref"],
+- ### B) Transition Result + Authorization Proof (what Hands requires)
+- "required": [
+- "required": ["auth_type", "signed_scope", "expires_at"],
+- # 3) Wiring Requirements (non-negotiable “usability closure” rules)
+- Hands must require:
+- If you want the next artifact, I can produce the **exact API surface** (endpoints + events) required to operationalize this:
+- "required_artifacts": ["IDENTITY_SNAPSHOT_REDACTED"],
+- "required_artifacts": [
+- { "artifact_type": "IDENTITY_SNAPSHOT_REDACTED", "required": true, "description": "Redacted identity evidence." }
+- { "action": "CONFIRM_MATCH", "resulting_state": "IDENTITY_VERIFIED", "requires_artifacts": ["IDENTITY_SNAPSHOT_REDACTED"] },
+- { "action": "FLAG_MISMATCH", "resulting_state": "STOP_IDENTITY_MISMATCH", "requires_artifacts": ["IDENTITY_SNAPSHOT_REDACTED"] }
+- ## 3.1 Operational Topics (UI + human workflows)
+- # 4) Required Invariants (this is what prevents “unlinked gaps”)
+- If Brain outputs HOLD, then within the same transaction:
+- -- artifacts required + actions allowed stored as JSONB for flexible evolution
+- required_artifacts JSONB NOT NULL DEFAULT '[]'::jsonb,
+- -- optional: constraints, e.g. requires compliance operator, etc.
+- ## 3.2 `cp_task_template_required_artifacts`
+- # 8) Required Indexes for Control Plane Lookup Performance
+- ## R1 — Brain must output reason_codes (not free text)
+- # 10) The Minimal “CP Admin UI” surfaces implied by these tables
+- To make the product usable internally, your Admin UI must include:
+- * Deterministic outputs: same inputs ⇒ same tasks
+- ## Outputs
+- function resolve_published_config(workspace_id):
+- # 2) Build DecisionProjection (human-readable) deterministically
+- function build_decision_projection(decision_trace, config_version_id):
+- function map_reasons_to_task_types(workspace_id, config_version_id, reason_codes):
+- **Stable order requirement:** sort by `reason_code` (or reason severity then code) to make output deterministic.
+- function resolve_task_details(workspace_id, config_version_id, task_candidates):
+- function instantiate_operational_tasks(decision_trace, current_state, state_version):
+- if not tasks_required:
+- required_artifacts: spec.required_artifacts,
+- `TransitionRequest` (from UI/API):
+- ## Outputs
+- function action_boundary_transition(req: TransitionRequest) -> TransitionResult:
+- // Combine: template required artifacts + allowed_action.requires_artifacts
+- for each artifact_type in required_types:
+- return ERROR(409, "MISSING_REQUIRED_ARTIFACT:" + artifact_type)
+- if allowed.requires_approval == true:
+- if action_requires_compliance(task.task_type, req.action):
+- # 3) Critical Helper Functions (Explicit)
+- function actor_can_act_on_task(cfg, actor, task):
+- function compute_auth_type(task_type, action, to_state):
+- ## 3.3 `action_requires_compliance`
+- function action_requires_compliance(task_type, action):
+- ## Outputs
+- ### H3 — Ambiguity becomes an OperationalTask, not a retry storm
+- function hands_execute(req: HandsExecutionRequest) -> HandsExecutionReceipt:
+- function classify_result(result):
+- // Ambiguity triggers:
+- if result.ui_state_unknown:
+- function is_execution_eligible(state):
+- "error_code": "UI_STATE_UNKNOWN",
+- Below is the **Ambiguity Resolution Loop**: the closed operational circuit that makes uncertain external outcomes *usable* instead of chaotic.
+- # Ambiguity Resolution Loop (Closed-Loop Spec)
+- # 1) States and Objects Required
+- * One immutable key per ambiguity resolution action:
+- * required artifacts: screenshot + receipt ref
+- ### Why RE_RUN requires new authz
+- ### Ambiguity cap policy (hard)
+- ### DP3 — Re-run automation requires new authz and new idempotency key
+- Required fields:
+- Required fields:
+- ### FM3 — Ambiguity repeats beyond cap
+- Required artifacts:
+- Without this loop, ambiguity causes:
+- * **HOLD_***: requires human action (must have at least one OPEN OperationalTask)
+- # 2) Execution Phase (Hands + Ambiguity Loop)
+- ## 2.2 Ambiguity Resolution (Operator Task)
+- ### Ambiguity loop cap (hard policy)
+- The key is: **ambiguity must have a stable state and a stable task type**.
+- "system_transitions": "Transitions with task_type='SYSTEM' are emitted by orchestrator/Hands/events, not via ActionBoundary UI actions.",
+- "action": "ENABLE_FEATURE",
+- "preconditions": ["approval_required:true"],
+- "preconditions": ["artifact:MESSAGE_PREVIEW_REDACTED", "compliance_proof:valid_if_required"],
+- "preconditions": ["new_authz_required:true"],
+- "preconditions": ["retry_budget:available", "strict_mode:reauthz_required"],
+- "preconditions": ["fix_applied:true", "strict_mode:reauthz_required"],
+- "preconditions": ["fix_applied:true", "strict_mode:reauthz_required"],
+- "preconditions": ["system_only", "ambiguity_cap:not_exceeded"],
+- "effects": ["task_status:RESOLVED", "ensure_task:APPROVE_ACTION_if_required"]
+- "ambiguity_cap": {
+- "reason_code": "AMBIGUITY_CAP_EXCEEDED"
+- "reauthz_required_for_retries": true
+- You have RBAC referenced, but the **full identity fabric** is usually missing in execution-centric builds:
+- What’s still missing in the operational graph we built:
+- You’ve said the journeys are “almost missing.” The missing parts aren’t UI — they’re **operational subsystems**:
+- # What I specifically “missed” in our prior outputs
+- We **over-built** the execution spine and under-built the **SaaS control surface** around it:
+- If you want, I can do this in the same ruthless, phase-wise style:
+- **B) Produce a phase-wise gap register for each subsystem** with:
+- If you say: **“EXPAND OPERATIONAL GRAPH TO FULL SAAS ORGANS + PHASED GAP REGISTER”**, I’ll generate that end-to-end.
+- Your current system (based on everything we built) covers:
+- # 3) PHASED GAP REGISTER (CTO View)
+- ## PHASE 0 — Structural Usability Closure (CRITICAL)
+- ## PHASE 1 — Governance + Safety (Launch Blocking)
+- ## PHASE 2 — Execution Stability (Scale Blocking)
+- ## PHASE 3 — Compliance & Enterprise Readiness
+- ## PHASE 4 — SRE / Incident Operating Model
+- ## PHASE 5 — Economic & Growth Layer
+- You built:
+- **Gap pattern:** if any organ emits events without these links, your UI and support workflows fracture.
+- # 3) Phase-wise Build Order (Dependency-Respecting)
+- ## Phase 0 — Make it operable (minimum usable SaaS skeleton)
+- ## Phase 1 — Make it governable
+- ## Phase 2 — Make it stable at scale
+- ## Phase 3 — Make it enterprise-ready
+- ## Phase 4 — Make it survivable
+- ## Phase 5 — Make it a SaaS business
+- # PHASE 0 — STRUCTURAL USABILITY GAPS
+- **Build Phase:** 0
+- **Build Phase:** 0
+- **Build Phase:** 0
+- **Build Phase:** 0
+- **Build Phase:** 0
+- # PHASE 1 — GOVERNANCE & CONTROL PLANE GAPS
+- **Build Phase:** 1
+- **Build Phase:** 1
+- **Build Phase:** 1
+- **Build Phase:** 1
+- # PHASE 2 — EXECUTION STABILITY GAPS
+- **Build Phase:** 2
+- **Build Phase:** 2
+- **Build Phase:** 2
+- **Build Phase:** 2
+- # PHASE 3 — ENTERPRISE READINESS GAPS
+- **Build Phase:** 3
+- **Build Phase:** 3
+- **Build Phase:** 3
+- # PHASE 4 — INCIDENT & SRE GAPS
+- **Build Phase:** 4
+- **Build Phase:** 4
+- # PHASE 5 — ECONOMIC & SCALE GAPS
+- **Build Phase:** 5
+- **Build Phase:** 5
+- **Build Phase:** 5
+- You built a powerful execution runtime — but without these organs the system feels:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- Requires:
+- # B. Operational Spine Backbone (You already built ~60% of this)
+- ## MBB-14 — Evidence Bundle Builder
+- Feature availability resolved via:
+- # 11) Recovery Intuition Engine
+- Most teams stop after building:
+- You already built:
+- But maturity requires:
+- ### LOOP-04 — Ambiguity Spiral (E4 → E5 → E6)
+- **Breaker:** Ambiguity cap + enforced evidence requirements + read-only verification + replay bundles.
+- **Breaker:** Silent failure detector (expectation registry) + heartbeat monitors + auto-task `RESOLVE_PIPELINE_STALL`.
+- * **Missing E3/E4 controls:** integration lifecycle not operable, ambiguity unresolved at scale
+- ## 7) Practical Output: Entropy Reduction Sequence (Shortest Path)
+- "required_correlation_keys": [
+- "name": "Ambiguity Accumulation",
+- "definition": "Uncertain outcomes accumulate (AMBIGUOUS receipts, repeated ambiguity loops), driving operator guessing and re-execution.",
+- "primary_indicators": ["ambiguity_rate", "ambiguity_loop_count", "post_exec_verify_ambiguous_rate"],
+- "event_topics_required": [
+- "tables_required": [
+- "numerator": "count(events_with_required_keys)",
+- "denominator": "count(events_requiring_keys)"
+- "metric_id": "ambiguity_rate",
+- "metric_id": "ambiguity_loop_count",
+- "definition": "Count of expectation violations (expected event not observed within deadline).",
+- "expectations_registry": [
+- "expectation_id": "EXP-001-task-created-after-hold",
+- "emit_event": "vte.reliability.expectation_violation.v1",
+- "expectation_id": "EXP-002-execution-result-after-dispatch",
+- "emit_event": "vte.reliability.expectation_violation.v1",
+- "expectation_id": "EXP-003-notification-delivered-for-task",
+- { "band": "ORANGE", "range": [50, 69], "meaning": "Operationally unstable; automatic tasks and mitigations required." },
+- "rule_id": "AA-001-spike-ambiguity",
+- "metric": "ambiguity_rate",
+- "reason_codes": ["AMBIGUITY_SPIKE"]
+- "payload": { "severity": "HIGH", "category": "AMBIGUITY" }
+- "dashboard_views": [
+- ## UX-GAP-04 — Ambiguity Resolution Is Cognitive Overload
+- Replay exists conceptually but UX requires:
+- Support cannot quickly produce:
+- Users cannot intuitively move between:
+- System reacts, but UI does not warn:
+- But mature UX requires:
+- Right now the UI exposes:
+- # 8) UI/UX Collapse Clusters (High-Leverage Fixes)
+- The runtime is strong, but the UI does not express:
+- This will define **every required UX surface** for:
+- This defines the **minimum complete set of UX surfaces** required for a stable, scalable SaaS — mapped directly to:
+- # 0) Global UX Ontology (Required Everywhere)
+- ## 0.2 Canonical Status Language (single glossary used across UI)
+- ## OP-04 — Ambiguity Resolution Workspace
+- * Task templates: required artifacts, allowed actions, ownership rules, SLA tier
+- ## SU-02 — Replay Builder (Safe)
+- * Replay mode: **read-only** vs **execute** (execute requires fresh authz)
+- # 4) Developer UX Surfaces (Build, Debug, Operate the Runtime)
+- ## DV-05 — Schema/Contract CI Dashboard
+- ## CU-01 — Activity & Outcomes Dashboard
+- # 7) Phase Mapping (UX Surface Build Order)
+- ## Phase 0 — Usability skeleton
+- ## Phase 1 — Governance
+- ## Phase 2 — Stability at scale
+- ## Phase 3 — Enterprise
+- ## Phase 4 — Survivability
+- ## Phase 5 — SaaS economics
+- ### Required widgets
+- Center: Action Preview + Required Evidence
+- ### Required widgets
+- ### Required widgets
+- Evidence Required:
+- If you only build these screens first, most UX gaps collapse:
+- These contracts ensure UI is **deterministic**, aligned with:
+- ui_action: "Claim Task"
+- ### UI Feedback
+- ui_action: "Confirm Match" / "Approve" / "Fix Policy Conflict"
+- ### Required Context
+- ### UI Feedback
+- ui_action: "Upload Evidence"
+- ### UI Feedback
+- ## CONTRACT-OP-04 — Resolve Ambiguity
+- ui_action: "Confirm Automation Result"
+- ### UI Feedback
+- ui_action: "Modify Task Template"
+- ### UI Feedback
+- ui_action: "Run Simulation"
+- ### UI Feedback
+- ui_action: "Publish"
+- ### UI Feedback
+- ui_action: "Generate Bundle"
+- ### UI Feedback
+- ui_action: "Create Incident"
+- ui_action: "Replay"
+- ui_action: "Explain Transition"
+- ### UI Feedback
+- ui_action: "Retry"
+- ui_action: "Reconnect"
+- ### UI Feedback
+- ui_action: "Adjust Budget"
+- UI Action: Expand Timeline Node
+- UI Action: Preview Action
+- ## **“Zero-Ambiguity UI Blueprint”**
+- ## LAW-02 — Action Requires Preview
+- UI builds:
+- # 10) Narrative Timeline Widget — Zero-Ambiguity Spec
+- # 11) Action Preview Widget — Zero-Ambiguity Spec
+- ## Ambiguity Review
+- # 13) Visual State Language (Zero Ambiguity)
+- When implemented, the UI stops exposing:
+- CFE Output:
+- signal_type: "REQUIRES_HUMAN_DECISION",
+- ## Rule B — Ambiguity Focus
+- The engine controls which UI elements are:
+- # 12) Micro-Guidance System
+- → signal: REQUIRES_OPERATOR_CONFIRMATION
+- → signal: GOVERNANCE_ATTENTION_REQUIRED
+- Every user interaction progresses through five neural phases:
+- # 4) Animation Semantics (Functional, Not Decorative)
+- ## Rule 2 — Ambiguity Confirmation
+- # 8) Neural Guidance Blocks
+- Instead of static tooltips, system emits contextual guidance:
+- UI must continuously expose:
+- Transitions require:
+- Outputs:
+- The system builds a unified graph:
+- Outputs:
+- Protocol requirement:
+- OEP requires:
+- ## Phase 1 — Observe
+- ## Phase 2 — Interpret
+- Outputs:
+- ## Phase 3 — Simulate
+- ## Phase 4 — Introduce
+- ## Phase 5 — Monitor
+- ## Phase 6 — Stabilize
+- Requirements:
+- # 6) Narrative Continuity Rule
+- Promotion requires:
+- The organism moves through macro phases:
+- Each phase unlocks:
+- ## R6 — Economic Equilibrium
+- If new feature increases entropy beyond threshold:
+- # 9) Long-Term Equilibrium Metrics
+- ## Required Capabilities
+- Permission = function of:
+- Displayed in UI as:
+- UI shows:
+- # 9) Secure UI Interaction Patterns (Critical Missing Detail)
+- Require:
+- UI must show:
+- # 11) Zero-Ambiguity Security Design Laws
+- HIPAA is not a feature; it is a **system-wide operational constraint** that affects:
+- UI must show:
+- HIPAA requires:
+- Replay Builder must enforce:
+- UI must:
+- # 10) HIPAA Compliance Dashboard (New UX Surface)
+- Admins require a dedicated screen:
+- * **Object-level authorization** on *every* request (not just UI):
+- * **Action Preview Security Panel**: PHI exposure, risk, justification required
+- ## Required Events
+- ## Required Tables
+- ## Required Events
+- ## Required Tables
+- ## 5.1 Authorization Function (Deterministic)
+- Permission is a function of:
+- ## Required Events
+- ## Required Tables
+- If integration trust degrades or ambiguity rises:
+- ## Required Events
+- ## Required Tables
+- ## Required Events
+- ## Required Tables
+- ## 8.3 UI Anti-Phishing
+- High-risk actions require:
+- ## Required Events
+- ## Required Tables
+- ## Required Events
+- ## Required Tables
+- ## Required Events
+- ## Required Tables
+- ## Required Events
+- ## Required Tables
+- # 13) Required Admin UX to Operate the Fabric
+- ## 0.1 Core IDs (required on most records)
+- "required": ["event_id", "event_type", "occurred_at", "workspace_id", "payload"],
+- "required": ["session_id", "trust_score", "risk_band", "factors", "evaluator_version"],
+- "required": ["transition_id", "decision", "deny_reason_codes", "rule_match"],
+- "required": ["purpose_id", "access_type", "resource_type", "resource_ref", "phi_classification", "scope", "outcome"],
+- "required": ["containment_id", "action_type", "scope", "expires_at"],
+- ## 3.1 Rule: Require purpose binding for PHI access
+- name: "PHI access requires purpose binding"
+- require:
+- name: "High-risk actions require TRUSTED session"
+- require:
+- - STEPUP_REQUIRED
+- ## 3.3 Rule: Export requires dual approval if PHI present
+- name: "PHI exports require dual approval"
+- require:
+- required_roles_any:
+- require:
+- # 4) UI Widget Contracts BoM (Secure UX Components)
+- "requires_stepup": true,
+- "trust_requirement": { "min_trust_score": 0.80, "required_band": "TRUSTED" },
+- "required_evidence": [{ "type": "RECEIPT_REF", "present": true }],
+- ### Requirements
+- "requires_stepup": true,
+- "requires_justification": true
+- ## 4.3 Widget: **Export Bundle Builder (HIPAA)**
+- Minimum required topics to implement the fabric cleanly:
+- If you want the next “hardening artifact,” I can generate **test suites** for this BoM:
+- # 1) Authorization Test Matrix Suite
+- ### Full coverage required for:
+- ### Suite A — Purpose Binding (HIPAA minimum necessary)
+- ### Suite B — Trust Band Gating (high-risk)
+- * expect: `DENY`, reason: `TRUST_SCORE_TOO_LOW` or `STEPUP_REQUIRED`
+- * expect: `ALLOW_WITH_GATES`, `requires_stepup=true`
+- ### Suite C — Role Segmentation
+- ### Suite D — Governance hardening
+- ### Suite E — Integration trust gating
+- # 2) PHI Leakage Regression Suite
+- ## 2.1 PHI Test Fixtures (required)
+- ### D) Logging tests (quiet PHI leaks)
+- # 3) Attack Simulation Suites
+- ### Objective
+- ### Required Assertions
+- ### Objective
+- ### Required Assertions
+- ### Objective
+- ### Required Assertions
+- # 4) Packaging These as Automated Suites (Practical Layout)
+- - id: "PHI_REVEAL_REQUIRES_STEPUP"
+- description: "REVEAL_PHI requires step-up even if trust is TRUSTED"
+- error_code: "STEPUP_REQUIRED"
+- ## 3.1 `requirements.txt`
+- Returns a context dict with fixture outputs, e.g.:
+
+## Source: VTE - Plans.txt
+- Outputs:
+- ### 7.2 Deterministic Build Order (Example)
+- PHASE-0:
+- PHASE-1:
+- PHASE-2:
+- ## 10) Observability Requirements
+- ## 11) System Inputs & Outputs
+- ### Outputs
+- ## 0) Objective
+- Build a **10,000-user, multi-tenant SaaS automation platform** that executes a property-management SOP using:
+- This spec defines duties for these roles (required to execute):
+- * **R-Frontend Lead**: CP UI + DP UI consoles; contract-driven rendering
+- * **Brain Runtime Engine Spec**: core objects + algorithmic runtime requirements
+- * **UMP Build Order**: deterministic UMP phases and required files per phase
+- ## 3) Non-Negotiable Requirements (Invariants)
+- ## 4) Architecture Expectations (Authoritative Shape)
+- # 5) Canonical Contracts (Must be built before features)
+- "workspace_id": "string (required)",
+- "work_item_id": "string (required)",
+- "correlation_id": "uuid (required)",
+- # 7) Sequential Linear Build Plan (No Skipping)
+- ## PHASE 0 — System Invariants (Must Exist Before Anything Else)
+- ### Acceptance tests (Fail this phase if any fail)
+- ## PHASE 1 — Control Plane Governance (Make execution lawful)
+- **D1.5 CP UI surface (minimum)**: Approval Console exists because approval is required by contract
+- ## PHASE 2 — Brain Runtime (Make the system deterministic)
+- * Given same inputs: DecisionOutput identical (bit-for-bit stable)
+- ## PHASE 3 — Data Plane Organs (Make the system actually “do work”)
+- ## PHASE 4 — SOP Workflow Implementation (Make it match the real operator day)
+- ## PHASE 5 — Application UI (Contract-driven, not “pretty-first”)
+- This is where your UI/UX becomes legitimate: it must **render deterministic runtime states**, not guess.
+- ### Required UI behaviors (non-negotiable)
+- ## PHASE 6 — Production Hardening (10k-user readiness)
+- You cannot declare “Phase complete” unless all are true:
+- ## A7) UI/UX is declared but missing the **contract-driven UI mapping**
+- To stay deterministic, UI must be defined by:
+- **Missing surface**: `UI STATE/ROLE → ACTION MATRIX + SCREEN INVENTORY`
+- To keep your plan **sequential**, each missing aspect must be inserted at the correct phase boundary:
+- ## Insert BEFORE PHASE 0 (new “PHASE -1: Definitions”)
+- Reason: these are foundational invariants. Without them, Phase 0 tools can’t be correctly defined.
+- ## Insert INTO PHASE 0 (System Invariants)
+- ## Insert INTO PHASE 1 (Control Plane)
+- ## Insert INTO PHASE 3 (Data Plane)
+- ## Insert INTO PHASE 5 (UI)
+- ## 0) Objective
+- # PHASE -1 — Definitions & Prohibitions (M-01, M-04, M-05)
+- > **Gate:** You may not start PHASE 0 until PHASE -1 outputs exist as versioned artifacts in `foundation/contracts/` and `foundation/security/`.
+- * `correlation_id`: stable per end-to-end processing trace (may equal work_item_id scope, but must be UUID)
+- # PHASE 0 — System Invariants (M-02 starts here; reason catalog starts here)
+- This phase corresponds to the UMP Phase-0 invariants: envelope contract, redaction engine, boundary linter.
+- "workspace_isolation": "REQUIRED",
+- * **Breaking**: removing fields, changing type, making optional->required
+- * Breaking changes require:
+- CI checks required by spine map:
+- "required_fields": ["evidence_refs"],
+- ### 0.2.2 Minimum Required Codes (v1)
+- # PHASE 1 — Control Plane Governance (M-06)
+- ### 1.1.3 Approval Requirements (Deterministic)
+- ApprovalEngine must compute `approval.required` based on:
+- # PHASE 2 — Brain Runtime (state machine + decision compiler) + PHASE 3 organs
+- These phases remain as previously defined, but they now **must consume** the Phase -1/0 artifacts:
+- # PHASE 4 — SOP Binding (Decision tables to states)
+- # PHASE 5 — UI/UX (M-07) + PHASE 3 adapters auth (M-08)
+- ## 5.1 M-07 UI State/Role/Action Matrix + Screen Inventory
+- ### 5.1.2 UI Role → Action Matrix (Minimum v1)
+- * If login requires OTP and the platform cannot retrieve OTP via an approved secure channel:
+- # Updated Linear Build Order (Now Correct)
+- **PHASE -1**: Data classes + TTL + prohibitions; WorkItem IDs/idempotency; evidence refs
+- **PHASE 0**: Pipe registry mechanics + envelope schema + redaction + boundary-linter + tenant isolation
+- **PHASE 1**: RBAC/ABAC + approvals + workflow registry + policy pinning
+- **PHASE 2**: Brain runtime state machine + decision compiler + checkpoint store
+- **PHASE 3**: Organs (Eyes/Hands/Lungs/Heart/Kidneys) + adapter auth sessions
+- **PHASE 4**: SOP binding (decision tables wired into states)
+- **PHASE 5**: UI: CP/DP consoles + role/action matrix + reason-code rendering
+- **PHASE 6**: production hardening (backpressure, DLQ ops, rollout, incident, audit)
+- "workspace_id": "string (required)",
+- "work_item_id": "string (required)",
+- "correlation_id": "uuid (required)",
+- * Producer: Control Plane (CP UI/API)
+- "required_fields": ["PROPERTY_ADDRESS","UNIT","TENANT_NAME","TAGS","AMOUNT_RECEIVABLE","DATE_NOTES_BLOCKS"],
+- "status": "OK|NOT_FOUND|AUTH_REQUIRED|ERROR",
+- "unit_required_if_present": true
+- "status": "OK|NOT_FOUND|AMBIGUOUS|AUTH_REQUIRED|OTP_REQUIRED|ERROR",
+- "full_ledger_required": true,
+- "scroll_to_end_required": true
+- "status": "OK|INCOMPLETE|AUTH_REQUIRED|OTP_REQUIRED|ERROR",
+- "status": "OK|AUTH_REQUIRED|OTP_REQUIRED|ERROR",
+- "quiet_hours_policy_id": "string|null"
+- "required_approver_role": "SUPERVISOR|COMPLIANCE|ADMIN|null",
+- ## PIPE-12 — Brain Emits Decision Output (for UI + audit)
+- "output": "CONTACT|HOLD|STOP",
+- "required_role": "SUPERVISOR|COMPLIANCE|ADMIN",
+- { "decision_table_id": "string", "output": "CONTACT|HOLD|STOP", "reason_code": "string" }
+- # A3) Required Redaction Profiles (Registry must reference these)
+- If you say **“Proceed — Spec Pack B”**, I will output:
+- "required": ["evidence_type", "system", "external_id", "captured_at", "redaction_profile_id"],
+- "required": ["version", "codes"],
+- "required": [
+- "required_fields": {
+- "required": ["request_id", "source_ref", "work_date", "requested_by"],
+- "required": ["delinquency_sheet_row_ref", "calling_sheet_row_ref"],
+- "required": ["evidence_ref"],
+- "required": ["evidence_ref"],
+- "required": ["user_id", "role"],
+- "required": ["evidence_ref", "read_purpose", "required_fields", "return_mode"],
+- "required_fields": {
+- "required": ["evidence_ref", "status", "derivatives"],
+- "status": { "type": "string", "enum": ["OK", "NOT_FOUND", "AUTH_REQUIRED", "ERROR"] },
+- "required": ["normalized_address_hash", "sheet_tags_class", "amount_receivable_class"],
+- "required": ["allowed", "expires_at", "fields"],
+- "required": ["lookup_inputs", "match_rules", "return_mode"],
+- "required": ["address_ephemeral"],
+- "required": ["address_normalization", "unit_required_if_present"],
+- "unit_required_if_present": { "type": "boolean" }
+- "required": ["status", "identity_derivatives"],
+- "status": { "type": "string", "enum": ["OK", "NOT_FOUND", "AMBIGUOUS", "AUTH_REQUIRED", "OTP_REQUIRED", "ERROR"] },
+- "required": ["normalized_address_hash", "tenant_names_hashes"],
+- "required": ["allowed", "expires_at", "fields"],
+- "then": { "required": ["tenant_page_ref"] }
+- "required": ["tenant_page_ref", "extract_scope", "ledger_schema_version", "return_mode"],
+- "required": ["full_ledger_required", "scroll_to_end_required"],
+- "full_ledger_required": { "type": "boolean" },
+- "scroll_to_end_required": { "type": "boolean" }
+- "required": ["tenant_page_ref", "status", "completeness", "ledger_derivatives"],
+- "status": { "type": "string", "enum": ["OK", "INCOMPLETE", "AUTH_REQUIRED", "OTP_REQUIRED", "ERROR"] },
+- "required": ["scroll_to_end_verified", "entry_count"],
+- "required": ["current_balance_class", "unmapped_label_present", "known_categories_present", "payment_plan_signal"],
+- "required": ["allowed", "expires_at", "entries"],
+- "required": ["date", "label", "amount"],
+- "required": ["tenant_page_ref", "signals_requested", "notes_window", "return_mode"],
+- "required": ["min_recent_notes"],
+- "required": ["tenant_page_ref", "status", "tag_derivatives", "notes_derivatives"],
+- "status": { "type": "string", "enum": ["OK", "AUTH_REQUIRED", "OTP_REQUIRED", "ERROR"] },
+- "required": ["dnc", "jba_jbd"],
+- "required": ["explicit_dnc_directive", "explicit_contact_x_first", "legal_representation_signal"],
+- "required": ["allowed", "expires_at", "tags", "recent_notes", "upcoming_activities"],
+- "required": ["date", "text"],
+- "required": ["date", "text"],
+- "required": ["action_type", "workspace_context", "risk_inputs", "evidence_refs"],
+- "required": ["workspace_id", "policy_version"],
+- "required": ["reason_codes_present"],
+- "quiet_hours_policy_id": { "type": ["string", "null"] }
+- "required": ["status", "risk_level"],
+- "required_approver_role": { "type": ["string", "null"], "enum": ["SUPERVISOR", "COMPLIANCE", "ADMIN", null] },
+- ## B4.12 `PIPE_BRAIN__SPINE__DECISION_OUTPUT__V1.payload.schema.json`
+- "$id": "https://vte.local/schemas/pipes/PIPE_BRAIN__SPINE__DECISION_OUTPUT__V1.payload.schema.json",
+- "title": "DecisionOutputPayloadV1",
+- "required": ["decision", "reason_code", "allowed_channels", "documentation_payload_template_id", "decision_trace_entry"],
+- "required": ["decision_table_id", "inputs_hash", "output", "timestamp"],
+- "output": { "type": "string", "enum": ["CONTACT", "HOLD", "STOP"] },
+- "required": ["approval_id", "requested_action", "risk_level", "required_role", "reason_code", "policy_version", "evidence_refs"],
+- "required_role": { "type": "string", "enum": ["SUPERVISOR", "COMPLIANCE", "ADMIN"] },
+- "required": ["approval_id", "status", "approved_by", "approved_at"],
+- "required": ["user_id", "role"],
+- "description": "Must be non-PII; enforce via redaction rules + UI guidance.",
+- "required": ["template_id", "template_version", "context", "evidence_refs"],
+- "required": ["reason_code", "allowed_channels", "policy_version"],
+- "required": ["action_type", "idempotency_key", "intent_hash", "channel_target_ref", "content", "execution_refs"],
+- "required": ["template_id", "template_version"],
+- "required": ["tenant_page_ref", "sheet_row_ref"],
+- "required": ["action_type", "idempotency_key", "status", "attempt_count"],
+- "required": ["idempotency_key", "pipe_id_failed", "error_code", "retry_policy_id"],
+- "required": ["idempotency_key", "pipe_id_failed", "error_code", "dlq_reason"],
+- "required": ["idempotency_key", "pipe_id_failed", "error_code", "retry_policy_id", "next_attempt_at", "dlq"],
+- "required": ["enabled"],
+- "required": ["final_state", "final_reason_code", "policy_version", "decision_trace_summary", "execution_summary"],
+- "required": ["decision_table_id", "output", "reason_code"],
+- "output": { "type": "string", "enum": ["CONTACT", "HOLD", "STOP"] },
+- "required": ["action_type", "status", "idempotency_key"],
+- "required": ["final_state", "final_reason_code", "policy_version"],
+- If you say **“Proceed — Spec Pack C”**, I will output:
+- # C0) Outputs (Files to Create)
+- ## C1.3 `schema-hash.rules.md` (content requirements)
+- function canonicalize(value: any): any {
+- export function hashSchemaFile(path: string): string {
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "pipe_id": "PIPE_BRAIN__SPINE__DECISION_OUTPUT__V1",
+- "payload_schema_path": "foundation/contracts/pipes/PIPE_BRAIN__SPINE__DECISION_OUTPUT__V1.payload.schema.json",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- "workspace_isolation": "REQUIRED",
+- ## C5.2 Outputs
+- function classifyChange(oldSchema: any, newSchema: any): ChangeClass;
+- function requireVersionBumpIfBreaking(pipeId: string, registry: any): void;
+- If you say **“Proceed — Spec Pack D”**, I will output:
+- # D0) Required Files (Canonical Paths)
+- ### Required fields
+- ### Required behavior
+- This is explicitly required: STOP is terminal and cannot be bypassed.
+- ## D9.1 `hold_stop_engine.apply(decision_output, wi)`
+- ### Required fields written to WorkItem
+- Approval requirements exist in WorkItem structure and UMP plan: “No Hands execution without approval metadata.”
+- * If `wi.approval.required == true`:
+- ## D14.2 Required behavior
+- ## E1.3 Required inputs
+- ## E2.3 Required inputs
+- ## E3.3 Required inputs
+- * Add decision_trace entry: `DT-LEDGER-*` (inputs_hash, output, reason_code)
+- ## E4.3 Required inputs
+- Produce the deterministic **DecisionOutput**: CONTACT vs HOLD vs STOP, plus allowed channels and documentation template IDs.
+- ## E5.3 Required inputs
+- 1. Compute decision table output:
+- * If HOLD: set `wi.state=HOLD` with `next_eligible_at`, then emit to UI (DecisionOutput already covers)
+- * If CONTACT: transition to `APPROVED` and request approval if required
+- ## E6.3 Required inputs
+- * When returning: re-emit the last required request pipe for the return_state (e.g., re-request ledger extract)
+- ## E8.3 Required inputs
+- 3. If approval required but not received:
+- ## E9.3 Required inputs
+- ## E10.3 Required inputs
+- # Spec Pack F — Reason-Code-to-UI + Role Actions (Deterministic UX Contract) — Authoritative v1
+- UI components may render only:
+- UI logic must use `reason-codes.v1.json`:
+- # F10) Reason-Code → UI Behavior Map (Authoritative Examples)
+- # F11) UI Guard Hooks (Mandatory)
+- UI is considered compliant only if:
+- Required interface:
+- ## G4.2 Encryption Requirements
+- ## G5.2 UI Interaction Flow
+- UI emits resolution event:
+- ## G7.1 Required Pre-conditions
+- ## G7.2 Output Constraints
+- Required API:
+- # H15) Testing Requirements
+- ## J3.1 Requirements
+- # PHASE 0 — SYSTEM INVARIANTS (FOUNDATION)
+- # PHASE −1 — DATA CLASSIFICATION & REDACTION ENGINE
+- Mandatory functions:
+- # PHASE 1 — PIPE REGISTRY & CONTRACTS (SPINE)
+- # PHASE 2 — IDENTITY & IDEMPOTENCY
+- # PHASE 3 — EVIDENCE REF MODEL
+- # PHASE 4 — CONTROL PLANE (CP)
+- # PHASE 5 — DATA PLANE ORCHESTRATION (BRAIN)
+- # PHASE 6 — RUNTIME GUARDS
+- # PHASE 7 — ADAPTER RUNTIME (EYES & HANDS)
+- Outputs:
+- Requires:
+- # PHASE 8 — UI/UX CONTRACT (DETERMINISTIC)
+- ## 8.2 UI Action Enablement
+- ## 8.3 STOP UI
+- ## 8.4 HOLD UI
+- # PHASE 9 — DEPLOYMENT TOPOLOGY
+- # PHASE 10 — OBSERVABILITY
+- # PHASE 11 — FAILURE DOMAINS
+- # PHASE 12 — DISASTER RECOVERY
+- # PHASE 13 — ACCEPTANCE CRITERIA (SYSTEM-LEVEL)
+- Below is the **Ultra Micro Plan (UMP) Build Order Spec — E2E**, written as a **single sequential, linear, enforceable project plan** with:
+- ui/                                 (CHAPTER: UI)
+- "phase": "PH1_FOUNDATION_WIRING",
+- "immutability": { "seal_required": true, "sealed_by": null, "sealed_at": null },
+- "forbidden_roots": ["chapters/eyes", "chapters/hands", "control-plane", "ui", "infra"]
+- "requires_umps": ["UMP-FOUNDATION-CONTRACTS-0001"],
+- "requires_files": [
+- "requires_pipes": ["PIPE_CP__BRAIN__WORKITEM_CREATE__V1"]
+- "requires_live_data_test": false
+- ## 4.3 `files.json` (file-level build specification)
+- # 5) Guardrails Required in Every UMP (Deep Rooted)
+- # 6) Full-Scale Project Index (Chapters → Topics → Phases → UMP Sequences)
+- **Phase PH1: Contract Baseline**
+- **Phase PH2: Pipe Payload Schemas**
+- **Phase PH1: Determinism utilities**
+- **Phase PH1: Guard chain**
+- **Phase PH1: Redaction engine baseline**
+- **Phase PH1: Boundary + UMP immutability tooling**
+- **Phase PH1: Registry bootstrap**
+- **Phase PH1: Deterministic router**
+- **Phase PH1: spine telemetry publisher**
+- **Phase PH1: canonical topics**
+- **Phase PH1: Ingress + guard chain**
+- **Phase PH2: State machine**
+- * UMP-BRN-DEC-0004: decision output publisher (PIPE_BRAIN__SPINE__DECISION_OUTPUT)
+- * UMP-BRN-AI-0002: prompt builder that passes AI guard (no tenant data)
+- * UMP-KDN-COMP-0002: quiet hours policy enforcement
+- * UMP-HND-VER-0002: receipt builder
+- ## 6.10 CHAPTER 10 — UI (Apple-Aligned UX, Deterministic)
+- ### Topic UI-01: Auth (Google + Outlook SSO only)
+- * UMP-UI-AUTH-0001: Google OAuth flow
+- * UMP-UI-AUTH-0002: Outlook SSO flow
+- * UMP-UI-AUTH-0003: Seal auth
+- ### Topic UI-02: Design System (Apple doctrine)
+- * UMP-UI-DS-0001: typography + sizing rules
+- * UMP-UI-DS-0002: calm tokens + spacing + motion
+- * UMP-UI-DS-0003: animation doctrine (“never silent”)
+- * UMP-UI-DS-0004: Seal design system
+- ### Topic UI-03: Data Plane Screens
+- * UMP-UI-DP-0001: Work Queue
+- * UMP-UI-DP-0002: Work Item Detail (timeline + decision trace)
+- * UMP-UI-DP-0003: Hold Console
+- * UMP-UI-DP-0004: Stop Console
+- * UMP-UI-DP-0005: Execution Viewer
+- * UMP-UI-DP-0006: responsive visual test runner (browser-agent)
+- * UMP-UI-DP-0007: Seal DP screens
+- ### Topic UI-04: Control Plane Screens
+- * UMP-UI-CP-0001: Policy Console
+- * UMP-UI-CP-0002: Approval Console
+- * UMP-UI-CP-0003: RBAC Admin
+- * UMP-UI-CP-0004: Audit Viewer
+- * UMP-UI-CP-0005: Seal CP screens
+- * UMP-INF-OBS-0002: dashboards
+- * output: `{policy_version}`
+- * output: `{accepted:true}`
+- # 9) E2E Required Payload Invariants (Global)
+- ### Required fields
+- * Hands must require a signed authorization token (internal) attached to the command envelope metadata:
+- * Build receipt object (non-PII):
+- # 14) “Pre-Hands Critical Moves” (Required Before Touching Hands)
+- Hands cannot be built until these UMP groups are SEALED:
+- ## 15.2 Reboot-required UMPs
+- * AI output must pass:
+- # 17) Live Data Requirement (No Shippable Without Real Tests)
+- NON-NEGOTIABLE OUTPUT FORMAT:
+- - You must produce: (1) Full Scale Project Index, (2) Canonical Monorepo Tree, (3) Chapters→Topics→Phases→UMPs→Files in strict sequential order.
+- - Never summarize. Never omit required sections. Always write linearly.
+- - Every Chapter is a self-contained module folder buildable/testable/deployable independently.
+- - All future changes must be a new UMP that composes on sealed outputs.
+- UMP REQUIRED CONTENT:
+- For every UMP output:
+- 2) File list (files.json) with: context, purpose, connectivity, build prompt, constraints, and expected outputs
+- 4) Guardrails: boundary, redaction, storage, schema, determinism, idempotency, live-data requirements
+- SYSTEM CONTENT REQUIREMENTS (E2E):
+- BUILD ORDER:
+- UX REQUIREMENTS:
+- - UI/UX must align with Apple-like calm clarity, meaningful motion, never-silent pages.
+- OUTPUT MUST BE PROJECT-REAL:
+- 11. Only then: Hands + Eyes adapters and UI.
+
+## Source: VTE_Brain_Runtime_Full_Execution_Engine_Spec.txt
+- “string”, “output”: “CONTACT|HOLD|STOP”, “reason_code”: “string”,
+- “timestamp”: “ISO8601” } ], “approval”: { “required”: true, “status”:
+- -   Authoritative for: RBAC/ABAC permissions approval requirements
+- STATE: APPROVED - Check if approval required: If yes -> MESSAGE_PREVIEW
+- STATE: MESSAGE_PREVIEW - Build communication draft (templated,
+- Rules: - Overrides require explicit approval chain. - Overrides create
+
+## Source: VTE_Brain_Runtime_Production_Grade_Orchestration_Loop_Pseudocode.txt
+- function BrainEventLoop(): while true: if
+- function handle_event(event: PipeEnvelope): assert_envelope(event) //
+- function route_state(state, event, wf, ctx, wi): switch state: case
+- function handle_init(event, wf, ctx, wi): wi.state = “IDENTITY_CHECK”
+- function handle_identity_check(event, wf, ctx, wi): inputs =
+- if decision.output == “STOP”: wi.state = “STOP” wi.stop_reason =
+- if decision.output == “HOLD”: wi.state = “HOLD” wi.hold_reason =
+- function handle_ledger_parse(event, wf, ctx, wi): ledger =
+- if classification.output == “HOLD”: wi.state = “HOLD” wi.hold_reason =
+- function handle_eligibility(event, wf, ctx, wi): // Evaluate all
+- if out.output == "STOP":
+- if out.output == "HOLD":
+- function handle_decision(event, wf, ctx, wi): // Build canonical
+- // Policy gate: does this require human approval? approval_req =
+- function handle_hold(event, wf, ctx, wi): // HOLD is non-terminal; can
+- function handle_stop(event, wf, ctx, wi): // STOP is terminal; only
+- function handle_approved(event, wf, ctx, wi): // For approval-required
+- wi.approval.required and wi.approval.status != “APPROVED”: wi.state =
+- function handle_message_preview(event, wf, ctx, wi): // Build
+- Output Schema. if POLICY_ENGINE.ai_enabled(ctx.workspace_id):
+- function handle_execution(event, wf, ctx, wi): // Final safety gates:
+- Poison events: - sent to DLQ with supervisor approval required for
+
+## Source: VTE_Deterministic_Runtime_Contract_Spec.txt
+- { “workspace_id”: “string (required)”, “work_item_id”: “string
+- (required)”, “correlation_id”: “uuid (required)”, “organ_source”:
+- CI Enforcement: - decision-table.compiler tests - ambiguity detector
+- AI Output Schema:
+- Rules: - AI cannot directly trigger Hands. - AI output MUST pass
+- Fail Conditions: - UI cannot allow execution without approval metadata.
+
+## Source: VTE_Execution_Spine_Executable_System_Map.txt
+- Purpose: Translate the 600 identified gaps into a BUILDABLE SYSTEM MAP.
+- Structure: Repository Tree → Organ → UMP Folder → Required Files →
+- UMP Folders: foundation/contracts/ foundation/security/ foundation/ui/
+- Required Files: - pipe-envelope.schema.json -
+- Runtime Guards: - workspace_id REQUIRED in all events. - correlation_id
+- Required Files: - pipe.schema.registry.json -
+- Required Files: - workflow.state-machine.ts -
+- Runtime Guards: - Unknown decisions → HOLD. - Policy evaluation REQUIRED
+- Required Files: - idempotency.middleware.ts - retry.policy.json -
+- Required Files: - stream.partition.strategy.ts -
+- Required Files: - adapter.contract.ts - browser.runner.ts -
+- Runtime Guards: - External calls wrapped with circuit breaker. - DOM
+- Required Files: - consent.registry.ts - jurisdiction.rules.json -
+- Required Files: - workqueue.dashboard.tsx -
+- Runtime Guards: - No silent pages allowed. - Risky actions require
+- CI Checks: - accessibility tests - UI state enforcement checks
+- Required Files: - canary.deployment.yaml - rollback.automation.ts -
+
+## Source: VTE_UMP_Build_Order_for_Execution_Spine.txt
+- Each UMP includes: - Scope - Required Files - Runtime Guards - CI
+- UMP-0401 — WORKQUEUE DASHBOARD Files: apps/web/components/WorkQueue.tsx
+- Acceptance: - Illegal contact blocked in UI.
+- Acceptance: - Quiet hours enforced fail-closed.
+

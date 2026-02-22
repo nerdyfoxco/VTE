@@ -1,0 +1,89 @@
+{
+  "ump_id": "UMP-0103",
+  "chapter_id": "FOUNDATION",
+  "topic_id": "TP-00",
+  "phase_id": "PH-01",
+  "title": "Prompt Registry",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "foundation/contracts/ump/UMP-0103/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "foundation/src/prompt_registry/",
+    "allowed_paths": [
+      "foundation/src/prompt_registry/**"
+    ],
+    "forbidden_paths": [
+      "chapters/**"
+    ],
+    "allowed_shared_paths": [
+      "foundation/contracts/**"
+    ]
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "foundation/src/prompt_registry/prompts.json",
+      "operation": "create",
+      "context": "Phase 1 Control Plane",
+      "purpose": "Authoritative storage of pinned prompts to ensure AI determinism over time.",
+      "connectivity": {
+        "imports": [],
+        "exports": [],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create a JSON dictionary of system prompts mapped by an immutable ID.",
+      "json_spec_path": "foundation/contracts/ump/UMP-0103/spec.prompts.json"
+    },
+    {
+      "path": "foundation/src/prompt_registry/prompt_fetcher.py",
+      "operation": "create",
+      "context": "Phase 1 Control Plane",
+      "purpose": "A utility to fetch a prompt string by its immutable ID.",
+      "connectivity": {
+        "imports": [],
+        "exports": [
+          "PromptFetcher",
+          "PromptNotFoundError"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create a class that loads standard prompts.json and returns strings by key, throwing an error on miss.",
+      "json_spec_path": "foundation/contracts/ump/UMP-0103/spec.prompt_fetcher.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "python foundation/tests/test_prompt_registry.py"
+    ],
+    "acceptance_criteria": [
+      "Existing keys load correctly.",
+      "Missing keys throw an explicit fail-closed error."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [
+      "Prompts must not contain dynamic user data (templating happens outside the registry)."
+    ],
+    "redaction": []
+  }
+}

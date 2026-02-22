@@ -1,0 +1,84 @@
+{
+  "ump_id": "UMP-0401",
+  "chapter_id": "WEB",
+  "topic_id": "TP-00",
+  "phase_id": "PH-04",
+  "title": "Operator UX Components",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "apps/web/contracts/ump/UMP-0401/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "apps/web/components/",
+    "allowed_paths": [
+      "apps/web/components/**"
+    ],
+    "forbidden_paths": [
+      "chapters/**",
+      "spine/**"
+    ],
+    "allowed_shared_paths": []
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "apps/web/components/workqueue_dashboard.tsx",
+      "operation": "create",
+      "context": "Phase 4 Operator UX",
+      "purpose": "A React component to view items pending approval.",
+      "connectivity": {
+        "imports": [],
+        "exports": [
+          "WorkqueueDashboard"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create a dummy React component (TSX) representing the Workqueue Dashboard.",
+      "json_spec_path": "apps/web/contracts/ump/UMP-0401/spec.workqueue.json"
+    },
+    {
+      "path": "apps/web/components/decision_trace_viewer.tsx",
+      "operation": "create",
+      "context": "Phase 4 Operator UX",
+      "purpose": "A React component to view deterministic evaluation trees.",
+      "connectivity": {
+        "imports": [],
+        "exports": [
+          "DecisionTraceViewer"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create a dummy React component (TSX) representing the Decision Trace Viewer.",
+      "json_spec_path": "apps/web/contracts/ump/UMP-0401/spec.trace_viewer.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "manual"
+    ],
+    "commands": [],
+    "acceptance_criteria": [
+      "Components exist and compile without syntax errors."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [],
+    "redaction": []
+  }
+}

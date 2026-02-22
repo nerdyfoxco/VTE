@@ -1,0 +1,73 @@
+{
+  "ump_id": "UMP-0201",
+  "chapter_id": "CH-01",
+  "topic_id": "TP-01",
+  "phase_id": "PH-02",
+  "title": "Workflow State Machine",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "chapters/brain/contracts/ump/UMP-0201/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "chapters/brain/topic-orchestration/",
+    "allowed_paths": [
+      "chapters/brain/topic-orchestration/**"
+    ],
+    "forbidden_paths": [
+      "chapters/hands/**"
+    ],
+    "allowed_shared_paths": [
+      "foundation/contracts/**"
+    ]
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "chapters/brain/topic-orchestration/src/workflow_state_machine.py",
+      "operation": "create",
+      "context": "Phase 2 Brain Runtime",
+      "purpose": "Authoritative state transitions (INIT -> IDENTITY_CHECK -> ... -> EXECUTION | STOP).",
+      "connectivity": {
+        "imports": [],
+        "exports": [
+          "WorkflowStateMachine",
+          "WorkItemState"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Define an explicit enum for states and a class that safely moves states according to the Deterministic Runtime rules. Unknown states must map to HOLD.",
+      "json_spec_path": "chapters/brain/contracts/ump/UMP-0201/spec.workflow_state_machine.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "python chapters/brain/topic-orchestration/tests/test_workflow_state_machine.py"
+    ],
+    "acceptance_criteria": [
+      "Unknown state -> HOLD",
+      "Terminal states cannot be regressed."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [],
+    "redaction": []
+  }
+}

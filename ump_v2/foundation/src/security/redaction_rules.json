@@ -1,0 +1,16 @@
+{
+    "redact_keys_exact": [
+        "ssn",
+        "social_security_number",
+        "credit_card",
+        "routing_number",
+        "account_number"
+    ],
+    "redact_keys_partial": [
+        "phone",
+        "email",
+        "address",
+        "name"
+    ],
+    "replacement_string": "[REDACTED]"
+}

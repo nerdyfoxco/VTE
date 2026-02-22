@@ -1,0 +1,8 @@
+{
+  "ump_id": "UMP-0202",
+  "timestamp": "2026-02-21T15:55:00Z",
+  "hashes": {
+    "spec.decision_table_compiler.py": "ceec4f904a507cc4f3fd9cf79a910ce8e5f4ac36107dcf05d97618f34f6464df",
+    "test_decision_table_compiler.py": "eb113747cf0b323d50f7ce757c9c6371bb6aa7fd3741a74a9303e0eb72bea2d2"
+  }
+}

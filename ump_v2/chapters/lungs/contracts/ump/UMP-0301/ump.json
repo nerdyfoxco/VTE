@@ -1,0 +1,74 @@
+{
+  "ump_id": "UMP-0301",
+  "chapter_id": "CH-06",
+  "topic_id": "TP-01",
+  "phase_id": "PH-03",
+  "title": "Streaming Backbone (Lungs)",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "chapters/lungs/contracts/ump/UMP-0301/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "chapters/lungs/",
+    "allowed_paths": [
+      "chapters/lungs/**"
+    ],
+    "forbidden_paths": [
+      "chapters/brain/**",
+      "chapters/hands/**"
+    ],
+    "allowed_shared_paths": [
+      "foundation/contracts/**"
+    ]
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "chapters/lungs/src/backpressure_manager.py",
+      "operation": "create",
+      "context": "Phase 3 Data Plane Execution",
+      "purpose": "A rate limiter/circuit breaker for ingestion. Allows Brain to signal backpressure to Eyes.",
+      "connectivity": {
+        "imports": [],
+        "exports": [
+          "BackpressureManager",
+          "BackpressureState"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create a backpressure manager that tracks queue depth and drops state to PAUSED if thresholds are exceeded, throwing a specific exception if ingestion is attempted while PAUSED.",
+      "json_spec_path": "chapters/lungs/contracts/ump/UMP-0301/spec.backpressure.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "python chapters/lungs/tests/test_backpressure_manager.py"
+    ],
+    "acceptance_criteria": [
+      "When load exceeds threshold, status becomes PAUSED.",
+      "Ingestion throws BackpressureError when PAUSED."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [],
+    "redaction": []
+  }
+}

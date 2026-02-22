@@ -1,0 +1,8 @@
+{
+  "ump_id": "UMP-0302",
+  "timestamp": "2026-02-21T16:25:00Z",
+  "hashes": {
+    "spec.idempotency.py": "9b0b635fcd776a7dd74c86e244f7f493a25891a779428087d31facbf87c9e25b",
+    "test_idempotency_middleware.py": "8b8f2fd565433e6f4d7f5fd18144d6172d4e5dd9af0ba113eef36bbe1b5e13b6"
+  }
+}

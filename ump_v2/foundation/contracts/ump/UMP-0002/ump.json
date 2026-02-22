@@ -1,0 +1,91 @@
+{
+  "ump_id": "UMP-0002",
+  "chapter_id": "CH-00",
+  "topic_id": "TP-00",
+  "phase_id": "PH-00",
+  "title": "Redaction Engine",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "foundation/contracts/ump/UMP-0002/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "foundation/",
+    "allowed_paths": [
+      "foundation/security/**"
+    ],
+    "forbidden_paths": [
+      "chapters/**",
+      "spine/**"
+    ],
+    "allowed_shared_paths": []
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "foundation/src/security/redaction_rules.json",
+      "operation": "create",
+      "context": "Phase 0 System Invariant",
+      "purpose": "Define schema for fields that must be redacted (e.g. ssn, phone, email).",
+      "connectivity": {
+        "imports": [],
+        "exports": [],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create JSON file mapping target PII keys to placeholder string.",
+      "json_spec_path": "foundation/contracts/ump/UMP-0002/spec.redaction_rules.json"
+    },
+    {
+      "path": "foundation/src/security/redaction_engine.py",
+      "operation": "create",
+      "context": "Phase 0 System Invariant",
+      "purpose": "Recursively wash payloads and logs of PII.",
+      "connectivity": {
+        "imports": [
+          "json",
+          "re"
+        ],
+        "exports": [
+          "RedactionEngine",
+          "redact_payload"
+        ],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Implement recursive dictionary walk that replaces matched keys with [REDACTED].",
+      "json_spec_path": "foundation/contracts/ump/UMP-0002/spec.redaction_engine.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "unit"
+    ],
+    "commands": [
+      "pytest foundation/tests/test_redaction_engine.py"
+    ],
+    "acceptance_criteria": [
+      "PII fields blocked before logging.",
+      "Nested dictionaries correctly scrubbed."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [],
+    "redaction": [
+      "Applies global redaction rules across all Organs."
+    ]
+  }
+}

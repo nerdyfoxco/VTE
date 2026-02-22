@@ -1,0 +1,65 @@
+{
+  "ump_id": "UMP-0501",
+  "chapter_id": "OPS",
+  "topic_id": "TP-00",
+  "phase_id": "PH-05",
+  "title": "Operations Canary Deployment",
+  "status": "sealed",
+  "immutability": {
+    "sealed": true,
+    "seal_path": "environments/contracts/ump/UMP-0501/seal.json",
+    "successor_policy": "new_ump_required_for_changes"
+  },
+  "scope": {
+    "module_path": "environments/",
+    "allowed_paths": [
+      "environments/**"
+    ],
+    "forbidden_paths": [
+      "chapters/**"
+    ],
+    "allowed_shared_paths": []
+  },
+  "contracts": {
+    "pipes_added_or_modified": []
+  },
+  "files": [
+    {
+      "path": "environments/canary_deployment.yaml",
+      "operation": "create",
+      "context": "Phase 5 Operations",
+      "purpose": "Defines the Kubernetes setup for the fail-closed Canary engine.",
+      "connectivity": {
+        "imports": [],
+        "exports": [],
+        "pipes_produced": [],
+        "pipes_consumed": []
+      },
+      "build_prompt": "Create a standard canary kubernetes YAML file configuring vte-ump-system.",
+      "json_spec_path": "environments/contracts/ump/UMP-0501/spec.canary.json"
+    }
+  ],
+  "build": {
+    "commands": [],
+    "expected_artifacts": []
+  },
+  "tests": {
+    "levels": [
+      "static"
+    ],
+    "commands": [],
+    "acceptance_criteria": [
+      "YAML is valid."
+    ]
+  },
+  "observability": {
+    "logging": [],
+    "metrics": [],
+    "tracing": []
+  },
+  "security": {
+    "data_classification": "internal",
+    "validation": [],
+    "redaction": []
+  }
+}
