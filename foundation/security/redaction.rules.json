@@ -1,0 +1,25 @@
+{
+    "rules": [
+        {
+            "name": "SSN",
+            "pattern": "\\b\\d{3}-\\d{2}-\\d{4}\\b",
+            "replacement": "[REDACTED_SSN]"
+        },
+        {
+            "name": "PhoneNumber",
+            "pattern": "\\b\\d{3}[-.]?\\d{3}[-.]?\\d{4}\\b",
+            "replacement": "[REDACTED_PHONE]"
+        },
+        {
+            "name": "Email",
+            "pattern": "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b",
+            "replacement": "[REDACTED_EMAIL]"
+        }
+    ],
+    "forbidden_fields": [
+        "tenant_name",
+        "property_address",
+        "ledger_balance",
+        "notes"
+    ]
+}

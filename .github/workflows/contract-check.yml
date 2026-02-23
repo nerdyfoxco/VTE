@@ -1,0 +1,22 @@
+name: Contract Schema Validator
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  schema-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+      - name: Install ajv-cli and formats
+        run: npm install -g ajv-cli ajv-formats
+      - name: Validate Pipe Envelope Schema
+        run: |
+          ajv compile -s foundation/contracts/pipe-envelope.schema.json -c ajv-formats

@@ -1,0 +1,9 @@
+{
+    "context": {
+        "Contact Channel": "SMS",
+        "Balance": "100",
+        "Days in Arrears": "45"
+    },
+    "expectedAction": "HOLD",
+    "expectedReason": "AMBIGUOUS_EVIDENCE_NO_RULE_MATCH"
+}

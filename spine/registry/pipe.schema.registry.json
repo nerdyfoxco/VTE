@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "registry": {
+        "WorkItemEvent": {
+            "version": "1.0",
+            "hash": "pending_hash"
+        },
+        "DecisionOutputEvent": {
+            "version": "1.0",
+            "hash": "pending_hash"
+        },
+        "ExecutionResultEvent": {
+            "version": "1.0",
+            "hash": "pending_hash"
+        }
+    }
+}
