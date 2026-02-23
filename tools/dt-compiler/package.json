@@ -1,0 +1,16 @@
+{
+    "name": "dt-compiler",
+    "version": "1.0.0",
+    "description": "Deterministic Decision Table Compiler for VTE Brain",
+    "main": "dist/compiler.js",
+    "scripts": {
+        "build": "tsc",
+        "compile": "ts-node src/compiler.ts"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "typescript": "^5.0.0",
+        "ts-node": "^10.9.1"
+    }
+}

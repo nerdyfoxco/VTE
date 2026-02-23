@@ -1,0 +1,32 @@
+{
+  "version": "v1.0.0",
+  "compiledAt": "2026-02-23T07:03:01.421Z",
+  "rules": [
+    {
+      "conditions": {
+        "ArrearsAmount": "> 10.00",
+        "MoveInDate": "< 30_DAYS"
+      },
+      "action": "HOLD",
+      "reasonCode": "NEW_TENANT_GRACE",
+      "sourceTable": "DT-001-Arrears.md"
+    },
+    {
+      "conditions": {
+        "ArrearsAmount": "<= 10.00"
+      },
+      "action": "STOP",
+      "reasonCode": "DUST_BALANCE",
+      "sourceTable": "DT-001-Arrears.md"
+    },
+    {
+      "conditions": {
+        "ArrearsAmount": "> 10.00",
+        "MoveInDate": "> 30_DAYS"
+      },
+      "action": "APPROVED",
+      "reasonCode": "CLEAR_TO_CONTACT",
+      "sourceTable": "DT-001-Arrears.md"
+    }
+  ]
+}

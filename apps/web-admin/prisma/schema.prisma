@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Workspace {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  operators       Operator[]
+  policies        PolicyVersion[]
+  approvals       ApprovalLedger[]
+  prompts         PromptVersion[]
+}
+
+model Operator {
+  id          String    @id @default(uuid())
+  workspaceId String
+  email       String    @unique
+  role        String    // e.g., "Supervisor", "Operator", "Compliance"
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  approvals   ApprovalLedger[]
+}
+
+model PolicyVersion {
+  id                  String   @id @default(uuid())
+  workspaceId         String
+  version             String
+  globalWaitDays      Int
+  contactThresholdMax Int
+  isActive            Boolean  @default(false)
+  createdAt           DateTime @default(now())
+
+  workspace           Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model ApprovalLedger {
+  id             String   @id @default(uuid())
+  workspaceId    String
+  operatorId     String
+  workItemId     String
+  decision       String   // e.g., "APPROVED_OVERRIDE", "REJECTED"
+  justification  String
+  createdAt      DateTime @default(now())
+
+  workspace      Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  operator       Operator  @relation(fields: [operatorId], references: [id])
+}
+
+model PromptVersion {
+  id          String   @id @default(uuid())
+  workspaceId String
+  organ       String   // e.g., "EYES", "HANDS"
+  promptText  String
+  version     String
+  isActive    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}

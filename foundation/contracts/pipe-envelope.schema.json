@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "PipeEnvelope",
+    "type": "object",
+    "required": [
+        "workspace_id",
+        "work_item_id",
+        "correlation_id",
+        "organ_source",
+        "organ_target",
+        "policy_version",
+        "timestamp",
+        "payload"
+    ],
+    "properties": {
+        "workspace_id": {
+            "type": "string"
+        },
+        "work_item_id": {
+            "type": "string"
+        },
+        "correlation_id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "organ_source": {
+            "type": "string"
+        },
+        "organ_target": {
+            "type": "string"
+        },
+        "policy_version": {
+            "type": "string"
+        },
+        "timestamp": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "payload": {
+            "type": "object"
+        }
+    }
+}

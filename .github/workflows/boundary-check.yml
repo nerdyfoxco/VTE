@@ -1,0 +1,21 @@
+name: Boundary Linter
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  boundary-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - name: Install ts-node
+        run: npm install -g ts-node
+      - name: Run Boundary Linter
+        run: ts-node tools/boundary-linter/index.ts .
