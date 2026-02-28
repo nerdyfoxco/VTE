@@ -1,3 +1,7 @@
+import os
+from dotenv import load_dotenv
+load_dotenv() # Force OS var injection before anything else boots
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware

@@ -1,0 +1,12 @@
+[
+    {
+        "path": "src/workflow-store.ts",
+        "operation": "create",
+        "purpose": "Provides state access for API constraints and step completions"
+    },
+    {
+        "path": "test/idempotency.test.ts",
+        "operation": "create",
+        "purpose": "Protects against accidental re-triggering of states"
+    }
+]

@@ -1,0 +1,22 @@
+[
+    {
+        "path": "src/agent/poller.ts",
+        "operation": "create",
+        "purpose": "Polling execution loops natively explicitly."
+    },
+    {
+        "path": "test/agent/poller.test.ts",
+        "operation": "create",
+        "purpose": "Assertion traces bounding executions mathematically securely."
+    },
+    {
+        "path": "package.json",
+        "operation": "create",
+        "purpose": "Scaffolding natively."
+    },
+    {
+        "path": "tsconfig.json",
+        "operation": "create",
+        "purpose": "TypeScript natively."
+    }
+]

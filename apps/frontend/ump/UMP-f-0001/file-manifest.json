@@ -1,0 +1,7 @@
+[
+    {
+        "path": "app/globals.css",
+        "operation": "modify",
+        "purpose": "Inject strictly defined Shadcn theme tokens into the global CSS space."
+    }
+]

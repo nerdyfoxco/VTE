@@ -1,0 +1,57 @@
+{
+    "ump_id": "UMP-0026",
+    "chapter_id": "CH-04",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Define pipe.worker.dispatch.v1 schema",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/legs/topic-worker-runner/ump/UMP-0026/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/legs/topic-worker-runner/",
+        "allowed_paths": [
+            "foundation/contracts/pipes/**",
+            "chapters/legs/topic-worker-runner/ump/UMP-0026/**"
+        ],
+        "forbidden_paths": [
+            "spine/**",
+            "chapters/brain/**",
+            "chapters/hands/**",
+            "chapters/eyes/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": [
+            "pipe.worker.dispatch.v1"
+        ]
+    },
+    "files": [
+        {
+            "path": "foundation/contracts/pipes/schemas/pipe.worker.dispatch.v1.schema.json",
+            "operation": "create",
+            "purpose": "Authoritative Dispatch Mapping gracefully defining jobs."
+        },
+        {
+            "path": "foundation/contracts/pipes/pipe-registry.json",
+            "operation": "modify",
+            "purpose": "Updating explicitly exactly accurately safely."
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "contract"
+        ],
+        "commands": [
+            "npm run contract-check"
+        ]
+    }
+}

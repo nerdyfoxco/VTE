@@ -1,0 +1,17 @@
+[
+    {
+        "path": "src/circuit/breaker.ts",
+        "operation": "create",
+        "purpose": "Sliding window rate limit rules natively tracking calls dynamically."
+    },
+    {
+        "path": "test/circuit/breaker.test.ts",
+        "operation": "create",
+        "purpose": "Test definitions securely limiting payloads robustly."
+    },
+    {
+        "path": "src/engine/shadow-wrapper.ts",
+        "operation": "modify",
+        "purpose": "Injection point bounds structural logic."
+    }
+]

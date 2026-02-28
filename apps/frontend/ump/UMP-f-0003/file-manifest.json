@@ -1,0 +1,12 @@
+[
+    {
+        "path": "src/components/layout/app-layout.tsx",
+        "operation": "create",
+        "purpose": "Provides the Strangler Fig entry point (`vte-app-shell` target)."
+    },
+    {
+        "path": "src/app/layout.tsx",
+        "operation": "modify",
+        "purpose": "Injects the `AppLayout` over the entire tree root globally."
+    }
+]

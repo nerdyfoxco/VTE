@@ -1,19 +1,54 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --radius: 0.5rem;
+  
+  /* Apple Light Mode Palette (Calm & Confident) */
+  --color-background: hsl(0 0% 98%);
+  --color-foreground: hsl(240 5.9% 10%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(240 5.9% 10%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(240 5.9% 10%);
+  
+  --color-primary: hsl(210 100% 50%); /* Apple System Blue */
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(240 5% 96%);
+  --color-secondary-foreground: hsl(240 5.9% 10%);
+  
+  --color-muted: hsl(240 5% 96%);
+  --color-muted-foreground: hsl(240 3.8% 46.1%);
+  --color-accent: hsl(240 5% 96%);
+  --color-accent-foreground: hsl(240 5.9% 10%);
+  
+  --color-destructive: hsl(348 100% 61%); /* Apple System Red */
+  --color-destructive-foreground: hsl(0 0% 100%);
+  
+  --color-border: hsl(240 5.9% 90%); /* Subtle border */
+  --color-input: hsl(240 5.9% 90%);
+  --color-ring: hsl(210 100% 50%); /* Focus rings map to primary */
 }
 
+/* Base structural overrides for Typography & Calm UI */
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* STRANGLER FIG ESCAPE HATCH: 
+   If a new component mounts the vte-app-shell class, 
+   we safely reset the legacy layout.tsx boundaries without modifying the file. */
+body:has(.vte-app-shell) > main {
+  max-width: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+body:has(.vte-app-shell) {
+  padding: 0 !important;
+  margin: 0 !important;
 }

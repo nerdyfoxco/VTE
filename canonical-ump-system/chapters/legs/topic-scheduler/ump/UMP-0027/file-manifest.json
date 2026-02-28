@@ -1,0 +1,10 @@
+[
+    {
+        "path": "src/scheduler.ts",
+        "operation": "create"
+    },
+    {
+        "path": "test/scheduler.test.ts",
+        "operation": "create"
+    }
+]

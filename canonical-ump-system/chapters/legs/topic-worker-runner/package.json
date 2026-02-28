@@ -1,0 +1,16 @@
+{
+    "name": "@chapters/legs-topic-worker-runner",
+    "version": "1.0.0",
+    "description": "Legs Topic Worker Runner Module",
+    "main": "src/index.ts",
+    "scripts": {
+        "build": "tsc",
+        "test": "tsx --test test/**/*.test.ts test/*.test.ts"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "typescript": "^5.0.0",
+        "tsx": "^4.7.0",
+        "@types/node": "^20.0.0"
+    }
+}

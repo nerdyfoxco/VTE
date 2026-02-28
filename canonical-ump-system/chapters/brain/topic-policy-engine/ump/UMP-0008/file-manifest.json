@@ -1,0 +1,17 @@
+[
+    {
+        "path": "foundation/contracts/pipes/schemas/pipe.policy.evaluate.v1.schema.json",
+        "operation": "create",
+        "purpose": "Authoritative Policy Inference Pipeline schema."
+    },
+    {
+        "path": "foundation/contracts/pipes/pipe-registry.json",
+        "operation": "modify",
+        "purpose": "Registration of the consuming endpoints."
+    },
+    {
+        "path": "chapters/brain/topic-policy-engine/contracts/pipes-consumed.json",
+        "operation": "create",
+        "purpose": "Explicit bounds mapped exclusively to topic-policy-engine."
+    }
+]

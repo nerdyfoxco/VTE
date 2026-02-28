@@ -1,0 +1,12 @@
+[
+    {
+        "path": "src/adapters/appfolio-reader.adapter.ts",
+        "operation": "create",
+        "purpose": "Playwright fetching explicitly natively."
+    },
+    {
+        "path": "src/adapters/gmail-reader.adapter.ts",
+        "operation": "create",
+        "purpose": "Gmail API fetches natively safely."
+    }
+]

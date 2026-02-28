@@ -1,0 +1,70 @@
+{
+    "ump_id": "UMP-0005",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-02",
+    "title": "Create workflow.started pipe producer (AJV validation)",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0005/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/src/pipes/workflow-started.producer.ts",
+            "chapters/brain/topic-orchestration/test/pipes.workflow-started.producer.test.ts",
+            "chapters/brain/topic-orchestration/ump/UMP-0005/**"
+        ],
+        "forbidden_paths": [
+            "**/*"
+        ],
+        "allowed_shared_paths": [
+            "foundation/src/testing/contract-runner.ts"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/pipes/workflow-started.producer.ts",
+            "operation": "create",
+            "context": "Producer binding logic",
+            "purpose": "Ensures payloads perfectly map to the JSON schema before dispatch",
+            "build_prompt": "Create producer injecting AJV contract validation inline before logging emission.",
+            "json_spec_path": "ump/UMP-0005/spec.workflow-started.producer.ts.json"
+        },
+        {
+            "path": "test/pipes.workflow-started.producer.test.ts",
+            "operation": "create",
+            "context": "Producer unit tests",
+            "purpose": "Validate the pure function wrapper enforces typing flawlessly",
+            "build_prompt": "Test valid data dispatch and simulated type violations.",
+            "json_spec_path": "ump/UMP-0005/spec.pipes.workflow-started.producer.test.ts.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [
+            "pipe_emit_logged"
+        ],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

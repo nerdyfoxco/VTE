@@ -1,0 +1,7 @@
+[
+    {
+        "path": "src/app/queue/page.tsx",
+        "operation": "modify",
+        "purpose": "Provide high-density visualization of holds, compliance tags, and tenant arrears."
+    }
+]

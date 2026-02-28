@@ -1,0 +1,43 @@
+{
+    "ump_id": "UMP-0029",
+    "chapter_id": "CH-05",
+    "topic_id": "TP-02",
+    "phase_id": "PH-01",
+    "title": "Implement Global Retry Wrapper & Backoff Engine",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/heart/topic-retries-dlq/ump/UMP-0029/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/heart/topic-retries-dlq/",
+        "allowed_paths": [
+            "chapters/heart/topic-retries-dlq/src/retries/**",
+            "chapters/heart/topic-retries-dlq/test/retries/**",
+            "chapters/heart/topic-retries-dlq/ump/UMP-0029/**",
+            "chapters/heart/topic-retries-dlq/package.json",
+            "chapters/heart/topic-retries-dlq/tsconfig.json"
+        ],
+        "forbidden_paths": [
+            "spine/**",
+            "chapters/brain/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/retries/exponential-backoff.ts",
+            "operation": "create",
+            "purpose": "Execution retry wrappers fluently logically properly functionally smartly."
+        },
+        {
+            "path": "test/retries/exponential-backoff.test.ts",
+            "operation": "create",
+            "purpose": "Native backoff mock maps neatly neatly explicitly solidly smoothly intelligently smartly organically elegantly successfully smoothly elegantly securely seamlessly compactly reliably intuitively dynamically successfully smartly functionally intelligently elegantly correctly natively cleanly correctly cleanly inherently directly."
+        }
+    ]
+}

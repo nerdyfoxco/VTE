@@ -1,0 +1,91 @@
+{
+    "ump_id": "UMP-0001",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Create topic skeleton (Service + smoke test)",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0001/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/**"
+        ],
+        "forbidden_paths": [
+            "**/*"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/index.ts",
+            "operation": "create",
+            "context": "Process entrypoint reads env and starts server",
+            "purpose": "Deterministic startup",
+            "build_prompt": "Read PORT from environment, log startup line strictly.",
+            "json_spec_path": "ump/UMP-0001/spec.index.ts.json"
+        },
+        {
+            "path": "src/server.ts",
+            "operation": "create",
+            "context": "HTTP server entry for topic module",
+            "purpose": "Provide /healthz and extension points",
+            "build_prompt": "Implement startServer({port}) with /healthz 200 ok logic.",
+            "json_spec_path": "ump/UMP-0001/spec.server.ts.json"
+        },
+        {
+            "path": "test/smoke.test.ts",
+            "operation": "create",
+            "context": "Verifies skeleton service behavior",
+            "purpose": "Prevent regressions",
+            "build_prompt": "Fetch /healthz on ephemeral port and assert 200 ok output.",
+            "json_spec_path": "ump/UMP-0001/spec.smoke.test.ts.json"
+        },
+        {
+            "path": "package.json",
+            "operation": "create",
+            "context": "Topic sub-module package definition",
+            "purpose": "Deterministic build/test",
+            "build_prompt": "Provides tsc build and node tests execution logic.",
+            "json_spec_path": "ump/UMP-0001/spec.package.json.json"
+        },
+        {
+            "path": "tsconfig.json",
+            "operation": "create",
+            "context": "Compile boundary",
+            "purpose": "Enforce isolated compilation",
+            "build_prompt": "Strict TS configuration outputting to dist.",
+            "json_spec_path": "ump/UMP-0001/spec.tsconfig.json.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm i",
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [
+            "startup_line_required"
+        ],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

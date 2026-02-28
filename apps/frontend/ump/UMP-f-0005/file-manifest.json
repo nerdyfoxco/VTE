@@ -1,0 +1,7 @@
+[
+    {
+        "path": "src/app/queue/page.tsx",
+        "operation": "modify",
+        "purpose": "Links UI execution to real canonical topics."
+    }
+]

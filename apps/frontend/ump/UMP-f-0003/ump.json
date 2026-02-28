@@ -1,0 +1,68 @@
+{
+    "ump_id": "UMP-f-0003",
+    "chapter_id": "CH-frontend-01",
+    "topic_id": "TP-frontend-01",
+    "phase_id": "PH-02",
+    "title": "Implement <AppLayout> wrapper in app/layout.tsx",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "apps/frontend/ump/UMP-f-0003/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "apps/frontend/",
+        "allowed_paths": [
+            "apps/frontend/src/app/layout.tsx",
+            "apps/frontend/src/components/layout/app-layout.tsx",
+            "apps/frontend/ump/UMP-f-0003/**"
+        ],
+        "forbidden_paths": [
+            "**/*.py"
+        ],
+        "allowed_shared_paths": [
+            "apps/frontend/src/components/layout/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/components/layout/app-layout.tsx",
+            "operation": "create",
+            "context": "Main application wrapper combining navigational components",
+            "purpose": "Provides the Strangler Fig entry point (`vte-app-shell` target).",
+            "build_prompt": "Compose Sidebar and TopNav with dynamic width calculations tracking viewport space.",
+            "json_spec_path": "ump/UMP-f-0003/spec.app-layout.tsx.json"
+        },
+        {
+            "path": "src/app/layout.tsx",
+            "operation": "modify",
+            "context": "Replaces legacy Navbar",
+            "purpose": "Injects the `AppLayout` over the entire tree root globally.",
+            "build_prompt": "Strip older NavBar and Tailwind container classes. Wrap children in AppLayout.",
+            "json_spec_path": "ump/UMP-f-0003/spec.layout.tsx.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "visual"
+        ],
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "public_ui"
+    }
+}

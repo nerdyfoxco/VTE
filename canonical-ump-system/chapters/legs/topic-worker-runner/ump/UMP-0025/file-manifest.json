@@ -1,0 +1,10 @@
+[
+    {
+        "path": "src/worker.ts",
+        "operation": "create"
+    },
+    {
+        "path": "test/worker.test.ts",
+        "operation": "create"
+    }
+]

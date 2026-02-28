@@ -1,0 +1,68 @@
+{
+    "ump_id": "UMP-0023",
+    "chapter_id": "CH-03",
+    "topic_id": "TP-02",
+    "phase_id": "PH-02",
+    "title": "Register Evidence Extraction Adapters (AppFolio/Gmail Readers)",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/eyes/topic-ingestion/ump/UMP-0023/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/eyes/topic-ingestion/",
+        "allowed_paths": [
+            "chapters/eyes/topic-ingestion/src/adapters/**",
+            "chapters/eyes/topic-ingestion/ump/UMP-0023/**"
+        ],
+        "forbidden_paths": [
+            "spine/**",
+            "foundation/**",
+            "chapters/brain/**",
+            "chapters/hands/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/adapters/appfolio-reader.adapter.ts",
+            "operation": "create",
+            "context": "Physical binding boundary natively.",
+            "purpose": "Playwright orchestration mapping natively explicitly cleanly.",
+            "build_prompt": "Define IAppFolioReader returning valid mocked ledgers perfectly.",
+            "json_spec_path": "ump/UMP-0023/spec.appfolio.json"
+        },
+        {
+            "path": "src/adapters/gmail-reader.adapter.ts",
+            "operation": "create",
+            "context": "Physical email bindings natively explicitly.",
+            "purpose": "Gmail HTTP Rest limits.",
+            "build_prompt": "Define IGmailReader outputting JSON arrays natively.",
+            "json_spec_path": "ump/UMP-0023/spec.gmail.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

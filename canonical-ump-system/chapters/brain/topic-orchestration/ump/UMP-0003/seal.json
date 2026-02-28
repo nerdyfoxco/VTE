@@ -1,0 +1,27 @@
+﻿{
+    "ump_id": "UMP-0003",
+    "sealed_at": "2026-02-25T11:42:00Z",
+    "status": "sealed",
+    "files": [
+        {
+            "path": "foundation/src/testing/contract-runner.ts",
+            "hash": "83b9c7a20ee8dff14ba361da926fa9b4221147558661def746b1cabbec5b94f1"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/test/contracts.workflow.test.ts",
+            "hash": "77e3846cdbbadade38367fb308d5b8393cb1dcbf0b4119d2aa80cf5a70fb76fb"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/ump/UMP-0003/ump.json",
+            "hash": "c074ea9b5f5869480dc2fe19cd7fe98ec1562ae06fae918db4931a5eb2fc55ae"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/ump/UMP-0003/file-manifest.json",
+            "hash": "1537b2d5d8364ea49842cce4a22adcd9f52f53d865cffa4cc920dd334cc42ec1"
+        }
+    ],
+    "verified_tests": [
+        "Workflow Started Pipe Contract Validations",
+        "Workflow Step Completed Pipe Contract Validations"
+    ]
+}

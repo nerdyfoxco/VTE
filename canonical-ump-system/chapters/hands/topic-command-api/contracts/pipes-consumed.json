@@ -1,0 +1,6 @@
+{
+    "module": "chapters/hands/topic-command-api",
+    "pipes_consumed": [
+        "pipe.command.execute.v1"
+    ]
+}

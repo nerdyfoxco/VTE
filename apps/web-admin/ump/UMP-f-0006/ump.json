@@ -1,0 +1,42 @@
+{
+    "ump_id": "UMP-f-0006",
+    "chapter_id": "CH-frontend-03",
+    "topic_id": "TP-admin-01",
+    "phase_id": "PH-01",
+    "title": "Build Approvals Inbox (SC-0300)",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "apps/web-admin/ump/UMP-f-0006/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "apps/web-admin/",
+        "allowed_paths": [
+            "apps/web-admin/app/approvals/page.tsx",
+            "apps/web-admin/ump/UMP-f-0006/**"
+        ],
+        "forbidden_paths": [
+            "**/*.py"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "app/approvals/page.tsx",
+            "operation": "create",
+            "purpose": "Provide a high-fidelity control plane interface for supervisors to clear or reject STOP/HOLD evaluations.",
+            "build_prompt": "Scaffold specialized Shadcn Table atomics displaying HOLD metrics accurately with Action Dropdowns for L2 Overrides."
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "security": {
+        "data_classification": "control_plane_ui"
+    }
+}

@@ -1,0 +1,17 @@
+[
+    {
+        "path": "src/routes/workflow.routes.ts",
+        "operation": "create",
+        "purpose": "Links external calls to the state engine and message bus."
+    },
+    {
+        "path": "src/server.ts",
+        "operation": "modify",
+        "purpose": "Inject singleton state manager globally."
+    },
+    {
+        "path": "test/routes.workflow.test.ts",
+        "operation": "create",
+        "purpose": "Assures 400 errors map correctly vs 201 successes."
+    }
+]

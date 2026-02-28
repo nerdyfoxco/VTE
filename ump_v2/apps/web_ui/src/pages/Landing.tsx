@@ -12,8 +12,14 @@ const Landing: React.FC = () => {
                         <ShieldCheck className="text-blue-500 w-8 h-8" />
                         <span className="text-xl font-bold tracking-tight text-white">VTE Platform</span>
                     </div>
+                    <div className="hidden md:flex items-center gap-6 mr-6">
+                        <Link to="/architecture" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Architecture</Link>
+                        <Link to="/compliance" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Compliance</Link>
+                        <Link to="/modules" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Modules</Link>
+                        <a href="#" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Support</a>
+                    </div>
                     <div className="flex items-center gap-4">
-                        <Link to="/login" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
+                        <Link to="/login" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
                             Operator Sign In
                         </Link>
                         <Link to="/signup" className="text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md transition-colors shadow-lg shadow-blue-500/20">
@@ -24,7 +30,14 @@ const Landing: React.FC = () => {
             </nav>
 
             {/* Hero Section */}
-            <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center py-20">
+            <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center py-20 relative overflow-hidden">
+                {/* Subtle Background Animation */}
+                <div className="absolute inset-0 z-0 flex justify-center items-center pointer-events-none opacity-20">
+                    <div className="absolute w-[600px] h-[600px] bg-blue-600/30 rounded-full blur-[100px] animate-pulse"></div>
+                    <div className="absolute w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[80px] -translate-x-1/2 -translate-y-1/4"></div>
+                </div>
+                
+                <div className="relative z-10 flex flex-col items-center">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/30 border border-blue-800/50 text-blue-400 text-sm font-medium mb-8">
                     <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-pulse"></span>
                     VTE 3.0 Production Build
@@ -38,13 +51,19 @@ const Landing: React.FC = () => {
                     <strong className="text-gray-200">Fail-Closed. Zero Ambiguity.</strong> Replace flawed human intuition with computationally verified debt collection and communication workflows.
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-center gap-4">
-                    <Link to="/signup" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-xl shadow-blue-500/20 w-full sm:w-auto justify-center">
-                        Request Operator Access <ArrowRight className="w-5 h-5" />
-                    </Link>
-                    <Link to="/login" className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 px-8 py-4 rounded-lg text-lg font-semibold transition-all w-full sm:w-auto justify-center">
-                        Operator Sign In
-                    </Link>
+                <div className="flex flex-col items-center gap-4">
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                        <Link to="/signup" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all hover:scale-105 shadow-xl shadow-blue-500/20 w-full sm:w-auto justify-center">
+                            Request Operator Access <ArrowRight className="w-5 h-5" />
+                        </Link>
+                        <Link to="/login" className="flex items-center gap-2 bg-white/5 hover:bg-white/10 backdrop-blur-md text-gray-100 border border-white/10 px-8 py-4 rounded-lg text-lg font-semibold transition-all w-full sm:w-auto justify-center shadow-lg shadow-black/20">
+                            Operator Sign In
+                        </Link>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2 text-xs text-gray-500">
+                        <ShieldCheck className="w-3 h-3 text-emerald-500" />
+                        Protected by reCAPTCHA Enterprise
+                    </div>
                 </div>
 
                 {/* Trust/Compliance Badges */}
@@ -64,6 +83,7 @@ const Landing: React.FC = () => {
                             <h3 className="text-gray-300 font-medium">Idempotency-Locked</h3>
                         </div>
                     </div>
+                </div>
                 </div>
             </main>
 

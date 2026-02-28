@@ -1,0 +1,17 @@
+[
+    {
+        "path": "src/engine/shadow-wrapper.ts",
+        "operation": "create",
+        "purpose": "Proxy intercepting Zero-Trust."
+    },
+    {
+        "path": "src/engine/command-consumer.ts",
+        "operation": "create",
+        "purpose": "Pipeline bindings proxy natively."
+    },
+    {
+        "path": "test/engine/shadow-wrapper.test.ts",
+        "operation": "create",
+        "purpose": "Physical bounds validation test."
+    }
+]

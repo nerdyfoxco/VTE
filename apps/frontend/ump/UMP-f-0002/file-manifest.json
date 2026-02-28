@@ -1,0 +1,12 @@
+[
+    {
+        "path": "src/components/layout/vte-sidebar.tsx",
+        "operation": "create",
+        "purpose": "Provides clear, persistent lateral navigation using Next.js Link atomics."
+    },
+    {
+        "path": "src/components/layout/vte-topnav.tsx",
+        "operation": "create",
+        "purpose": "Display current Workspace, Breadcrumbs, Avatar drops, and Notifications."
+    }
+]

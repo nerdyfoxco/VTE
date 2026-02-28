@@ -1,0 +1,76 @@
+{
+    "ump_id": "UMP-0008",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-02",
+    "phase_id": "PH-01",
+    "title": "Define pipe.policy.evaluate.v1 schema",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-policy-engine/ump/UMP-0008/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-policy-engine/",
+        "allowed_paths": [
+            "foundation/contracts/pipes/**",
+            "chapters/brain/topic-policy-engine/contracts/**",
+            "chapters/brain/topic-policy-engine/ump/UMP-0008/**"
+        ],
+        "forbidden_paths": [
+            "spine/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": [
+            "pipe.policy.evaluate.v1"
+        ]
+    },
+    "files": [
+        {
+            "path": "foundation/contracts/pipes/schemas/pipe.policy.evaluate.v1.schema.json",
+            "operation": "create",
+            "context": "Physical contract definition for evaluations.",
+            "purpose": "Authoritative Policy Inference Pipeline schema.",
+            "build_prompt": "Strict JSON schema containing required Context hash, requesting ID, Policy ID.",
+            "json_spec_path": "ump/UMP-0008/spec.schema.json"
+        },
+        {
+            "path": "foundation/contracts/pipes/pipe-registry.json",
+            "operation": "modify",
+            "context": "Central map tracking all active events.",
+            "purpose": "Registration of the consuming endpoints.",
+            "build_prompt": "Add policy.evaluate to registry array.",
+            "json_spec_path": "ump/UMP-0008/spec.registry.json"
+        },
+        {
+            "path": "chapters/brain/topic-policy-engine/contracts/pipes-consumed.json",
+            "operation": "create",
+            "context": "Node specific execution map.",
+            "purpose": "Explicit bounds mapped exclusively to topic-policy-engine.",
+            "build_prompt": "Array containing pipe ID.",
+            "json_spec_path": "ump/UMP-0008/spec.consumed.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "contract"
+        ],
+        "commands": [
+            "npm run contract-check"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

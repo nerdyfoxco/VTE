@@ -1,0 +1,30 @@
+{
+    "name": "@vte/gateway-routing",
+    "version": "1.0.0",
+    "description": "Strangler Fig Gateway for Canonical VTE execution. Routes new UMP modules and proxies legacy Python requests.",
+    "main": "dist/main.js",
+    "types": "dist/main.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "start": "tsx src/main.ts",
+        "test": "jest",
+        "lint": "eslint src --ext .ts"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.10.2",
+        "@vte/brain-orchestration": "file:../../brain/topic-orchestration",
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "http-proxy-middleware": "^2.0.6",
+        "prisma": "^5.10.2"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.17",
+        "@types/express": "^4.17.21",
+        "@types/http-proxy-middleware": "^1.0.0",
+        "@types/node": "^20.11.24",
+        "ts-node": "^10.9.2",
+        "tsx": "^4.21.0",
+        "typescript": "^5.3.3"
+    }
+}

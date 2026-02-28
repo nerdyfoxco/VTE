@@ -1,0 +1,59 @@
+{
+    "ump_id": "UMP-f-0001",
+    "chapter_id": "CH-frontend-01",
+    "topic_id": "TP-frontend-01",
+    "phase_id": "PH-01",
+    "title": "Tailwind & Theme Initialization (Strangler Fig Base)",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "apps/frontend/ump/UMP-f-0001/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "apps/frontend/",
+        "allowed_paths": [
+            "apps/frontend/app/globals.css",
+            "apps/frontend/tailwind.config.ts",
+            "apps/frontend/ump/UMP-f-0001/**"
+        ],
+        "forbidden_paths": [
+            "apps/web-admin/**",
+            "**/*.py"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "app/globals.css",
+            "operation": "modify",
+            "context": "Eradicates legacy raw HTML styling, forcing Apple-grade HSL variables.",
+            "purpose": "Inject strictly defined Shadcn theme tokens into the global CSS space.",
+            "build_prompt": "Replace existing content with clean Tailwind directives and strict :root HSL definitions for calm, confident UI.",
+            "json_spec_path": "ump/UMP-f-0001/spec.globals.css.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npx shadcn-ui@latest init -y"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "visual"
+        ],
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "public_ui"
+    }
+}

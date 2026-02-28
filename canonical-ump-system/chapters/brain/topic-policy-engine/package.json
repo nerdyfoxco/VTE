@@ -1,0 +1,16 @@
+{
+    "name": "@chapters/brain-topic-policy-engine",
+    "version": "1.0.0",
+    "description": "Canonical UMP Policy Engine Node",
+    "main": "src/index.ts",
+    "scripts": {
+        "build": "tsc",
+        "test": "tsx --test test/**/*.test.ts test/*.test.ts"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "tsx": "^4.7.1",
+        "typescript": "^5.4.2"
+    }
+}

@@ -1,0 +1,70 @@
+{
+    "ump_id": "UMP-0012",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-02",
+    "phase_id": "PH-02",
+    "title": "Integration test: orchestration <=> policy via pipe",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-policy-engine/ump/UMP-0012/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-policy-engine/",
+        "allowed_paths": [
+            "chapters/brain/topic-policy-engine/src/pipes/**",
+            "chapters/brain/topic-policy-engine/test/integration/**",
+            "chapters/brain/topic-policy-engine/ump/UMP-0012/**"
+        ],
+        "forbidden_paths": [
+            "spine/**"
+        ],
+        "allowed_shared_paths": [
+            "foundation/contracts/pipes/schemas/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": [
+            "pipe.policy.evaluated.v1"
+        ]
+    },
+    "files": [
+        {
+            "path": "src/pipes/evaluate-consumer.ts",
+            "operation": "create",
+            "context": "Ingestion logic mapping",
+            "purpose": "Consumes incoming evaluate requests safely.",
+            "build_prompt": "Catch payload, evaluate properly, generate compliant evaluated schema object natively.",
+            "json_spec_path": "ump/UMP-0012/spec.consumer.json"
+        },
+        {
+            "path": "test/integration/policy-pipeline.integration.test.ts",
+            "operation": "create",
+            "context": "Pipeline verifications.",
+            "purpose": "Simulates orchestration events triggering the policy loop.",
+            "build_prompt": "Mock valid event boundaries. Inject them and strictly validate outputs against the evaluated schema pathing.",
+            "json_spec_path": "ump/UMP-0012/spec.integration.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "integration"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

@@ -1,0 +1,7 @@
+[
+    {
+        "path": "test/contracts.command.execute.test.ts",
+        "operation": "create",
+        "purpose": "Physical testing block mocking constraints"
+    }
+]

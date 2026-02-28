@@ -1,0 +1,27 @@
+[
+    {
+        "path": "src/server.ts",
+        "operation": "create",
+        "purpose": "Local fast-server initialization handling GET /healthz"
+    },
+    {
+        "path": "src/index.ts",
+        "operation": "create",
+        "purpose": "Start the HTTP server on process.env.PORT"
+    },
+    {
+        "path": "test/smoke.test.ts",
+        "operation": "create",
+        "purpose": "Asserts /healthz natively."
+    },
+    {
+        "path": "package.json",
+        "operation": "create",
+        "purpose": "Node configuration"
+    },
+    {
+        "path": "tsconfig.json",
+        "operation": "create",
+        "purpose": "Typescript configuration"
+    }
+]

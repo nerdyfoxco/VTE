@@ -34,6 +34,28 @@ class Agent(ABC):
             sha256=sha256
         )
 
-    # TODO: Add emit() to post to API or DB directly?
-    # For now, Agents might return data tasks, or we inject a repository.
-    # Decoupling: Agents return 'EvidenceBundleDraft', Task runner saves it.
+    def emit(self, draft: Any) -> bool:
+        """
+        Emits a DecisionDraft or EvidenceBundleDraft directly to the VTE API.
+        Requires BOT_API_TOKEN environment variable.
+        """
+        import os
+        import requests
+        
+        api_url = os.getenv("API_URL", "http://localhost:8000/api/v1")
+        token = os.getenv("BOT_API_TOKEN", "system-agent-token-1234")
+        
+        try:
+            payload = draft.model_dump() if hasattr(draft, 'model_dump') else draft
+            headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+            
+            response = requests.post(f"{api_url}/decisions/drafts", json=payload, headers=headers, timeout=5)
+            if response.status_code in [200, 201, 202]:
+                self.logger.info(f"Successfully emitted draft to API. Status: {response.status_code}")
+                return True
+            else:
+                self.logger.warning(f"Failed to emit draft. API returned {response.status_code}")
+                return False
+        except Exception as e:
+            self.logger.error(f"Error emitting draft to API: {e}")
+            return False

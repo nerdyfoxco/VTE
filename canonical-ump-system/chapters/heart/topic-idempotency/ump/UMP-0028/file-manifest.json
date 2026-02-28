@@ -1,0 +1,10 @@
+[
+    {
+        "path": "src/idempotency.ts",
+        "operation": "create"
+    },
+    {
+        "path": "test/idempotency.test.ts",
+        "operation": "create"
+    }
+]

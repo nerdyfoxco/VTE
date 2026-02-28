@@ -1,0 +1,17 @@
+[
+    {
+        "path": "foundation/contracts/pipes/schemas/pipe.command.execute.v1.schema.json",
+        "operation": "create",
+        "purpose": "Authoritative Command Schema."
+    },
+    {
+        "path": "foundation/contracts/pipes/pipe-registry.json",
+        "operation": "modify",
+        "purpose": "Integrate boundary into registry loop."
+    },
+    {
+        "path": "chapters/hands/topic-command-api/contracts/pipes-consumed.json",
+        "operation": "create",
+        "purpose": "Topic specific boundary file mapping."
+    }
+]

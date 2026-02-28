@@ -1,0 +1,74 @@
+{
+    "ump_id": "UMP-0013",
+    "chapter_id": "CH-02",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Create command API skeleton",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/hands/topic-command-api/ump/UMP-0013/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/hands/topic-command-api/",
+        "allowed_paths": [
+            "chapters/hands/topic-command-api/**"
+        ],
+        "forbidden_paths": [
+            "foundation/**",
+            "spine/**",
+            "chapters/brain/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/server.ts",
+            "operation": "create",
+            "context": "Microservice boilerplate",
+            "purpose": "Local fast-server initialization handling GET /healthz",
+            "build_prompt": "Expose startServer({ port }). Return 200 ok { \"status\": \"ok\", \"service\": \"command-api\" }.",
+            "json_spec_path": "ump/UMP-0013/spec.server.ts.json"
+        },
+        {
+            "path": "src/index.ts",
+            "operation": "create",
+            "context": "Service entry point",
+            "purpose": "Start the HTTP server on process.env.PORT or 3002",
+            "build_prompt": "Import startServer, listen, block exit on error.",
+            "json_spec_path": "ump/UMP-0013/spec.index.ts.json"
+        },
+        {
+            "path": "test/smoke.test.ts",
+            "operation": "create",
+            "context": "Smoke validations",
+            "purpose": "Asserts /healthz natively.",
+            "build_prompt": "Use node:test async blocks to query local port randomly.",
+            "json_spec_path": "ump/UMP-0013/spec.smoke.test.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "smoke"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

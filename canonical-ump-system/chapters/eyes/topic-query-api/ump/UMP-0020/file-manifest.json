@@ -1,0 +1,22 @@
+[
+    {
+        "path": "foundation/contracts/pipes/schemas/pipe.query.request.v1.schema.json",
+        "operation": "create",
+        "purpose": "Data schema definition natively."
+    },
+    {
+        "path": "foundation/contracts/pipes/schemas/pipe.query.response.v1.schema.json",
+        "operation": "create",
+        "purpose": "Response contract mapping bounds explicitly"
+    },
+    {
+        "path": "foundation/contracts/pipes/pipe-registry.json",
+        "operation": "modify",
+        "purpose": "Pipe binding loop registry natively"
+    },
+    {
+        "path": "chapters/eyes/topic-query-api/contracts/pipes-consumed.json",
+        "operation": "create",
+        "purpose": "Local mapping loop natively."
+    }
+]

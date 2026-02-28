@@ -1,0 +1,23 @@
+{
+    "ump_id": "UMP-0010",
+    "chapter_id": "CH-03",
+    "topic_id": "TP-01",
+    "phase_id": "PH-04",
+    "title": "Seal Final Expansion: Hands Dispatch Module",
+    "status": "executed",
+    "immutability": {
+        "sealed": true,
+        "seal_path": "foundation/ump/UMP-0010/seal.json"
+    },
+    "scope": {
+        "module_path": "chapters/hands/topic-dispatch",
+        "allowed_paths": [
+            "chapters/hands/topic-dispatch/src/dispatcher.ts",
+            "chapters/hands/topic-dispatch/src/providers/email.ts"
+        ],
+        "forbidden_paths": []
+    },
+    "contracts": {
+        "live_side_effects": "Only the Hands module is permitted to make external network connections. Orchestration must pass strictly verified payloads exclusively through the Dispatcher interface."
+    }
+}

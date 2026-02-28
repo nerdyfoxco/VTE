@@ -1,0 +1,42 @@
+{
+    "ump_id": "UMP-f-0007",
+    "chapter_id": "CH-frontend-03",
+    "topic_id": "TP-admin-01",
+    "phase_id": "PH-02",
+    "title": "Build Super Admin Global Dashboard (APP-19)",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "apps/web-admin/ump/UMP-f-0007/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "apps/web-admin/",
+        "allowed_paths": [
+            "apps/web-admin/app/superadmin/page.tsx",
+            "apps/web-admin/ump/UMP-f-0007/**"
+        ],
+        "forbidden_paths": [
+            "**/*.py"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "app/superadmin/page.tsx",
+            "operation": "create",
+            "purpose": "Provide a high-fidelity control plane interface for system-level Super Admins.",
+            "build_prompt": "Scaffold specialized Shadcn-style toggle cards and system health components accurately reflecting physical system activity."
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "security": {
+        "data_classification": "control_plane_ui"
+    }
+}

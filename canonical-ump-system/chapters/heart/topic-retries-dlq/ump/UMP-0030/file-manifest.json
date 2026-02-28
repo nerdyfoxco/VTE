@@ -1,0 +1,10 @@
+[
+    {
+        "path": "src/dlq/manager.ts",
+        "operation": "create"
+    },
+    {
+        "path": "test/dlq/manager.test.ts",
+        "operation": "create"
+    }
+]

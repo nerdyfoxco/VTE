@@ -1,0 +1,75 @@
+{
+    "ump_id": "UMP-0011",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-02",
+    "phase_id": "PH-02",
+    "title": "Add validation/redaction hooks",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-policy-engine/ump/UMP-0011/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-policy-engine/",
+        "allowed_paths": [
+            "chapters/brain/topic-policy-engine/src/observability/**",
+            "foundation/src/security/**",
+            "chapters/brain/topic-policy-engine/test/**",
+            "chapters/brain/topic-policy-engine/ump/UMP-0011/**"
+        ],
+        "forbidden_paths": [
+            "spine/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "foundation/src/security/redact.ts",
+            "operation": "create",
+            "context": "PII Abstraction",
+            "purpose": "Overrides SSN logic.",
+            "build_prompt": "Recursive replacement of explicit keys with [REDACTED].",
+            "json_spec_path": "ump/UMP-0011/spec.redact.json"
+        },
+        {
+            "path": "src/observability/logger.ts",
+            "operation": "create",
+            "context": "Context logging proxy.",
+            "purpose": "Filters evaluations context through the security layer.",
+            "build_prompt": "Proxy JSON.stringify with redactContext bindings.",
+            "json_spec_path": "ump/UMP-0011/spec.logger.json"
+        },
+        {
+            "path": "test/observability.redaction.test.ts",
+            "operation": "create",
+            "context": "Boundary validation",
+            "purpose": "Validates the redact mapping.",
+            "build_prompt": "Mock SSN properties map accurately cleanly.",
+            "json_spec_path": "ump/UMP-0011/spec.test.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

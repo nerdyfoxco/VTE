@@ -1,0 +1,82 @@
+{
+    "ump_id": "UMP-0007",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-02",
+    "phase_id": "PH-01",
+    "title": "Create policy engine skeleton",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-policy-engine/ump/UMP-0007/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-policy-engine/",
+        "allowed_paths": [
+            "chapters/brain/topic-policy-engine/**"
+        ],
+        "forbidden_paths": [
+            "foundation/**",
+            "spine/**",
+            "chapters/brain/topic-orchestration/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/server.ts",
+            "operation": "create",
+            "context": "Microservice boilerplate",
+            "purpose": "Local fast-server initialization handling GET /healthz",
+            "build_prompt": "Expose startServer({ port }). Return 200 ok {\"status\": \"ok\", \"service\": \"policy-engine\"}.",
+            "json_spec_path": "ump/UMP-0007/spec.server.ts.json"
+        },
+        {
+            "path": "src/index.ts",
+            "operation": "create",
+            "context": "Node entrypoint",
+            "purpose": "Reads PORT and boots server securely.",
+            "build_prompt": "Call startServer with PORT 3001.",
+            "json_spec_path": "ump/UMP-0007/spec.index.ts.json"
+        },
+        {
+            "path": "test/smoke.test.ts",
+            "operation": "create",
+            "context": "Boundary validation",
+            "purpose": "Ensures server can be instantiated and replies natively to fetch requests.",
+            "build_prompt": "Run ephemeral 0 port and test /healthz and /unknown 404.",
+            "json_spec_path": "ump/UMP-0007/spec.smoke.test.ts.json"
+        },
+        {
+            "path": "package.json",
+            "operation": "create",
+            "context": "Module descriptor",
+            "purpose": "Names package @chapters/brain-topic-policy-engine.",
+            "build_prompt": "Set scripts to build and test.",
+            "json_spec_path": "ump/UMP-0007/spec.package.ts.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "smoke"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

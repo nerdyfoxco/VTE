@@ -1,0 +1,69 @@
+{
+    "ump_id": "UMP-f-0002",
+    "chapter_id": "CH-frontend-01",
+    "topic_id": "TP-frontend-01",
+    "phase_id": "PH-02",
+    "title": "Construct <VteSidebar> and <VteTopNav>",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "apps/frontend/ump/UMP-f-0002/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "apps/frontend/",
+        "allowed_paths": [
+            "apps/frontend/src/components/layout/vte-sidebar.tsx",
+            "apps/frontend/src/components/layout/vte-topnav.tsx",
+            "apps/frontend/ump/UMP-f-0002/**"
+        ],
+        "forbidden_paths": [
+            "apps/frontend/app/**",
+            "**/*.py"
+        ],
+        "allowed_shared_paths": [
+            "apps/frontend/src/components/ui/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/components/layout/vte-sidebar.tsx",
+            "operation": "create",
+            "context": "Main application drawer mapping system states to routes",
+            "purpose": "Provides clear, persistent lateral navigation using Next.js Link atomics.",
+            "build_prompt": "Create 72px wide fixed sidebar using Lucide icons. Add animations and active state.",
+            "json_spec_path": "ump/UMP-f-0002/spec.vte-sidebar.tsx.json"
+        },
+        {
+            "path": "src/components/layout/vte-topnav.tsx",
+            "operation": "create",
+            "context": "Consistent contextual top bar",
+            "purpose": "Display current Workspace, Breadcrumbs, Avatar drops, and Notifications.",
+            "build_prompt": "Backdrop-blur header sticky to top with Shadcn Avatar mapping.",
+            "json_spec_path": "ump/UMP-f-0002/spec.vte-topnav.tsx.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "visual"
+        ],
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "public_ui"
+    }
+}

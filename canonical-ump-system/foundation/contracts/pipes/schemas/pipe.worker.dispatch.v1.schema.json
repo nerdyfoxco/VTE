@@ -1,0 +1,82 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "canon://vte/pipe.worker.dispatch.v1.schema.json",
+    "title": "Worker Job Dispatch",
+    "description": "Pipe schema issuing heavy execution payloads from Orchestration into Asynchronous Queues natively explicitly.",
+    "type": "object",
+    "properties": {
+        "meta": {
+            "type": "object",
+            "properties": {
+                "event_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "timestamp_utc": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "correlation_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "producer": {
+                    "type": "string"
+                },
+                "schema_version": {
+                    "type": "string",
+                    "const": "1.0.0"
+                }
+            },
+            "required": [
+                "event_id",
+                "timestamp_utc",
+                "correlation_id",
+                "producer",
+                "schema_version"
+            ],
+            "additionalProperties": false
+        },
+        "data": {
+            "type": "object",
+            "properties": {
+                "job_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "priority": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 10
+                },
+                "queue_name": {
+                    "type": "string",
+                    "enum": [
+                        "heavy_ingest",
+                        "light_mutation",
+                        "general"
+                    ]
+                },
+                "payload": {
+                    "type": "object"
+                },
+                "max_retries": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "job_id",
+                "priority",
+                "queue_name",
+                "payload",
+                "max_retries"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "meta",
+        "data"
+    ],
+    "additionalProperties": false
+}

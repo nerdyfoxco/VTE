@@ -1,0 +1,8 @@
+{
+    "produces": [
+        "pipe.workflow.started.v1"
+    ],
+    "consumes": [
+        "pipe.workflow.step.completed.v1"
+    ]
+}

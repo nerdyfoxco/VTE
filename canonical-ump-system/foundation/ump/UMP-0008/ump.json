@@ -1,0 +1,69 @@
+{
+    "ump_id": "UMP-0008",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-03",
+    "title": "Seal Constitutional Finalization (Shadow Execution Engine)",
+    "status": "executed",
+    "immutability": {
+        "sealed": true,
+        "seal_path": "foundation/ump/UMP-0008/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/src/**"
+        ],
+        "forbidden_paths": [
+            "**/*"
+        ],
+        "allowed_shared_paths": [
+            "foundation/src/security/middleware.ts",
+            "chapters/kidney/topic-validation/src/validator.ts"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": [
+            "pipe.workflow.shadow.evaluated.v1"
+        ]
+    },
+    "files": [
+        {
+            "path": "chapters/brain/topic-orchestration/src/shadow.ts",
+            "operation": "create",
+            "context": "Shadow Execution Engine",
+            "purpose": "Evaluate workflows and project side-effects without issuing external calls, writing SHADOW traces to Prisma."
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/src/routes.ts",
+            "operation": "create",
+            "context": "Trace Telemetry Router",
+            "purpose": "Bind the Firewall, Kidney Validator, and Shadow Engine to explicit REST endpoints."
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit",
+            "integration"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [
+            "shadow_records_must_be_deterministic",
+            "simulated_effects_must_not_fire"
+        ],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "critical"
+    }
+}

@@ -1,7 +1,8 @@
 import "./globals.css";
 import React from "react";
-import Link from "next/link";
-import Navbar from "../components/Navbar";
+import { AppLayout } from "@/components/layout/app-layout";
+import AnalyticsProvider from "@/components/AnalyticsProvider";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 export const metadata = {
     title: "VTE Control Plane",
@@ -14,12 +15,15 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en">
-            <body className="min-h-screen bg-gray-100 text-gray-900 font-sans">
-                <Navbar />
-                <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                    {children}
-                </main>
+        <html lang="en" suppressHydrationWarning>
+            <body className="min-h-screen font-sans antialiased" suppressHydrationWarning>
+                <ErrorBoundary>
+                    <AnalyticsProvider>
+                        <AppLayout>
+                            {children}
+                        </AppLayout>
+                    </AnalyticsProvider>
+                </ErrorBoundary>
             </body>
         </html>
     );

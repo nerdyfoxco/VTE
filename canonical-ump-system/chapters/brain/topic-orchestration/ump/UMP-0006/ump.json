@@ -1,0 +1,75 @@
+{
+    "ump_id": "UMP-0006",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-02",
+    "title": "Create workflow API routing to bridge state into pipes",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0006/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/src/server.ts",
+            "chapters/brain/topic-orchestration/src/routes/**",
+            "chapters/brain/topic-orchestration/test/routes.workflow.test.ts",
+            "chapters/brain/topic-orchestration/ump/UMP-0006/**"
+        ],
+        "forbidden_paths": [
+            "**/*"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/routes/workflow.routes.ts",
+            "operation": "create",
+            "context": "Provides explicit HTTP mutation boundaries",
+            "purpose": "Links external calls to the state engine and message bus.",
+            "build_prompt": "Handle POST, validate fields, update state, emit pipe, return 201.",
+            "json_spec_path": "ump/UMP-0006/spec.workflow.routes.ts.json"
+        },
+        {
+            "path": "src/server.ts",
+            "operation": "modify",
+            "context": "Updates shell to mount specific handlers",
+            "purpose": "Inject singleton state manager globally.",
+            "build_prompt": "Route fallback architecture pointing to handleWorkflowRoutes.",
+            "json_spec_path": "ump/UMP-0006/spec.server.ts.json"
+        },
+        {
+            "path": "test/routes.workflow.test.ts",
+            "operation": "create",
+            "context": "Automated verification of route integrity",
+            "purpose": "Assures 400 errors map correctly vs 201 successes.",
+            "build_prompt": "Spin up test server and fetch endpoints locally.",
+            "json_spec_path": "ump/UMP-0006/spec.routes.workflow.test.ts.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "integration"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

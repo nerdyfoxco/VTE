@@ -1,0 +1,99 @@
+{
+    "ump_id": "UMP-0002",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Register orchestration event pipe schemas",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0002/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "foundation/contracts/pipes/**",
+            "chapters/brain/topic-orchestration/contracts/**",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [
+            "**/*"
+        ],
+        "allowed_shared_paths": [
+            "foundation/contracts/pipes/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": [
+            {
+                "pipe_id": "pipe.workflow.started.v1",
+                "direction": "down",
+                "producer": "chapters/brain/topic-orchestration",
+                "consumer": "any",
+                "schema_path": "foundation/contracts/pipes/schemas/pipe.workflow.started.v1.schema.json",
+                "version": "1.0.0",
+                "compatibility": "strict"
+            },
+            {
+                "pipe_id": "pipe.workflow.step.completed.v1",
+                "direction": "up",
+                "producer": "any",
+                "consumer": "chapters/brain/topic-orchestration",
+                "schema_path": "foundation/contracts/pipes/schemas/pipe.workflow.step.completed.v1.schema.json",
+                "version": "1.0.0",
+                "compatibility": "strict"
+            }
+        ]
+    },
+    "files": [
+        {
+            "path": "foundation/contracts/pipes/schemas/pipe.workflow.started.v1.schema.json",
+            "operation": "create",
+            "context": "Pipe schema for workflow start event",
+            "purpose": "Define strict API contract for down-stream consumers",
+            "build_prompt": "JSON Schema draft-07 without additional properties allowed in meta. Data includes workflow_id, initiator, inputs.",
+            "json_spec_path": "ump/UMP-0002/spec.pipe.workflow.started.v1.json"
+        },
+        {
+            "path": "foundation/contracts/pipes/schemas/pipe.workflow.step.completed.v1.schema.json",
+            "operation": "create",
+            "context": "Pipe schema for step completion",
+            "purpose": "Define strict API contract for up-stream producers",
+            "build_prompt": "JSON Schema draft-07 for step completion payload.",
+            "json_spec_path": "ump/UMP-0002/spec.pipe.workflow.step.completed.v1.json"
+        },
+        {
+            "path": "foundation/contracts/pipes/pipe-registry.json",
+            "operation": "create",
+            "context": "Global registry for all system pipes",
+            "purpose": "Central mapping for spine connectivity checks",
+            "build_prompt": "Contains list of pipes mapped to their schema URIs.",
+            "json_spec_path": "ump/UMP-0002/spec.pipe-registry.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/contracts/pipes-used.json",
+            "operation": "create",
+            "context": "Topic specific pipe references",
+            "purpose": "Explicit visibility of upstream dependencies",
+            "build_prompt": "Documents what this topic consumes and produces.",
+            "json_spec_path": "ump/UMP-0002/spec.pipes-used.json"
+        }
+    ],
+    "build": {
+        "commands": []
+    },
+    "tests": {
+        "levels": [
+            "schema"
+        ],
+        "commands": []
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

@@ -1,0 +1,71 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "canon://vte/pipe.policy.evaluate.v1.schema.json",
+    "title": "Policy Engine Evaluation Request",
+    "description": "Pipe schema governing requests emitted to the Policy Engine for strict compliance evaluations.",
+    "type": "object",
+    "properties": {
+        "meta": {
+            "type": "object",
+            "properties": {
+                "event_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "timestamp_utc": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "correlation_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "producer": {
+                    "type": "string"
+                },
+                "schema_version": {
+                    "type": "string",
+                    "const": "1.0.0"
+                }
+            },
+            "required": [
+                "event_id",
+                "timestamp_utc",
+                "correlation_id",
+                "producer",
+                "schema_version"
+            ],
+            "additionalProperties": false
+        },
+        "data": {
+            "type": "object",
+            "properties": {
+                "policy_id": {
+                    "type": "string"
+                },
+                "context": {
+                    "type": "object",
+                    "description": "Dynamic hash of evidence required for evaluation."
+                },
+                "requester": {
+                    "type": "string"
+                },
+                "dry_run": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "policy_id",
+                "context",
+                "requester",
+                "dry_run"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "meta",
+        "data"
+    ],
+    "additionalProperties": false
+}

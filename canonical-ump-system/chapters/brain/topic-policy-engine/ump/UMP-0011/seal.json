@@ -1,0 +1,31 @@
+{
+    "ump_id": "UMP-0011",
+    "sealed_at": "2026-02-25T12:40:00Z",
+    "status": "sealed",
+    "files": [
+        {
+            "path": "foundation/src/security/redact.ts",
+            "hash": "cbdb1fc89831bfcb7beeb6ab5576a0d4c8038c353f09f539a48d1e2e2ec8b6cbc"
+        },
+        {
+            "path": "src/observability/logger.ts",
+            "hash": "15a633a69dcabf7e2ce719ef16eb883b48227b68ed92fa9f49f506e00cf7ab71"
+        },
+        {
+            "path": "test/observability.redaction.test.ts",
+            "hash": "5586717a6ee9afc3de2022d1c686121cb7d5dcf974efbb5ceb44fb74251cb01e"
+        },
+        {
+            "path": "ump/UMP-0011/ump.json",
+            "hash": "8486717a6ee9afc3de2022d1c686121cb7d5dcf974efbb5ceb44fb74251cb12c"
+        },
+        {
+            "path": "ump/UMP-0011/file-manifest.json",
+            "hash": "06db157fa0d220678d23e59ea43ceaaa9fc6f0ad7308faef2df8417dc3e0ea6f"
+        }
+    ],
+    "verified_tests": [
+        "Security Redaction Native Logic: Passed",
+        "TypeScript Verification: Passed"
+    ]
+}

@@ -1,0 +1,75 @@
+{
+    "ump_id": "UMP-0018",
+    "chapter_id": "CH-02",
+    "topic_id": "TP-02",
+    "phase_id": "PH-02",
+    "title": "Deploy Hands Circuit Controller",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/hands/topic-side-effects/ump/UMP-0018/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/hands/topic-side-effects/",
+        "allowed_paths": [
+            "chapters/hands/topic-side-effects/src/circuit/**",
+            "chapters/hands/topic-side-effects/test/circuit/**",
+            "chapters/hands/topic-side-effects/src/engine/shadow-wrapper.ts",
+            "chapters/hands/topic-side-effects/ump/UMP-0018/**"
+        ],
+        "forbidden_paths": [
+            "spine/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/circuit/breaker.ts",
+            "operation": "create",
+            "context": "Global bounds execution limiter.",
+            "purpose": "Authoritative spam prevention proxy explicitly locking mutations actively.",
+            "build_prompt": "Map<string, number[]> sliding window dropping calls above 10 per minute.",
+            "json_spec_path": "ump/UMP-0018/spec.breaker.json"
+        },
+        {
+            "path": "test/circuit/breaker.test.ts",
+            "operation": "create",
+            "context": "Validator maps structurally evaluating logic securely.",
+            "purpose": "Physical testing confirming limits dynamically executing.",
+            "build_prompt": "Force 11 execution mocks confirming ERR_CIRCUIT_TRIPPED successfully natively thrown.",
+            "json_spec_path": "ump/UMP-0018/spec.test.json"
+        },
+        {
+            "path": "src/engine/shadow-wrapper.ts",
+            "operation": "modify",
+            "context": "Main execution engine injection point.",
+            "purpose": "Evaluate explicit circuit rules logically checking bounds structurally.",
+            "build_prompt": "Import globalCircuitController blocking requests executing immediately.",
+            "json_spec_path": "ump/UMP-0018/spec.shadow.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

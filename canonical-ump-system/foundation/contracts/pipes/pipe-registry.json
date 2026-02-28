@@ -1,0 +1,78 @@
+{
+    "registry_version": "1.0.0",
+    "description": "Canonical master registry mapping all deterministic inter-module pipe communication structures.",
+    "pipes": [
+        {
+            "schema_id": "pipe.workflow.started.v1",
+            "path": "foundation/contracts/pipes/schemas/pipe.workflow.started.v1.schema.json",
+            "producer": "chapters/brain/topic-orchestration",
+            "consumers": [
+                "external"
+            ]
+        },
+        {
+            "schema_id": "pipe.workflow.step.completed.v1",
+            "path": "foundation/contracts/pipes/schemas/pipe.workflow.step.completed.v1.schema.json",
+            "producer": "external",
+            "consumers": [
+                "chapters/brain/topic-orchestration"
+            ]
+        },
+        {
+            "schema_id": "pipe.policy.evaluate.v1",
+            "path": "foundation/contracts/pipes/schemas/pipe.policy.evaluate.v1.schema.json",
+            "producer": "external",
+            "consumers": [
+                "chapters/brain/topic-policy-engine"
+            ]
+        },
+        {
+            "schema_id": "pipe.policy.evaluated.v1",
+            "path": "foundation/contracts/pipes/schemas/pipe.policy.evaluated.v1.schema.json",
+            "producer": "chapters/brain/topic-policy-engine",
+            "consumers": [
+                "external"
+            ]
+        },
+        {
+            "schema_id": "pipe.command.execute.v1",
+            "path": "foundation/contracts/pipes/schemas/pipe.command.execute.v1.schema.json",
+            "producer": "external",
+            "consumers": [
+                "chapters/hands/topic-command-api"
+            ]
+        },
+        {
+            "schema_id": "pipe.query.request.v1",
+            "path": "foundation/contracts/pipes/schemas/pipe.query.request.v1.schema.json",
+            "producer": "chapters/brain/topic-orchestration",
+            "consumers": [
+                "chapters/eyes/topic-query-api"
+            ]
+        },
+        {
+            "schema_id": "pipe.query.response.v1",
+            "path": "foundation/contracts/pipes/schemas/pipe.query.response.v1.schema.json",
+            "producer": "chapters/eyes/topic-query-api",
+            "consumers": [
+                "chapters/brain/topic-orchestration"
+            ]
+        },
+        {
+            "schema_id": "pipe.evidence.ingested.v1",
+            "path": "foundation/contracts/pipes/schemas/pipe.evidence.ingested.v1.schema.json",
+            "producer": "chapters/eyes/topic-ingestion",
+            "consumers": [
+                "external"
+            ]
+        },
+        {
+            "schema_id": "pipe.worker.dispatch.v1",
+            "path": "foundation/contracts/pipes/schemas/pipe.worker.dispatch.v1.schema.json",
+            "producer": "external",
+            "consumers": [
+                "chapters/legs/topic-worker-runner"
+            ]
+        }
+    ]
+}

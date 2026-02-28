@@ -1,0 +1,25 @@
+{
+    "name": "@vte/brain-queue",
+    "version": "1.0.0",
+    "description": "Unified Queue module for Canonical VTE execution. Strangled from Python Legacy.",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "test": "jest",
+        "lint": "eslint src --ext .ts"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.22.0",
+        "express": "^4.18.3",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.21",
+        "@types/jest": "^29.5.12",
+        "@types/node": "^20.11.24",
+        "jest": "^29.7.0",
+        "ts-jest": "^29.1.2",
+        "typescript": "^5.3.3"
+    }
+}

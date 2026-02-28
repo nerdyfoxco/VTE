@@ -1,0 +1,17 @@
+[
+    {
+        "path": "src/rules/library.ts",
+        "operation": "create",
+        "purpose": "Authoritative predicates determining boolean passes."
+    },
+    {
+        "path": "src/rules/evaluator.ts",
+        "operation": "create",
+        "purpose": "Stateless calculations mapping Contexts to Predicates safely."
+    },
+    {
+        "path": "test/rules/evaluator.test.ts",
+        "operation": "create",
+        "purpose": "Verify dictionary mapping behaves identically."
+    }
+]

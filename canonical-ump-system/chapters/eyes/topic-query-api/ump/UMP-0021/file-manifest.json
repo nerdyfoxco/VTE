@@ -1,0 +1,7 @@
+[
+    {
+        "path": "test/contracts.query.test.ts",
+        "operation": "create",
+        "purpose": "Test definitions explicitly ensuring bound constraints safely."
+    }
+]

@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -6,8 +6,10 @@ from sqlalchemy.orm import Session
 from spine.db.engine import get_db
 from spine.db.models import DBUser
 from spine.core.security import SecurityService
+from spine.api.deps import SECRET_KEY, ALGORITHM
 from spine.ops.audit import AuditLogger
 from pydantic import BaseModel
+from jose import jwt
 
 router = APIRouter()
 
@@ -83,9 +85,20 @@ async def login_for_access_token(
     db.commit()
     AuditLogger.log(db, user.username, "LOGIN_SUCCESS", "token_granted")
 
-    # 6. Generate Token
+    # 6. Generate Valid Canonical JWT
+    # The Node.js CommandAuthorityFirewall structurally demands these.
+    payload = {
+        "sub": user.username,
+        "tenantId": user.tenant_id,
+        "operatorId": user.username, # Proxying email as operatorId since legacy users lack UUIDs
+        "role": user.role,
+        "email": user.username,
+        "exp": datetime.utcnow() + timedelta(days=7) # 1 week max session
+    }
+    encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
     return {
-        "access_token": f"fake-jwt-token-{user.username}", 
+        "access_token": encoded_jwt, 
         "token_type": "bearer",
         "mfa_required": False
     }

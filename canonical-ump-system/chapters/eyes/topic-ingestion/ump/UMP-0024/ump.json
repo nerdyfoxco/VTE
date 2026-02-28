@@ -1,0 +1,69 @@
+{
+    "ump_id": "UMP-0024",
+    "chapter_id": "CH-03",
+    "topic_id": "TP-02",
+    "phase_id": "PH-02",
+    "title": "Define pipe.evidence.ingested.v1 schema",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/eyes/topic-ingestion/ump/UMP-0024/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/eyes/topic-ingestion/",
+        "allowed_paths": [
+            "foundation/contracts/pipes/**",
+            "chapters/eyes/topic-ingestion/ump/UMP-0024/**"
+        ],
+        "forbidden_paths": [
+            "spine/**",
+            "chapters/brain/**",
+            "chapters/hands/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": [
+            "pipe.evidence.ingested.v1"
+        ]
+    },
+    "files": [
+        {
+            "path": "foundation/contracts/pipes/schemas/pipe.evidence.ingested.v1.schema.json",
+            "operation": "create",
+            "context": "Physical mapping bounding Ingestion evidence payloads accurately.",
+            "purpose": "Authoritative Intent Mappings explicitly",
+            "build_prompt": "Strict JSON schema modeling evidence extraction payloads.",
+            "json_spec_path": "ump/UMP-0024/spec.schema.json"
+        },
+        {
+            "path": "foundation/contracts/pipes/pipe-registry.json",
+            "operation": "modify",
+            "context": "Central map mapping tracking endpoints",
+            "purpose": "Define the Eyes ingestion explicitly locally bindings.",
+            "build_prompt": "Include injected schema cleanly.",
+            "json_spec_path": "ump/UMP-0024/spec.registry.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "contract"
+        ],
+        "commands": [
+            "npm run contract-check"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

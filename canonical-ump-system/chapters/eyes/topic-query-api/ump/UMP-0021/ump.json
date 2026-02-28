@@ -1,0 +1,61 @@
+{
+    "ump_id": "UMP-0021",
+    "chapter_id": "CH-03",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Contract tests for query pipes",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/eyes/topic-query-api/ump/UMP-0021/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/eyes/topic-query-api/",
+        "allowed_paths": [
+            "chapters/eyes/topic-query-api/test/**",
+            "chapters/eyes/topic-query-api/ump/UMP-0021/**"
+        ],
+        "forbidden_paths": [
+            "spine/**",
+            "chapters/brain/**",
+            "chapters/hands/**"
+        ],
+        "allowed_shared_paths": [
+            "foundation/src/testing/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "test/contracts.query.test.ts",
+            "operation": "create",
+            "context": "Physical contract testing explicitly",
+            "purpose": "Authoritative contract mappings ensuring boundaries flawlessly.",
+            "build_prompt": "Evaluate valid requests missing domains valid bindings.",
+            "json_spec_path": "ump/UMP-0021/spec.test.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "contract"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

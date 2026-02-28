@@ -8,7 +8,7 @@ import uuid
 
 # Define Enums (must match DB types)
 RoleEnum = Enum('super_admin', 'admin', 'user', 'auditor', 'system_bot', name='role_enum')
-OutcomeEnum = Enum('PROPOSED', 'APPROVED', 'DENIED', 'NEEDS_MORE_EVIDENCE', name='outcome_enum')
+OutcomeEnum = Enum('PROPOSED', 'APPROVED', 'MESSAGE_PREVIEW', 'EXECUTION_READY', 'DENIED', 'NEEDS_MORE_EVIDENCE', name='outcome_enum')
 CriticalityEnum = Enum('HIGH', 'MEDIUM', 'LOW', name='criticality_enum')
 
 class EvidenceBundle(Base):

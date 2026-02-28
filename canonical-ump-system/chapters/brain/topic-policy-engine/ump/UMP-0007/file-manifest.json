@@ -1,0 +1,22 @@
+[
+    {
+        "path": "src/server.ts",
+        "operation": "create",
+        "purpose": "Local fast-server initialization handling GET /healthz"
+    },
+    {
+        "path": "src/index.ts",
+        "operation": "create",
+        "purpose": "Reads PORT and boots server securely."
+    },
+    {
+        "path": "test/smoke.test.ts",
+        "operation": "create",
+        "purpose": "Ensures server can be instantiated and replies natively to fetch requests."
+    },
+    {
+        "path": "package.json",
+        "operation": "create",
+        "purpose": "Names package @chapters/brain-topic-policy-engine."
+    }
+]

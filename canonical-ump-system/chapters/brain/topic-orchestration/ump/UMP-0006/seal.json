@@ -1,0 +1,32 @@
+{
+    "ump_id": "UMP-0006",
+    "sealed_at": "2026-02-25T11:49:00Z",
+    "status": "sealed",
+    "files": [
+        {
+            "path": "src/routes/workflow.routes.ts",
+            "hash": "43e2e5052309192ebfae38e6dfd1561ae3d18c39abdeb871f7dbbe0d70fdb8fc"
+        },
+        {
+            "path": "src/server.ts",
+            "hash": "cbf1fc89831bfcb7beeb6ab5576a0d4c8038c353f09f539a48d1e2e2ec8b6cb2"
+        },
+        {
+            "path": "test/routes.workflow.test.ts",
+            "hash": "35a82fa20c99a8ea8d01d4a0f44b3cfb9b87e2206ffdeee10787e6fa50b69124"
+        },
+        {
+            "path": "ump/UMP-0006/ump.json",
+            "hash": "7486717a6ee9afc3de2022d1c686121cb7d5dcf974efbb5ceb44fb74251cb124"
+        },
+        {
+            "path": "ump/UMP-0006/file-manifest.json",
+            "hash": "9c1044bd91b45ab10bd4b901fc1ca95edc8b4b745bb0e9e4f24efb43ed5b0c99"
+        }
+    ],
+    "verified_tests": [
+        "POST /workflows/start Route",
+        "Successfully starts a workflow and returns 201",
+        "Rejects payload missing initiator field with 400"
+    ]
+}

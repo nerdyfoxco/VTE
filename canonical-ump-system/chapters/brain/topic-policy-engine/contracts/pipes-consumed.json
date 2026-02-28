@@ -1,0 +1,6 @@
+{
+    "module": "chapters/brain/topic-policy-engine",
+    "pipes_consumed": [
+        "pipe.policy.evaluate.v1"
+    ]
+}

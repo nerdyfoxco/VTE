@@ -1,0 +1,10 @@
+[
+    {
+        "path": "src/retries/exponential-backoff.ts",
+        "operation": "create"
+    },
+    {
+        "path": "test/retries/exponential-backoff.test.ts",
+        "operation": "create"
+    }
+]

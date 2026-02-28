@@ -17,8 +17,7 @@ class AuditorAgent(Agent):
         super().__init__(agent_id)
         self.gmail = GmailClient()
         self.appfolio = AppFolioClient()
-        # TODO: Use internal API URL if in Docker
-        self.api_url = os.getenv("API_URL", "http://spine-api:8000/api/v1") 
+        self.api_url = os.getenv("API_URL", "http://spine-api:8000/api/v1")
 
     def run(self, unit_id: str = "101") -> Dict[str, Any]:
         self.logger.info(f"Starting Audit for Unit {unit_id}...")
@@ -88,13 +87,11 @@ class AuditorAgent(Agent):
 
         # 5. Submit Draft
         try:
-           # We need a token or internal auth to post as a bot. 
-           # For now, we skip the actual POST because we haven't set up "Bot Auth" in the API yet.
-           # We just log the draft.
-           self.logger.info(f"Would Submit Decision Draft: {draft.model_dump_json()}")
+           self.emit(draft)
+           self.logger.info(f"Submitted Decision Draft: {draft.model_dump_json()}")
            return {"status": "discrepancy_found", "draft": draft.model_dump()}
            
         except Exception as e:
-            pass
+            self.logger.error(f"Error submitting decision draft: {e}")
 
         return {"status": "audit_complete"}

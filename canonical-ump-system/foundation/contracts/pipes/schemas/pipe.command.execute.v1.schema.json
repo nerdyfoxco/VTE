@@ -1,0 +1,98 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "canon://vte/pipe.command.execute.v1.schema.json",
+    "title": "Command API Execution Request",
+    "description": "Pipe schema authorizing the Hands module to execute an external mutation (e.g. AppFolio, Gmail).",
+    "type": "object",
+    "properties": {
+        "meta": {
+            "type": "object",
+            "properties": {
+                "event_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "timestamp_utc": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "correlation_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "producer": {
+                    "type": "string"
+                },
+                "schema_version": {
+                    "type": "string",
+                    "const": "1.0.0"
+                }
+            },
+            "required": [
+                "event_id",
+                "timestamp_utc",
+                "correlation_id",
+                "producer",
+                "schema_version"
+            ],
+            "additionalProperties": false
+        },
+        "data": {
+            "type": "object",
+            "properties": {
+                "command_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "target_system": {
+                    "type": "string",
+                    "enum": [
+                        "appfolio",
+                        "gmail",
+                        "stripe",
+                        "mock"
+                    ]
+                },
+                "action": {
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "object"
+                },
+                "execution_authz": {
+                    "type": "object",
+                    "properties": {
+                        "token": {
+                            "type": "string"
+                        },
+                        "approved_by": {
+                            "type": "string"
+                        },
+                        "risk_tier": {
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "token",
+                        "approved_by",
+                        "risk_tier"
+                    ],
+                    "additionalProperties": false
+                }
+            },
+            "required": [
+                "command_id",
+                "target_system",
+                "action",
+                "parameters",
+                "execution_authz"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "meta",
+        "data"
+    ],
+    "additionalProperties": false
+}

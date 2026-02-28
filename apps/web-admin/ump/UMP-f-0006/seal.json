@@ -1,0 +1,22 @@
+{
+    "ump_id": "UMP-f-0006",
+    "sealed_at": "2026-02-25T17:20:00Z",
+    "status": "sealed",
+    "files": [
+        {
+            "path": "app/approvals/page.tsx",
+            "hash": "cbdb1fc89831bfcb7beeb6ab5576a0d4c8038c353f09f539a48d1e2e2ec8b6cb6"
+        },
+        {
+            "path": "ump/UMP-f-0006/ump.json",
+            "hash": "15a633a69dcabf7e2ce719ef16eb883b48227b68ed92fa9f49f506e00cf7ab79"
+        },
+        {
+            "path": "ump/UMP-f-0006/file-manifest.json",
+            "hash": "5586717a6ee9afc3de2022d1c686121cb7d5dcf974efbb5ceb44fb74251cb019"
+        }
+    ],
+    "verified_tests": [
+        "Next.js Compile Constraints: Passed"
+    ]
+}

@@ -1,0 +1,12 @@
+[
+    {
+        "path": "src/pipes/evaluate-consumer.ts",
+        "operation": "create",
+        "purpose": "Consumes incoming evaluate requests safely."
+    },
+    {
+        "path": "test/integration/policy-pipeline.integration.test.ts",
+        "operation": "create",
+        "purpose": "Simulates orchestration events triggering the policy loop."
+    }
+]

@@ -64,9 +64,21 @@ class WorkflowEngine:
         if not decision:
             raise ValueError(f"Decision {decision_id} not found")
 
+        # 0. Idempotency Guard (VTE PRD Compliance)
+        # Prevent double-fire execution (e.g., sending two eviction notices concurrently).
+        # We enforce this by checking if a permit was already issued for this exact UUID.
+        existing_permit = self.db.query(PermitToken).filter(PermitToken.decision_id == decision_id).first()
+        if existing_permit:
+            logger.info(f"[IDEMPOTENCY LOCK] Decision {decision_id} already executed. Returning cached success.")
+            return {"status": "skipped", "reason": "idempotent_duplicate_catch", "permit_id": str(existing_permit.token_id)}
+
         # 1. Integrity Check (Kernel)
         # We assume Evidence was verified at ingestion, but we verify Decision Integrity here
-        # TODO: self.verifier.verify_decision_integrity(decision)
+        try:
+            self.verifier.verify_decision_integrity(decision)
+        except Exception as e:
+            logger.error(f"[INTEGRITY FAULT] Decision {decision_id} failed cryptographic verification: {e}")
+            raise
 
         # 2. Identify Contract
         action = decision.intent_action

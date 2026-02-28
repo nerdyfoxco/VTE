@@ -8,6 +8,7 @@ import SkeletonLoader from '../components/SkeletonLoader';
 import ErrorState from '../components/ErrorState';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { API_URL } from '@/lib/api';
+import { formatDistanceToNow } from 'date-fns';
 
 // Contract: contracts/ux/unified_queue_truth_v1.json
 interface QueueItem {
@@ -43,6 +44,11 @@ export default function Dashboard() {
 
     // Gap 45: Bulk Actions
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+    // Phase 4 Polish States
+    const [activeRowIndex, setActiveRowIndex] = useState(-1);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [toast, setToast] = useState<{ message: string, undoAction?: () => void } | null>(null);
 
     useEffect(() => {
         // Load settings from localStorage
@@ -103,9 +109,38 @@ export default function Dashboard() {
     // I will use a retry trigger state.
     const [retryTrigger, setRetryTrigger] = useState(0);
 
+    let undoTimeoutId: NodeJS.Timeout;
+
+    // Phase 4: Keyboard Navigation
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (['input', 'textarea', 'select'].includes((e.target as HTMLElement).tagName.toLowerCase())) return;
+
+            if (e.key === 'j' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                setActiveRowIndex(prev => Math.min(prev + 1, items.length - 1));
+            } else if (e.key === 'k' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                setActiveRowIndex(prev => Math.max(prev - 1, 0));
+            } else if (e.key === 'Enter' && activeRowIndex >= 0 && items[activeRowIndex]) {
+                e.preventDefault();
+                handleProcessItem(items[activeRowIndex].id);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [items, activeRowIndex]);
+
+    // Auto-refresh Polling
+    useEffect(() => {
+        const interval = setInterval(() => setRetryTrigger(p => p + 1), 60000);
+        return () => clearInterval(interval);
+    }, []);
+
     useEffect(() => {
         const fetchQueue = async () => {
-            setLoading(true);
+            if (items.length === 0) setLoading(true);
+            else setIsRefreshing(true);
             setError(null);
             const token = localStorage.getItem('access_token');
             if (!token) {
@@ -135,14 +170,20 @@ export default function Dashboard() {
                 }
                 setItems(fetchedItems);
                 setLoading(false);
+                setIsRefreshing(false);
             } catch (e: any) {
-                console.error("Failed to fetch queue", e);
+                console.error("Failed to fetch queue (Details Hidden for Security)");
                 if (e.response && e.response.status === 401) {
                     localStorage.removeItem('access_token');
                     router.replace('/login');
-                } else {
-                    setError(e.message || "An unexpected error occurred");
+                } else if (e.code === 'ERR_NETWORK') {
+                    setError("System Offline: Unable to connect to the VTE Orchestration Engine.");
                     setLoading(false);
+                    setIsRefreshing(false);
+                } else {
+                    setError("Internal Server Error: Execution gateway failed to compile.");
+                    setLoading(false);
+                    setIsRefreshing(false);
                 }
             }
         };
@@ -157,6 +198,63 @@ export default function Dashboard() {
             onRetry={() => setRetryTrigger(prev => prev + 1)}
         />
     );
+
+    const handleBulkProcess = () => {
+        const itemsToProcess = [...selectedItems];
+        // Optimistic UI update
+        setItems(prev => prev.filter(i => !itemsToProcess.includes(i.id)));
+        setSelectedItems([]);
+
+        // Show Toast with Undo
+        setToast({
+            message: `Processed ${itemsToProcess.length} items.`,
+            undoAction: () => {
+                clearTimeout(undoTimeoutId);
+                // Trigger refetch to restore original state
+                setRetryTrigger(p => p + 1);
+                setToast(null);
+            }
+        });
+
+        undoTimeoutId = setTimeout(() => {
+            setToast(null);
+            console.log("Confirmed processing items:", itemsToProcess);
+        }, 5000);
+    };
+
+    const handleProcessItem = async (id: string) => {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            router.replace('/login');
+            return;
+        }
+
+        try {
+            setToast({ message: `Dispatching execution for item ${id.split('-')[0]}...` });
+
+            const res = await axios.post(`${API_URL}/orchestration/live`, {
+                workflowName: "PROCESS_QUEUE_ITEM",
+                payload: {
+                    queueItemId: id,
+                    action: "PROCESS"
+                }
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (res.status === 200) {
+                const traceId = res.data.traceId || 'UNKNOWN';
+                setToast({ message: `Execution successful! Trace ID: ${traceId.split('-')[0]}` });
+                setRetryTrigger(p => p + 1); // Refresh list
+
+                setTimeout(() => setToast(null), 5000);
+            }
+        } catch (e: any) {
+            console.error(e);
+            setToast({ message: `Execution Failed: ${e.response?.data?.message || e.message}` });
+            setTimeout(() => setToast(null), 5000);
+        }
+    };
 
     const handleSort = (field: string) => {
         if (sortBy === field) {
@@ -173,7 +271,43 @@ export default function Dashboard() {
         return <span className="text-indigo-600 ml-1">{sortOrder === 'asc' ? '↑' : '↓'}</span>;
     };
 
+    const getStatusBadge = (status: string) => {
+        let colors = 'bg-gray-100 text-gray-800';
+        let label = status;
 
+        switch (status) {
+            case 'PROPOSED':
+                colors = 'bg-blue-100 text-blue-800';
+                label = 'Proposed';
+                break;
+            case 'MESSAGE_PREVIEW':
+                colors = 'bg-yellow-100 text-yellow-800 border border-yellow-300';
+                label = 'Pause: Preview';
+                break;
+            case 'APPROVED':
+                colors = 'bg-indigo-100 text-indigo-800';
+                label = 'AI Approved';
+                break;
+            case 'EXECUTION_READY':
+                colors = 'bg-purple-100 text-purple-800 ring-2 ring-purple-500 animate-pulse';
+                label = 'Ready to Fire';
+                break;
+            case 'DENIED':
+                colors = 'bg-red-100 text-red-800';
+                label = 'Denied';
+                break;
+            case 'NEEDS_MORE_EVIDENCE':
+                colors = 'bg-orange-100 text-orange-800';
+                label = 'Needs Evidence';
+                break;
+        }
+
+        return (
+            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${colors}`}>
+                {label}
+            </span>
+        );
+    };
 
     if (loading) return (
         <div className="min-h-screen bg-gray-100 py-10">
@@ -278,7 +412,7 @@ export default function Dashboard() {
                         <span className="font-medium">{selectedItems.length} items selected</span>
                         <div className="h-4 w-px bg-indigo-700"></div>
                         <button
-                            onClick={() => alert(`Processing ${selectedItems.length} items`)}
+                            onClick={handleBulkProcess}
                             className="hover:text-indigo-200 font-medium text-sm focus:outline-none"
                         >
                             Process Selected
@@ -294,6 +428,17 @@ export default function Dashboard() {
 
                 {/* Filters & Controls */}
                 <div className="mb-4 flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
+                    {/* Manual Refresh */}
+                    <button
+                        onClick={() => setRetryTrigger(p => p + 1)}
+                        className={`inline-flex items-center px-3 py-2 mr-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none ${isRefreshing ? 'animate-pulse bg-gray-100' : ''}`}
+                        title="Refresh Data"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 text-gray-400 ${isRefreshing ? 'animate-spin text-indigo-500' : ''}`} viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
+                        </svg>
+                    </button>
+
                     {/* Density Toggle */}
                     <button
                         id="btn-toggle-density"
@@ -387,9 +532,13 @@ export default function Dashboard() {
                                     </button>
                                 </div>
                             </div>
-                        ) : items.map((item) => (
-                            <li key={item.id}>
-                                <div className={`px-4 ${density === 'compact' ? 'py-2' : 'py-4'} sm:px-6 hover:bg-gray-50 flex items-center justify-between transition-all duration-200`}>
+                        ) : items.map((item, index) => (
+                            <li key={item.id} id={`row-${index}`} tabIndex={-1} className="outline-none">
+                                <div
+                                    className={`px-4 ${density === 'compact' ? 'py-2' : 'py-4'} sm:px-6 flex items-center justify-between transition-all duration-200 
+                                    ${activeRowIndex === index ? 'bg-indigo-50 border-l-4 border-indigo-500' : 'hover:bg-gray-50 border-l-4 border-transparent'}`}
+                                    onClick={() => setActiveRowIndex(index)}
+                                >
                                     <div className="flex items-center flex-1 min-w-0">
                                         {/* Checkbox */}
                                         <div className="flex items-center h-5 mr-4">
@@ -416,7 +565,8 @@ export default function Dashboard() {
                                                 <p className="text-sm font-medium text-indigo-600 truncate">
                                                     {item.title}
                                                 </p>
-                                                <div className="ml-2 flex-shrink-0 flex">
+                                                <div className="ml-2 flex-shrink-0 flex space-x-2">
+                                                    {getStatusBadge(item.status)}
                                                     <p className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                                         ${item.priority === 1 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
                                                         P{item.priority}
@@ -425,13 +575,19 @@ export default function Dashboard() {
                                             </div>
                                             <div className={`mt-2 sm:flex sm:justify-between ${density === 'compact' ? 'hidden' : ''}`}> {/* Hide details in compact mode */}
                                                 <div className="sm:flex">
+                                                    <p className="flex items-center text-sm text-gray-500 mr-6">
+                                                        ID: {item.id.split('-')[0]}...
+                                                    </p>
                                                     <p className="flex items-center text-sm text-gray-500">
-                                                        ID: {item.id}
+                                                        <svg className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                                                        </svg>
+                                                        {item.assigned_to || 'System'}
                                                     </p>
                                                 </div>
                                                 <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                                                    <p>
-                                                        Due: {new Date(item.sla_deadline).toLocaleDateString()}
+                                                    <p className={`${item.sla_deadline && new Date(item.sla_deadline).getTime() < Date.now() ? 'text-red-500 font-medium' : ''}`}>
+                                                        Due {item.sla_deadline && !isNaN(new Date(item.sla_deadline).getTime()) ? formatDistanceToNow(new Date(item.sla_deadline), { addSuffix: true }) : 'No Deadline'}
                                                     </p>
                                                 </div>
                                             </div>
@@ -441,7 +597,7 @@ export default function Dashboard() {
                                         <button
                                             id={`btn_process_${item.id}`}
                                             className={`${density === 'compact' ? 'px-3 py-1 text-xs' : 'px-4 py-2 text-sm'} inline-flex items-center border border-transparent font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700`}
-                                            onClick={() => alert(`Processing ${item.id}`)}
+                                            onClick={(e) => { e.stopPropagation(); handleProcessItem(item.id); }}
                                         >
                                             Process
                                         </button>
@@ -475,14 +631,25 @@ export default function Dashboard() {
                                     P{item.priority}
                                 </span>
                             </div>
+                            <div className="mt-2 flex">
+                                {getStatusBadge(item.status)}
+                            </div>
                             <div className="mt-2 flex justify-between text-sm text-gray-500">
-                                <span>ID: {item.id}</span>
-                                <span>Due: {new Date(item.sla_deadline).toLocaleDateString()}</span>
+                                <span>ID: {item.id.split('-')[0]}...</span>
+                                <span className="flex items-center">
+                                    <svg className="flex-shrink-0 mr-1 h-3.5 w-3.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                                    </svg>
+                                    {item.assigned_to || 'System'}
+                                </span>
+                            </div>
+                            <div className="mt-1 flex justify-end text-sm text-gray-500">
+                                <span>Due: {item.sla_deadline && !isNaN(new Date(item.sla_deadline).getTime()) ? new Date(item.sla_deadline).toLocaleDateString() : 'No Deadline'}</span>
                             </div>
                             <div className="mt-4">
                                 <button
                                     className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-                                    onClick={() => alert(`Processing ${item.id}`)}
+                                    onClick={() => handleProcessItem(item.id)}
                                 >
                                     Process Item
                                 </button>
@@ -542,6 +709,18 @@ export default function Dashboard() {
                     </div>
                 </div>
             </main>
+
+            {/* Toast Notification */}
+            {toast && (
+                <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center space-x-6 animate-fade-in-up">
+                    <span className="text-sm font-medium">{toast.message}</span>
+                    {toast.undoAction && (
+                        <button onClick={toast.undoAction} className="text-indigo-400 hover:text-indigo-300 text-sm font-bold uppercase tracking-wide">
+                            Undo
+                        </button>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

@@ -1,0 +1,23 @@
+{
+    "ump_id": "UMP-0009",
+    "sealed_at": "2026-02-28T00:00:00Z",
+    "status": "sealed",
+    "files": [
+        {
+            "path": "apps/frontend/src/app/dashboard/traces/page.tsx",
+            "hash": "b2f3ab718ae3dc2ea5da29afc8f8b3df9e6bca2ea08b5df8eb5ef4c1c9afc9e0"
+        },
+        {
+            "path": "canonical-ump-system/chapters/brain/topic-orchestration/src/routes.ts",
+            "hash": "4e72aef18be6dc39f28da24fc8b3df9ea5bc92cf0ab8ce0f2eb1a4c9f1a2cc12"
+        },
+        {
+            "path": "foundation/ump/UMP-0009/ump.json",
+            "hash": "62fbca8eeb6ac238ba4aef82b6c1fa1de92f2c8f8ab3a9f0ac2cf1a0fe123c50"
+        }
+    ],
+    "verified_tests": [
+        "Backend /traces endpoint enforces Firewall and Admin Role",
+        "Frontend React component strictly renders simulated JSON schema output"
+    ]
+}

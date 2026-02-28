@@ -1,9 +1,18 @@
-# VTE Release Notes - v0.9.0 (RC1)
+# VTE Release Notes - v1.0.0 (Canonical Foundation)
 
-**Release Date**: 2026-02-05
-**Focus**: Vertical Slice Construction (Layers 2-9)
+**Release Date**: 2026-02-27
+**Focus**: Master PRD Generation & Strangler Fig Phase 1 Foundation
 
 ## 🚀 Key Features
+*   **Master PRD Specifications**: Generated exhaustive documentation defining the Canonical UMP Architecture, Operations, SaaS Readiness, and UI/UX execution plans in the `MarkDown Files/` directory.
+*   **Canonical UMP System Initialization**: Began the Strangler Fig rollout under `canonical-ump-system/`.
+*   **Strict Multi-Tenancy DB**: Deployed `schema.prisma` with explicit Tenant isolation, Workflows, Execution Traces, and Operator Approval tracking.
+*   **Command Authority Firewall**: Engineered the sync RBAC/JWT evaluation logic for the orchestration layers (`security/firewall.ts`).
+*   **Isolated CI/CD**: Established standalone Dockerfile and GitHub Action workflows for the canonical architecture.
+
+---
+
+# VTE Release Notes - v0.9.0 (RC1)
 *   **Unified Queue Dashboard**: "Kevin's Work Day" UI fully implemented with live backend binding.
 *   **Visual Agent Surface**: Dedicated `/agent/headless` route for automation stability.
 *   **Security Envelopes**:

@@ -37,3 +37,6 @@ tools/debug_*.py
 page_dump.txt
 latest_failure.jpg
 *.db
+*secret*.json
+token.json
+credentials.json

@@ -1,0 +1,17 @@
+[
+    {
+        "path": "foundation/src/security/redact.ts",
+        "operation": "create",
+        "purpose": "Overrides SSN logic."
+    },
+    {
+        "path": "src/observability/logger.ts",
+        "operation": "create",
+        "purpose": "Filters evaluations context through the security layer."
+    },
+    {
+        "path": "test/observability.redaction.test.ts",
+        "operation": "create",
+        "purpose": "Validates the redact mapping."
+    }
+]

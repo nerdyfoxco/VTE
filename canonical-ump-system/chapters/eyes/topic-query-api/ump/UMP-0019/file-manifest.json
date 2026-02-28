@@ -1,0 +1,27 @@
+[
+    {
+        "path": "src/server.ts",
+        "operation": "create",
+        "purpose": "Local fast-server initialization"
+    },
+    {
+        "path": "src/index.ts",
+        "operation": "create",
+        "purpose": "Execution Entry Point"
+    },
+    {
+        "path": "test/smoke.test.ts",
+        "operation": "create",
+        "purpose": "Assert API limits dynamically natively."
+    },
+    {
+        "path": "package.json",
+        "operation": "create",
+        "purpose": "Build Definitions package rules"
+    },
+    {
+        "path": "tsconfig.json",
+        "operation": "create",
+        "purpose": "Typescript configuration bindings"
+    }
+]

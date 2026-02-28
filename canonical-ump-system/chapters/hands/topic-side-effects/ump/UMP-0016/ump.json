@@ -1,0 +1,76 @@
+{
+    "ump_id": "UMP-0016",
+    "chapter_id": "CH-02",
+    "topic_id": "TP-02",
+    "phase_id": "PH-01",
+    "title": "Implement Shadow Execution Engine",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/hands/topic-side-effects/ump/UMP-0016/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/hands/topic-side-effects/",
+        "allowed_paths": [
+            "chapters/hands/topic-side-effects/src/engine/**",
+            "chapters/hands/topic-side-effects/test/engine/**",
+            "chapters/hands/topic-side-effects/ump/UMP-0016/**",
+            "chapters/hands/topic-side-effects/package.json",
+            "chapters/hands/topic-side-effects/tsconfig.json"
+        ],
+        "forbidden_paths": [
+            "spine/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/engine/shadow-wrapper.ts",
+            "operation": "create",
+            "context": "Safety Engine proxy mapping",
+            "purpose": "Authoritative proxy executing Zero-Trust boundaries directly against real mutations locally.",
+            "build_prompt": "If token is mocked, return Shadow mode receipt, intercepting wrapper explicitly natively.",
+            "json_spec_path": "ump/UMP-0016/spec.shadow.json"
+        },
+        {
+            "path": "src/engine/command-consumer.ts",
+            "operation": "create",
+            "context": "Command execution listener natively",
+            "purpose": "Consume payload matching execute.v1 internally mapping to adapters.",
+            "build_prompt": "Forward target_system schemas into Shadow Engine robustly natively.",
+            "json_spec_path": "ump/UMP-0016/spec.consumer.json"
+        },
+        {
+            "path": "test/engine/shadow-wrapper.test.ts",
+            "operation": "create",
+            "context": "Validation mapping natively",
+            "purpose": "Verify execution overrides explicitly correctly identifying dry-run targets.",
+            "build_prompt": "Execute missing mocked missing token logic structurally to assert false callings successfully.",
+            "json_spec_path": "ump/UMP-0016/spec.test.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

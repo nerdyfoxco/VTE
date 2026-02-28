@@ -1,0 +1,77 @@
+{
+    "ump_id": "UMP-0007",
+    "chapter_id": "CH-00",
+    "topic_id": "TP-00",
+    "phase_id": "PH-02",
+    "title": "Seal Foundation Database, Firewall, and Kidney",
+    "status": "executed",
+    "immutability": {
+        "sealed": true,
+        "seal_path": "foundation/ump/UMP-0007/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "foundation/",
+        "allowed_paths": [
+            "foundation/prisma/**",
+            "foundation/src/security/**",
+            "chapters/kidney/topic-validation/**"
+        ],
+        "forbidden_paths": [
+            "**/*"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "foundation/prisma/schema.prisma",
+            "operation": "create",
+            "context": "Canonical Database Architecture",
+            "purpose": "Define Multi-Tenancy and Traceability"
+        },
+        {
+            "path": "foundation/src/security/firewall.ts",
+            "operation": "create",
+            "context": "Command Authority Firewall",
+            "purpose": "Enforce RBAC and JWT validation synchronously"
+        },
+        {
+            "path": "foundation/src/security/middleware.ts",
+            "operation": "create",
+            "context": "Express Route Isolation",
+            "purpose": "Wrap REST APIs with the CAF"
+        },
+        {
+            "path": "chapters/kidney/topic-validation/src/validator.ts",
+            "operation": "create",
+            "context": "Data Sanitization",
+            "purpose": "Assert JSON Schemas before Orchestration"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npx prisma generate",
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [
+            "validation_failures_must_log"
+        ],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "critical"
+    }
+}

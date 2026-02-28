@@ -1,0 +1,42 @@
+{
+    "ump_id": "UMP-f-0008",
+    "chapter_id": "CH-frontend-03",
+    "topic_id": "TP-admin-02",
+    "phase_id": "PH-01",
+    "title": "Build Sales Pipeline Console (SALES-SCR-01)",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "apps/web-admin/ump/UMP-f-0008/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "apps/web-admin/",
+        "allowed_paths": [
+            "apps/web-admin/app/sales/page.tsx",
+            "apps/web-admin/ump/UMP-f-0008/**"
+        ],
+        "forbidden_paths": [
+            "**/*.py"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "app/sales/page.tsx",
+            "operation": "create",
+            "purpose": "Provide a high-fidelity B2B revenue pipeline tracker for VTE SaaS operations.",
+            "build_prompt": "Scaffold specialized Shadcn-style active deal stages accurately reflecting ARR and prospect health."
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "security": {
+        "data_classification": "control_plane_ui"
+    }
+}

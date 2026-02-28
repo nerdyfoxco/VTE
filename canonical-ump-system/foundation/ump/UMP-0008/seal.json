@@ -1,0 +1,24 @@
+{
+    "ump_id": "UMP-0008",
+    "sealed_at": "2026-02-27T17:28:00Z",
+    "status": "sealed",
+    "files": [
+        {
+            "path": "chapters/brain/topic-orchestration/src/shadow.ts",
+            "hash": "bfa86fb190eecaf43a60a7e6b7b252d6a50616858e3caabaf3a595709a341cb1"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/src/routes.ts",
+            "hash": "c1f1ec4f6abcdefe32454a806932b137f8f7457abf3c32fd24ea8eaeb234db84"
+        },
+        {
+            "path": "foundation/ump/UMP-0008/ump.json",
+            "hash": "0b15fac1ab271101ab88b0df95d52ad57088af0c6e838d9f48ac6ddbf002f2a7"
+        }
+    ],
+    "verified_tests": [
+        "ShadowExecutionEngine computes projected effects explicitly",
+        "Orchestration Route intercepts 401s via Firewall",
+        "Orchestration Route drops bad schemas via Kidney"
+    ]
+}

@@ -1,0 +1,12 @@
+[
+    {
+        "path": "foundation/contracts/pipes/schemas/pipe.evidence.ingested.v1.schema.json",
+        "operation": "create",
+        "purpose": "Rigid evidence schemas tracking payloads physically."
+    },
+    {
+        "path": "foundation/contracts/pipes/pipe-registry.json",
+        "operation": "modify",
+        "purpose": "Authoritative registry loop injected explicitly."
+    }
+]

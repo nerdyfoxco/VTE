@@ -1,0 +1,87 @@
+{
+    "ump_id": "UMP-0020",
+    "chapter_id": "CH-03",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Define pipe.query.request.v1 and pipe.query.response.v1 schemas",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/eyes/topic-query-api/ump/UMP-0020/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/eyes/topic-query-api/",
+        "allowed_paths": [
+            "foundation/contracts/pipes/**",
+            "chapters/eyes/topic-query-api/contracts/**",
+            "chapters/eyes/topic-query-api/ump/UMP-0020/**"
+        ],
+        "forbidden_paths": [
+            "spine/**",
+            "chapters/brain/**",
+            "chapters/hands/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": [
+            "pipe.query.request.v1",
+            "pipe.query.response.v1"
+        ]
+    },
+    "files": [
+        {
+            "path": "foundation/contracts/pipes/schemas/pipe.query.request.v1.schema.json",
+            "operation": "create",
+            "context": "Physical contract definition for data queries natively",
+            "purpose": "Authoritative Intent Mappings explicitly",
+            "build_prompt": "Strict JSON map requesting variables cleanly.",
+            "json_spec_path": "ump/UMP-0020/spec.request.schema.json"
+        },
+        {
+            "path": "foundation/contracts/pipes/schemas/pipe.query.response.v1.schema.json",
+            "operation": "create",
+            "context": "Physical contract modeling query outcomes.",
+            "purpose": "Authoritative Response Map natively",
+            "build_prompt": "JSON Schema emitting the fetching status gracefully.",
+            "json_spec_path": "ump/UMP-0020/spec.response.schema.json"
+        },
+        {
+            "path": "foundation/contracts/pipes/pipe-registry.json",
+            "operation": "modify",
+            "context": "Central map mapping tracking endpoints",
+            "purpose": "Define the Eyes bidirectional logic routing bindings.",
+            "build_prompt": "Include Both Query schemas efficiently replacing cleanly",
+            "json_spec_path": "ump/UMP-0020/spec.registry.json"
+        },
+        {
+            "path": "chapters/eyes/topic-query-api/contracts/pipes-consumed.json",
+            "operation": "create",
+            "context": "Local context mappings.",
+            "purpose": "Record consumed parameters structurally.",
+            "build_prompt": "Set exact endpoint references bounds explicitly.",
+            "json_spec_path": "ump/UMP-0020/spec.consumed.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "contract"
+        ],
+        "commands": [
+            "npm run contract-check"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

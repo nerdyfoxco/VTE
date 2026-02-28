@@ -1,0 +1,17 @@
+[
+    {
+        "path": "src/adapters/appfolio.adapter.ts",
+        "operation": "create",
+        "purpose": "Playwright hook."
+    },
+    {
+        "path": "src/adapters/gmail.adapter.ts",
+        "operation": "create",
+        "purpose": "Gmail API Hook natively."
+    },
+    {
+        "path": "src/adapters/index.ts",
+        "operation": "create",
+        "purpose": "Barrel hook natively."
+    }
+]

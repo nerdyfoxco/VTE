@@ -1,0 +1,74 @@
+{
+    "ump_id": "UMP-0017",
+    "chapter_id": "CH-02",
+    "topic_id": "TP-02",
+    "phase_id": "PH-02",
+    "title": "Register Integration Signatures (AppFolio/Gmail Adapters)",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/hands/topic-side-effects/ump/UMP-0017/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/hands/topic-side-effects/",
+        "allowed_paths": [
+            "chapters/hands/topic-side-effects/src/adapters/**",
+            "chapters/hands/topic-side-effects/ump/UMP-0017/**"
+        ],
+        "forbidden_paths": [
+            "spine/**",
+            "chapters/brain/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/adapters/appfolio.adapter.ts",
+            "operation": "create",
+            "context": "External Provider Bindings.",
+            "purpose": "Playwright Automation Hooks execution mock structural validation.",
+            "build_prompt": "Interface IAppFolioMutator and mock behaviors emitting log statement indicating mutations physically triggered.",
+            "json_spec_path": "ump/UMP-0017/spec.appfolio.json"
+        },
+        {
+            "path": "src/adapters/gmail.adapter.ts",
+            "operation": "create",
+            "context": "External E-Mail Bindings.",
+            "purpose": "Gmail HTTP physical mapping limits.",
+            "build_prompt": "Interface IGmailMutator and simple string outputs to prove execution pipeline success.",
+            "json_spec_path": "ump/UMP-0017/spec.gmail.json"
+        },
+        {
+            "path": "src/adapters/index.ts",
+            "operation": "create",
+            "context": "Barrel Export.",
+            "purpose": "Consolidated internal adapter references.",
+            "build_prompt": "Export * from adapters natively.",
+            "json_spec_path": "ump/UMP-0017/spec.index.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

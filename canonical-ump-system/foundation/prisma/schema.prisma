@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// TENANT & ACCESS CONTROL LAYER
+// ==========================================
+
+model Tenant {
+  id              String   @id @default(uuid())
+  name            String
+  subscriptionTier String  @default("trial") // trial, pro, enterprise
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  operators       Operator[]
+  workflows       Workflow[]
+  executionTraces ExecutionTrace[]
+  approvals       ApprovalLedger[]
+  queueItems      QueueItem[]
+}
+
+model Operator {
+  id          String   @id @default(uuid())
+  tenantId    String
+  email       String   @unique
+  role        String   // admin, approver, viewer
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant              Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  approvals           ApprovalLedger[]
+  assignedWorkflows   Workflow[]       @relation("OperatorWorkflows")
+}
+
+// ==========================================
+// ORCHESTRATION & EXECUTION LAYER
+// ==========================================
+
+model Workflow {
+  id              String   @id @default(uuid())
+  tenantId        String
+  idempotencyKey  String   @unique
+  status          String   // PENDING, RUNNING, HITL_REQUIRED, COMPLETED, FAILED
+  payload         String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  operators       Operator[]       @relation("OperatorWorkflows")
+  executionTraces ExecutionTrace[]
+  approvals       ApprovalLedger[]
+}
+
+model ExecutionTrace {
+  id          String   @id @default(uuid())
+  tenantId    String
+  workflowId  String
+  stepName    String
+  organ       String   // e.g., BRAIN, HANDS, EYES
+  outcome     String   // SUCCESS, FAILURE_RECOVERABLE, FAILURE_FATAL
+  snapshotUrl String?  // S3/Azure Blob link to screenshot
+  createdAt   DateTime @default(now())
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  workflow    Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+}
+
+model ApprovalLedger {
+  id            String   @id @default(uuid())
+  tenantId      String
+  workflowId    String
+  operatorId    String
+  decision      String   // APPROVED, REJECTED, MODIFIED
+  justification String?
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  workflow      Workflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  operator      Operator @relation(fields: [operatorId], references: [id])
+}
+
+// ==========================================
+// UNIFIED QUEUE LAYER (STRANGLED)
+// ==========================================
+
+model QueueItem {
+  id          String   @id @default(uuid())
+  title       String
+  priority    Int?
+  status      String   @default("PENDING")
+  assignedTo  String?  @map("assigned_to")
+  slaDeadline DateTime? @map("sla_deadline")
+  createdAt   DateTime? @map("created_at")
+  tenantId    String?   @map("tenant_id") // Maintain legacy snake_case in db
+
+  tenant      Tenant?   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("queue_items") // Bind strictly to the legacy Python table to avoid data migration
+}

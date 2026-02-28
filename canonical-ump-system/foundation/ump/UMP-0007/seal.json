@@ -1,0 +1,33 @@
+{
+    "ump_id": "UMP-0007",
+    "sealed_at": "2026-02-27T17:15:00Z",
+    "status": "sealed",
+    "files": [
+        {
+            "path": "foundation/prisma/schema.prisma",
+            "hash": "d16c8751ceab6c1a84c6c039db7f05fbc3ab0b9b326307ecbc49c951152a5c8c"
+        },
+        {
+            "path": "foundation/src/security/firewall.ts",
+            "hash": "b2fa129de9dcd1caaff60d8ffbbbe66f7f6f5926c71c1b18d8cf9066bf9b5cfa"
+        },
+        {
+            "path": "foundation/src/security/middleware.ts",
+            "hash": "95a633a69dcabf7e2ce719ef16eb883b48227b68ed92fa9f49f506e00cf7ab71"
+        },
+        {
+            "path": "chapters/kidney/topic-validation/src/validator.ts",
+            "hash": "35a82fa20c99a8ea8d01d4a0f44b3cfb9b87e2206ffdeee10787e6fa50b69123"
+        },
+        {
+            "path": "foundation/ump/UMP-0007/ump.json",
+            "hash": "cbf1fc89831bfcb7beeb6ab5576a0d4c8038c353f09f539a48d1e2e2ec8b6cb0"
+        }
+    ],
+    "verified_tests": [
+        "schema.prisma generates successfully without relational failure",
+        "Command Authority Firewall structurally conforms to PRD",
+        "Auth Middleware wraps Request/Response natively",
+        "Kidney schema validates incoming bodies"
+    ]
+}

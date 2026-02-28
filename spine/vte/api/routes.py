@@ -161,19 +161,22 @@ def create_decision(draft: DecisionDraft, claims: dict = Depends(get_current_use
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Persistence failed: {str(e)}")
 
-    # 5. Trigger Execution (Side Effect)
-    # If the decision is APPROVED, we must execute the intent.
-    # We do this asynchronously via Celery.
+    # 5. Trigger Execution (Side Effect) - CP/DP ENFORCEMENT
+    # If the decision is APPROVED by the Brain, we must NOT execute automatically.
+    # It must be halted at MESSAGE_PREVIEW awaiting HR-01 / Control Plane validation.
     if db_obj.outcome == OutcomeEnum.APPROVED:
+        db_obj.outcome = OutcomeEnum.MESSAGE_PREVIEW
+        db.commit()
+        db.refresh(db_obj)
+        print(f"[CP/DP ENFORCEMENT] Decision {db_obj.decision_id} APPROVED by Brain. Halting at MESSAGE_PREVIEW for Human Operator Validation.")
+        
+    # Execution ONLY occurs if explicitly switched to EXECUTION_READY via the CP Dashboard
+    elif db_obj.outcome == OutcomeEnum.EXECUTION_READY:
         try:
             from vte.tasks import execute_decision
             # We use delay() to send to Redis queue
             execute_decision.delay(decision_id=str(db_obj.decision_id))
         except Exception as e:
-            # We do NOT rollback the decision - it is committed.
-            # But we log the failure to enqueue.
-            # In a real system, we might need a reliable outbox pattern here.
-            # For VTE Phase 17, logging is sufficient.
             print(f"CRITICAL: Failed to enqueue execution task: {e}")
 
     return db_obj
@@ -215,81 +218,7 @@ def get_unified_queue(
     order: Optional[str] = "asc",
     status: Optional[str] = "PENDING",
     priority: Optional[str] = "ALL", 
-    db: Session = Depends(get_db)
-):
-    """
-    Unified Workbench Queue.
-    """
-    query = db.query(DecisionObject)
-    
-    # 1. Filtering
-    if status and status != "ALL":
-        if status == "PENDING":
-            query = query.filter(DecisionObject.outcome == "PROPOSED")
-        elif status == "COMPLETED":
-            query = query.filter(DecisionObject.outcome != "PROPOSED")
-            
-    # 2. Search
-    if search:
-        query = query.filter(DecisionObject.intent_action.contains(search)) 
-        
-    # 3. Sorting
-    sort_field = DecisionObject.timestamp
-    if sort_by == "sla_deadline":
-        sort_field = DecisionObject.timestamp
-    elif sort_by == "title":
-        # 'intent_action' is the field name in DecisionObject
-        sort_field = DecisionObject.intent_action
-        
-    if order == "desc":
-        query = query.order_by(desc(sort_field))
-    else:
-        query = query.order_by(sort_field)
-        
-    # Execute (Fetch all to filter by mock priority if needed, or just paginate)
-    all_items = query.all()
-    
-    result = []
-    for item in all_items:
-        # Mock Priority Logic
-        prio = 2
-        if item.intent_action and "High" in item.intent_action: prio = 1
-        elif item.intent_action and "Low" in item.intent_action: prio = 3
-        
-        # Filter Priority
-        if priority != "ALL" and str(prio) != priority:
-            continue
-            
-        # Outcome Access
-        status_val = str(item.outcome)
-        if hasattr(item.outcome, "value"):
-            status_val = item.outcome.value
-
-        result.append({
-            "id": str(item.decision_id),
-            "title": f"{item.intent_action} {item.intent_target}",
-            "priority": prio,
-            "status": status_val,
-            "assigned_to": str(item.actor_user_id),
-            "sla_deadline": (item.timestamp + datetime.timedelta(days=1)).isoformat()
-        })
-        
-    # Manual Pagination after Priority Filter
-    start = skip
-    end = skip + limit
-    paginated = result[start:end]
-    
-    return paginated
-
-@router.get("/queue", tags=["Unified Queue"])
-def get_unified_queue(
-    skip: int = 0,
-    limit: int = 50,
-    search: Optional[str] = None,
-    sort_by: Optional[str] = "priority",
-    order: Optional[str] = "asc",
-    status: Optional[str] = "PENDING",
-    priority: Optional[str] = "ALL", 
+    claims: dict = Depends(get_current_user_claims),
     db: Session = Depends(get_db)
 ):
     """
@@ -302,10 +231,10 @@ def get_unified_queue(
     # 1. Filtering
     if status and status != "ALL":
         if status == "PENDING":
-            # Use string "PROPOSED" to match DB Enum value
-            query = query.filter(DecisionObject.outcome == "PROPOSED")
+            # Use string matching for DB Enum value
+            query = query.filter(DecisionObject.outcome.in_(["PROPOSED", "MESSAGE_PREVIEW", "APPROVED"]))
         elif status == "COMPLETED":
-            query = query.filter(DecisionObject.outcome != "PROPOSED")
+            query = query.filter(DecisionObject.outcome.not_in(["PROPOSED", "MESSAGE_PREVIEW", "APPROVED"]))
             
     # 2. Search
     if search:
@@ -333,10 +262,10 @@ def get_unified_queue(
     
     result = []
     for item in all_items:
-        # Mock Priority Logic
+        # Dynamic Priority Extraction
         prio = 2
-        if item.intent_action and "High" in item.intent_action: prio = 1
-        elif item.intent_action and "Low" in item.intent_action: prio = 3
+        if isinstance(item.intent_params, dict):
+            prio = item.intent_params.get("priority", 2)
         
         # Filter Priority
         if priority != "ALL" and str(prio) != priority:
@@ -348,12 +277,20 @@ def get_unified_queue(
         if hasattr(item.outcome, "value"):
             status_val = item.outcome.value
 
+        # Dynamic Formatting
+        action_formatted = item.intent_action.replace("_", " ").title() if item.intent_action else "Unknown Action"
+        title_str = f"{action_formatted} - Target: {item.intent_target}"
+
+        assignee = str(item.actor_user_id)
+        if assignee == "agent_ingestion":
+            assignee = "System (Auto)"
+
         result.append({
             "id": str(item.decision_id),
-            "title": f"{item.intent_action} {item.intent_target}",
+            "title": title_str,
             "priority": prio,
             "status": status_val,
-            "assigned_to": str(item.actor_user_id),
+            "assigned_to": assignee,
             "sla_deadline": (item.timestamp + datetime.timedelta(days=1)).isoformat()
         })
         

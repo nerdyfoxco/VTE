@@ -1,0 +1,27 @@
+[
+    {
+        "path": "src/index.ts",
+        "operation": "create",
+        "purpose": "Deterministic startup"
+    },
+    {
+        "path": "src/server.ts",
+        "operation": "create",
+        "purpose": "Provide /healthz and extension points"
+    },
+    {
+        "path": "test/smoke.test.ts",
+        "operation": "create",
+        "purpose": "Prevent regressions"
+    },
+    {
+        "path": "package.json",
+        "operation": "create",
+        "purpose": "Deterministic build/test"
+    },
+    {
+        "path": "tsconfig.json",
+        "operation": "create",
+        "purpose": "Enforce isolated compilation"
+    }
+]

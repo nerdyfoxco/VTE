@@ -1,0 +1,66 @@
+{
+    "ump_id": "UMP-0004",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Build in-memory Workflow Store and enforce idempotency",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0004/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/src/workflow-store.ts",
+            "chapters/brain/topic-orchestration/test/idempotency.test.ts",
+            "chapters/brain/topic-orchestration/ump/UMP-0004/**"
+        ],
+        "forbidden_paths": [
+            "**/*"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/workflow-store.ts",
+            "operation": "create",
+            "context": "Maintains physical deterministic map of execution states",
+            "purpose": "Provides state access for API constraints and step completions",
+            "build_prompt": "Map<string, WorkflowState>. Exposes createWorkflow, getWorkflow, completeStep. Throws ERR_WORKFLOW_EXISTS on idempotency fail.",
+            "json_spec_path": "ump/UMP-0004/spec.workflow-store.ts.json"
+        },
+        {
+            "path": "test/idempotency.test.ts",
+            "operation": "create",
+            "context": "Assurance testing for duplicate protections",
+            "purpose": "Protects against accidental re-triggering of states",
+            "build_prompt": "Test duplicate additions throwing ERR_WORKFLOW_EXISTS.",
+            "json_spec_path": "ump/UMP-0004/spec.idempotency.test.ts.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

@@ -1,0 +1,117 @@
+  console.error
+    [AUTH_FAILURE] Route: /shadow - Error: UNAUTHORIZED: Missing or malformed Authorization header.
+
+    [0m [90m 32 |[39m         next()[33m;[39m
+     [90m 33 |[39m     } [36mcatch[39m (error[33m:[39m any) {
+    [31m[1m>[22m[39m[90m 34 |[39m         console[33m.[39merror([32m`[AUTH_FAILURE] Route: ${req.url} - Error: ${error.message}`[39m)[33m;[39m
+     [90m    |[39m                 [31m[1m^[22m[39m
+     [90m 35 |[39m         res[33m.[39mstatus([35m401[39m)[33m.[39mjson({
+     [90m 36 |[39m             error[33m:[39m [32m"UNAUTHORIZED"[39m[33m,[39m
+     [90m 37 |[39m             message[33m:[39m error[33m.[39mmessage[0m
+
+      at requireAuth (../../../foundation/src/security/middleware.ts:34:17)
+      at Layer.handle [as handle_request] (node_modules/express/lib/router/layer.js:95:5)
+      at next (node_modules/express/lib/router/route.js:149:13)
+      at Route.dispatch (node_modules/express/lib/router/route.js:119:3)
+      at Layer.handle [as handle_request] (node_modules/express/lib/router/layer.js:95:5)
+      at node_modules/express/lib/router/index.js:284:15
+      at router.process_params (node_modules/express/lib/router/index.js:346:12)
+      at next (node_modules/express/lib/router/index.js:280:10)
+      at router.handle (node_modules/express/lib/router/index.js:175:3)
+      at router (node_modules/express/lib/router/index.js:47:12)
+      at Layer.handle [as handle_request] (node_modules/express/lib/router/layer.js:95:5)
+      at trim_prefix (node_modules/express/lib/router/index.js:328:13)
+      at node_modules/express/lib/router/index.js:286:9
+      at router.process_params (node_modules/express/lib/router/index.js:346:12)
+      at next (node_modules/express/lib/router/index.js:280:10)
+      at node_modules/body-parser/lib/read.js:137:5
+      at invokeCallback (node_modules/raw-body/index.js:238:16)
+      at done (node_modules/raw-body/index.js:227:7)
+      at IncomingMessage.onEnd (node_modules/raw-body/index.js:287:7)
+
+  console.error
+    [RBAC_FAILURE] Operator ops-admin-1 barred from Route: /shadow
+
+    [0m [90m 55 |[39m             next()[33m;[39m
+     [90m 56 |[39m         } [36mcatch[39m (error[33m:[39m any) {
+    [31m[1m>[22m[39m[90m 57 |[39m             console[33m.[39merror([32m`[RBAC_FAILURE] Operator ${authReq.vteContext.operatorId} barred from Route: ${req.url}`[39m)[33m;[39m
+     [90m    |[39m                     [31m[1m^[22m[39m
+     [90m 58 |[39m             res[33m.[39mstatus([35m403[39m)[33m.[39mjson({
+     [90m 59 |[39m                 error[33m:[39m [32m"FORBIDDEN"[39m[33m,[39m
+     [90m 60 |[39m                 message[33m:[39m error[33m.[39mmessage[0m
+
+      at ../../../foundation/src/security/middleware.ts:57:21
+      at Layer.handle [as handle_request] (node_modules/express/lib/router/layer.js:95:5)
+      at next (node_modules/express/lib/router/route.js:149:13)
+      at requireAuth (../../../foundation/src/security/middleware.ts:32:9)
+      at Layer.handle [as handle_request] (node_modules/express/lib/router/layer.js:95:5)
+      at next (node_modules/express/lib/router/route.js:149:13)
+      at Route.dispatch (node_modules/express/lib/router/route.js:119:3)
+      at Layer.handle [as handle_request] (node_modules/express/lib/router/layer.js:95:5)
+      at node_modules/express/lib/router/index.js:284:15
+      at router.process_params (node_modules/express/lib/router/index.js:346:12)
+      at next (node_modules/express/lib/router/index.js:280:10)
+      at router.handle (node_modules/express/lib/router/index.js:175:3)
+      at router (node_modules/express/lib/router/index.js:47:12)
+      at Layer.handle [as handle_request] (node_modules/express/lib/router/layer.js:95:5)
+      at trim_prefix (node_modules/express/lib/router/index.js:328:13)
+      at node_modules/express/lib/router/index.js:286:9
+      at router.process_params (node_modules/express/lib/router/index.js:346:12)
+      at next (node_modules/express/lib/router/index.js:280:10)
+      at node_modules/body-parser/lib/read.js:137:5
+      at invokeCallback (node_modules/raw-body/index.js:238:16)
+      at done (node_modules/raw-body/index.js:227:7)
+      at IncomingMessage.onEnd (node_modules/raw-body/index.js:287:7)
+
+  console.error
+    [VALIDATION_SYSTEM_ERROR] [
+      {
+        "code": "invalid_type",
+        "expected": "string",
+        "received": "undefined",
+        "path": [
+          "workflowName"
+        ],
+        "message": "Required"
+      }
+    ]
+
+    [0m [90m 33 |[39m                 })[33m;[39m
+     [90m 34 |[39m             } [36melse[39m {
+    [31m[1m>[22m[39m[90m 35 |[39m                 console[33m.[39merror([32m`[VALIDATION_SYSTEM_ERROR] ${error}`[39m)[33m;[39m
+     [90m    |[39m                         [31m[1m^[22m[39m
+     [90m 36 |[39m                 res[33m.[39mstatus([35m500[39m)[33m.[39mjson({
+     [90m 37 |[39m                     error[33m:[39m [32m"INTERNAL_ERROR"[39m[33m,[39m
+     [90m 38 |[39m                     message[33m:[39m [32m"A systemic exception occurred during payload validation."[39m[0m
+
+      at ../../kidney/topic-validation/src/validator.ts:35:25
+
+FAIL test/routes.test.ts
+  Orchestration Router (Trace Telemetry)
+    √ should reject unauthenticated requests via the CAF Middleware (81 ms)
+    √ should reject unauthorized roles via RBAC (19 ms)
+    × should intercept bad schemas via the Kidney Organ (16 ms)
+    √ should execute Shadow Mode safely when authorized and valid (10 ms)
+
+  ● Orchestration Router (Trace Telemetry) › should intercept bad schemas via the Kidney Organ
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 500
+
+    [0m [90m 73 |[39m             [33m.[39msend({ badPayloadShape[33m:[39m [36mtrue[39m })[33m;[39m [90m// Missing workflowName[39m
+     [90m 74 |[39m
+    [31m[1m>[22m[39m[90m 75 |[39m         expect(response[33m.[39mstatus)[33m.[39mtoBe([35m400[39m)[33m;[39m
+     [90m    |[39m                                 [31m[1m^[22m[39m
+     [90m 76 |[39m         expect(response[33m.[39mbody[33m.[39merror)[33m.[39mtoBe([32m'BAD_REQUEST'[39m)[33m;[39m
+     [90m 77 |[39m         expect(response[33m.[39mbody[33m.[39mviolations[[35m0[39m][33m.[39mpath)[33m.[39mtoBe([32m'workflowName'[39m)[33m;[39m
+     [90m 78 |[39m     })[33m;[39m[0m
+
+      at Object.<anonymous> (test/routes.test.ts:75:33)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 3 passed, 4 total
+Snapshots:   0 total
+Time:        3.483 s, estimated 4 s
+Ran all test suites matching /test\\routes.test.ts/i.

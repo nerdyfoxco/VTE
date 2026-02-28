@@ -1,0 +1,12 @@
+[
+    {
+        "path": "foundation/src/testing/contract-runner.ts",
+        "operation": "create",
+        "purpose": "Ensures runtime or test-time schema assertion"
+    },
+    {
+        "path": "chapters/brain/topic-orchestration/test/contracts.workflow.test.ts",
+        "operation": "create",
+        "purpose": "Protects orchestration boundaries from malformed schema data"
+    }
+]

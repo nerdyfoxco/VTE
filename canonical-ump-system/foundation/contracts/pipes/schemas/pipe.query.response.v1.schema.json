@@ -1,0 +1,80 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "canon://vte/pipe.query.response.v1.schema.json",
+    "title": "Query Read Response",
+    "description": "Pipe schema emitting fetched read outcomes back to orchestration structures safely natively.",
+    "type": "object",
+    "properties": {
+        "meta": {
+            "type": "object",
+            "properties": {
+                "event_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "timestamp_utc": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "correlation_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "producer": {
+                    "type": "string"
+                },
+                "schema_version": {
+                    "type": "string",
+                    "const": "1.0.0"
+                }
+            },
+            "required": [
+                "event_id",
+                "timestamp_utc",
+                "correlation_id",
+                "producer",
+                "schema_version"
+            ],
+            "additionalProperties": false
+        },
+        "data": {
+            "type": "object",
+            "properties": {
+                "original_query_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "found",
+                        "not_found",
+                        "error"
+                    ]
+                },
+                "payload": {
+                    "type": "object"
+                },
+                "timestamp_fetched_utc": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "error_reason": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "original_query_id",
+                "status",
+                "payload",
+                "timestamp_fetched_utc"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "meta",
+        "data"
+    ],
+    "additionalProperties": false
+}

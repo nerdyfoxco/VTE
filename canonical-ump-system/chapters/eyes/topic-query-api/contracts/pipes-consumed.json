@@ -1,0 +1,6 @@
+{
+    "module": "chapters/eyes/topic-query-api",
+    "pipes_consumed": [
+        "pipe.query.request.v1"
+    ]
+}

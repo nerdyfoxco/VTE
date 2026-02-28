@@ -1,0 +1,39 @@
+{
+    "ump_id": "UMP-0027",
+    "chapter_id": "CH-04",
+    "topic_id": "TP-02",
+    "phase_id": "PH-01",
+    "title": "Implement Cron Scheduler",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/legs/topic-scheduler/ump/UMP-0027/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/legs/topic-scheduler/",
+        "allowed_paths": [
+            "chapters/legs/topic-scheduler/src/**",
+            "chapters/legs/topic-scheduler/test/**",
+            "chapters/legs/topic-scheduler/ump/UMP-0027/**",
+            "chapters/legs/topic-scheduler/package.json",
+            "chapters/legs/topic-scheduler/tsconfig.json"
+        ],
+        "forbidden_paths": [
+            "spine/**",
+            "chapters/brain/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/scheduler.ts",
+            "operation": "create",
+            "purpose": "Authoritative Master Cron tracking endpoints gracefully smartly intuitively strongly accurately actively intelligently.",
+            "json_spec_path": "ump/UMP-0027/spec.scheduler.json"
+        }
+    ]
+}

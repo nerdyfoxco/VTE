@@ -1,0 +1,75 @@
+{
+    "ump_id": "UMP-0019",
+    "chapter_id": "CH-03",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Create query API skeleton",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/eyes/topic-query-api/ump/UMP-0019/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/eyes/topic-query-api/",
+        "allowed_paths": [
+            "chapters/eyes/topic-query-api/**"
+        ],
+        "forbidden_paths": [
+            "foundation/**",
+            "spine/**",
+            "chapters/brain/**",
+            "chapters/hands/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/server.ts",
+            "operation": "create",
+            "context": "Microservice boilerplate",
+            "purpose": "Local server initialization.",
+            "build_prompt": "Handle GET /healthz returning service query-api gracefully.",
+            "json_spec_path": "ump/UMP-0019/spec.server.json"
+        },
+        {
+            "path": "src/index.ts",
+            "operation": "create",
+            "context": "Service entry point",
+            "purpose": "Start the HTTP server on Port 3003",
+            "build_prompt": "Import startServer gracefully.",
+            "json_spec_path": "ump/UMP-0019/spec.index.json"
+        },
+        {
+            "path": "test/smoke.test.ts",
+            "operation": "create",
+            "context": "Smoke validations",
+            "purpose": "Asserts endpoints dynamically.",
+            "build_prompt": "Validate boundaries naturally via async tests locally.",
+            "json_spec_path": "ump/UMP-0019/spec.test.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "smoke"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

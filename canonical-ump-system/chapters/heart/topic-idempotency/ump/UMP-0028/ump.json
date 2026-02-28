@@ -1,0 +1,43 @@
+{
+    "ump_id": "UMP-0028",
+    "chapter_id": "CH-05",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Implement Central Idempotency Store",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/heart/topic-idempotency/ump/UMP-0028/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/heart/topic-idempotency/",
+        "allowed_paths": [
+            "chapters/heart/topic-idempotency/src/**",
+            "chapters/heart/topic-idempotency/test/**",
+            "chapters/heart/topic-idempotency/ump/UMP-0028/**",
+            "chapters/heart/topic-idempotency/package.json",
+            "chapters/heart/topic-idempotency/tsconfig.json"
+        ],
+        "forbidden_paths": [
+            "spine/**",
+            "chapters/brain/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/idempotency.ts",
+            "operation": "create",
+            "purpose": "KV execution guard natively."
+        },
+        {
+            "path": "test/idempotency.test.ts",
+            "operation": "create",
+            "purpose": "Unit map securely natively explicitly."
+        }
+    ]
+}

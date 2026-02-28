@@ -8,9 +8,11 @@
 
 ## 🏗 Architecture
 
-The repository allows for a Monorepo structure:
+The repository allows for a Monorepo structure moving towards a strict Canonical UMP Model:
 
-*   **`apps/backend-core` (Spine)**: Python/FastAPI backend using the Canon/Spine architecture.
+*   **`MarkDown Files/`**: The definitive Master Product Requirements Document (PRD) governing all UMP execution.
+*   **`canonical-ump-system/`**: The Phase 1 Strangler Fig implementation of the strict API Orchestration and database Foundation.
+*   **`apps/backend-core` (Legacy Spine)**: Initial Python/FastAPI backend execution engine.
 *   **`apps/frontend` (Web)**: Next.js 15 application with Tier 1 UI/UX.
 *   **`contracts/`**: JSON/Markdown definitions that serve as the "Source of Truth" for the system.
 *   **`infrastructure/`**: Terraform and Cloud definitions (GitHub Native).

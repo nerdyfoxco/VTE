@@ -1,0 +1,12 @@
+[
+    {
+        "path": "src/pipes/workflow-started.producer.ts",
+        "operation": "create",
+        "purpose": "Ensures payloads perfectly map to the JSON schema before dispatch"
+    },
+    {
+        "path": "test/pipes.workflow-started.producer.test.ts",
+        "operation": "create",
+        "purpose": "Validate the pure function wrapper enforces typing flawlessly"
+    }
+]

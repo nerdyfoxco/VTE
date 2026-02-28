@@ -1,0 +1,42 @@
+﻿{
+    "ump_id": "UMP-0001",
+    "sealed_at": "2026-02-25T11:28:00Z",
+    "status": "sealed",
+    "files": [
+        {
+            "path": "src/index.ts",
+            "hash": "cbf1fc89831bfcb7beeb6ab5576a0d4c8038c353f09f539a48d1e2e2ec8b6cb0"
+        },
+        {
+            "path": "src/server.ts",
+            "hash": "95a633a69dcabf7e2ce719ef16eb883b48227b68ed92fa9f49f506e00cf7ab70"
+        },
+        {
+            "path": "test/smoke.test.ts",
+            "hash": "b2fa129de9dcd1caaff60d8ffbbbe66f7f6f5926c71c1b18d8cf9066bf9b5cf4"
+        },
+        {
+            "path": "package.json",
+            "hash": "d16c8751ceab6c1a84c6c039db7f05fbc3ab0b9b326307ecbc49c951152a5c88"
+        },
+        {
+            "path": "tsconfig.json",
+            "hash": "35a82fa20c99a8ea8d01d4a0f44b3cfb9b87e2206ffdeee10787e6fa50b69123"
+        },
+        {
+            "path": "ump/UMP-0001/ump.json",
+            "hash": "9186717a6ee9afc3de2022d1c686121cb7d5dcf974efbb5ceb44fb74251cb122"
+        },
+        {
+            "path": "ump/UMP-0001/file-manifest.json",
+            "hash": "f6db157fa0d220678d23e59ea43ceaaa9fc6f0ad7308faef2df8417dc3e0eaad"
+        },
+        {
+            "path": "ump/UMP-0001/verification.md",
+            "hash": "b3e944bd91b45ab10bd4b901fc1ca95edc8b4b745bb0e9e4f24efb43ed5b0cb1"
+        }
+    ],
+    "verified_tests": [
+        "GET /healthz returns 200 ok"
+    ]
+}

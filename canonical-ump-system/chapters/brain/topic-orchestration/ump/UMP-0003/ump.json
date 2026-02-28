@@ -1,0 +1,69 @@
+{
+    "ump_id": "UMP-0003",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Contract tests for workflow pipes",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0003/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "foundation/src/testing/**",
+            "chapters/brain/topic-orchestration/test/**",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [
+            "**/*"
+        ],
+        "allowed_shared_paths": [
+            "foundation/src/testing/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "foundation/src/testing/contract-runner.ts",
+            "operation": "create",
+            "context": "Validation utility wrapping AJV",
+            "purpose": "Ensures runtime or test-time schema assertion",
+            "build_prompt": "Class wrapping AJV allowing dynamic pathing and assertions.",
+            "json_spec_path": "ump/UMP-0003/spec.contract-runner.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/test/contracts.workflow.test.ts",
+            "operation": "create",
+            "context": "Assurance testing",
+            "purpose": "Protects orchestration boundaries from malformed schema data",
+            "build_prompt": "Validate standard and flawed mock payloads.",
+            "json_spec_path": "ump/UMP-0003/spec.contracts.workflow.test.ts.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm i ajv-formats ajv",
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "contracts"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

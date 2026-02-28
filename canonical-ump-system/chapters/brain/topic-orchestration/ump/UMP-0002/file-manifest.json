@@ -1,0 +1,22 @@
+[
+    {
+        "path": "foundation/contracts/pipes/schemas/pipe.workflow.started.v1.schema.json",
+        "operation": "create",
+        "purpose": "Define strict API contract for down-stream consumers"
+    },
+    {
+        "path": "foundation/contracts/pipes/schemas/pipe.workflow.step.completed.v1.schema.json",
+        "operation": "create",
+        "purpose": "Define strict API contract for up-stream producers"
+    },
+    {
+        "path": "foundation/contracts/pipes/pipe-registry.json",
+        "operation": "create",
+        "purpose": "Central mapping for spine connectivity checks"
+    },
+    {
+        "path": "chapters/brain/topic-orchestration/contracts/pipes-used.json",
+        "operation": "create",
+        "purpose": "Explicit visibility of upstream dependencies"
+    }
+]

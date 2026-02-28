@@ -1,0 +1,39 @@
+{
+    "ump_id": "UMP-0025",
+    "chapter_id": "CH-04",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Implement Celery/Redis Worker Skeleton",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/legs/topic-worker-runner/ump/UMP-0025/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/legs/topic-worker-runner/",
+        "allowed_paths": [
+            "chapters/legs/topic-worker-runner/src/**",
+            "chapters/legs/topic-worker-runner/test/**",
+            "chapters/legs/topic-worker-runner/ump/UMP-0025/**",
+            "chapters/legs/topic-worker-runner/package.json",
+            "chapters/legs/topic-worker-runner/tsconfig.json"
+        ],
+        "forbidden_paths": [
+            "spine/**",
+            "chapters/brain/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/worker.ts",
+            "operation": "create",
+            "purpose": "Asynchronous Queue Consumer Shell",
+            "json_spec_path": "ump/UMP-0025/spec.worker.json"
+        }
+    ]
+}

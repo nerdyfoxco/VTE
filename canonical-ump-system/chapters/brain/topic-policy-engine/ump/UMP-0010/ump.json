@@ -1,0 +1,75 @@
+{
+    "ump_id": "UMP-0010",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-02",
+    "phase_id": "PH-02",
+    "title": "Implement policy evaluator (pure function core)",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-policy-engine/ump/UMP-0010/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-policy-engine/",
+        "allowed_paths": [
+            "chapters/brain/topic-policy-engine/src/rules/**",
+            "chapters/brain/topic-policy-engine/test/rules/**",
+            "chapters/brain/topic-policy-engine/ump/UMP-0010/**"
+        ],
+        "forbidden_paths": [
+            "spine/**",
+            "foundation/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/rules/library.ts",
+            "operation": "create",
+            "context": "Deterministic Dictionary",
+            "purpose": "Authoritative predicates determining boolean passes.",
+            "build_prompt": "Export POLICY_LIBRARY mapping eviction thresholds and spending limits.",
+            "json_spec_path": "ump/UMP-0010/spec.library.json"
+        },
+        {
+            "path": "src/rules/evaluator.ts",
+            "operation": "create",
+            "context": "Pure Function Node",
+            "purpose": "Stateless calculations mapping Contexts to Predicates safely.",
+            "build_prompt": "Import library. Expose evaluatePolicy. Throw on invalid policyId.",
+            "json_spec_path": "ump/UMP-0010/spec.evaluator.json"
+        },
+        {
+            "path": "test/rules/evaluator.test.ts",
+            "operation": "create",
+            "context": "Unit Verifications",
+            "purpose": "Verify dictionary mapping behaves identically.",
+            "build_prompt": "Test pure function evaluations dynamically.",
+            "json_spec_path": "ump/UMP-0010/spec.test.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "internal"
+    }
+}

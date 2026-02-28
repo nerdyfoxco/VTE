@@ -1,0 +1,49 @@
+{
+    "ump_id": "UMP-0009",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-03.5",
+    "title": "Seal Trace Telemetry Dashboard",
+    "status": "executed",
+    "immutability": {
+        "sealed": true,
+        "seal_path": "foundation/ump/UMP-0009/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "apps/frontend/src/app/dashboard/traces/",
+        "allowed_paths": [
+            "apps/frontend/src/app/dashboard/traces/page.tsx",
+            "canonical-ump-system/chapters/brain/topic-orchestration/src/routes.ts"
+        ],
+        "forbidden_paths": [
+            "**/*"
+        ]
+    },
+    "contracts": {
+        "telemetry_exposure": {
+            "mapped_source": "canonical-ump-system/chapters/brain",
+            "mapped_destination": "apps/frontend",
+            "security_clearance": "admin_only"
+        }
+    },
+    "files": [
+        {
+            "path": "apps/frontend/src/app/dashboard/traces/page.tsx",
+            "operation": "create",
+            "context": "Frontend Trace Mapping",
+            "purpose": "Human-in-the-loop audit trace of all background orchestration and SHADOW execution side effects."
+        },
+        {
+            "path": "canonical-ump-system/chapters/brain/topic-orchestration/src/routes.ts",
+            "operation": "modify",
+            "context": "Backend Extractor",
+            "purpose": "Expose ExecutionTraces array explicit matching."
+        }
+    ],
+    "observability": {
+        "logging": [
+            "trace_reads_do_not_mutate_backend"
+        ]
+    }
+}

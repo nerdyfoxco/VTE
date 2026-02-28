@@ -1,0 +1,7 @@
+[
+    {
+        "path": "test/contracts.policy.evaluate.test.ts",
+        "operation": "create",
+        "purpose": "Authoritative Policy JSON schema strict logic validator."
+    }
+]

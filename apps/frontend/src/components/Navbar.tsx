@@ -6,8 +6,15 @@ import { usePathname } from "next/navigation";
 export default function Navbar() {
     const pathname = usePathname();
 
-    // Hide Navbar on Login page
-    if (pathname === '/login') {
+    // STRANGLER FIG ENFORCEMENT: 
+    // Hide Legacy Navbar on new VTE 3.0 App Shell Routes
+    const isV2Route = pathname?.startsWith('/queue') ||
+        pathname?.startsWith('/sales') ||
+        pathname?.startsWith('/approvals') ||
+        pathname?.startsWith('/superadmin');
+
+    // Hide Navbar on Login page and V2 routes
+    if (pathname === '/login' || isV2Route) {
         return null;
     }
 

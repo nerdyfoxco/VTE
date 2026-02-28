@@ -1,0 +1,59 @@
+{
+    "ump_id": "UMP-f-0005",
+    "chapter_id": "CH-frontend-02",
+    "topic_id": "TP-frontend-02",
+    "phase_id": "PH-01",
+    "title": "Wire Work Queue /workflows/start APIs",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "apps/frontend/ump/UMP-f-0005/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "apps/frontend/",
+        "allowed_paths": [
+            "apps/frontend/src/app/queue/page.tsx",
+            "apps/frontend/ump/UMP-f-0005/**"
+        ],
+        "forbidden_paths": [
+            "**/*.py"
+        ],
+        "allowed_shared_paths": [
+            "apps/frontend/src/components/ui/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "src/app/queue/page.tsx",
+            "operation": "modify",
+            "context": "Updates DataTable action buttons to emit orchestration API paths",
+            "purpose": "Links UI execution to real canonical topics.",
+            "build_prompt": "Add fetch POST logic inside the Work Queue targeting the `POST /workflows/start` endpoint of the Brain node.",
+            "json_spec_path": "ump/UMP-f-0005/spec.queue.page.tsx.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "visual"
+        ],
+        "commands": [
+            "npm run build"
+        ]
+    },
+    "observability": {
+        "logging": [],
+        "metrics": []
+    },
+    "security": {
+        "data_classification": "public_ui"
+    }
+}
