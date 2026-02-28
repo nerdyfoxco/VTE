@@ -1,7 +1,7 @@
 // Canonical UMP Framework - Hands (Dispatch Organ)
 // Strictly isolated gateway for processing LIVE side-effects.
 
-import { MockEmailProvider, EmailPayload } from './providers/email';
+import { LiveEmailProvider, EmailPayload } from './providers/email';
 
 export interface ComputedEffect {
     target: string;
@@ -10,10 +10,10 @@ export interface ComputedEffect {
 }
 
 export class SideEffectDispatcher {
-    private emailProvider: MockEmailProvider;
+    private emailProvider: LiveEmailProvider;
 
     constructor() {
-        this.emailProvider = new MockEmailProvider();
+        this.emailProvider = new LiveEmailProvider();
     }
 
     /**
