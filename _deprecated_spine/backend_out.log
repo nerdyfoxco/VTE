@@ -1,0 +1,48 @@
+INFO:     127.0.0.1:60423 - "GET /.well-known/openid-configuration HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51843 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51843 - "OPTIONS /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51843 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:62459 - "GET /api/v1/queue?skip=0&limit=5 HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:62462 - "GET /api/v1/queue?limit=5&sort_by=priority&order=asc HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:62465 - "GET /api/v1/queue?status=COMPLETED HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:62468 - "GET /api/v1/queue?search=Urgent HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:49672 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49672 - "OPTIONS /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49672 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:50060 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50060 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:58270 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58270 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:50381 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50381 - "OPTIONS /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50381 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:62448 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62448 - "OPTIONS /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62448 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:50567 - "GET /.well-known/openid-configuration HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50500 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50500 - "OPTIONS /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50500 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:56995 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56998 - "GET /api/v1/queue?skip=0&limit=5 HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:57001 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57003 - "GET /api/v1/queue?limit=5&sort_by=priority&order=asc HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:57007 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57009 - "GET /api/v1/queue?status=COMPLETED HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:57014 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57017 - "GET /api/v1/queue?search=Urgent HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:54846 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54846 - "OPTIONS /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54846 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:61358 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61358 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:63894 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63894 - "OPTIONS /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63894 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:65429 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:64322 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64322 - "OPTIONS /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64322 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error
+INFO:     127.0.0.1:51546 - "POST /api/v1/auth/token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51546 - "OPTIONS /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51546 - "GET /api/v1/queue?skip=0&limit=5&sort_by=priority&order=asc&status=PENDING HTTP/1.1" 500 Internal Server Error

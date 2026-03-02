@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: vte-backend-spine
+    env: node
+    buildCommand: npm install && npx tsc
+    startCommand: node dist/spine/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000

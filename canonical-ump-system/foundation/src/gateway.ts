@@ -3,6 +3,7 @@ import cors from 'cors';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { orchestrationRouter } from '../../chapters/brain/topic-orchestration/src/routes';
 import { queueRouter } from '../../chapters/brain/topic-queue/src/routes';
+import authRouter from './api/auth.router';
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -20,10 +21,13 @@ const jsonParser = express.json();
 
 // 2. Canonical UMP Routes
 console.log("[GATEWAY] 🟢 Mounting Canonical UMP Orchestration Router at /api/v1/orchestration");
-app.use('/api/v1/orchestration', jsonParser, orchestrationRouter);
+app.use('/api/v1/orchestration', jsonParser, orchestrationRouter as any);
 
 console.log("[GATEWAY] 🟢 Mounting Canonical UMP Queue Router at /api/v1");
-app.use('/api/v1', jsonParser, queueRouter);
+app.use('/api/v1', jsonParser, queueRouter as any);
+
+console.log("[GATEWAY] 🟢 Mounting Canonical UMP Authentication Router at /api/v1/auth");
+app.use('/api/v1/auth', jsonParser, authRouter);
 
 // 3. Strangler Fig Proxy (Catch-All)
 console.log(`[GATEWAY] 🟠 Proxying remaining /api/v1/* traffic -> ${LEGACY_PYTHON_BACKEND}`);
@@ -32,7 +36,6 @@ app.use(
     createProxyMiddleware({
         target: LEGACY_PYTHON_BACKEND,
         changeOrigin: true,
-        logLevel: 'debug',
         pathRewrite: {
             '^/': '/api/v1/'
         }

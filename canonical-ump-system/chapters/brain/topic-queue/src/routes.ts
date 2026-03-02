@@ -1,8 +1,8 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { PrismaClient } from '../../../../foundation/node_modules/@prisma/client';
 import { requireAuth, AuthenticatedRequest } from '../../../../foundation/src/security/middleware';
 
-export const queueRouter = express.Router();
+export const queueRouter: Router = express.Router();
 const prisma = new PrismaClient();
 
 /**

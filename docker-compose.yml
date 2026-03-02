@@ -1,6 +1,6 @@
 services:
   spine-db:
-    image: postgres:16
+    image: pgvector/pgvector:pg16
     container_name: vte-spine-db
     environment:
       POSTGRES_USER: spine_app

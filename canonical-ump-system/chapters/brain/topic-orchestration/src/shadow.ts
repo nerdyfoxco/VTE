@@ -56,13 +56,20 @@ export class ShadowExecutionEngine {
         // In a real system, this involves complex pure-function transitions.
         const simulatedEffects = this.computeSideEffects(request);
 
-        // 2. Mock a deterministic Trace to the Ledger proving the Execution path
-        // (Bypassing strictly relational Prisma inserts for the Strangler Mock phase)
-        const fakeTraceId = `trace-${Math.random().toString(36).substr(2, 9)}`;
+        // 2. Record an explicit SHADOW trace definitively to the Canonical Ledger
+        const trace = await this.prisma.executionTrace.create({
+            data: {
+                tenantId: tenantId || '00000000-0000-0000-0000-000000000001',
+                workflowId: '00000000-0000-0000-0000-000000000002',
+                stepName: request.workflowName,
+                organ: 'BRAIN',
+                outcome: 'SUCCESS'
+            }
+        });
 
         // 3. Return the result strictly halting before hitting "Hands"
         return {
-            traceId: fakeTraceId,
+            traceId: trace.id,
             mode: 'SHADOW',
             status: 'SIMULATED_SUCCESS',
             simulatedEffects: simulatedEffects
@@ -88,13 +95,23 @@ export class ShadowExecutionEngine {
         // 2. Transmit explicitly to the strict Dispatcher
         const dispatchSucceeded = await this.dispatcher.dispatchAll(tenantId, liveEffects);
 
-        // 3. Mock the trace strictly as LIVE and report dispatch success
+        // 3. Record a LIVE_EXECUTED trace definitively to the Canonical Ledger
+        const dbOutcome = dispatchSucceeded ? 'SUCCESS' : 'FAILURE_RECOVERABLE';
         const finalStatus = dispatchSucceeded ? 'EXECUTED_SUCCESS' : 'HALTED';
-        const fakeTraceId = `trace-${Math.random().toString(36).substr(2, 9)}`;
+
+        const trace = await this.prisma.executionTrace.create({
+            data: {
+                tenantId: tenantId || '00000000-0000-0000-0000-000000000001',
+                workflowId: '00000000-0000-0000-0000-000000000002',
+                stepName: request.workflowName,
+                organ: 'BRAIN',
+                outcome: dbOutcome
+            }
+        });
 
         // 4. Return the Live mode object
         return {
-            traceId: fakeTraceId,
+            traceId: trace.id,
             mode: 'LIVE',
             status: finalStatus,
             simulatedEffects: liveEffects // Note: these are now Real 

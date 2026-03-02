@@ -2,7 +2,6 @@
     "compilerOptions": {
         "target": "ES2022",
         "module": "CommonJS",
-        "rootDir": "./src",
         "outDir": "./dist",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
@@ -11,6 +10,8 @@
         "declaration": true
     },
     "include": [
-        "src/**/*"
+        "src/**/*",
+        "../chapters/brain/topic-orchestration/src/**/*",
+        "../chapters/brain/topic-queue/src/**/*"
     ]
 }

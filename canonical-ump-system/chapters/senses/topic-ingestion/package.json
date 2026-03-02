@@ -1,0 +1,25 @@
+{
+    "name": "@vte/senses-ingestion",
+    "version": "1.0.0",
+    "description": "Sense organ for Canonical VTE explicitly handling Gmail data ingestion.",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "test": "jest",
+        "lint": "eslint src --ext .ts",
+        "start": "tsx src/index.ts"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.10.2",
+        "@types/jsonwebtoken": "^9.0.10",
+        "dotenv": "^16.4.5",
+        "googleapis": "^140.0.0",
+        "jsonwebtoken": "^9.0.3"
+    },
+    "devDependencies": {
+        "@types/node": "^20.11.24",
+        "tsx": "^4.21.0",
+        "typescript": "^5.3.3"
+    }
+}

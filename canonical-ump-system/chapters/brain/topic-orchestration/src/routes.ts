@@ -1,14 +1,14 @@
 // Canonical UMP Framework - Brain (Orchestration Router)
 // Explicit REST entrypoints protected strictly by the Command Authority Firewall.
 
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 import { requireAuth, requireRole, AuthenticatedRequest } from '../../../../foundation/src/security/middleware';
 import { validatePayload } from '../../../kidney/topic-validation/src/validator';
 import { ShadowExecutionEngine } from './shadow';
 
-export const orchestrationRouter = express.Router();
+export const orchestrationRouter: Router = express.Router();
 const shadowEngine = new ShadowExecutionEngine();
 
 /**

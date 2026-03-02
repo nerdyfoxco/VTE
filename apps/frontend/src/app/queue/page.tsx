@@ -25,22 +25,26 @@ export default function WorkQueuePage() {
     const startWorkflow = async (workItemId: string) => {
         setIsStarting(workItemId);
         try {
-            const orchestratorUrl = process.env.NEXT_PUBLIC_ORCHESTRATOR_URL || 'http://localhost:3001';
-            const res = await fetch(`${orchestratorUrl}/workflows/start`, {
+            const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+
+            // Acquire the operator's securely minted token to bypass the canonical Gateway commands
+            const token = localStorage.getItem('access_token') || 'mocked_token'; // Or handle missing auth cleanly
+
+            const res = await fetch(`${apiBaseUrl}/orchestration/live`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    workflow_name: 'Eviction_Process',
-                    initiator: 'operator@vte.example',
-                    inputs: { work_item_id: workItemId }
+                    workflowName: 'Eviction_Process',
+                    payload: { work_item_id: workItemId } // Payload format mapped strictly to the Zod Schema
                 })
             });
 
             if (!res.ok) {
                 const errData = await res.json().catch(() => ({}));
-                console.error('Failed to start workflow:', errData);
+                console.error('Failed to dispatch live trace:', errData);
                 alert(`Failed: ${errData.error || res.statusText}`);
             } else {
                 const json = await res.json();

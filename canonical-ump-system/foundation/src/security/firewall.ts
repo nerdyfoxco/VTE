@@ -2,6 +2,8 @@
 // Enforces synchronous RBAC and JWT validation before Orchestration Brain execution.
 
 import * as jwt from 'jsonwebtoken';
+import { config } from 'dotenv';
+config({ path: '../../.env' }); // Binds the core VTE_JWT_SECRET from the root securely
 
 export interface AuthContext {
     tenantId: string;

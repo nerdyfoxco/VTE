@@ -17,15 +17,11 @@ export default function LoginPage() {
         e.preventDefault();
         setError(null);
 
-        const formData = new URLSearchParams();
-        formData.append('username', username);
-        formData.append('password', password);
-
         try {
-            const res = await api.post('/auth/token', formData, {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
+            // Canonical Strategy: Target the Native /auth/login Gateway specifically with JSON payload
+            const res = await api.post('/auth/login', {
+                email: username,
+                password: password
             });
 
             if (res.data.mfa_required) {

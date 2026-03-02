@@ -1,10 +1,12 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
 }
 
 // ==========================================
@@ -23,19 +25,56 @@ model Tenant {
   executionTraces ExecutionTrace[]
   approvals       ApprovalLedger[]
   queueItems      QueueItem[]
+  embeddings      VectorEmbedding[]
+  policies        PolicyVersion[]
 }
 
 model Operator {
   id          String   @id @default(uuid())
   tenantId    String
-  email       String   @unique
-  role        String   // admin, approver, viewer
+  userId      String   @unique // Links exactly to the definitive User identity
+  role        String   // super_admin, admin, approver, viewer (matches Python RoleEnum)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   tenant              Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user                User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   approvals           ApprovalLedger[]
   assignedWorkflows   Workflow[]       @relation("OperatorWorkflows")
+}
+
+// ==========================================
+// IDENTITY & SECURITY LAYER (STRANGLED FROM PYTHON)
+// ==========================================
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String?   @map("password_hash") // Optional if using external Identity Provider
+  name          String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  operator      Operator? // 1:1 relationship with Operator context for RBAC
+  sessions      UserSession[]
+
+  @@map("users")
+}
+
+model UserSession {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  tokenJti      String   @unique @map("token_jti") // JWT ID
+  ipAddress     String?  @map("ip_address")
+  userAgent     String?  @map("user_agent")
+  revoked       String   @default("false") // Legacy python used a "false" string
+  
+  createdAt     DateTime @default(now()) @map("created_at")
+  expiresAt     DateTime @map("expires_at")
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_sessions") // Binds strictly to the legacy Python auth table
 }
 
 // ==========================================
@@ -102,4 +141,54 @@ model QueueItem {
   tenant      Tenant?   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@map("queue_items") // Bind strictly to the legacy Python table to avoid data migration
+}
+
+// ==========================================
+// VECTOR & RETRIEVAL LAYER (THE BRAIN)
+// ==========================================
+
+model VectorEmbedding {
+  id        String   @id @default(uuid())
+  tenantId  String
+  sourceUri String   // Pointer to source document
+  content   String   // Text chunk content
+  embedding Unsupported("vector(1536)") // OpenAI text-embedding-ada-002 dimensions
+
+  createdAt DateTime @default(now())
+
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+// ==========================================
+// RULES ENGINE & DECISION LOGIC LAYER
+// ==========================================
+
+model PolicyVersion {
+  id          String   @id @default(uuid())
+  tenantId    String
+  name        String   // e.g., "Property Management Standard SOPs", "Grace Period Policy"
+  description String?
+  isActive    Boolean  @default(true)
+  version     Int      @default(1)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  rules       DecisionRule[]
+}
+
+model DecisionRule {
+  id              String   @id @default(uuid())
+  policyId        String
+  priority        Int      @default(100) // Deterministic order: Lower numbers evaluate first
+  conditionType   String   // e.g., EVENT_SENDER_MATCH, EMAIL_CONTAINS, WORKFLOW_TAG
+  conditionValue  String   // Flat string or JSON payload to evaluate
+  action          String   // e.g., ESCALATE_HITL, DISPATCH_EMAIL, FORK_TRACE
+  actionPayload   String?  // Parameters for the execution engine
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  policy          PolicyVersion @relation(fields: [policyId], references: [id], onDelete: Cascade)
 }
